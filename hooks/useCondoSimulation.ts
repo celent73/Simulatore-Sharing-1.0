@@ -30,9 +30,9 @@ export const useCondoSimulation = (inputs: CondoInput): CondoSimulationResult =>
         } = inputs;
 
         // --- NETWORK OPPORTUNITY CALCULATION ---
-        // Logic: Managed Condos * Families * Conversion Rate
-        const totalPotentialFamilies = managedCondos * familiesPerCondo;
-        const newNetworkUsers = Math.floor(totalPotentialFamilies * (networkConversionRate / 100));
+        // Logic: (Green + Light Units) * Families * Conversion Rate
+        const totalPotentialFamilies = (greenUnits + lightUnits) * (familiesPerCondo || 0);
+        const newNetworkUsers = Math.floor(totalPotentialFamilies * ((networkConversionRate || 0) / 100));
 
         let net_OneTime = 0;
         let net_RecY1 = 0;
