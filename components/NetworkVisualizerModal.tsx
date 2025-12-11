@@ -605,7 +605,7 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
         {/* --- MAIN GRAPH AREA --- */}
         <div
           ref={containerRef}
-          className="w-full h-full overflow-auto custom-scrollbar [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] flex items-start justify-center pt-32 md:pt-48 pb-40 md:pb-60 select-none cursor-grab active:cursor-grabbing relative z-20"
+          className="absolute top-0 left-0 right-0 bottom-80 md:relative md:bottom-auto md:w-full md:h-full overflow-auto custom-scrollbar scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent flex items-start justify-center pt-32 md:pt-48 pb-10 md:pb-60 select-none cursor-grab active:cursor-grabbing z-20"
           style={{ transform: `scale(${zoom})`, transformOrigin: 'top center', transition: 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}
         >
           <div className="flex flex-col items-center min-w-max px-4 md:px-20 py-10">
