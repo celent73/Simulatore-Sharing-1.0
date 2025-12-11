@@ -85,27 +85,68 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                 </div>
 
                 {/* SIMPLIFIED NETWORK SLIDER */}
+                {/* NETWORK SECTION (Calculated) */}
                 <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-2xl border border-purple-200 dark:border-purple-800">
-                    <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-purple-700 dark:text-purple-400 font-bold text-sm uppercase tracking-wider flex items-center gap-2">
-                            <span>💜</span> {t('input.network_directs_title') || "Clienti Network Extra"}
-                        </h3>
-                        <span className="text-sm font-bold text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/50 px-2 py-1 rounded-lg">
-                            {inputs.networkDirects || 0}
-                        </span>
+                    <h3 className="text-purple-700 dark:text-purple-400 font-bold text-sm mb-4 uppercase tracking-wider flex items-center gap-2">
+                        <span className="text-lg">💜</span> {t('input.network_section') || "Opportunità Network"}
+                    </h3>
+
+                    <div className="space-y-4">
+                        <InputGroup
+                            label={t('input.managed_condos') || "Condomini Gestiti"}
+                            value={inputs.managedCondos || 0}
+                            onChange={(val) => onInputChange('managedCondos', val)}
+                            max={100}
+                            step={1}
+                        />
+                        <InputGroup
+                            label={t('input.families_per_condo') || "Famiglie Condominio"}
+                            value={inputs.familiesPerCondo || 20}
+                            onChange={(val) => onInputChange('familiesPerCondo', val)}
+                            max={100}
+                            step={5}
+                        />
+
+                        {/* MATH FEEDBACK 1 */}
+                        <div className="bg-white/50 dark:bg-black/20 p-2 rounded-lg text-xs text-center font-mono text-purple-800 dark:text-purple-300">
+                            {inputs.managedCondos || 0} (Condomini) x {inputs.familiesPerCondo || 0} (Fam) = <strong>{(inputs.managedCondos || 0) * (inputs.familiesPerCondo || 0)}</strong> Famiglie Totali
+                        </div>
+
+                        <div>
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    {t('input.network_conversion') || "% Adesione Network"}
+                                </label>
+                                <span className="text-xs font-bold text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/50 px-2 py-1 rounded-lg">
+                                    {inputs.networkConversionRate || 0}%
+                                </span>
+                            </div>
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                step="1"
+                                value={inputs.networkConversionRate || 0}
+                                onChange={(e) => onInputChange('networkConversionRate', parseInt(e.target.value))}
+                                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-purple-600"
+                            />
+
+                            {/* MATH FEEDBACK 2 */}
+                            <div className="mt-2 text-[10px] text-gray-500 dark:text-gray-400 text-center font-medium">
+                                <span className="text-purple-600 dark:text-purple-400">
+                                    {Math.floor(((inputs.managedCondos || 0) * (inputs.familiesPerCondo || 0)) * ((inputs.networkConversionRate || 0) / 100))}
+                                </span> nuovi clienti stimati
+                                <div className="text-[9px] opacity-70">
+                                    ({(inputs.managedCondos || 0) * (inputs.familiesPerCondo || 0)} x {inputs.networkConversionRate || 0}% = {Math.floor(((inputs.managedCondos || 0) * (inputs.familiesPerCondo || 0)) * ((inputs.networkConversionRate || 0) / 100))})
+                                </div>
+                            </div>
+
+                            <div className="mt-3 p-2 bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-100 dark:border-yellow-800/30 rounded text-[10px] text-yellow-700 dark:text-yellow-400 flex gap-2 items-start">
+                                <span>⚠️</span>
+                                <span>{t('input.network_assumption_note') || "Nota: Il calcolo considera l'attivazione di 2 contratti per cliente (1 Green + 1 Light)."}</span>
+                            </div>
+                        </div>
                     </div>
-                    <input
-                        type="range"
-                        min="0"
-                        max="50"
-                        step="1"
-                        value={inputs.networkDirects || 0}
-                        onChange={(e) => onInputChange('networkDirects', parseInt(e.target.value))}
-                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-purple-600"
-                    />
-                    <p className="text-[10px] text-gray-400 mt-1 text-center">
-                        {t('input.network_directs_desc') || "Imposta quanti condomini diventano clienti/promoter"}
-                    </p>
                 </div>
             </div>
 

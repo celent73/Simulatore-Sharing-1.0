@@ -24,19 +24,22 @@ export const useCondoSimulation = (inputs: CondoInput): CondoSimulationResult =>
             lightUnits,
             yearlyNewUnitsGreen,
             yearlyNewUnitsLight,
-            networkDirects = 0 // Simplified: Direct input of new network users
+            managedCondos = 0,
+            familiesPerCondo = 0,
+            networkConversionRate = 0
         } = inputs;
 
-        // --- NETWORK OPPORTUNITY CALCULATION (Simplified) ---
-        // Inputs: Just "networkDirects" (How many people join?)
-        // Logic: Calculate earnings as "Level 0" (Direct Recruits)
+        // --- NETWORK OPPORTUNITY CALCULATION ---
+        // Logic: Managed Condos * Families * Conversion Rate
+        const totalPotentialFamilies = managedCondos * familiesPerCondo;
+        const newNetworkUsers = Math.floor(totalPotentialFamilies * (networkConversionRate / 100));
 
         let net_OneTime = 0;
         let net_RecY1 = 0;
         let net_RecY2 = 0;
         let net_RecY3 = 0;
 
-        if (networkDirects > 0) {
+        if (newNetworkUsers > 0) {
             // Apply Compensation Plan "Level 0" (Direct) Rates
             // Assumption: 1 Green + 1 Light per user (Standard Bundle)
             // Rates from useSimulation.ts (BONUS_RATES[0] & RECURRING_RATES_PER_YEAR)
@@ -52,8 +55,8 @@ export const useCondoSimulation = (inputs: CondoInput): CondoSimulationResult =>
             const perUser_Rec_Base = rate_Rec_1st + rate_Rec_Extra;   // 1.50€
 
             // Totals
-            net_OneTime = networkDirects * perUser_OT;
-            const baseRecTotal = networkDirects * perUser_Rec_Base;
+            net_OneTime = newNetworkUsers * perUser_OT;
+            const baseRecTotal = newNetworkUsers * perUser_Rec_Base;
 
             // Yearly Multipliers
             net_RecY1 = baseRecTotal * 1.0; // Y1
@@ -62,7 +65,7 @@ export const useCondoSimulation = (inputs: CondoInput): CondoSimulationResult =>
         }
 
         const networkStats = {
-            usersCount: networkDirects,
+            usersCount: newNetworkUsers,
             oneTimeBonus: net_OneTime,
             recurringYear1: net_RecY1,
             recurringYear2: net_RecY2,
