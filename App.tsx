@@ -108,7 +108,15 @@ const initialInputs: PlanInput = {
   personalClientsGreen: 0, personalClientsLight: 0, personalClientsBusinessGreen: 0, personalClientsBusinessLight: 0,
   myPersonalUnitsGreen: 0, myPersonalUnitsLight: 0, cashbackSpending: 0, cashbackPercentage: 0
 };
-const initialCondoInputs: CondoInput = { greenUnits: 0, lightUnits: 0, yearlyNewUnitsGreen: 0, yearlyNewUnitsLight: 0 };
+const initialCondoInputs: CondoInput = {
+  greenUnits: 0,
+  lightUnits: 0,
+  yearlyNewUnitsGreen: 0,
+  yearlyNewUnitsLight: 0,
+  familiesPerCondo: 0,
+  networkConversionRate: 0,
+  managedCondos: 0
+};
 
 const AppContent = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);

@@ -125,19 +125,19 @@ export const useCondoSimulation = (inputs: CondoInput): CondoSimulationResult =>
 
         return {
             year1: {
-                activeUnits: y1_ActiveUnits,
+                activeUnits: y1_ActiveUnits + networkStats.usersCount,
                 oneTimeBonus: y1_OT + networkStats.oneTimeBonus,
                 recurringMonthly: y1_RecMonthly + networkStats.recurringYear1,
                 totalAnnual: y1_TotalAnnual
             },
             year2: {
-                activeUnits: y2_ActiveUnits,
+                activeUnits: y2_ActiveUnits + networkStats.usersCount,
                 oneTimeBonus: y2_New_OT,
                 recurringMonthly: y2_RecMonthly,
                 totalAnnual: y2_TotalAnnual
             },
             year3: {
-                activeUnits: y3_ActiveUnits,
+                activeUnits: y3_ActiveUnits + networkStats.usersCount,
                 oneTimeBonus: y3_New_OT,
                 recurringMonthly: y3_RecMonthly,
                 totalAnnual: y3_TotalAnnual
