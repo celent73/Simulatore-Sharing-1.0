@@ -19,16 +19,7 @@
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="/logo.png">
 
-  <!-- SCRIPT TRAPPOLA: Cattura l'evento per il pulsante "Scarica App" -->
-  <script>
-    window.deferredPrompt = null;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault(); // Blocca il banner nativo per darlo al nostro pulsante
-      window.deferredPrompt = e;
-      console.log('Install event captured');
-    });
-  </script>
-
+  <!-- SCRIPT INSTALLAZIONE: Native Browser Prompt allowed -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
