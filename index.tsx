@@ -15,15 +15,20 @@ root.render(
   </React.StrictMode>
 );
 
-// PWA Service Worker Registration
+// PWA Service Worker NUCLEAR RESET
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then((registration) => {
-          console.log('ServiceWorker registration successful');
-        })
-        .catch((err) => {
-          console.log('ServiceWorker registration failed: ', err);
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      if (registrations.length > 0) {
+        console.log('Found ' + registrations.length + ' service workers. Unregistering all to force update...');
+        let unregisterPromises = registrations.map(r => r.unregister());
+        Promise.all(unregisterPromises).then(() => {
+          console.log('All SWs unregistered. Reloading...');
+          window.location.reload();
         });
+      } else {
+        console.log('No service workers found. Clean state.');
+      }
     });
+  });
 }
