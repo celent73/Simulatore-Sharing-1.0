@@ -277,6 +277,59 @@ const MiniControl = ({ label, value, onChange, min, max, icon: Icon, color }: an
   </div>
 );
 
+const DraggableBox = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef({ x: 0, y: 0 });
+  const initialPosRef = useRef({ x: 0, y: 0 });
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    // Only enable drag on mobile/touch devices or small screens if preferred, 
+    // but user said "Sempre in modalità mobile" which implies the context is mobile view.
+    // We can allow it always or just on touch. Pointer events work for both.
+    // Prevent default to stop scrolling while dragging
+    e.stopPropagation();
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    setIsDragging(true);
+    dragStartRef.current = { x: e.clientX, y: e.clientY };
+    initialPosRef.current = { ...position };
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const dx = e.clientX - dragStartRef.current.x;
+    const dy = e.clientY - dragStartRef.current.y;
+    setPosition({
+      x: initialPosRef.current.x + dx,
+      y: initialPosRef.current.y + dy
+    });
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    setIsDragging(false);
+    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+  };
+
+  return (
+    <div
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      style={{
+        transform: `translate(${position.x}px, ${position.y}px)`,
+        touchAction: 'none', // Crucial for dragging on mobile without scrolling
+        cursor: isDragging ? 'grabbing' : 'grab'
+      }}
+      className={`${className} transition-none`} // Disable transition during drag for smoothness
+    >
+      {children}
+    </div>
+  );
+};
+
 export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ isOpen, onClose, inputs, onInputChange, onReset }) => {
   const { language } = useLanguage();
   const txt = language === 'it' ? texts.it : texts.de;
@@ -486,7 +539,7 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
         </div>
 
         {/* --- HUD --- */}
-        <div className="absolute top-auto bottom-48 left-2 md:top-36 md:bottom-auto md:left-8 z-[60] pointer-events-auto animate-in slide-in-from-left-10 duration-700">
+        <DraggableBox className="absolute top-auto bottom-48 left-2 md:top-36 md:bottom-auto md:left-8 z-[60] pointer-events-auto animate-in slide-in-from-left-10 duration-700">
           <div className="bg-gray-900/40 backdrop-blur-xl p-4 md:p-5 rounded-[2rem] border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col gap-4 w-[200px] md:w-72 relative overflow-hidden group hover:bg-gray-900/60 transition-colors transform scale-75 md:scale-100 origin-top-left">
 
             {/* HUD Glow Effect */}
@@ -532,11 +585,11 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
             </div>
 
           </div>
-        </div>
+        </DraggableBox>
 
         {/* --- RANK BADGE --- */}
         {currentRank && (
-          <div className="absolute top-auto bottom-48 right-4 md:top-28 md:bottom-auto md:right-auto md:left-1/2 md:-translate-x-1/2 z-40 animate-in slide-in-from-top-4 zoom-in fade-in duration-500 pointer-events-none">
+          <DraggableBox className="absolute top-auto bottom-48 right-4 md:top-28 md:bottom-auto md:right-auto md:left-1/2 md:-translate-x-1/2 z-40 animate-in slide-in-from-top-4 zoom-in fade-in duration-500 pointer-events-none">
             <div className={`flex flex-col items-center gap-2 p-4 md:px-8 md:py-4 rounded-3xl border bg-black/40 backdrop-blur-2xl ${currentRank.bg} ${currentRank.glow} transition-all duration-500 transform scale-75 md:scale-100 origin-top-right md:origin-center`}>
               <currentRank.icon className={`${currentRank.color} drop-shadow-[0_0_10px_currentColor] animate-pulse`} size={32} />
               <div className="text-center">
@@ -546,7 +599,7 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
                 </p>
               </div>
             </div>
-          </div>
+          </DraggableBox>
         )}
 
         {/* --- MAIN GRAPH AREA --- */}
