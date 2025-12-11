@@ -1,4 +1,4 @@
-const CACHE_NAME = 'union-sim-final-v1.0.2-force';
+const CACHE_NAME = 'union-sim-final-v1.0.3-netfirst';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -26,23 +26,26 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(event.request).then((networkResponse) => {
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic' && networkResponse.type !== 'cors') {
+    fetch(event.request)
+      .then((networkResponse) => {
+        // Se la risposta è valida, la restituiamo e aggiorniamo la cache
+        if (!networkResponse || networkResponse.status !== 200 || (networkResponse.type !== 'basic' && networkResponse.type !== 'cors')) {
           return networkResponse;
         }
+
         const responseToCache = networkResponse.clone();
         caches.open(CACHE_NAME).then((cache) => {
           try {
             cache.put(event.request, responseToCache);
           } catch (err) { }
         });
+
         return networkResponse;
-      }).catch(() => { });
-    })
+      })
+      .catch(() => {
+        // Se siamo offline o la rete fallisce, usiamo la cache
+        return caches.match(event.request);
+      })
   );
 });
 
