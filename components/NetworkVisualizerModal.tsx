@@ -486,7 +486,7 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
         </div>
 
         {/* --- HUD --- */}
-        <div className="absolute top-24 left-2 md:top-36 md:left-8 z-[60] pointer-events-auto animate-in slide-in-from-left-10 duration-700">
+        <div className="absolute top-auto bottom-48 left-2 md:top-36 md:bottom-auto md:left-8 z-[60] pointer-events-auto animate-in slide-in-from-left-10 duration-700">
           <div className="bg-gray-900/40 backdrop-blur-xl p-4 md:p-5 rounded-[2rem] border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col gap-4 w-[200px] md:w-72 relative overflow-hidden group hover:bg-gray-900/60 transition-colors transform scale-75 md:scale-100 origin-top-left">
 
             {/* HUD Glow Effect */}
@@ -536,7 +536,7 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
 
         {/* --- RANK BADGE --- */}
         {currentRank && (
-          <div className="absolute top-28 right-4 md:right-auto md:left-1/2 md:-translate-x-1/2 z-40 animate-in slide-in-from-top-4 zoom-in fade-in duration-500 pointer-events-none">
+          <div className="absolute top-auto bottom-48 right-4 md:top-28 md:bottom-auto md:right-auto md:left-1/2 md:-translate-x-1/2 z-40 animate-in slide-in-from-top-4 zoom-in fade-in duration-500 pointer-events-none">
             <div className={`flex flex-col items-center gap-2 p-4 md:px-8 md:py-4 rounded-3xl border bg-black/40 backdrop-blur-2xl ${currentRank.bg} ${currentRank.glow} transition-all duration-500 transform scale-75 md:scale-100 origin-top-right md:origin-center`}>
               <currentRank.icon className={`${currentRank.color} drop-shadow-[0_0_10px_currentColor] animate-pulse`} size={32} />
               <div className="text-center">
