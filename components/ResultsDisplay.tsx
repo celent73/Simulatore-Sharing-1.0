@@ -223,7 +223,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           </button>
         </div>
 
-        <div className="mt-4 overflow-x-auto rounded-3xl border border-gray-200 dark:border-white/10 shadow-inner bg-gray-50/50 dark:bg-black/20 p-2">
+        <div className="mt-4 overflow-x-auto rounded-3xl border border-gray-200 dark:border-white/10 shadow-inner bg-gray-50/50 dark:bg-black/20 p-2 max-w-full">
           <table ref={tableRef} className="min-w-full divide-y divide-gray-200 dark:divide-white/5 bg-white dark:bg-black/20 rounded-2xl">
             <thead className="bg-gray-50 dark:bg-white/5 backdrop-blur-sm">
               <tr>

@@ -20,6 +20,7 @@ import TargetCalculatorModal from './components/TargetCalculatorModal';
 import DetailedGuideModal from './components/DetailedGuideModal';
 import ContractInfoModal from './components/ContractInfoModal';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
+import { InstallModal } from './components/InstallModal';
 
 // --- IMPORTAZIONI LEGALI E UI ---
 import { LegalFooter } from './components/LegalFooter';
@@ -317,7 +318,7 @@ const AppContent = () => {
     : '-30px 0 80px -5px rgba(0, 0, 0, 0.95), 30px 0 80px -5px rgba(255, 204, 0, 0.9), 0 0 50px -10px rgba(221, 0, 0, 0.8)';
 
   return (
-    <div className={`min-h-screen bg-transparent text-gray-800 dark:text-gray-200 transition-colors duration-300 relative flex flex-col`}>
+    <div className={`min-h-screen bg-transparent text-gray-800 dark:text-gray-200 transition-colors duration-300 relative flex flex-col overflow-x-hidden`}>
       <BackgroundMesh />
 
       {/* MODALE PREMIUM COLLEGATO ALLA VERIFICA */}
@@ -410,7 +411,7 @@ const AppContent = () => {
         </div>
 
         <main key={viewMode} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
-          <div className="md:col-span-1 lg:col-span-1">
+          <div className="md:col-span-1 lg:col-span-1 min-w-0">
             {viewMode === 'condo' ? (
               <CondoInputPanel inputs={condoInputs} onInputChange={handleCondoInputChange} onReset={handleCondoReset} />
             ) : (
@@ -429,7 +430,7 @@ const AppContent = () => {
               />
             )}
           </div>
-          <div className="md:col-span-1 lg:col-span-2 relative">
+          <div className="md:col-span-1 lg:col-span-2 relative min-w-0">
             {!isPremium && (
               <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-gray-900 dark:via-gray-900/80 z-20 flex items-center justify-center pointer-events-none">
                 <div className="bg-union-blue-600/90 text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-2 backdrop-blur-md pointer-events-auto cursor-pointer" onClick={() => setShowPremiumModal(true)}>
@@ -451,6 +452,7 @@ const AppContent = () => {
       <DetailedGuideModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
       <TargetCalculatorModal isOpen={isTargetCalcOpen} onClose={() => setIsTargetCalcOpen(false)} currentInputs={inputs} onApply={handleApplyTarget} />
       <ContractInfoModal isOpen={isContractInfoModalOpen} onClose={() => setIsContractInfoModalOpen(false)} />
+      <InstallModal isOpen={showInstallModal} onClose={() => setShowInstallModal(false)} />
     </div>
   );
 };
