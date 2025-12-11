@@ -515,7 +515,7 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
             <h2 className="text-3xl md:text-5xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] tracking-tight">
               {txt.title}
             </h2>
-            <p className="text-blue-200/80 text-sm md:text-lg font-medium max-w-md mt-2 shadow-black drop-shadow-md">
+            <p className="text-blue-200/80 text-xs md:text-lg font-medium max-w-md mt-2 shadow-black drop-shadow-md">
               {txt.subtitle}
             </p>
           </div>
@@ -589,7 +589,7 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
 
         {/* --- RANK BADGE --- */}
         {currentRank && (
-          <DraggableBox className="absolute top-auto bottom-48 right-4 md:top-28 md:bottom-auto md:right-auto md:left-1/2 md:-translate-x-1/2 z-40 animate-in slide-in-from-top-4 zoom-in fade-in duration-500 pointer-events-none">
+          <DraggableBox className="absolute top-auto bottom-48 right-4 md:top-28 md:bottom-auto md:right-auto md:left-1/2 md:-translate-x-1/2 z-40 animate-in slide-in-from-top-4 zoom-in fade-in duration-500 pointer-events-auto">
             <div className={`flex flex-col items-center gap-2 p-4 md:px-8 md:py-4 rounded-3xl border bg-black/40 backdrop-blur-2xl ${currentRank.bg} ${currentRank.glow} transition-all duration-500 transform scale-75 md:scale-100 origin-top-right md:origin-center`}>
               <currentRank.icon className={`${currentRank.color} drop-shadow-[0_0_10px_currentColor] animate-pulse`} size={32} />
               <div className="text-center">
