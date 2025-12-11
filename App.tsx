@@ -27,7 +27,8 @@ import { LegalFooter } from './components/LegalFooter';
 import { LegalModal } from './components/LegalModal';
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 import { PremiumModal } from './components/PremiumModal';
-import { Lock, Copy, Check, PartyPopper, Gem, Building2, ExternalLink } from 'lucide-react';
+import { PremiumModal } from './components/PremiumModal';
+import { Lock, Copy, Check, PartyPopper, Gem, Building2, ExternalLink, Download } from 'lucide-react';
 
 // --- CONFIGURAZIONE SUPABASE ---
 // Assicurati che queste variabili siano nel file .env
@@ -117,6 +118,7 @@ const AppContent = () => {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
   const [showInstallModal, setShowInstallModal] = useState(false);
+  const [canInstall, setCanInstall] = useState(false); // New state to track if install is possible
   const [isTrialExpired, setIsTrialExpired] = useState(false);
   const [secretClickCount, setSecretClickCount] = useState(0);
   const [isPremiumUnlocked, setIsPremiumUnlocked] = useState(false);
@@ -249,6 +251,12 @@ const AppContent = () => {
     };
     checkStandalone();
     window.addEventListener('resize', checkStandalone);
+
+    // Listen for installability
+    window.addEventListener('beforeinstallprompt', (e) => {
+      setCanInstall(true);
+    });
+
     return () => window.removeEventListener('resize', checkStandalone);
   }, []);
 
@@ -386,6 +394,13 @@ const AppContent = () => {
               </button>
 
               {!isPremium && <button onClick={() => setShowPremiumModal(true)} className="flex items-center justify-center w-auto px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-xl shadow-lg hover:scale-105 transition-all font-bold text-sm border border-yellow-300">Sblocca PRO</button>}
+
+              {!isStandalone && (
+                <button onClick={() => setShowInstallModal(true)} className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl shadow-lg hover:bg-black transition-all font-bold text-sm border border-gray-700 animate-pulse">
+                  <Download size={18} />
+                  <span className="hidden lg:inline">Scarica App</span>
+                </button>
+              )}
 
               {viewMode === 'family' && (
                 <button onClick={handleTargetClick} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-emerald-400 to-cyan-400 text-white rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.6)] hover:shadow-[0_0_30px_rgba(34,211,238,0.8)] transition-all border border-white/20 font-black text-sm hover:scale-[1.05] active:scale-95 animate-pulse-slow">
