@@ -92,7 +92,7 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                     <div className="space-y-6">
                         <InputGroup
                             label={t('input.families_per_condo') || "Famiglie Condominio"}
-                            value={inputs.familiesPerCondo || 20}
+                            value={inputs.familiesPerCondo ?? 0}
                             onChange={(val) => onInputChange('familiesPerCondo', val)}
                             max={100}
                             step={5}

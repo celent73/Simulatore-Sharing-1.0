@@ -362,7 +362,6 @@ const AppContent = () => {
                 <h1 onClick={handleTitleClick} className="text-2xl sm:text-4xl font-extrabold text-white drop-shadow-sm select-none cursor-pointer active:scale-95 transition-transform flex items-center gap-3 flex-wrap justify-center md:justify-start">
                   {language === 'it' ? <ItalyFlag /> : <GermanyFlag />}
                   {t('app.title')} <span className="text-union-orange-400">Sharing</span>
-                  <span className="text-xs bg-red-600 text-white px-2 py-1 rounded animate-pulse">v1.0.2-DEBUG</span>
                   {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-union-orange-400" /></span>}
                 </h1>
                 {isCreatorMode && <span className="hidden sm:inline-flex bg-white/20 backdrop-blur-md text-white border border-white/40 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm uppercase tracking-wider">Creator Mode</span>}
