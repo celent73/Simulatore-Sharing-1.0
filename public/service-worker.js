@@ -1,4 +1,4 @@
-const CACHE_NAME = 'union-sim-final-v2026-fix-mobile-2';
+const CACHE_NAME = 'union-sim-final-visual-test-v1';
 const urlsToCache = [
   '/',
   '/index.html',
