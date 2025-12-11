@@ -27,7 +27,6 @@ import { LegalFooter } from './components/LegalFooter';
 import { LegalModal } from './components/LegalModal';
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 import { PremiumModal } from './components/PremiumModal';
-import { PremiumModal } from './components/PremiumModal';
 import { Lock, Copy, Check, PartyPopper, Gem, Building2, ExternalLink, Download } from 'lucide-react';
 
 // --- CONFIGURAZIONE SUPABASE ---
