@@ -1,4 +1,4 @@
-const CACHE_NAME = 'union-sim-final-v2026';
+const CACHE_NAME = 'union-sim-final-v2026-fix-mobile-1';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -38,10 +38,10 @@ self.addEventListener('fetch', (event) => {
         caches.open(CACHE_NAME).then((cache) => {
           try {
             cache.put(event.request, responseToCache);
-          } catch (err) {}
+          } catch (err) { }
         });
         return networkResponse;
-      }).catch(() => {});
+      }).catch(() => { });
     })
   );
 });
