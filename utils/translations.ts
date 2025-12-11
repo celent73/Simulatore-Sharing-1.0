@@ -159,6 +159,10 @@ export const translations = {
       green_units_new: "Nuove Utenze Green all'anno",
       light_units_init: "Utenze Light Iniziali (1° Anno)",
       light_units_new: "Nuove Utenze Light all'anno",
+      families_per_condo: "Famiglie per Condominio (Media)",
+      network_conversion: "% Adesione al Network",
+      network_directs_title: "Clienti Network Extra",
+      network_directs_desc: "Imposta quanti condomini diventano clienti/promoter",
       condo_note: "Nota: Il calcolo simula la progressione automatica delle ricorrenze basata sull'anzianità dei contratti.",
     },
     results: {
@@ -575,6 +579,10 @@ export const translations = {
       green_units_new: "Neue Green Einheiten / Jahr",
       light_units_init: "Light Einheiten Start (1. Jahr)",
       light_units_new: "Neue Light Einheiten / Jahr",
+      families_per_condo: "Familien pro Gebäude (Ø)",
+      network_conversion: "% Beitrittsrate Netzwerk",
+      network_directs_title: "Extra Netzwerk-Kunden",
+      network_directs_desc: "Lege fest, wie viele Bewohner Kunden/Promoter werden",
       condo_note: "Hinweis: Die Berechnung simuliert die automatische Erhöhung der wiederkehrenden Einnahmen basierend auf der Vertragsdauer.",
     },
     results: {
