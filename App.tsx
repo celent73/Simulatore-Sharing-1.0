@@ -318,13 +318,10 @@ const AppContent = () => {
     : '-30px 0 80px -5px rgba(0, 0, 0, 0.95), 30px 0 80px -5px rgba(255, 204, 0, 0.9), 0 0 50px -10px rgba(221, 0, 0, 0.8)';
 
   return (
-    <div className={`min-h-screen bg-transparent text-gray-800 dark:text-gray-200 transition-colors duration-300 relative flex flex-col overflow-x-hidden pt-14`}>
+    <div className={`min-h-screen bg-transparent text-gray-800 dark:text-gray-200 transition-colors duration-300 relative flex flex-col overflow-x-hidden`}>
       <BackgroundMesh />
 
-      {/* VISUAL VERIFICATION BANNER */}
-      <div className="fixed top-0 left-0 right-0 h-12 bg-red-600 text-white z-[99999] flex items-center justify-center font-black animate-pulse shadow-xl">
-        ⚠️ VERSIONE TEST 19:07 - SE VEDI QUESTO È AGGIORNATO ⚠️
-      </div>
+
 
       <PremiumModal
         isOpen={showPremiumModal}
