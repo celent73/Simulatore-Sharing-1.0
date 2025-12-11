@@ -19,6 +19,8 @@ const BuildingIcon = () => (
 const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange, onReset }) => {
     const { t } = useLanguage();
 
+    const effectiveCondos = (inputs.greenUnits || 0) + (inputs.lightUnits || 0);
+
     return (
         <div className="bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl p-6 rounded-3xl shadow-md border border-blue-300 dark:border-gray-600 h-full transition-all duration-300">
             <div className="flex items-center justify-between mb-6">
@@ -84,21 +86,10 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                     </div>
                 </div>
 
-                {/* SIMPLIFIED NETWORK SLIDER */}
                 {/* NETWORK SECTION (Calculated) */}
                 <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-2xl border border-purple-200 dark:border-purple-800">
-                    <h3 className="text-purple-700 dark:text-purple-400 font-bold text-sm mb-4 uppercase tracking-wider flex items-center gap-2">
-                        <span className="text-lg">💜</span> {t('input.network_section') || "Opportunità Network"}
-                    </h3>
 
                     <div className="space-y-4">
-                        <InputGroup
-                            label={t('input.managed_condos') || "Condomini Gestiti"}
-                            value={inputs.managedCondos || 0}
-                            onChange={(val) => onInputChange('managedCondos', val)}
-                            max={100}
-                            step={1}
-                        />
                         <InputGroup
                             label={t('input.families_per_condo') || "Famiglie Condominio"}
                             value={inputs.familiesPerCondo || 20}
@@ -109,7 +100,7 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
 
                         {/* MATH FEEDBACK 1 */}
                         <div className="bg-white/50 dark:bg-black/20 p-2 rounded-lg text-xs text-center font-mono text-purple-800 dark:text-purple-300">
-                            {inputs.managedCondos || 0} (Condomini) x {inputs.familiesPerCondo || 0} (Fam) = <strong>{(inputs.managedCondos || 0) * (inputs.familiesPerCondo || 0)}</strong> Famiglie Totali
+                            {effectiveCondos} (Condomini) x {inputs.familiesPerCondo || 0} (Fam) = <strong>{effectiveCondos * (inputs.familiesPerCondo || 0)}</strong> Famiglie Totali
                         </div>
 
                         <div>
@@ -134,10 +125,10 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                             {/* MATH FEEDBACK 2 */}
                             <div className="mt-2 text-[10px] text-gray-500 dark:text-gray-400 text-center font-medium">
                                 <span className="text-purple-600 dark:text-purple-400">
-                                    {Math.floor(((inputs.managedCondos || 0) * (inputs.familiesPerCondo || 0)) * ((inputs.networkConversionRate || 0) / 100))}
+                                    {Math.floor(((effectiveCondos) * (inputs.familiesPerCondo || 0)) * ((inputs.networkConversionRate || 0) / 100))}
                                 </span> nuovi clienti stimati
                                 <div className="text-[9px] opacity-70">
-                                    ({(inputs.managedCondos || 0) * (inputs.familiesPerCondo || 0)} x {inputs.networkConversionRate || 0}% = {Math.floor(((inputs.managedCondos || 0) * (inputs.familiesPerCondo || 0)) * ((inputs.networkConversionRate || 0) / 100))})
+                                    ({(effectiveCondos) * (inputs.familiesPerCondo || 0)} x {inputs.networkConversionRate || 0}% = {Math.floor(((effectiveCondos) * (inputs.familiesPerCondo || 0)) * ((inputs.networkConversionRate || 0) / 100))})
                                 </div>
                             </div>
 
