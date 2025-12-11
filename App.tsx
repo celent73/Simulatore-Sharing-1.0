@@ -453,6 +453,14 @@ const AppContent = () => {
       <TargetCalculatorModal isOpen={isTargetCalcOpen} onClose={() => setIsTargetCalcOpen(false)} currentInputs={inputs} onApply={handleApplyTarget} />
       <ContractInfoModal isOpen={isContractInfoModalOpen} onClose={() => setIsContractInfoModalOpen(false)} />
       <InstallModal isOpen={showInstallModal} onClose={() => setShowInstallModal(false)} />
+
+      {/* DEBUG OVERLAY - REMOVE AFTER FIX */}
+      <div className="fixed bottom-0 left-0 bg-black/80 text-white p-2 text-[10px] z-[9999] pointer-events-none font-mono opacity-60">
+        <p>STD: {String(isStandalone)}</p>
+        <p>MODAL: {String(showInstallModal)}</p>
+        <p>IOS: {/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase()) ? 'YES' : 'NO'}</p>
+        <p>W: {window.innerWidth}px</p>
+      </div>
     </div>
   );
 };
