@@ -101,21 +101,21 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                         {/* MATH FEEDBACK 1 - CARD WOW */}
                         <div className="bg-gradient-to-r from-purple-100 to-white dark:from-purple-900/40 dark:to-transparent p-4 rounded-xl border-l-4 border-purple-500 shadow-sm">
                             <div className="text-xs text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider mb-1">
-                                Potenziale Famiglie
+                                {t('input.network_potential_families')}
                             </div>
                             <div className="font-mono text-gray-800 dark:text-gray-100 flex flex-col sm:flex-row sm:items-baseline gap-2">
                                 <span className="text-lg">
-                                    {effectiveCondos} <span className="text-xs text-gray-500 font-sans font-normal">(Condomini)</span>
+                                    {effectiveCondos} <span className="text-xs text-gray-500 font-sans font-normal">{t('input.condos_parens')}</span>
                                 </span>
                                 <span className="text-gray-400">x</span>
                                 <span className="text-lg">
-                                    {inputs.familiesPerCondo || 0} <span className="text-xs text-gray-500 font-sans font-normal">(Famiglie)</span>
+                                    {inputs.familiesPerCondo || 0} <span className="text-xs text-gray-500 font-sans font-normal">{t('input.families_parens')}</span>
                                 </span>
                                 <span className="text-gray-400">=</span>
                                 <strong className="text-2xl text-purple-700 dark:text-purple-300">
                                     {effectiveCondos * (inputs.familiesPerCondo || 0)}
                                 </strong>
-                                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Famiglie Totali</span>
+                                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('input.network_total_families')}</span>
                             </div>
                         </div>
 
@@ -141,14 +141,14 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                             {/* MATH FEEDBACK 2 - CARD WOW */}
                             <div className="mt-4 bg-gradient-to-r from-purple-600 to-indigo-600 p-4 rounded-xl shadow-lg text-white transform transition-all hover:scale-[1.02]">
                                 <div className="text-[10px] text-purple-100 uppercase tracking-wider font-bold mb-1">
-                                    Risultato Stimato
+                                    {t('input.network_est_result')}
                                 </div>
                                 <div className="flex items-baseline gap-2">
                                     <span className="text-3xl font-black text-white drop-shadow-md">
                                         {Math.floor(((effectiveCondos) * (inputs.familiesPerCondo || 0)) * ((inputs.networkConversionRate || 0) / 100))}
                                     </span>
                                     <span className="text-lg font-medium text-purple-100">
-                                        Nuovi Clienti
+                                        {t('input.network_new_clients')}
                                     </span>
                                 </div>
                                 <div className="mt-2 text-xs text-purple-200/80 font-mono bg-black/20 inline-block px-2 py-1 rounded">
