@@ -163,6 +163,7 @@ export const translations = {
       network_conversion: "% Adesione al Network",
       network_directs_title: "Clienti Network Extra",
       network_directs_desc: "Imposta quanti condomini diventano clienti/promoter",
+      network_assumption_note: "Nota: Il calcolo considera l'attivazione di 2 contratti per cliente (1 Green + 1 Light).",
       condo_note: "Nota: Il calcolo simula la progressione automatica delle ricorrenze basata sull'anzianità dei contratti.",
     },
     results: {
@@ -583,6 +584,7 @@ export const translations = {
       network_conversion: "% Beitrittsrate Netzwerk",
       network_directs_title: "Extra Netzwerk-Kunden",
       network_directs_desc: "Lege fest, wie viele Bewohner Kunden/Promoter werden",
+      network_assumption_note: "Hinweis: Die Berechnung geht von 2 Verträgen pro Kunde aus (1 Green + 1 Light).",
       condo_note: "Hinweis: Die Berechnung simuliert die automatische Erhöhung der wiederkehrenden Einnahmen basierend auf der Vertragsdauer.",
     },
     results: {

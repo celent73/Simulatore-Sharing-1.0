@@ -21,8 +21,10 @@ export interface CondoInput {
   lightUnits: number;
   yearlyNewUnitsGreen: number;
   yearlyNewUnitsLight: number;
-  // Simplified Network Input
-  networkDirects: number; // 0-50
+  // Network Logic Inputs
+  managedCondos: number;
+  familiesPerCondo: number;
+  networkConversionRate: number; // 0-100
 }
 
 export type ViewMode = 'family' | 'client' | 'condo';
