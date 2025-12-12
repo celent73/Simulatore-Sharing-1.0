@@ -57,7 +57,10 @@ const DetailedGuideModal: React.FC<DetailedGuideModalProps> = ({ isOpen, onClose
     const handleDownloadPDF = async () => {
         if (printRef.current) {
             try {
-                const dataUrl = await toPng(printRef.current, { quality: 0.95, backgroundColor: '#ffffff' });
+                // Ensure fonts are ready
+                await document.fonts.ready;
+
+                const dataUrl = await toPng(printRef.current, { quality: 0.95, pixelRatio: 2 });
                 const pdf = new jsPDF('p', 'mm', 'a4');
                 const imgProps = pdf.getImageProperties(dataUrl);
                 const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -306,9 +309,12 @@ const DetailedGuideModal: React.FC<DetailedGuideModalProps> = ({ isOpen, onClose
                     </div>
                 </div>
 
-                {/* Print View Hidden */}
-                <div className="fixed top-[-9999px] left-[-9999px] w-[800px]" ref={printRef}>
-                    <div className="p-10 bg-white text-gray-900 space-y-10">
+                {/* Print View Hidden - Changed to absolute for better capture reliability */}
+                <div
+                    ref={printRef}
+                    className="absolute top-0 left-0 w-[794px] min-h-[1123px] bg-white text-gray-900 z-[-1000] p-10 transform translate-x-[-9999px]"
+                >
+                    <div className="space-y-10">
                         <div className="text-center border-b pb-8">
                             <h1 className="text-4xl font-black mb-2">{t('guide_wow.title')}</h1>
                             <p className="text-xl text-gray-500">{t('guide_wow.subtitle')}</p>
@@ -319,8 +325,8 @@ const DetailedGuideModal: React.FC<DetailedGuideModalProps> = ({ isOpen, onClose
                             <h2 className="text-2xl font-bold border-l-4 border-blue-500 pl-4">{t('guide_wow.tabs.intro')}</h2>
                             <p className="text-base leading-relaxed">{t('guide_wow.content.intro_text')}</p>
                             <div className="grid grid-cols-2 gap-4 mt-4">
-                                <div className="p-4 bg-gray-50 rounded-xl border"><h4 className="font-bold">Input Panel</h4><p className="text-xs">Imposta i cursori.</p></div>
-                                <div className="p-4 bg-gray-50 rounded-xl border"><h4 className="font-bold">Grafici Live</h4><p className="text-xs">Visualizza la crescita.</p></div>
+                                <div className="p-4 bg-gray-50 rounded-xl border border-gray-200"><h4 className="font-bold">Input Panel</h4><p className="text-xs">Imposta i cursori.</p></div>
+                                <div className="p-4 bg-gray-50 rounded-xl border border-gray-200"><h4 className="font-bold">Grafici Live</h4><p className="text-xs">Visualizza la crescita.</p></div>
                             </div>
                         </div>
 
@@ -350,10 +356,10 @@ const DetailedGuideModal: React.FC<DetailedGuideModalProps> = ({ isOpen, onClose
                             <h2 className="text-2xl font-bold border-l-4 border-orange-500 pl-4">{t('guide_wow.tabs.vision')}</h2>
                             <p className="text-base italic">"{t('guide_wow.content.vision_desc')}"</p>
                             <ul className="grid grid-cols-2 gap-4 text-sm mt-4">
-                                <li className="p-3 bg-gray-50 border rounded-lg" dangerouslySetInnerHTML={{ __html: t('guide_wow.content.vision_zero') }} />
-                                <li className="p-3 bg-gray-50 border rounded-lg" dangerouslySetInnerHTML={{ __html: t('guide_wow.content.vision_freedom') }} />
-                                <li className="p-3 bg-gray-50 border rounded-lg" dangerouslySetInnerHTML={{ __html: t('guide_wow.content.vision_dreams') }} />
-                                <li className="p-3 bg-gray-50 border rounded-lg" dangerouslySetInnerHTML={{ __html: t('guide_wow.content.vision_pension') }} />
+                                <li className="p-3 bg-gray-50 border border-gray-200 rounded-lg" dangerouslySetInnerHTML={{ __html: t('guide_wow.content.vision_zero') }} />
+                                <li className="p-3 bg-gray-50 border border-gray-200 rounded-lg" dangerouslySetInnerHTML={{ __html: t('guide_wow.content.vision_freedom') }} />
+                                <li className="p-3 bg-gray-50 border border-gray-200 rounded-lg" dangerouslySetInnerHTML={{ __html: t('guide_wow.content.vision_dreams') }} />
+                                <li className="p-3 bg-gray-50 border border-gray-200 rounded-lg" dangerouslySetInnerHTML={{ __html: t('guide_wow.content.vision_pension') }} />
                             </ul>
                         </div>
 
