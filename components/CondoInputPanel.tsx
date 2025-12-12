@@ -11,7 +11,7 @@ interface CondoInputPanelProps {
 }
 
 const BuildingIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-union-blue-500">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
     </svg>
 );
@@ -22,27 +22,27 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
     const effectiveCondos = (inputs.greenUnits || 0) + (inputs.lightUnits || 0);
 
     return (
-        <div className="bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl p-6 rounded-3xl shadow-md border border-blue-300 dark:border-gray-600 h-full transition-all duration-300">
-            <div className="flex items-center justify-between mb-6">
+        <div className="bg-white dark:bg-black/40 backdrop-blur-xl dark:backdrop-blur-xl p-6 rounded-[2.5rem] shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 h-full transition-all duration-300">
+            <div className="flex items-center justify-between mb-8 pb-2">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-union-blue-50/50 dark:bg-union-blue-900/20 rounded-xl backdrop-blur-sm">
+                    <div className="p-3 bg-gradient-to-br from-union-blue-500 to-union-blue-700 text-white rounded-2xl shadow-lg shadow-union-blue-500/30">
                         <BuildingIcon />
                     </div>
-                    <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 leading-tight">
+                    <h2 className="text-xl font-black text-gray-900 dark:text-white leading-[1.1]">
                         {t('input.admin_params')}
                     </h2>
                 </div>
-                <button onClick={onReset} className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-600 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                <button onClick={onReset} className="p-2.5 bg-gray-50 dark:bg-white/5 hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-400 hover:text-red-500 dark:text-white/50 dark:hover:text-red-400 rounded-xl transition-all border border-gray-100 dark:border-white/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 11.667 0 8.25 8.25 0 0 0 0-11.667l-3.182-3.182m0 0-3.182 3.183m3.182-3.182-4.992 4.992" />
                     </svg>
                 </button>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6 overflow-y-auto custom-scrollbar pr-1" style={{ maxHeight: 'calc(100vh - 200px)' }}>
                 {/* GREEN SECTION */}
-                <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-2xl border border-green-200 dark:border-green-800">
-                    <h3 className="text-green-700 dark:text-green-400 font-bold text-sm mb-4 uppercase tracking-wider flex items-center gap-2">
+                <div className="bg-green-50/50 dark:bg-green-900/10 p-5 rounded-3xl border border-green-100 dark:border-green-500/20">
+                    <h3 className="text-green-700 dark:text-green-400 font-bold text-xs mb-4 uppercase tracking-widest flex items-center gap-2">
                         <span className="text-lg">🌿</span> {t('input.green_section')}
                     </h3>
                     <div className="space-y-4">
@@ -64,8 +64,8 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                 </div>
 
                 {/* LIGHT SECTION */}
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-2xl border border-blue-200 dark:border-blue-800">
-                    <h3 className="text-blue-700 dark:text-blue-400 font-bold text-sm mb-4 uppercase tracking-wider flex items-center gap-2">
+                <div className="bg-blue-50/50 dark:bg-blue-900/10 p-5 rounded-3xl border border-blue-100 dark:border-blue-500/20">
+                    <h3 className="text-blue-700 dark:text-blue-400 font-bold text-xs mb-4 uppercase tracking-widest flex items-center gap-2">
                         <span className="text-lg">💡</span> {t('input.light_section')}
                     </h3>
                     <div className="space-y-4">
@@ -87,7 +87,7 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                 </div>
 
                 {/* NETWORK SECTION (Calculated) */}
-                <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-2xl border border-purple-200 dark:border-purple-800">
+                <div className="bg-purple-50/50 dark:bg-purple-900/10 p-5 rounded-3xl border border-purple-100 dark:border-purple-500/20">
 
                     <div className="space-y-6">
                         <InputGroup
@@ -99,7 +99,7 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                         />
 
                         {/* MATH FEEDBACK 1 - CARD WOW */}
-                        <div className="bg-gradient-to-r from-purple-100 to-white dark:from-purple-900/40 dark:to-transparent p-4 rounded-xl border-l-4 border-purple-500 shadow-sm">
+                        <div className="bg-white dark:bg-black/20 p-4 rounded-2xl border border-purple-100 dark:border-purple-500/20 shadow-sm">
                             <div className="text-xs text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider mb-1">
                                 {t('input.network_potential_families')}
                             </div>
