@@ -29,7 +29,7 @@ const FirstVisitModal: React.FC<FirstVisitModalProps> = ({ onComplete, forceInst
             {!showGuide ? (
                 <div className="text-center p-6 max-w-md w-full animate-in zoom-in duration-500">
                     <div className="w-24 h-24 bg-union-blue-500 rounded-3xl mx-auto mb-8 flex items-center justify-center shadow-[0_0_50px_rgba(0,119,200,0.5)]">
-                        <img src="/logo-new.png" alt="Logo" className="w-16 h-16 object-contain" />
+                        <img src="/logo.png" alt="Logo" className="w-16 h-16 object-contain" />
                     </div>
 
                     <h1 className="text-4xl font-black text-white mb-2 tracking-tight">
