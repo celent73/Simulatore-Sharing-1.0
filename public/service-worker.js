@@ -1,9 +1,9 @@
-const CACHE_NAME = 'union-sim-final-v1.0.5-fix';
+const CACHE_NAME = 'union-sim-final-v1.0.6-logo';
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/logo.png',
+  '/logo-new.png',
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap'
 ];
