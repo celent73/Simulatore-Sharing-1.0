@@ -25,7 +25,12 @@ const texts = {
         projY3Label: "Proiezione 3° Anno",
         projY3Sub: "Crescita stimata 2.0x",
         backBtn: "Torna al Simulatore",
-        disclaimer: "*Calcolo basato su: scenario 1 contratto Azzeriamola Green per utente (1,00€ il 1° anno)."
+        disclaimer: "*Calcolo basato su: scenario 1 contratto Azzeriamola Green per utente (1,00€ il 1° anno).",
+        speedLabel: "Velocità di Crescita",
+        speedSlow: "Conservativa",
+        speedMedium: "Equilibrata",
+        speedFast: "Aggressiva",
+        resetBtn: "Azzera"
     },
     de: {
         title: "Ziel-Simulator",
@@ -40,7 +45,12 @@ const texts = {
         projY3Label: "Prognose 3. Jahr",
         projY3Sub: "Geschätztes Wachstum 2.0x",
         backBtn: "Zurück zum Simulator",
-        disclaimer: "*Berechnung basierend auf: Szenario 1 Azzeriamola Green Vertrag pro Benutzer (1,00€ im 1. Jahr)."
+        disclaimer: "*Berechnung basierend auf: Szenario 1 Azzeriamola Green Vertrag pro Benutzer (1,00€ im 1. Jahr).",
+        speedLabel: "Wachstumsgeschwindigkeit",
+        speedSlow: "Konservativ",
+        speedMedium: "Ausgewogen",
+        speedFast: "Aggressiv",
+        resetBtn: "Zurücksetzen"
     }
 };
 
@@ -105,6 +115,7 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
     const txt = language === 'it' ? texts.it : texts.de;
 
     const [inputValue, setInputValue] = useState<string>("1500");
+    const [speedMode, setSpeedMode] = useState<'slow' | 'medium' | 'fast'>('medium');
     const [results, setResults] = useState({ people: 0, time: 0, structure: 'N/A', contracts: 0, actions: 0, projY2: 0, projY3: 0 });
     const [animating, setAnimating] = useState(false);
 
@@ -121,10 +132,26 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
 
             let estimatedMonths = 0;
             if (totalPeopleNeeded > 0) {
-                const growthFactor = 3;
-                const timePerStep = 1.5;
-                const logBase3 = Math.log(totalPeopleNeeded) / Math.log(growthFactor);
-                estimatedMonths = Math.ceil(logBase3 * timePerStep);
+                let growthFactor = 2.0;
+                let timePerStep = 1.5;
+
+                switch (speedMode) {
+                    case 'slow':
+                        growthFactor = 1.5;
+                        timePerStep = 2.0;
+                        break;
+                    case 'medium':
+                        growthFactor = 2.0;
+                        timePerStep = 1.5;
+                        break;
+                    case 'fast':
+                        growthFactor = 3.0;
+                        timePerStep = 1.5;
+                        break;
+                }
+
+                const logBase = Math.log(totalPeopleNeeded) / Math.log(growthFactor);
+                estimatedMonths = Math.ceil(logBase * timePerStep);
                 if (desiredIncome > 0 && estimatedMonths < 1) estimatedMonths = 1;
             }
 
@@ -175,7 +202,7 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
         };
 
         if (isOpen) calculate();
-    }, [inputValue, isOpen]);
+    }, [inputValue, isOpen, speedMode]);
 
     if (!isOpen) return null;
 
@@ -218,6 +245,32 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                 </div>
 
                 <div className="p-6 space-y-8 relative z-10">
+
+                    {/* SPEED SELECTOR */}
+                    <div className="flex flex-col items-center justify-center gap-3 mb-2">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{txt.speedLabel}</span>
+                        <div className="flex p-1 bg-gray-900 rounded-xl border border-gray-700">
+                            <button
+                                onClick={() => setSpeedMode('slow')}
+                                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${speedMode === 'slow' ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/50' : 'text-gray-500 hover:text-gray-300'}`}
+                            >
+                                {txt.speedSlow}
+                            </button>
+                            <button
+                                onClick={() => setSpeedMode('medium')}
+                                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${speedMode === 'medium' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/50' : 'text-gray-500 hover:text-gray-300'}`}
+                            >
+                                {txt.speedMedium}
+                            </button>
+                            <button
+                                onClick={() => setSpeedMode('fast')}
+                                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${speedMode === 'fast' ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/50' : 'text-gray-500 hover:text-gray-300'}`}
+                            >
+                                {txt.speedFast}
+                            </button>
+                        </div>
+                    </div>
+
                     <div className="relative group text-center">
                         <label className="text-emerald-500 font-bold text-xs uppercase tracking-[0.2em] mb-2 block">
                             {txt.inputLabel}
@@ -232,6 +285,27 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                                 placeholder="0"
                             />
                             <span className="absolute top-1/2 -translate-y-1/2 -right-4 text-gray-600 text-3xl font-light">€</span>
+
+                            {/* RESET BUTTON */}
+                            {inputValue !== "0" && inputValue !== "" && (
+                                <button
+                                    onClick={() => setInputValue("0")}
+                                    className="absolute top-1/2 -translate-y-1/2 -right-16 p-2 text-gray-600 hover:text-red-500 transition-colors bg-gray-900/50 rounded-full border border-gray-800 hover:border-red-500/30"
+                                    title={txt.resetBtn}
+                                >
+                                    <Clock size={16} className="rotate-180" />
+                                    {/* Using Clock rotated as a kind of 'rewind' or 'reset' since RefreshCcw might not be imported. 
+                                        Actually, let's use 'RotateCcw' if available, or just X. Let's stick to X for standard 'clear'. 
+                                        But user asked for "azzera", existing X is for closing modal.
+                                        Let's import RefreshCcw or RotateCcw at the top first if I can, but to be safe without breaking imports, 
+                                        I will use the existing 'X' icon but styled differently, or just check imports. 
+                                        WAIT: I can see imports: X, Target, Users, Clock, TrendingUp, Zap, FileText, Activity.
+                                        I don't have RefreshCcw. I'll add it to imports in a separate step or just use 'X' again which is standard for clearing inputs.
+                                        Let's use 'X' for now as a clear button.
+                                    */}
+                                    <X size={16} />
+                                </button>
+                            )}
                         </div>
                     </div>
 
