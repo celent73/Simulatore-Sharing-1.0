@@ -427,6 +427,22 @@ export const translations = {
       title: "Analisi Utenze",
       subtitle: "Calcola il vero risparmio"
     },
+    projection: {
+      modal_title: "Il Tuo Futuro Finanziario",
+      projection_at: "Proiezione ricchezza a",
+      years: "Anni",
+      year_1: "Anno",
+      total_accumulated: "TOTALE STIMATO ACCUMULATO",
+      recurring_monthly: "Ricorrente Mensile",
+      recurring_monthly_sub: "Ricorrente Mensile",
+      per_month: "/mese",
+      in_y_years: "In {{years}} anni:",
+      in_1_year: "In 1 anno:",
+      one_time_immediate: "Una Tantum Immediato",
+      initial_value: "Valore Iniziale:",
+      quote: "\"Il miglior momento per piantare un albero era 20 anni fa. Il secondo miglior momento è oggi.\"",
+      label: "Proiezione:"
+    },
   },
   de: {
     app: {
@@ -847,6 +863,22 @@ export const translations = {
       desc: "Im Network bringt dich jede Ablehnung dem Erfolg näher. Statistisch gesehen musst du für einen Partner (Ja) etwa 9 'Nein' erhalten. Das bedeutet, jedes Mal, wenn jemand Nein sagt, hast du trotzdem verdient:",
       contact_value: "Wert pro Kontakt",
       stat_contacts: "Geschätzte Kontakte"
+    },
+    projection: {
+      modal_title: "Deine Finanzielle Zukunft",
+      projection_at: "Vermögensprojektion für",
+      years: "Jahre",
+      year_1: "Jahr",
+      total_accumulated: "GESCHÄTZTES GESAMTVERMÖGEN",
+      recurring_monthly: "Monatl. Wiederkehrend",
+      recurring_monthly_sub: "Monatl. Wiederkehrend",
+      per_month: "/Monat",
+      in_y_years: "In {{years}} Jahren:",
+      in_1_year: "In 1 Jahr:",
+      one_time_immediate: "Sofortiger Einmalbonus",
+      initial_value: "Anfangswert:",
+      quote: "\"Der beste Zeitpunkt, einen Baum zu pflanzen, war vor 20 Jahren. Der zweitbeste Zeitpunkt ist heute.\"",
+      label: "Projektion:"
     },
   }
 };

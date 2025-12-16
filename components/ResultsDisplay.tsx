@@ -11,7 +11,7 @@ import InactionCost from './InactionCost';
 import ZeroCostGoal from './ZeroCostGoal';
 import CustomerBenefitCard from './CustomerBenefitCard';
 import GoldenNoCard from './GoldenNoCard';
-import FamilyProCard from './FamilyProCard';
+
 import ScenarioComparator from './ScenarioComparator';
 import QuickPitchMode from './QuickPitchMode';
 import QuickNavigation from './QuickNavigation';
@@ -19,6 +19,7 @@ import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import { useLanguage } from '../contexts/LanguageContext';
 import { FileDown } from 'lucide-react';
+import ProjectionModal from './ProjectionModal';
 
 interface ResultsDisplayProps {
   planResult: CompensationPlanResult;
@@ -105,6 +106,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   const [isExporting, setIsExporting] = useState(false);
   const [showWowFeatures, setShowWowFeatures] = useState(false);
   const [managerBonus, setManagerBonus] = useState(0);
+  const [projectionYears, setProjectionYears] = useState(1);
+  const [isProjectionModalOpen, setIsProjectionModalOpen] = useState(false);
   const { t } = useLanguage();
 
   const isClientMode = viewMode === 'client';
@@ -132,11 +135,11 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
     return {
       ...d,
       cumulativeEarnings: (d.cumulativeEarnings * multiplier) + lostCashback,
-      monthlyRecurring: d.monthlyRecurring * multiplier,
+      monthlyRecurring: (d.monthlyRecurring * multiplier) + managerBonus,
       monthlyOneTimeBonus: (d.monthlyOneTimeBonus * multiplier) + (d.monthlyOneTimeBonus * ratioCashback * (1 - multiplier)),
-      monthlyTotalEarnings: ((d.monthlyOneTimeBonus + d.monthlyRecurring) * multiplier) + (d.monthlyOneTimeBonus * ratioCashback * (1 - multiplier)),
+      monthlyTotalEarnings: ((d.monthlyOneTimeBonus + d.monthlyRecurring) * multiplier) + (d.monthlyOneTimeBonus * ratioCashback * (1 - multiplier)) + managerBonus,
       cumulativeOneTimeBonus: (d.cumulativeOneTimeBonus * multiplier) + lostCashback,
-      cumulativeRecurring: d.cumulativeRecurring * multiplier,
+      cumulativeRecurring: (d.cumulativeRecurring * multiplier) + (managerBonus * 12),
     };
   });
 
@@ -199,6 +202,15 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
   return (
     <div className="space-y-8 relative">
+      <ProjectionModal
+        isOpen={isProjectionModalOpen}
+        onClose={() => setIsProjectionModalOpen(false)}
+        years={projectionYears}
+        onYearChange={setProjectionYears}
+        monthlyRecurring={totalRecurringYear3}
+        totalOneTime={totalOneTimeBonus}
+      />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
         <SummaryCard title={t('results.total_users')} value={totalUsers.toLocaleString('it-IT')} variant="glass" icon={<UsersIcon />} />
         <SummaryCard title={cashbackPeriod === 'annual' ? "Bonus Una Tantum" : t('results.one_time')} value={formatValueWithSuffix(totalOneTimeBonus).value} variant="gradient-blue" icon={<WalletIcon />} />
@@ -249,29 +261,69 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
             </tbody>
             <tfoot className="bg-gray-50 dark:bg-white/5 backdrop-blur-sm border-t border-gray-200 dark:border-white/10">
               <tr>
-                <td className="px-6 py-4 text-left text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider">{t('results.total')}</td>
+                <td className="px-6 py-4 text-left text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider">
+                  <div className="flex flex-col gap-2">
+                    <span>{t('results.total')}</span>
+                    <div className="flex items-center gap-2">
+                      <label className="text-[10px] uppercase font-bold text-gray-400">{t('projection.label')}</label>
+
+                      {/* WOW PROJECTION TRIGGER */}
+                      <button
+                        onClick={() => setIsProjectionModalOpen(true)}
+                        className="p-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-md hover:scale-110 transition-transform"
+                        title="Visualizza Proiezione Dettagliata"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                          <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                          <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />
+                        </svg>
+                      </button>
+
+                      <select
+                        value={projectionYears}
+                        onChange={(e) => setProjectionYears(Number(e.target.value))}
+                        className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs font-bold rounded-lg px-2 py-1 focus:ring-2 focus:ring-union-blue-500 outline-none cursor-pointer"
+                      >
+                        <option value={1}>1 {t('projection.year_1')}</option>
+                        <option value={2}>2 {t('projection.years')}</option>
+                        <option value={3}>3 {t('projection.years')}</option>
+                        <option value={5}>5 {t('projection.years')}</option>
+                        <option value={10}>10 {t('projection.years')}</option>
+                      </select>
+                    </div>
+                  </div>
+                </td>
                 <td className="px-6 py-4 text-left text-sm font-black text-gray-900 dark:text-white font-mono">{totalUsers.toLocaleString('it-IT')}</td>
                 <td className="px-6 py-4 text-left text-lg font-black text-emerald-600 dark:text-emerald-400">{formatCurrency(totalOneTimeBonus)}</td>
-                <td className="px-6 py-4 text-left text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(totalRecurringYear1)}</td>
-                <td className="px-6 py-4 text-left text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(totalRecurringYear2)}</td>
-                <td className="px-6 py-4 text-left text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(totalRecurringYear3)}</td>
+                <td className="px-6 py-4 text-left">
+                  <div className="text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(totalRecurringYear1)}</div>
+                  <div className="text-xs font-bold text-gray-400 mt-1">
+                    {projectionYears === 1 ? t('projection.in_1_year') : t('projection.in_y_years').replace('{{years}}', projectionYears.toString())} <span className="text-gray-600 dark:text-gray-300">{formatCurrency(totalRecurringYear1 * 12 * projectionYears)}</span>
+                  </div>
+                </td>
+                <td className="px-6 py-4 text-left">
+                  <div className="text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(totalRecurringYear2)}</div>
+                  <div className="text-xs font-bold text-gray-400 mt-1">
+                    {projectionYears === 1 ? t('projection.in_1_year') : t('projection.in_y_years').replace('{{years}}', projectionYears.toString())} <span className="text-gray-600 dark:text-gray-300">{formatCurrency(totalRecurringYear2 * 12 * projectionYears)}</span>
+                  </div>
+                </td>
+                <td className="px-6 py-4 text-left">
+                  <div className="text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(totalRecurringYear3)}</div>
+                  <div className="text-xs font-bold text-gray-400 mt-1">
+                    {projectionYears === 1 ? t('projection.in_1_year') : t('projection.in_y_years').replace('{{years}}', projectionYears.toString())} <span className="text-gray-600 dark:text-gray-300">{formatCurrency(totalRecurringYear3 * 12 * projectionYears)}</span>
+                  </div>
+                </td>
               </tr>
             </tfoot>
           </table>
         </div>
       </div>
 
-      {/* BONUS PROGRESS - HIDDEN IN CLIENT MODE */}
       {!isClientMode && (
         <BonusProgress
           totalContracts={totalContracts}
           onBonusChange={setManagerBonus}
         />
-      )}
-
-      {/* FAMILY PRO CARD - HIDDEN IN CLIENT MODE - INSERTED HERE */}
-      {!isClientMode && (
-        <FamilyProCard inputs={inputs} />
       )}
 
       <div className="bg-white dark:bg-black/40 backdrop-blur-xl rounded-[2.5rem] shadow-lg border border-gray-100 dark:border-white/10 overflow-hidden mt-8 p-1">
@@ -295,12 +347,10 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           </div>
 
           <div className="space-y-8 p-6 rounded-[2.5rem] bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 backdrop-blur-sm">
-            {/* NEW: Quick Pitch Mode */}
             <div id="quick-pitch">
               <QuickPitchMode planResult={planResult} realizationMonths={inputs.realizationTimeMonths} />
             </div>
 
-            {/* NEW: Scenario Comparator */}
             <div id="scenario-comparator">
               <ScenarioComparator baseInputs={inputs} />
             </div>
@@ -342,7 +392,6 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
             </div>
           </div>
 
-          {/* Quick Navigation Menu */}
           <QuickNavigation sections={[
             { id: 'quick-pitch', name: 'Pitch Veloce', icon: '⚡' },
             { id: 'scenario-comparator', name: 'Confronto Scenari', icon: '🎯' },
@@ -360,7 +409,6 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         </div>
       )}
 
-      {/* EXPORT TEMPLATE - FORCE DARK MODE STYLE FOR CONSISTENCY */}
       <div style={{ position: 'absolute', top: 0, left: '-9999px' }}>
         <div ref={exportRef} className="w-[600px] h-[900px] bg-slate-900 text-white p-10 flex flex-col justify-between font-sans overflow-hidden relative" style={{ backgroundColor: '#0f172a' }}>
           <div className="relative z-10 flex flex-col h-full">
