@@ -7,7 +7,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { createClient } from '@supabase/supabase-js'; // <--- AGGIUNTO SUPABASE
+import { supabase } from './utils/supabaseClient';
 import { PlanInput, CondoInput, ViewMode } from './types';
 import { useCompensationPlan } from './hooks/useSimulation';
 import { useCondoSimulation } from './hooks/useCondoSimulation';
@@ -28,12 +28,6 @@ import { LegalModal } from './components/LegalModal';
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 import { PremiumModal } from './components/PremiumModal';
 import { Lock, Copy, Check, PartyPopper, Gem, Building2, ExternalLink, Download } from 'lucide-react';
-
-// --- CONFIGURAZIONE SUPABASE ---
-// Assicurati che queste variabili siano nel file .env
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // --- ICONE SVG MANUALI ---
 const SunIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-6.364-.386 1.591-1.591M3 12h2.25m.386-6.364 1.591 1.591" /></svg>);

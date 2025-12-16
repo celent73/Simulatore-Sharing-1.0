@@ -27,14 +27,16 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
             reset: "Azzera tutto",
             electricity: "Energia Elettrica",
             enterData: "Inserisci i dati della tua bolletta",
-            priceKw: "Prezzo al kW (€)",
+            priceKw: "Spread luce (margine azienda)",
+            pun: "PUN (Prezzo Unico Naz.)",
             monthlyConsumption: "Consumo Mensile",
             fixedCosts: "Spese Fisse / Oneri (Mensile)",
             totalElectricity: "Totale Luce",
             annual: "Annuo",
             monthly: "Mensile",
             gas: "Gas Metano",
-            priceSmc: "Prezzo al Smc (€)",
+            priceSmc: "Spread Gas (margine azienda)",
+            psv: "PSV (Punto Scambio Virtuale)",
             totalGas: "Totale Gas",
             summary: "Riepilogo",
             total: "Totale",
@@ -48,7 +50,9 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
             profitto: "PROFITTO!",
             disclaimer: "* I valori sono stime basate sui dati inseriti. Il calcolo include solo la quota energia e cashback indicativo.",
             understood: "Ho capito!",
-            downloadPdf: "Scarica PDF"
+            downloadPdf: "Scarica PDF",
+            includeSpread: "Includi Spread",
+            spreadImpact: "Valore Spread"
         },
         de: {
             premiumAnalysis: "Premium Analyse",
@@ -57,14 +61,16 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
             reset: "Alles zurücksetzen",
             electricity: "Strom",
             enterData: "Gib deine Rechnungsdaten ein",
-            priceKw: "Preis pro kW (€)",
+            priceKw: "Marge Strom",
+            pun: "PUN",
             monthlyConsumption: "Monatlicher Verbrauch",
             fixedCosts: "Fixkosten / Gebühren (Monatlich)",
             totalElectricity: "Gesamt Strom",
             annual: "Jährlich",
             monthly: "Monatlich",
             gas: "Erdgas",
-            priceSmc: "Preis pro Smc (€)",
+            priceSmc: "Marge Gas",
+            psv: "PSV",
             totalGas: "Gesamt Gas",
             summary: "Zusammenfassung",
             total: "Gesamt",
@@ -78,29 +84,37 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
             profitto: "GEWINN!",
             disclaimer: "* Die Werte sind Schätzungen basierend auf den eingegebenen Daten. Die Berechnung umfasst nur den Energieanteil und das indikative Cashback.",
             understood: "Verstanden!",
-            downloadPdf: "PDF herunterladen"
+            downloadPdf: "PDF herunterladen",
+            includeSpread: "Marge einbeziehen",
+            spreadImpact: "Margenwert"
         }
     };
 
     const txt = texts[language as keyof typeof texts] || texts.it;
 
     const [electricityPrice, setElectricityPrice] = useState<string>('');
+    const [punValue, setPunValue] = useState<string>('');
     const [electricityConsumption, setElectricityConsumption] = useState<string>(''); // Monthly
     const [electricityFixed, setElectricityFixed] = useState<string>('');
     const [gasPrice, setGasPrice] = useState<string>('');
+    const [psvValue, setPsvValue] = useState<string>('');
     const [gasConsumption, setGasConsumption] = useState<string>(''); // Monthly
     const [gasFixed, setGasFixed] = useState<string>('');
     const [isEditingCashback, setIsEditingCashback] = useState(false); // Toggle for cashback edit section
+    const [includeSpread, setIncludeSpread] = useState(true); // New Toggle for Spread
 
     const handleReset = () => {
         setElectricityPrice('');
+        setPunValue('');
         setElectricityConsumption('');
         setElectricityFixed('');
         setGasPrice('');
+        setPsvValue('');
         setGasConsumption('');
         setGasFixed('');
         onInputChange('cashbackSpending', 0);
         onInputChange('cashbackPercentage', 0);
+        setIncludeSpread(true);
     };
 
     const handleExportPDF = async () => {
@@ -121,8 +135,13 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
             const clonedInputs = clone.querySelectorAll('input');
             originalInputs.forEach((input, index) => {
                 if (clonedInputs[index]) {
-                    clonedInputs[index].value = input.value;
-                    clonedInputs[index].setAttribute('value', input.value);
+                    // Checkbox handling
+                    if (input.type === 'checkbox') {
+                        (clonedInputs[index] as HTMLInputElement).checked = (input as HTMLInputElement).checked;
+                    } else {
+                        clonedInputs[index].value = input.value;
+                        clonedInputs[index].setAttribute('value', input.value);
+                    }
                 }
             });
 
@@ -205,18 +224,24 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
     };
 
     // Calculate annuals
-    const elecPrice = parseFloat(electricityPrice.replace(',', '.')) || 0;
+    const elecSpread = parseFloat(electricityPrice.replace(',', '.')) || 0;
+    const pun = parseFloat(punValue.replace(',', '.')) || 0;
     const elecCons = parseFloat(electricityConsumption.replace(',', '.')) || 0;
     const elecFix = parseFloat(electricityFixed.replace(',', '.')) || 0;
 
-    const gasPr = parseFloat(gasPrice.replace(',', '.')) || 0;
+    const gasSpread = parseFloat(gasPrice.replace(',', '.')) || 0;
+    const psv = parseFloat(psvValue.replace(',', '.')) || 0;
     const gasCons = parseFloat(gasConsumption.replace(',', '.')) || 0;
     const gasFix = parseFloat(gasFixed.replace(',', '.')) || 0;
 
-    const monthlyElectricityCost = (elecPrice * elecCons) + elecFix;
+    // Effective Spread based on Checkbox
+    const activeElecSpread = includeSpread ? elecSpread : 0;
+    const activeGasSpread = includeSpread ? gasSpread : 0;
+
+    const monthlyElectricityCost = ((activeElecSpread + pun) * elecCons) + elecFix;
     const annualElectricityCost = monthlyElectricityCost * 12;
 
-    const monthlyGasCost = (gasPr * gasCons) + gasFix;
+    const monthlyGasCost = ((activeGasSpread + psv) * gasCons) + gasFix;
     const annualGasCost = monthlyGasCost * 12;
 
     const totalAnnualCost = annualElectricityCost + annualGasCost;
@@ -228,21 +253,19 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
     const rawNetMonthly = totalMonthlyCost - monthlyCashback;
     const rawNetAnnual = totalAnnualCost - annualCashback;
 
+    // Spread Impact Calculation (Difference)
+    const monthlySpreadImpact = (elecSpread * elecCons) + (gasSpread * gasCons);
+    const annualSpreadImpact = monthlySpreadImpact * 12;
+    const currentSpreadImpact = period === 'annual' ? annualSpreadImpact : monthlySpreadImpact;
+
     // Determine Status
     // > 0 means Cost is higher than Cashback (Debt)
     // <= 0 means Cashback covers Cost (Surplus or Break-even)
     const isDebt = (period === 'annual' ? rawNetAnnual : rawNetMonthly) > 0.01; // small epsilon
     const isSurplus = (period === 'annual' ? rawNetAnnual : rawNetMonthly) < -0.01;
 
-    // Dynamic Gradient
-    // Dynamic Gradient
-    let gradientClass = "from-indigo-500 via-purple-500 to-pink-500"; // Default/Fallback
-    if (isDebt) {
-        gradientClass = "from-red-500 via-orange-500 to-rose-500";
-    } else {
-        // Surplus or Break-even (Green Theme)
-        gradientClass = "from-emerald-400 via-green-400 to-teal-400";
-    }
+    // Dynamic Gradient - FORCED GREEN as requested
+    let gradientClass = "from-emerald-400 via-green-400 to-teal-400";
 
     const savingsPercentage = totalMonthlyCost > 0 ? (monthlyCashback / totalMonthlyCost) * 100 : 0;
 
@@ -314,12 +337,26 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                         value={electricityPrice}
                                         onChange={(e) => setElectricityPrice(e.target.value)}
                                         className="w-full bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 font-bold text-gray-700 dark:text-white focus:outline-none focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/20 transition-all text-lg"
-                                        placeholder="0.30"
+                                        placeholder="0.05"
                                     />
                                     <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">€/kW</span>
                                 </div>
                             </div>
                             <div className="space-y-2">
+                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wide ml-1">{txt.pun}</label>
+                                <div className="relative">
+                                    <input
+                                        type="number"
+                                        step="any"
+                                        value={punValue}
+                                        onChange={(e) => setPunValue(e.target.value)}
+                                        className="w-full bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 font-bold text-gray-700 dark:text-white focus:outline-none focus:border-yellow-400 focus:ring-4 focus:ring-yellow-400/20 transition-all text-lg"
+                                        placeholder="0.10"
+                                    />
+                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">€/kW</span>
+                                </div>
+                            </div>
+                            <div className="space-y-2 sm:col-span-2">
                                 <label className="text-xs font-bold text-gray-400 uppercase tracking-wide ml-1">{txt.monthlyConsumption}</label>
                                 <div className="relative">
                                     <input
@@ -380,12 +417,26 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                         value={gasPrice}
                                         onChange={(e) => setGasPrice(e.target.value)}
                                         className="w-full bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 font-bold text-gray-700 dark:text-white focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-400/20 transition-all text-lg"
-                                        placeholder="1.10"
+                                        placeholder="0.10"
                                     />
                                     <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">€/Smc</span>
                                 </div>
                             </div>
                             <div className="space-y-2">
+                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wide ml-1">{txt.psv}</label>
+                                <div className="relative">
+                                    <input
+                                        type="number"
+                                        step="any"
+                                        value={psvValue}
+                                        onChange={(e) => setPsvValue(e.target.value)}
+                                        className="w-full bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 font-bold text-gray-700 dark:text-white focus:outline-none focus:border-orange-400 focus:ring-4 focus:ring-orange-400/20 transition-all text-lg"
+                                        placeholder="0.40"
+                                    />
+                                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">€/Smc</span>
+                                </div>
+                            </div>
+                            <div className="space-y-2 sm:col-span-2">
                                 <label className="text-xs font-bold text-gray-400 uppercase tracking-wide ml-1">{txt.monthlyConsumption}</label>
                                 <div className="relative">
                                     <input
@@ -433,7 +484,8 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                 <h3 className="text-lg font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">{txt.summary} {period === 'annual' ? txt.annual : txt.monthly} {txt.total}</h3>
                                 <div className="flex items-center justify-center gap-2">
                                     <div className="flex flex-col items-center">
-                                        <span className="text-5xl font-black text-gray-900 dark:text-white">
+                                        {/* CHANGED TO RED */}
+                                        <span className="text-5xl font-black text-red-600 dark:text-red-400">
                                             €{(period === 'annual' ? totalAnnualCost : totalMonthlyCost).toLocaleString('it-IT', { minimumFractionDigits: 2 })}
                                         </span>
                                         <span className="text-sm font-bold text-gray-400 mt-1">
@@ -442,6 +494,26 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                     </div>
                                 </div>
                                 <p className="text-sm text-gray-400 font-medium mt-3">{txt.totalBillsCost}</p>
+
+                                {/* Checkbox for Spread Inclusion - NEW */}
+                                <div className="mt-4 flex items-center justify-center gap-3">
+                                    <label className="flex items-center cursor-pointer gap-2 select-none group">
+                                        <input
+                                            type="checkbox"
+                                            checked={includeSpread}
+                                            onChange={(e) => setIncludeSpread(e.target.checked)}
+                                            className="w-5 h-5 rounded-md border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                                        />
+                                        <span className="text-sm font-bold text-gray-600 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                            {txt.includeSpread}
+                                        </span>
+                                    </label>
+                                    <div className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                                        <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                                            {txt.spreadImpact}: {includeSpread ? '' : 'Escluso'} <span className="font-bold text-indigo-600 dark:text-indigo-400">€{currentSpreadImpact.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</span>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="space-y-4">
@@ -520,23 +592,23 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                     <ArrowRight size={24} strokeWidth={3} />
                                 </div>
 
-                                {/* Net Result Card */}
-                                <div className={`flex-1 w-full bg-gradient-to-br ${isDebt ? 'from-red-50 to-orange-50 dark:from-red-900/30 dark:to-orange-900/30 border-red-100 dark:border-red-800' : 'from-emerald-50 to-teal-50 dark:from-emerald-900/30 dark:to-teal-900/30 border-emerald-100 dark:border-emerald-800'} p-4 rounded-2xl flex items-center justify-between shadow-lg transform scale-105 border-2`}>
+                                {/* Net Result Card - FORCED GREEN */}
+                                <div className={`flex-1 w-full bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/30 dark:to-teal-900/30 border-emerald-100 dark:border-emerald-800 p-4 rounded-2xl flex items-center justify-between shadow-lg transform scale-105 border-2`}>
                                     <div>
-                                        <p className={`text-xs font-bold ${isDebt ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'} uppercase tracking-wider`}>{txt.newTotal} {period === 'annual' ? txt.annual : txt.monthly}</p>
+                                        <p className={`text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider`}>{txt.newTotal} {period === 'annual' ? txt.annual : txt.monthly}</p>
 
                                         {/* Main Value */}
-                                        <p className={`text-3xl font-black ${isDebt ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                                        <p className={`text-3xl font-black text-emerald-600 dark:text-emerald-400`}>
                                             {isSurplus ? '+' : ''}€{Math.abs(period === 'annual' ? rawNetAnnual : rawNetMonthly).toLocaleString('it-IT', { minimumFractionDigits: 2 })}
                                         </p>
 
                                         {/* Secondary Value / Label */}
-                                        <p className={`text-[10px] font-bold ${isDebt ? 'text-red-600/70 dark:text-red-400/70' : 'text-emerald-600/70 dark:text-emerald-400/70'}`}>
+                                        <p className={`text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70`}>
                                             {isSurplus ? txt.profitto : txt.daPagare}
                                         </p>
                                     </div>
                                     <div className="text-right">
-                                        <div className={`inline-flex items-center gap-1 ${isDebt ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300' : 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300'} px-3 py-1.5 rounded-xl shadow-sm`}>
+                                        <div className={`inline-flex items-center gap-1 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 px-3 py-1.5 rounded-xl shadow-sm`}>
                                             <span className="text-sm font-black">
                                                 {isSurplus ? `+${Math.min(100, savingsPercentage).toFixed(0)}%` : `-${Math.min(100, savingsPercentage).toFixed(0)}%`}
                                             </span>

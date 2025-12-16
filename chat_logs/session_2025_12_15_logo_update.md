@@ -27,5 +27,11 @@
 **Azioni Eseguite:**
 - Creazione di questo file di log per preservare la cronologia delle modifiche effettuate in questa sessione.
 
+### 4. Richiesta Utente: "aggiorna il nuovo logo e fai il deploy siu netifly" (16:12)
+**Azioni Eseguite:**
+- Rilevato che `logo-new.png` è stato rimosso e sostituito da `logo.png`.
+- Aggiornati i riferimenti nel codice (`index.html`, `manifest.json`, `service-worker.js`, `FirstVisitModal.tsx`) da `/logo-new.png` a `/logo.png`.
+- Eseguito commit e push su `main` per avviare il deploy automatico su Netlify.
+
 ---
 *Fine del log.*
