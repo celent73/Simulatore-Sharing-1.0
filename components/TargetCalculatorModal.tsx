@@ -18,14 +18,14 @@ const texts = {
         inputLabel: "INSERISCI LA RENDITA MENSILE CHE DESIDERI",
         peopleLabel: "Contratti di Rete",
         timeLabel: "Mesi Stimati",
-        rankLabel: "Qualifica Target",
-        rankSub: "Livello consigliato",
+        rankLabel: "Qualifica Raggiunta",
+        rankSub: "Livello raggiunto",
         projY2Label: "Proiezione 2° Anno",
         projY2Sub: "Crescita stimata 1.5x",
         projY3Label: "Proiezione 3° Anno",
         projY3Sub: "Crescita stimata 2.0x",
         backBtn: "Torna al Simulatore",
-        disclaimer: "*Calcolo basato su media storica: scenario 2 contratti per promoter (1,50€/utente)."
+        disclaimer: "*Calcolo basato su: scenario 1 contratto Azzeriamola Green per utente (1,00€ il 1° anno)."
     },
     de: {
         title: "Ziel-Simulator",
@@ -33,14 +33,14 @@ const texts = {
         inputLabel: "GEWÜNSCHTES MONATLICHES EINKOMMEN EINGEBEN",
         peopleLabel: "Netzwerkverträge",
         timeLabel: "Geschätzte Monate",
-        rankLabel: "Ziel-Qualifikation",
-        rankSub: "Empfohlenes Level",
+        rankLabel: "Erreichte Qualifikation",
+        rankSub: "Erreichtes Level",
         projY2Label: "Prognose 2. Jahr",
         projY2Sub: "Geschätztes Wachstum 1.5x",
         projY3Label: "Prognose 3. Jahr",
         projY3Sub: "Geschätztes Wachstum 2.0x",
         backBtn: "Zurück zum Simulator",
-        disclaimer: "*Berechnung basierend auf historischem Durchschnitt: Szenario 2 Verträge pro Promoter (1,50€/Benutzer)."
+        disclaimer: "*Berechnung basierend auf: Szenario 1 Azzeriamola Green Vertrag pro Benutzer (1,00€ im 1. Jahr)."
     }
 };
 
@@ -113,8 +113,8 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
         const desiredIncome = Number(inputValue) || 0;
 
         const calculate = () => {
-            const AVG_REVENUE_PER_USER = 1.50;
-            const CONTRACTS_PER_USER = 2;
+            const AVG_REVENUE_PER_USER = 1.00; // Updated to 1.00 as per request (Azzeriamola Green Year 1)
+            const CONTRACTS_PER_USER = 1; // implictly 1 contract (Green) as we calculate based on unit revenue
 
             let totalPeopleNeeded = Math.ceil(desiredIncome / AVG_REVENUE_PER_USER);
             if (totalPeopleNeeded < 1 && desiredIncome > 0) totalPeopleNeeded = 1;
@@ -128,13 +128,17 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                 if (desiredIncome > 0 && estimatedMonths < 1) estimatedMonths = 1;
             }
 
-            let structureSuggestion = "Start";
-            if (totalPeopleNeeded > 500) structureSuggestion = "Top Leader";
-            else if (totalPeopleNeeded > 200) structureSuggestion = "Builder Pro";
-            else if (totalPeopleNeeded > 50) structureSuggestion = "Team Developer";
-            else if (totalPeopleNeeded > 0) structureSuggestion = "Starter";
+            // If user implies "contracts of network" and revenue is 1 per contract, then people = contracts basically
+            // But let's keep the distinction if needed. 
+            // The prompt says "contracts of network" replaces "people needed".
+            const totalContracts = totalPeopleNeeded; // 1:1 ratio for simplicity based on 1.00 revenue
 
-            const totalContracts = totalPeopleNeeded * CONTRACTS_PER_USER;
+            let structureSuggestion = "Starter";
+            if (totalContracts >= 3000) structureSuggestion = "NATIONAL MANAGER";
+            else if (totalContracts >= 1500) structureSuggestion = "REGIONAL MANAGER";
+            else if (totalContracts >= 600) structureSuggestion = "PRO MANAGER";
+            else if (totalContracts > 200) structureSuggestion = "Builder Pro";
+            else if (totalContracts > 50) structureSuggestion = "Team Developer";
 
             let weeklyActions = 0;
             if (totalPeopleNeeded > 0) {
@@ -142,9 +146,21 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                 if (weeklyActions < 2) weeklyActions = 2;
             }
 
-            // Calcolo Proiezioni
-            const projY2 = desiredIncome * 1.5;
-            const projY3 = desiredIncome * 2.0;
+            // Calcolo Bonus Qualifica
+            let bonus = 0;
+            if (totalContracts >= 5000) {
+                bonus = 3000;
+            } else if (totalContracts >= 1500) {
+                bonus = 1000;
+            } else if (totalContracts > 600) {
+                bonus = 300;
+            }
+
+            // Calcolo Proiezioni con Bonus
+            // Year 2: 1.50 euro per contract
+            // Year 3: 2.00 euro per contract
+            const projY2 = (totalContracts * 1.50) + bonus;
+            const projY3 = (totalContracts * 2.00) + bonus;
 
             setResults({
                 people: totalPeopleNeeded,
