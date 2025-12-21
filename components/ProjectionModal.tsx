@@ -90,6 +90,8 @@ const ProjectionModal: React.FC<ProjectionModalProps> = ({
         <div className="fixed inset-0 z-50">
             {/* Backdrop */}
             <div
+                className="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity duration-300"
+                onClick={onClose}
             />
 
             {/* Scroll Container */}
