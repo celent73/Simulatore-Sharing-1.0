@@ -102,7 +102,7 @@ const ProjectionModal: React.FC<ProjectionModalProps> = ({
                     {/* Modal Card */}
                     <div className={`
         relative w-full max-w-4xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 
-        rounded-[2rem] md:rounded-[3rem] border-2 border-amber-500/30 shadow-[0_0_100px_rgba(245,158,11,0.2)] 
+        rounded-[2rem] md:rounded-[3rem] border border-white/10 shadow-2xl 
         transform transition-all duration-500 flex flex-col h-auto
         ${showContent ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-10'}
       `}>
