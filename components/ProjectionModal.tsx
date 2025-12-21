@@ -76,7 +76,7 @@ const ProjectionModal: React.FC<ProjectionModalProps> = ({
         // Determine number of coin piles
         const piles = Math.min(8, Math.max(1, Math.floor(amount / 5000)));
         return (
-            <div className="flex gap-2 justify-center flex-wrap mt-2">
+            <div className="flex gap-2 justify-center flex-wrap mt-2 mx-auto">
                 {Array.from({ length: piles }).map((_, i) => (
                     <div key={i} className="text-2xl animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>
                         💰
@@ -170,7 +170,7 @@ const ProjectionModal: React.FC<ProjectionModalProps> = ({
                             {/* Main Total */}
                             <div className="text-center space-y-4">
                                 <div className="inline-block relative">
-                                    <span className="text-6xl md:text-8xl font-black text-white tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+                                    <span className="text-7xl md:text-8xl font-black text-white tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">
                                         {count.toLocaleString('it-IT', { maximumFractionDigits: 0 })}€
                                     </span>
                                     <div className="absolute -top-6 -right-12 text-4xl animate-bounce">🚀</div>

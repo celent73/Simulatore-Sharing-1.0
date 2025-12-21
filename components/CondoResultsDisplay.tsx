@@ -95,7 +95,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                             <tr className="bg-gray-50 dark:bg-white/5 text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 font-bold backdrop-blur-sm">
                                 <th className="p-4 border-b border-gray-200 dark:border-white/10">{t('condo_results.col_period')}</th>
                                 <th className="p-4 border-b border-gray-200 dark:border-white/10">{t('condo_results.col_active_units')}</th>
-                                <th className="p-4 border-b border-gray-200 dark:border-white/10 text-right">{t('condo_results.col_token')}</th>
+                                <th className="p-4 border-b border-gray-200 dark:border-white/10 text-right">Guadagno Una Tantum</th>
                                 <th className="p-4 border-b border-gray-200 dark:border-white/10 text-right">{t('condo_results.rec_end_year')}</th>
                                 <th className="p-4 border-b border-gray-200 dark:border-white/10 text-right bg-gray-50/80 dark:bg-white/5">{t('condo_results.col_annual_total')}</th>
                             </tr>
