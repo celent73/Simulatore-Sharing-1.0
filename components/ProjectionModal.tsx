@@ -88,7 +88,7 @@ const ProjectionModal: React.FC<ProjectionModalProps> = ({
 
     return (
         <div className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden animate-fade-in custom-scrollbar">
-            <div className="min-h-full flex items-center justify-center p-0 md:p-4">
+            <div className="min-h-full flex items-center justify-center p-4">
                 {/* Backdrop */}
                 <div
                     className="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity duration-300"
@@ -99,8 +99,8 @@ const ProjectionModal: React.FC<ProjectionModalProps> = ({
                 {/* Modal Card */}
                 <div className={`
         relative w-full max-w-4xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 
-        rounded-none md:rounded-[3rem] border-0 md:border-2 border-amber-500/30 shadow-[0_0_100px_rgba(245,158,11,0.2)] 
-        transform transition-all duration-500 flex flex-col min-h-screen md:min-h-0 md:h-auto md:max-h-[85vh]
+        rounded-[2rem] md:rounded-[3rem] border-2 border-amber-500/30 shadow-[0_0_100px_rgba(245,158,11,0.2)] 
+        transform transition-all duration-500 flex flex-col h-auto
         ${showContent ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-10'}
       `}>
 

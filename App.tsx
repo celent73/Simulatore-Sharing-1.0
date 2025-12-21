@@ -407,10 +407,7 @@ const AppContent = () => {
 
               {viewMode === 'family' && (
                 <>
-                  <button onClick={() => setIsNetworkModalOpen(true)} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-xl shadow-[0_0_20px_rgba(167,139,250,0.6)] hover:shadow-[0_0_30px_rgba(192,132,252,0.8)] transition-all border border-white/20 font-black text-sm hover:scale-[1.05] active:scale-95 animate-pulse-slow">
-                    <Users className="w-5 h-5" />
-                    <span className="hidden sm:inline ml-2 drop-shadow-md uppercase tracking-wide">{language === 'it' ? 'Struttura' : 'Struktur'}</span>
-                  </button>
+                  {/* 'Struttura' button removed as per user request */}
                   <button onClick={handleTargetClick} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-emerald-400 to-cyan-400 text-white rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.6)] hover:shadow-[0_0_30px_rgba(34,211,238,0.8)] transition-all border border-white/20 font-black text-sm hover:scale-[1.05] active:scale-95 animate-pulse-slow">
                     <TargetIcon />
                     <span className="hidden sm:inline ml-2 drop-shadow-md uppercase tracking-wide">{targetButtonText}</span>
