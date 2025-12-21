@@ -17,6 +17,7 @@ import ResultsDisplay from './components/ResultsDisplay';
 import CondoResultsDisplay from './components/CondoResultsDisplay';
 import { useSmartState } from './hooks/useSmartState';
 import TargetCalculatorModal from './components/TargetCalculatorModal';
+import { NetworkVisualizerModal } from './components/NetworkVisualizerModal';
 import DetailedGuideModal from './components/DetailedGuideModal';
 import ContractInfoModal from './components/ContractInfoModal';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
@@ -27,7 +28,7 @@ import { LegalFooter } from './components/LegalFooter';
 import { LegalModal } from './components/LegalModal';
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 import { PremiumModal } from './components/PremiumModal';
-import { Lock, Copy, Check, PartyPopper, Gem, Building2, ExternalLink, Download } from 'lucide-react';
+import { Lock, Copy, Check, PartyPopper, Gem, Building2, ExternalLink, Download, Users } from 'lucide-react';
 
 // --- ICONE SVG MANUALI ---
 const SunIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-6.364-.386 1.591-1.591M3 12h2.25m.386-6.364 1.591 1.591" /></svg>);
@@ -116,6 +117,7 @@ const AppContent = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false);
   const [isTargetCalcOpen, setIsTargetCalcOpen] = useState(false);
+  const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
   const [showInstallModal, setShowInstallModal] = useState(false);
@@ -404,10 +406,16 @@ const AppContent = () => {
               )}
 
               {viewMode === 'family' && (
-                <button onClick={handleTargetClick} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-emerald-400 to-cyan-400 text-white rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.6)] hover:shadow-[0_0_30px_rgba(34,211,238,0.8)] transition-all border border-white/20 font-black text-sm hover:scale-[1.05] active:scale-95 animate-pulse-slow">
-                  <TargetIcon />
-                  <span className="hidden sm:inline ml-2 drop-shadow-md uppercase tracking-wide">{targetButtonText}</span>
-                </button>
+                <>
+                  <button onClick={() => setIsNetworkModalOpen(true)} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-xl shadow-[0_0_20px_rgba(167,139,250,0.6)] hover:shadow-[0_0_30px_rgba(192,132,252,0.8)] transition-all border border-white/20 font-black text-sm hover:scale-[1.05] active:scale-95 animate-pulse-slow">
+                    <Users className="w-5 h-5" />
+                    <span className="hidden sm:inline ml-2 drop-shadow-md uppercase tracking-wide">{language === 'it' ? 'Struttura' : 'Struktur'}</span>
+                  </button>
+                  <button onClick={handleTargetClick} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-emerald-400 to-cyan-400 text-white rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.6)] hover:shadow-[0_0_30px_rgba(34,211,238,0.8)] transition-all border border-white/20 font-black text-sm hover:scale-[1.05] active:scale-95 animate-pulse-slow">
+                    <TargetIcon />
+                    <span className="hidden sm:inline ml-2 drop-shadow-md uppercase tracking-wide">{targetButtonText}</span>
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -468,6 +476,7 @@ const AppContent = () => {
       <DisclaimerModal isOpen={isDisclaimerOpen} onClose={() => setIsDisclaimerOpen(false)} />
       <DetailedGuideModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
       <TargetCalculatorModal isOpen={isTargetCalcOpen} onClose={() => setIsTargetCalcOpen(false)} currentInputs={inputs} onApply={handleApplyTarget} />
+      <NetworkVisualizerModal isOpen={isNetworkModalOpen} onClose={() => setIsNetworkModalOpen(false)} inputs={inputs} onInputChange={handleInputChange} onReset={handleResetToZero} />
       <ContractInfoModal isOpen={isContractInfoModalOpen} onClose={() => setIsContractInfoModalOpen(false)} />
       <InstallModal isOpen={showInstallModal} onClose={() => setShowInstallModal(false)} />
     </div>

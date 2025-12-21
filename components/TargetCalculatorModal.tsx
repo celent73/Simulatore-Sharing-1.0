@@ -25,7 +25,7 @@ const texts = {
         projY3Label: "Proiezione 3° Anno",
         projY3Sub: "Crescita stimata 2.0x",
         backBtn: "Torna al Simulatore",
-        disclaimer: "*Calcolo basato su: scenario 1 contratto Azzeriamola Green per utente (1,00€ il 1° anno).",
+        disclaimer: "*Calcolo basato su: media provvigionale stimata di 35,00€ per utente.",
         speedLabel: "Velocità di Crescita",
         speedSlow: "Conservativa",
         speedMedium: "Equilibrata",
@@ -45,7 +45,7 @@ const texts = {
         projY3Label: "Prognose 3. Jahr",
         projY3Sub: "Geschätztes Wachstum 2.0x",
         backBtn: "Zurück zum Simulator",
-        disclaimer: "*Berechnung basierend auf: Szenario 1 Azzeriamola Green Vertrag pro Benutzer (1,00€ im 1. Jahr).",
+        disclaimer: "*Berechnung basierend auf: geschätzter durchschnittlicher Provision von 35,00€ pro Benutzer.",
         speedLabel: "Wachstumsgeschwindigkeit",
         speedSlow: "Konservativ",
         speedMedium: "Ausgewogen",
@@ -124,7 +124,7 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
         const desiredIncome = Number(inputValue) || 0;
 
         const calculate = () => {
-            const AVG_REVENUE_PER_USER = 1.00; // Updated to 1.00 as per request (Azzeriamola Green Year 1)
+            const AVG_REVENUE_PER_USER = 35.00; // Updated to 35.00 as per request
             const CONTRACTS_PER_USER = 1; // implictly 1 contract (Green) as we calculate based on unit revenue
 
             let totalPeopleNeeded = Math.ceil(desiredIncome / AVG_REVENUE_PER_USER);
@@ -183,11 +183,10 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                 bonus = 300;
             }
 
-            // Calcolo Proiezioni con Bonus
-            // Year 2: 1.50 euro per contract
-            // Year 3: 2.00 euro per contract
-            const projY2 = (totalContracts * 1.50) + bonus;
-            const projY3 = (totalContracts * 2.00) + bonus;
+            // Year 2: 1.5x growth
+            // Year 3: 2.0x growth
+            const projY2 = (totalContracts * (AVG_REVENUE_PER_USER * 1.5)) + bonus;
+            const projY3 = (totalContracts * (AVG_REVENUE_PER_USER * 2.0)) + bonus;
 
             setResults({
                 people: totalPeopleNeeded,
