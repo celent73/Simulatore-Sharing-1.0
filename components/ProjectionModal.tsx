@@ -129,7 +129,7 @@ const ProjectionModal: React.FC<ProjectionModalProps> = ({
                         </button>
 
                         {/* Header */}
-                        <div className="relative p-6 md:p-8 text-center border-b border-white/5">
+                        <div className="relative p-6 md:p-8 text-center">
                             <button
                                 onClick={onClose}
                                 className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-colors"
@@ -192,7 +192,7 @@ const ProjectionModal: React.FC<ProjectionModalProps> = ({
                                             <p className="text-2xl font-bold text-white">{monthlyRecurring.toLocaleString('it-IT')}€ <span className="text-sm opacity-50">{t('projection.per_month')}</span></p>
                                         </div>
                                     </div>
-                                    <div className="mt-4 pt-4 border-t border-white/5">
+                                    <div className="mt-4 pt-4">
                                         <p className="text-sm text-slate-400 text-center mb-2">
                                             {years === 1 ? t('projection.in_1_year') : t('projection.in_y_years').replace('{{years}}', years.toString())}
                                         </p>
@@ -214,7 +214,7 @@ const ProjectionModal: React.FC<ProjectionModalProps> = ({
                                             <p className="text-2xl font-bold text-white">{totalOneTime.toLocaleString('it-IT')}€</p>
                                         </div>
                                     </div>
-                                    <div className="mt-4 pt-4 border-t border-white/5">
+                                    <div className="mt-4 pt-4">
                                         <p className="text-sm text-slate-400 text-center mb-2">{t('projection.initial_value')}</p>
                                         <p className="text-3xl font-black text-amber-400 text-center">
                                             {totalOneTime.toLocaleString('it-IT')}€
