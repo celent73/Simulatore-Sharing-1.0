@@ -115,122 +115,121 @@ const ProjectionModal: React.FC<ProjectionModalProps> = ({
 
 
 
-                    </div>
+                        {/* Content Wrapper */}
+                        <div className="relative z-10">
 
-                    {/* Content Wrapper */}
-                    <div className="relative z-10">
-
-                        {/* Visual Close Icon Top Right (Extra safety) */}
-                        <button
-                            onClick={onClose}
-                            className="md:hidden fixed top-4 right-4 z-[100] p-3 rounded-full bg-slate-900/50 backdrop-blur-md border border-white/10 text-white"
-                        >
-                            <X size={24} />
-                        </button>
-
-                        {/* Header */}
-                        <div className="relative p-6 md:p-8 text-center">
+                            {/* Visual Close Icon Top Right (Extra safety) */}
                             <button
                                 onClick={onClose}
-                                className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-colors"
+                                className="md:hidden fixed top-4 right-4 z-[100] p-3 rounded-full bg-slate-900/50 backdrop-blur-md border border-white/10 text-white"
                             >
                                 <X size={24} />
                             </button>
 
-                            <div className="inline-block p-3 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-600 shadow-lg mb-4 transform -rotate-3 hover:rotate-0 transition-transform duration-300">
-                                <TrendingUp className="text-white w-8 h-8" />
-                            </div>
+                            {/* Header */}
+                            <div className="relative p-6 md:p-8 text-center">
+                                <button
+                                    onClick={onClose}
+                                    className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-colors"
+                                >
+                                    <X size={24} />
+                                </button>
 
-                            <h2 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600 mb-2">
-                                {t('projection.modal_title')}
-                            </h2>
-                            <p className="text-slate-400 font-medium text-lg mb-6">
-                                {t('projection.projection_at')}
-                            </p>
-
-                            <div className="flex justify-center flex-wrap gap-3">
-                                {[1, 2, 3, 5, 10].map((y) => (
-                                    <button
-                                        key={y}
-                                        onClick={() => onYearChange(y)}
-                                        className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${years === y
-                                            ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-black scale-110 shadow-[0_0_20px_rgba(251,191,36,0.5)] border-transparent'
-                                            : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white hover:border-white/30'
-                                            }`}
-                                    >
-                                        {y} {y === 1 ? t('projection.year_1') : t('projection.years')}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Main Content */}
-                        <div className="relative p-6 md:p-12 space-y-8 md:space-y-12">
-
-                            {/* Main Total */}
-                            <div className="text-center space-y-4">
-                                <div className="inline-block relative">
-                                    <span className="text-7xl md:text-8xl font-black text-white tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">
-                                        {count.toLocaleString('it-IT', { maximumFractionDigits: 0 })}€
-                                    </span>
-                                    <div className="absolute -top-6 -right-12 text-4xl animate-bounce">🚀</div>
-                                </div>
-                                <p className="text-xl text-green-400 font-bold uppercase tracking-widest">{t('projection.total_accumulated')}</p>
-                            </div>
-
-                            {/* Visual Representation */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-                                {/* Recurring Wealth */}
-                                <div className="bg-white/5 rounded-3xl p-6 border border-white/5 hover:border-green-500/30 transition-all hover:bg-white/10 group">
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <div className="p-3 rounded-xl bg-green-500/20 text-green-400 group-hover:scale-110 transition-transform">
-                                            <Coins size={32} />
-                                        </div>
-                                        <div className="text-left">
-                                            <h3 className="text-slate-400 font-bold text-sm uppercase">{t('projection.recurring_monthly_sub')}</h3>
-                                            <p className="text-2xl font-bold text-white">{monthlyRecurring.toLocaleString('it-IT')}€ <span className="text-sm opacity-50">{t('projection.per_month')}</span></p>
-                                        </div>
-                                    </div>
-                                    <div className="mt-4 pt-4">
-                                        <p className="text-sm text-slate-400 text-center mb-2">
-                                            {years === 1 ? t('projection.in_1_year') : t('projection.in_y_years').replace('{{years}}', years.toString())}
-                                        </p>
-                                        <p className="text-3xl font-black text-green-400 text-center">
-                                            {(monthlyRecurring * 12 * years).toLocaleString('it-IT')}€
-                                        </p>
-                                        <MoneyStack amount={monthlyRecurring * 12 * years} />
-                                    </div>
+                                <div className="inline-block p-3 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-600 shadow-lg mb-4 transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+                                    <TrendingUp className="text-white w-8 h-8" />
                                 </div>
 
-                                {/* Immediate Wealth */}
-                                <div className="bg-white/5 rounded-3xl p-6 border border-white/5 hover:border-amber-500/30 transition-all hover:bg-white/10 group">
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <div className="p-3 rounded-xl bg-amber-500/20 text-amber-400 group-hover:scale-110 transition-transform">
-                                            <Wallet size={32} />
-                                        </div>
-                                        <div className="text-left">
-                                            <h3 className="text-slate-400 font-bold text-sm uppercase">{t('projection.one_time_immediate')}</h3>
-                                            <p className="text-2xl font-bold text-white">{totalOneTime.toLocaleString('it-IT')}€</p>
-                                        </div>
-                                    </div>
-                                    <div className="mt-4 pt-4">
-                                        <p className="text-sm text-slate-400 text-center mb-2">{t('projection.initial_value')}</p>
-                                        <p className="text-3xl font-black text-amber-400 text-center">
-                                            {totalOneTime.toLocaleString('it-IT')}€
-                                        </p>
-                                        <GoldCoins amount={totalOneTime} />
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div className="text-center space-y-6">
-                                <p className="text-slate-500 italic">
-                                    {t('projection.quote')}
+                                <h2 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600 mb-2">
+                                    {t('projection.modal_title')}
+                                </h2>
+                                <p className="text-slate-400 font-medium text-lg mb-6">
+                                    {t('projection.projection_at')}
                                 </p>
+
+                                <div className="flex justify-center flex-wrap gap-3">
+                                    {[1, 2, 3, 5, 10].map((y) => (
+                                        <button
+                                            key={y}
+                                            onClick={() => onYearChange(y)}
+                                            className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 ${years === y
+                                                ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-black scale-110 shadow-[0_0_20px_rgba(251,191,36,0.5)] border-transparent'
+                                                : 'bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10 hover:text-white hover:border-white/30'
+                                                }`}
+                                        >
+                                            {y} {y === 1 ? t('projection.year_1') : t('projection.years')}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
 
+                            {/* Main Content */}
+                            <div className="relative p-6 md:p-12 space-y-8 md:space-y-12">
+
+                                {/* Main Total */}
+                                <div className="text-center space-y-4">
+                                    <div className="inline-block relative">
+                                        <span className="text-7xl md:text-8xl font-black text-white tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+                                            {count.toLocaleString('it-IT', { maximumFractionDigits: 0 })}€
+                                        </span>
+                                        <div className="absolute -top-6 -right-12 text-4xl animate-bounce">🚀</div>
+                                    </div>
+                                    <p className="text-xl text-green-400 font-bold uppercase tracking-widest">{t('projection.total_accumulated')}</p>
+                                </div>
+
+                                {/* Visual Representation */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                                    {/* Recurring Wealth */}
+                                    <div className="bg-white/5 rounded-3xl p-6 border border-white/5 hover:border-green-500/30 transition-all hover:bg-white/10 group">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className="p-3 rounded-xl bg-green-500/20 text-green-400 group-hover:scale-110 transition-transform">
+                                                <Coins size={32} />
+                                            </div>
+                                            <div className="text-left">
+                                                <h3 className="text-slate-400 font-bold text-sm uppercase">{t('projection.recurring_monthly_sub')}</h3>
+                                                <p className="text-2xl font-bold text-white">{monthlyRecurring.toLocaleString('it-IT')}€ <span className="text-sm opacity-50">{t('projection.per_month')}</span></p>
+                                            </div>
+                                        </div>
+                                        <div className="mt-4 pt-4">
+                                            <p className="text-sm text-slate-400 text-center mb-2">
+                                                {years === 1 ? t('projection.in_1_year') : t('projection.in_y_years').replace('{{years}}', years.toString())}
+                                            </p>
+                                            <p className="text-3xl font-black text-green-400 text-center">
+                                                {(monthlyRecurring * 12 * years).toLocaleString('it-IT')}€
+                                            </p>
+                                            <MoneyStack amount={monthlyRecurring * 12 * years} />
+                                        </div>
+                                    </div>
+
+                                    {/* Immediate Wealth */}
+                                    <div className="bg-white/5 rounded-3xl p-6 border border-white/5 hover:border-amber-500/30 transition-all hover:bg-white/10 group">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className="p-3 rounded-xl bg-amber-500/20 text-amber-400 group-hover:scale-110 transition-transform">
+                                                <Wallet size={32} />
+                                            </div>
+                                            <div className="text-left">
+                                                <h3 className="text-slate-400 font-bold text-sm uppercase">{t('projection.one_time_immediate')}</h3>
+                                                <p className="text-2xl font-bold text-white">{totalOneTime.toLocaleString('it-IT')}€</p>
+                                            </div>
+                                        </div>
+                                        <div className="mt-4 pt-4">
+                                            <p className="text-sm text-slate-400 text-center mb-2">{t('projection.initial_value')}</p>
+                                            <p className="text-3xl font-black text-amber-400 text-center">
+                                                {totalOneTime.toLocaleString('it-IT')}€
+                                            </p>
+                                            <GoldCoins amount={totalOneTime} />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div className="text-center space-y-6">
+                                    <p className="text-slate-500 italic">
+                                        {t('projection.quote')}
+                                    </p>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
 
