@@ -90,7 +90,7 @@ const ProjectionModal: React.FC<ProjectionModalProps> = ({
         <div className="fixed inset-0 z-50">
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity duration-300"
+                className="absolute inset-0 bg-slate-950/95 backdrop-blur-xl transition-opacity duration-300"
                 onClick={onClose}
             />
 
@@ -102,7 +102,7 @@ const ProjectionModal: React.FC<ProjectionModalProps> = ({
                     {/* Modal Card */}
                     <div className={`
         relative w-full max-w-4xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 
-        rounded-[2rem] md:rounded-[3rem] border border-white/10 shadow-2xl 
+        rounded-[2rem] md:rounded-[3rem] border-0 shadow-2xl 
         transform transition-all duration-500 flex flex-col h-auto
         ${showContent ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-10'}
       `}>
