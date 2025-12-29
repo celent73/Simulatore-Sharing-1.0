@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { CondoSimulationResult } from '../types';
-import CondoGhostCard from './CondoGhostCard';
+import AssetEquivalentCard from './AssetEquivalentCard';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface CondoResultsDisplayProps {
@@ -147,7 +147,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                 </div>
             </div>
 
-            <CondoGhostCard recurringMonthlyYear3={results.year3.recurringMonthly} />
+            <AssetEquivalentCard recurringAnnual={results.year3.recurringMonthly * 12} />
 
             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl p-4 text-sm text-blue-800 dark:text-blue-200 flex gap-3">
                 <span className="text-xl">ℹ️</span>
