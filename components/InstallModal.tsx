@@ -4,11 +4,20 @@ import { Download, X, Share, PlusSquare } from 'lucide-react';
 interface InstallModalProps {
     isOpen: boolean;
     onClose: () => void;
+    installPrompt?: any; // New prop
 }
 
-export const InstallModal: React.FC<InstallModalProps> = ({ isOpen, onClose }) => {
+export const InstallModal: React.FC<InstallModalProps> = ({ isOpen, onClose, installPrompt }) => {
     const [isIOS, setIsIOS] = useState(false);
-    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+    // Use prop as initial value if available
+    const [deferredPrompt, setDeferredPrompt] = useState<any>(installPrompt || null);
+
+    useEffect(() => {
+        // Sync with prop if it changes
+        if (installPrompt) {
+            setDeferredPrompt(installPrompt);
+        }
+    }, [installPrompt]);
 
     useEffect(() => {
         // Check if device is iOS
@@ -16,14 +25,14 @@ export const InstallModal: React.FC<InstallModalProps> = ({ isOpen, onClose }) =
         const isIosDevice = /iphone|ipad|ipod/.test(userAgent);
         setIsIOS(isIosDevice);
 
-        // Get the deferred prompt from window if available
-        // @ts-ignore - window.deferredPrompt is set in index.html
-        if (window.deferredPrompt) {
+        // Fallback: Get the deferred prompt from window if not passed via props
+        // @ts-ignore
+        if (!installPrompt && window.deferredPrompt) {
             // @ts-ignore
             setDeferredPrompt(window.deferredPrompt);
         }
 
-        // Listen for the event in case it happens after mount
+        // Listen for the event in case it happens after mount (self-contained backup)
         const handler = (e: any) => {
             e.preventDefault();
             setDeferredPrompt(e);
@@ -33,7 +42,7 @@ export const InstallModal: React.FC<InstallModalProps> = ({ isOpen, onClose }) =
 
         window.addEventListener('beforeinstallprompt', handler);
         return () => window.removeEventListener('beforeinstallprompt', handler);
-    }, []);
+    }, [installPrompt]);
 
     const handleInstallClick = async () => {
         if (!deferredPrompt) {

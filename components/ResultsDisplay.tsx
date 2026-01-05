@@ -31,7 +31,7 @@ interface ResultsDisplayProps {
 interface SummaryCardProps {
   title: string;
   value: string;
-  suffix?: string;
+  suffix?: React.ReactNode;
   variant?: 'glass' | 'gradient-blue' | 'gradient-orange';
   icon?: React.ReactNode;
 }
@@ -212,7 +212,13 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-        <SummaryCard title={t('results.total_users')} value={totalUsers.toLocaleString('it-IT')} variant="glass" icon={<UsersIcon />} />
+        <SummaryCard
+          title={t('results.total_users')}
+          value={`${totalUsers.toLocaleString('it-IT')}`}
+          suffix={<span className="text-xs opacity-70 font-normal block mt-1">/ {totalContracts.toLocaleString('it-IT')} Contratti</span>}
+          variant="glass"
+          icon={<UsersIcon />}
+        />
         <SummaryCard title={cashbackPeriod === 'annual' ? "Bonus Una Tantum" : t('results.one_time')} value={formatValueWithSuffix(totalOneTimeBonus).value} variant="gradient-blue" icon={<WalletIcon />} />
         <SummaryCard title={t('results.rec_y1')} value={formatValueWithSuffix(totalRecurringYear1).value} suffix={t('results.per_month')} variant="glass" icon={<FireIcon className="text-union-orange-500" />} />
         <SummaryCard title={t('results.rec_y2')} value={formatValueWithSuffix(totalRecurringYear2).value} suffix={t('results.per_month')} variant="glass" icon={<BoltIcon className="text-union-orange-500" />} />

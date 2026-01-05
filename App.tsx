@@ -22,6 +22,7 @@ import DetailedGuideModal from './components/DetailedGuideModal';
 import ContractInfoModal from './components/ContractInfoModal';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { InstallModal } from './components/InstallModal';
+import FutureTicketModal from './components/FutureTicketModal';
 
 // --- IMPORTAZIONI LEGALI E UI ---
 import { LegalFooter } from './components/LegalFooter';
@@ -134,6 +135,7 @@ const AppContent = () => {
   const [isPremium, setIsPremium] = useState(false);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isFutureTicketOpen, setIsFutureTicketOpen] = useState(false);
 
   // --- NUOVI STATI PER LA VERIFICA SUPABASE ---
   const [licenseCode, setLicenseCode] = useState('');
@@ -145,6 +147,8 @@ const AppContent = () => {
   const [isContractInfoModalOpen, setIsContractInfoModalOpen] = useState(false);
   const [cashbackPeriod, setCashbackPeriod] = useState<'monthly' | 'annual'>('monthly');
   const isInitialMount = useRef(true);
+  const installTimerRef = useRef<any>(null);
+  const [installPrompt, setInstallPrompt] = useState<any>(null); // State for the prompt event
 
   const { language, setLanguage, t } = useLanguage();
   const { state: inputs, set: setInputs, undo, redo, canUndo, canRedo, reset } = useSmartState<PlanInput>(initialInputs);
@@ -184,18 +188,19 @@ const AppContent = () => {
     setError('');
 
     try {
-      // 1. CERCA IL CODICE
-      const { data, error } = await supabase
+      // 1. CERCA IL CODICE (Gestisce duplicati prendendo il primo)
+      const { data: licenses, error } = await supabase
         .from('licenses')
         .select('*')
-        .eq('code', licenseCode.trim())
-        .single();
+        .eq('code', licenseCode.trim()); // Rimosso .single() per evitare errori su duplicati
 
-      if (error || !data) {
+      if (error || !licenses || licenses.length === 0) {
         setError('Codice non valido o scaduto.');
         setLoading(false);
         return;
       }
+
+      const data = licenses[0]; // Usiamo il primo record trovato
 
       // 2. CONTROLLA IL LIMITE (Max 3)
       const currentUses = data.uses || 0;
@@ -250,17 +255,65 @@ const AppContent = () => {
     const checkStandalone = () => {
       const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true || document.referrer.includes('android-app://');
       setIsStandalone(isStandaloneMode);
-      if (!isStandaloneMode) setShowInstallModal(true);
+      // Removed automatic setShowInstallModal from here to avoid showing it prematurely/incorrectly
     };
     checkStandalone();
     window.addEventListener('resize', checkStandalone);
 
-    // Listen for installability
-    window.addEventListener('beforeinstallprompt', (e) => {
-      setCanInstall(true);
-    });
+    // Logic to show install modal
+    const handleInstallCheck = () => {
+      const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone === true;
+      if (isStandaloneMode) return;
 
-    return () => window.removeEventListener('resize', checkStandalone);
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      const isIos = /iphone|ipad|ipod/.test(userAgent);
+
+      // If iOS, show it (manual instructions)
+      if (isIos) {
+        // Small delay to let user see app first
+        installTimerRef.current = setTimeout(() => {
+          setShowInstallModal(true);
+        }, 5000);
+      } else {
+        // For Android/Desktop: Check if we have the prompt
+        // @ts-ignore
+        if (window.deferredPrompt) {
+          setCanInstall(true);
+          // @ts-ignore
+          setInstallPrompt(window.deferredPrompt); // Sync state
+          installTimerRef.current = setTimeout(() => {
+            setShowInstallModal(true);
+          }, 5000);
+        }
+      }
+    };
+
+    // Check on mount (for iOS mainly) or if prompt was already captured
+    handleInstallCheck();
+
+    // Listen for dynamic event (Android/Desktop)
+    const installHandler = (e: Event) => {
+      e.preventDefault();
+      setCanInstall(true);
+      setInstallPrompt(e); // Sync state
+      // @ts-ignore
+      window.deferredPrompt = e;
+
+      // Clear previous timer if exists to restart or just ensure single trigger
+      if (installTimerRef.current) clearTimeout(installTimerRef.current);
+
+      installTimerRef.current = setTimeout(() => {
+        setShowInstallModal(true);
+      }, 5000);
+    };
+
+    window.addEventListener('beforeinstallprompt', installHandler);
+
+    return () => {
+      window.removeEventListener('resize', checkStandalone);
+      window.removeEventListener('beforeinstallprompt', installHandler);
+      if (installTimerRef.current) clearTimeout(installTimerRef.current);
+    };
   }, []);
 
   useEffect(() => { setIsPremiumUnlocked(true); setIsTrialExpired(false); }, []);
@@ -398,7 +451,7 @@ const AppContent = () => {
 
               {!isPremium && <button onClick={() => setShowPremiumModal(true)} className="flex items-center justify-center w-auto px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-xl shadow-lg hover:scale-105 transition-all font-bold text-sm border border-yellow-300">Sblocca PRO</button>}
 
-              {!isStandalone && (
+              {!isStandalone && (canInstall || /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase())) && (
                 <button onClick={() => setShowInstallModal(true)} className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl shadow-lg hover:bg-black transition-all font-bold text-sm border border-gray-700 animate-pulse">
                   <Download size={18} />
                   <span className="hidden lg:inline">Scarica App</span>
@@ -411,6 +464,15 @@ const AppContent = () => {
                   <button onClick={handleTargetClick} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-emerald-400 to-cyan-400 text-white rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.6)] hover:shadow-[0_0_30px_rgba(34,211,238,0.8)] transition-all border border-white/20 font-black text-sm hover:scale-[1.05] active:scale-95 animate-pulse-slow">
                     <TargetIcon />
                     <span className="hidden sm:inline ml-2 drop-shadow-md uppercase tracking-wide">{targetButtonText}</span>
+                  </button>
+                  <button
+                    onClick={() => setIsFutureTicketOpen(true)}
+                    className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white rounded-xl shadow-[0_0_15px_rgba(217,70,239,0.5)] hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] transition-all border border-white/20 font-black text-sm hover:scale-110 active:scale-95 relative group overflow-hidden animate-pulse"
+                    title="Il tuo biglietto"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-200%] group-hover:animate-shimmer" style={{ animationDuration: '1.5s' }}></div>
+                    <span className="text-xl">🎫</span>
+                    <span className="hidden sm:inline ml-2 drop-shadow-md uppercase tracking-wide italic">TICKET</span>
                   </button>
                 </>
               )}
@@ -475,7 +537,14 @@ const AppContent = () => {
       <TargetCalculatorModal isOpen={isTargetCalcOpen} onClose={() => setIsTargetCalcOpen(false)} currentInputs={inputs} onApply={handleApplyTarget} />
       <NetworkVisualizerModal isOpen={isNetworkModalOpen} onClose={() => setIsNetworkModalOpen(false)} inputs={inputs} onInputChange={handleInputChange} onReset={handleResetToZero} />
       <ContractInfoModal isOpen={isContractInfoModalOpen} onClose={() => setIsContractInfoModalOpen(false)} />
-      <InstallModal isOpen={showInstallModal} onClose={() => setShowInstallModal(false)} />
+      <FutureTicketModal
+        isOpen={isFutureTicketOpen}
+        onClose={() => setIsFutureTicketOpen(false)}
+        monthlyRecurring={planResult?.monthlyData?.length > 0 ? planResult.monthlyData[planResult.monthlyData.length - 1].monthlyRecurring : 0}
+        estimatedMonths={inputs.realizationTimeMonths}
+        userName={isPremium ? "Partner Pro" : "Guest"}
+      />
+      <InstallModal isOpen={showInstallModal} onClose={() => setShowInstallModal(false)} installPrompt={installPrompt} />
     </div>
   );
 };

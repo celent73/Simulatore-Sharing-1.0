@@ -25,6 +25,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
+    // Capture the install prompt globally
+    window.deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      window.deferredPrompt = e;
+      console.log('beforeinstallprompt captured in index.html');
+    });
+
     tailwind.config = {
       darkMode: 'class',
       theme: {

@@ -121,11 +121,12 @@ const BonusCard: React.FC<BonusCardProps> = ({
 
       <ProgressBar current={current} target={target} isCompleted={isCompleted} />
 
-      <p className="text-xs text-slate-500 mt-2 font-medium">
-        {isCompleted
-          ? t('bonus.card_unlocked')
-          : <>{t('bonus.card_remaining_prefix')} <span className="font-bold text-slate-700">{remaining.toLocaleString('it-IT')}</span> {t('bonus.card_remaining_suffix')}</>
-        }
+      <p className="text-xs text-slate-500 mt-2 font-medium flex justify-between">
+        <span>Fatti: <span className="font-bold text-slate-700">{current.toLocaleString('it-IT')}</span></span>
+        {!isCompleted && (
+          <span>Mancano: <span className="font-bold text-red-500">{remaining.toLocaleString('it-IT')}</span></span>
+        )}
+        {isCompleted && <span className="text-green-600 font-bold">{t('bonus.card_completed')}</span>}
       </p>
     </div>
   );
@@ -226,16 +227,7 @@ const BonusProgress: React.FC<BonusProgressProps> = ({ totalContracts, onBonusCh
           ))}
         </div>
 
-        {/* Floating Action Button */}
-        <button
-          onClick={scrollToParams}
-          className="absolute bottom-4 right-4 z-20 p-2.5 bg-union-orange-500 text-white rounded-full shadow-lg hover:bg-union-orange-600 transition-transform hover:scale-110 focus:outline-none border-2 border-white/20"
-          title="Modifica Parametri"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-          </svg>
-        </button>
+
       </div>
 
     </div>

@@ -276,7 +276,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
             <div ref={modalRef} className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl w-full max-w-2xl overflow-hidden relative animate-in zoom-in-95 duration-300 border border-white/20 dark:border-gray-700 flex flex-col max-h-[90vh]">
 
                 {/* Header WOW */}
-                <div className="relative overflow-hidden p-5 pb-6 md:p-8 md:pb-10 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 text-white shrink-0">
+                <div className="relative overflow-hidden p-3 pb-3 md:p-8 md:pb-10 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 text-white shrink-0">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                     <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/30 rounded-full blur-2xl translate-y-1/3 -translate-x-1/3"></div>
 
@@ -312,7 +312,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-6 space-y-6 md:space-y-8 bg-gray-50/50 dark:bg-gray-900/50">
+                <div className="flex-1 overflow-y-auto custom-scrollbar px-4 pt-8 pb-4 md:p-6 space-y-6 md:space-y-8 bg-gray-50/50 dark:bg-gray-900/50">
 
                     {/* Electricity Section */}
                     <div className="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group">
@@ -628,8 +628,8 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                 </div>
 
                 {/* Footer Actions */}
-                <div className="p-4 md:p-6 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 shrink-0">
-                    <button onClick={onClose} className="w-full py-3 md:py-4 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-lg md:text-xl shadow-xl hover:scale-[1.02] active:scale-95 transition-all">
+                <div className="p-2 md:p-6 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 shrink-0">
+                    <button onClick={onClose} className="w-full py-2 md:py-4 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-lg md:text-xl shadow-xl hover:scale-[1.02] active:scale-95 transition-all">
                         {txt.understood}
                     </button>
                 </div>

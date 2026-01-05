@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Target, Users, Clock, TrendingUp, Zap, FileText, Activity } from 'lucide-react';
+import { X, Target, Users, Clock, TrendingUp, Zap, FileText, Activity, Briefcase, Star } from 'lucide-react';
 import { PlanInput } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -25,11 +25,10 @@ const texts = {
         projY3Label: "Proiezione 3° Anno",
         projY3Sub: "Crescita stimata 2.0x",
         backBtn: "Torna al Simulatore",
-        disclaimer: "*Calcolo basato su: media provvigionale stimata di 35,00€ per utente.",
-        speedLabel: "Velocità di Crescita",
-        speedSlow: "Conservativa",
-        speedMedium: "Equilibrata",
-        speedFast: "Aggressiva",
+        disclaimer: "*Calcolo basato su media provvigionale stimata per contratto (0,75€ Y1 / 1,125€ Y2 / 1,50€ Y3).",
+        modeLabel: "Impegno Previsto",
+        modeBasic: "Basic / Part Time",
+        modePro: "Pro / Full Time",
         resetBtn: "Azzera"
     },
     de: {
@@ -46,10 +45,9 @@ const texts = {
         projY3Sub: "Geschätztes Wachstum 2.0x",
         backBtn: "Zurück zum Simulator",
         disclaimer: "*Berechnung basierend auf: geschätzter durchschnittlicher Provision von 35,00€ pro Benutzer.",
-        speedLabel: "Wachstumsgeschwindigkeit",
-        speedSlow: "Konservativ",
-        speedMedium: "Ausgewogen",
-        speedFast: "Aggressiv",
+        modeLabel: "Geplanter Einsatz",
+        modeBasic: "Basis / Teilzeit",
+        modePro: "Pro / Vollzeit",
         resetBtn: "Zurücksetzen"
     }
 };
@@ -63,6 +61,7 @@ const SmartGauge = ({ percentage, value, label, icon: Icon, colorTheme }: any) =
     const themes: any = {
         blue: { stroke: "stroke-blue-500", text: "text-blue-100", glow: "drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]" },
         purple: { stroke: "stroke-purple-500", text: "text-purple-100", glow: "drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]" },
+        emerald: { stroke: "stroke-emerald-500", text: "text-emerald-100", glow: "drop-shadow-[0_0_10px_rgba(16,185,129,0.8)]" },
     };
     const t = themes[colorTheme] || themes.blue;
 
@@ -84,7 +83,7 @@ const SmartGauge = ({ percentage, value, label, icon: Icon, colorTheme }: any) =
                 </svg>
                 {/* NUMERO PULITO AL CENTRO */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className={`text-5xl font-black ${t.text} tracking-tighter leading-none font-mono drop-shadow-md`}>
+                    <span className={`text-4xl font-black ${t.text} tracking-tighter leading-none font-mono drop-shadow-md`}>
                         {value}
                     </span>
                 </div>
@@ -110,13 +109,23 @@ const StatCard = ({ label, value, subtext, icon: Icon, colorClass }: any) => (
     </div>
 );
 
+// Data Points for Interpolation
+const TARGET_POINTS = [
+    { income: 500, basic: 12, pro: 6 },
+    { income: 1000, basic: 24, pro: 12 },
+    { income: 2500, basic: 36, pro: 18 },
+    { income: 5000, basic: 48, pro: 30 },
+    { income: 10000, basic: 60, pro: 42 },
+    { income: 50000, basic: 78, pro: 60 },
+];
+
 const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, onClose, onApply }) => {
     const { language } = useLanguage();
     const txt = language === 'it' ? texts.it : texts.de;
 
     const [inputValue, setInputValue] = useState<string>("1500");
-    const [speedMode, setSpeedMode] = useState<'slow' | 'medium' | 'fast'>('medium');
-    const [results, setResults] = useState({ people: 0, time: 0, structure: 'N/A', contracts: 0, actions: 0, projY2: 0, projY3: 0 });
+    const [workMode, setWorkMode] = useState<'basic' | 'pro'>('basic');
+    const [results, setResults] = useState({ people: 0, time: 0, structure: 'N/A', contracts: 0, projY2: 0, projY3: 0 });
     const [animating, setAnimating] = useState(false);
 
     useEffect(() => {
@@ -124,54 +133,69 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
         const desiredIncome = Number(inputValue) || 0;
 
         const calculate = () => {
-            const AVG_REVENUE_PER_USER = 35.00; // Updated to 35.00 as per request
-            const CONTRACTS_PER_USER = 1; // implictly 1 contract (Green) as we calculate based on unit revenue
+            const REVENUE_PER_CONTRACT_Y1 = 0.75;
+            const REVENUE_PER_CONTRACT_Y2 = 1.125;
+            const REVENUE_PER_CONTRACT_Y3 = 1.50;
 
-            let totalPeopleNeeded = Math.ceil(desiredIncome / AVG_REVENUE_PER_USER);
+            // 1. Calculate People Needed
+            let totalPeopleNeeded = Math.ceil(desiredIncome / REVENUE_PER_CONTRACT_Y1);
             if (totalPeopleNeeded < 1 && desiredIncome > 0) totalPeopleNeeded = 1;
 
+            // 2. Calculate Months via Interpolation
             let estimatedMonths = 0;
-            if (totalPeopleNeeded > 0) {
-                let growthFactor = 2.0;
-                let timePerStep = 1.5;
+            if (desiredIncome > 0) {
+                // Find lower and upper bounds
+                let lower = { income: 0, basic: 0, pro: 0 };
+                let upper = TARGET_POINTS[0];
 
-                switch (speedMode) {
-                    case 'slow':
-                        growthFactor = 1.5;
-                        timePerStep = 2.0;
+                for (let i = 0; i < TARGET_POINTS.length; i++) {
+                    if (desiredIncome <= TARGET_POINTS[i].income) {
+                        upper = TARGET_POINTS[i];
+                        if (i > 0) lower = TARGET_POINTS[i - 1];
                         break;
-                    case 'medium':
-                        growthFactor = 2.0;
-                        timePerStep = 1.5;
-                        break;
-                    case 'fast':
-                        growthFactor = 3.0;
-                        timePerStep = 1.5;
-                        break;
+                    }
+                    if (i === TARGET_POINTS.length - 1) {
+                        // Beyond max, use the last two points to extrapolate or just clamp? 
+                        // For simplicity, let's just linearly extrapolate from the last interval
+                        lower = TARGET_POINTS[i - 1];
+                        upper = TARGET_POINTS[i];
+                    }
                 }
 
-                const logBase = Math.log(totalPeopleNeeded) / Math.log(growthFactor);
-                estimatedMonths = Math.ceil(logBase * timePerStep);
-                if (desiredIncome > 0 && estimatedMonths < 1) estimatedMonths = 1;
+                // Linear Interpolation
+                // y = y1 + (x - x1) * (y2 - y1) / (x2 - x1)
+                const range = (upper.income - lower.income) || 1; // avoid div by 0
+                const percent = (desiredIncome - lower.income) / range;
+
+                const valLower = workMode === 'basic' ? lower.basic : lower.pro;
+                const valUpper = workMode === 'basic' ? upper.basic : upper.pro;
+
+                // If calculating for income > max defined, we might need special handling, but the loop above assigns upper as the last point, 
+                // effectively capping logic unless we want proper extrapolation. 
+                // Given the loop logic above: if desired > max, lower=50000, upper=50000. Wait, loop needs fix for >50000.
+                // Correction for > 50000:
+                if (desiredIncome > TARGET_POINTS[TARGET_POINTS.length - 1].income) {
+                    const last = TARGET_POINTS[TARGET_POINTS.length - 1];
+                    const prev = TARGET_POINTS[TARGET_POINTS.length - 2];
+
+                    // Slope
+                    const slope = (workMode === 'basic' ? (last.basic - prev.basic) : (last.pro - prev.pro)) / (last.income - prev.income);
+                    const initial = workMode === 'basic' ? last.basic : last.pro;
+                    estimatedMonths = initial + (desiredIncome - last.income) * slope;
+
+                } else {
+                    estimatedMonths = valLower + (percent * (valUpper - valLower));
+                }
             }
 
-            // If user implies "contracts of network" and revenue is 1 per contract, then people = contracts basically
-            // But let's keep the distinction if needed. 
-            // The prompt says "contracts of network" replaces "people needed".
-            const totalContracts = totalPeopleNeeded; // 1:1 ratio for simplicity based on 1.00 revenue
+            estimatedMonths = Math.ceil(estimatedMonths);
+
+            const totalContracts = totalPeopleNeeded;
 
             let structureSuggestion = "Starter";
-            if (totalContracts >= 3000) structureSuggestion = "NATIONAL MANAGER";
+            if (totalContracts >= 5000) structureSuggestion = "NATIONAL MANAGER";
             else if (totalContracts >= 1500) structureSuggestion = "REGIONAL MANAGER";
             else if (totalContracts >= 600) structureSuggestion = "PRO MANAGER";
-            else if (totalContracts > 200) structureSuggestion = "Builder Pro";
-            else if (totalContracts > 50) structureSuggestion = "Team Developer";
-
-            let weeklyActions = 0;
-            if (totalPeopleNeeded > 0) {
-                weeklyActions = Math.ceil((totalPeopleNeeded / estimatedMonths) / 5);
-                if (weeklyActions < 2) weeklyActions = 2;
-            }
 
             // Calcolo Bonus Qualifica
             let bonus = 0;
@@ -179,21 +203,18 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                 bonus = 3000;
             } else if (totalContracts >= 1500) {
                 bonus = 1000;
-            } else if (totalContracts > 600) {
+            } else if (totalContracts >= 600) {
                 bonus = 300;
             }
 
-            // Year 2: 1.5x growth
-            // Year 3: 2.0x growth
-            const projY2 = (totalContracts * (AVG_REVENUE_PER_USER * 1.5)) + bonus;
-            const projY3 = (totalContracts * (AVG_REVENUE_PER_USER * 2.0)) + bonus;
+            const projY2 = (totalContracts * REVENUE_PER_CONTRACT_Y2) + bonus;
+            const projY3 = (totalContracts * REVENUE_PER_CONTRACT_Y3) + bonus;
 
             setResults({
                 people: totalPeopleNeeded,
                 time: estimatedMonths,
                 structure: structureSuggestion,
                 contracts: totalContracts,
-                actions: weeklyActions,
                 projY2,
                 projY3
             });
@@ -201,12 +222,12 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
         };
 
         if (isOpen) calculate();
-    }, [inputValue, isOpen, speedMode]);
+    }, [inputValue, isOpen, workMode]);
 
     if (!isOpen) return null;
 
     const contractsPercentage = Math.min((results.contracts / 5000) * 100, 100) || 5;
-    const timePercentage = Math.min((results.time / 24) * 100, 100) || 5;
+    const timePercentage = Math.min((results.time / 60) * 100, 100) || 5; // Adjusted scale for months
 
     const formatCurrency = (val: number) => {
         return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val);
@@ -247,25 +268,21 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
 
                     {/* SPEED SELECTOR */}
                     <div className="flex flex-col items-center justify-center gap-3 mb-2">
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{txt.speedLabel}</span>
-                        <div className="flex p-1 bg-gray-900 rounded-xl border border-gray-700">
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{txt.modeLabel}</span>
+                        <div className="grid grid-cols-2 gap-2 p-1 bg-gray-900/50 rounded-2xl border border-gray-700 w-full max-w-md">
                             <button
-                                onClick={() => setSpeedMode('slow')}
-                                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${speedMode === 'slow' ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/50' : 'text-gray-500 hover:text-gray-300'}`}
+                                onClick={() => setWorkMode('basic')}
+                                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold uppercase transition-all ${workMode === 'basic' ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-900/50 scale-[1.02]' : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}
                             >
-                                {txt.speedSlow}
+                                <Briefcase size={16} />
+                                {txt.modeBasic}
                             </button>
                             <button
-                                onClick={() => setSpeedMode('medium')}
-                                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${speedMode === 'medium' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/50' : 'text-gray-500 hover:text-gray-300'}`}
+                                onClick={() => setWorkMode('pro')}
+                                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold uppercase transition-all ${workMode === 'pro' ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/50 scale-[1.02]' : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}
                             >
-                                {txt.speedMedium}
-                            </button>
-                            <button
-                                onClick={() => setSpeedMode('fast')}
-                                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${speedMode === 'fast' ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/50' : 'text-gray-500 hover:text-gray-300'}`}
-                            >
-                                {txt.speedFast}
+                                <Star size={16} />
+                                {txt.modePro}
                             </button>
                         </div>
                     </div>
@@ -289,20 +306,13 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                             {inputValue !== "0" && inputValue !== "" && (
                                 <button
                                     onClick={() => setInputValue("0")}
-                                    className="absolute top-1/2 -translate-y-1/2 -right-16 p-2 text-gray-600 hover:text-red-500 transition-colors bg-gray-900/50 rounded-full border border-gray-800 hover:border-red-500/30"
+                                    className="mt-4 mx-auto block md:absolute md:mt-0 md:left-auto md:translate-x-0 md:top-1/2 md:-translate-y-1/2 md:-right-16 md:bottom-auto p-2 text-white/50 hover:text-white transition-colors hover:bg-white/10 rounded-full"
                                     title={txt.resetBtn}
                                 >
-                                    <Clock size={16} className="rotate-180" />
-                                    {/* Using Clock rotated as a kind of 'rewind' or 'reset' since RefreshCcw might not be imported. 
-                                        Actually, let's use 'RotateCcw' if available, or just X. Let's stick to X for standard 'clear'. 
-                                        But user asked for "azzera", existing X is for closing modal.
-                                        Let's import RefreshCcw or RotateCcw at the top first if I can, but to be safe without breaking imports, 
-                                        I will use the existing 'X' icon but styled differently, or just check imports. 
-                                        WAIT: I can see imports: X, Target, Users, Clock, TrendingUp, Zap, FileText, Activity.
-                                        I don't have RefreshCcw. I'll add it to imports in a separate step or just use 'X' again which is standard for clearing inputs.
-                                        Let's use 'X' for now as a clear button.
-                                    */}
-                                    <X size={16} />
+                                    <div className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/10 md:bg-transparent md:border-0 md:p-0">
+                                        <X size={16} />
+                                        <span className="md:hidden text-xs font-bold uppercase tracking-wider">{txt.resetBtn}</span>
+                                    </div>
                                 </button>
                             )}
                         </div>

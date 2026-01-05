@@ -131,7 +131,7 @@ export const translations = {
         admin_desc: "Abbiamo creato una sezione dedicata ai professionisti del condominio.",
         admin_p1: "Passa alla modalità <strong>Amministratori Condominio</strong> in alto a destra.",
         admin_p2: "Inserisci le unità gestite (Green e Light) e la crescita annuale prevista.",
-        admin_p3: "Scopri il <strong>'Condominio Fantasma'</strong>: come guadagnare come se gestissi più palazzi, ma a stress zero."
+        admin_p3: "<strong>Clienti Union:</strong> Calcola quanti condomini diventano anche clienti Union e aumenta esponenzialmente la tua rendita."
       }
     },
     input: {
@@ -160,7 +160,7 @@ export const translations = {
       light_units_init: "Utenze Light Iniziali (1° Anno)",
       light_units_new: "Nuove Utenze Light all'anno",
       families_per_condo: "Famiglie per Condominio (Media)",
-      network_conversion: "% Adesione al Network",
+      network_conversion: "Passaggi a Union Energia",
       network_directs_title: "Clienti Network Extra",
       network_directs_desc: "Imposta quanti condomini diventano clienti/promoter",
       network_assumption_note: "Nota: Il calcolo considera l'attivazione di 2 contratti per cliente (1 Green + 1 Light).",
@@ -435,6 +435,14 @@ export const translations = {
       quote: "\"Il miglior momento per piantare un albero era 20 anni fa. Il secondo miglior momento è oggi.\"",
       label: "Proiezione:"
     },
+    ticket: {
+      title: "IL TUO BIGLIETTO PER IL FUTURO",
+      economy_option: "Opzione Economy",
+      become_client: "Diventa un Cliente Privilegiato",
+      business_option: "Opzione Business",
+      become_promoter: "Diventa un Family Utility",
+      recommended: "Consigliato"
+    },
   },
   de: {
     app: {
@@ -566,7 +574,7 @@ export const translations = {
         admin_desc: "Wir haben einen Bereich für Immobilienprofis erstellt.",
         admin_p1: "Wechsle oben rechts in den Modus <strong>Hausverwalter</strong>.",
         admin_p2: "Gib die verwalteten Einheiten (Green und Light) und das erwartete jährliche Wachstum ein.",
-        admin_p3: "Entdecke die <strong>'Geister-Immobilie'</strong>: wie man verdient, als würde man mehrere Gebäude verwalten, aber ohne Stress."
+        admin_p3: "<strong>Union-Kunden:</strong> Berechne, wie viele Bewohner zu Union-Kunden werden, und steigere dein Einkommen exponentiell."
       }
     },
     input: {
@@ -863,6 +871,14 @@ export const translations = {
       initial_value: "Anfangswert:",
       quote: "\"Der beste Zeitpunkt, einen Baum zu pflanzen, war vor 20 Jahren. Der zweitbeste Zeitpunkt ist heute.\"",
       label: "Projektion:"
+    },
+    ticket: {
+      title: "DEIN TICKET FÜR DIE ZUKUNFT",
+      economy_option: "Economy-Option",
+      become_client: "Werde Vorzugskunde",
+      business_option: "Business-Option",
+      become_promoter: "Werde Family Utility",
+      recommended: "Empfohlen"
     },
   }
 };

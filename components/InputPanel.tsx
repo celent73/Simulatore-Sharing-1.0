@@ -73,7 +73,8 @@ const uiTexts = {
     exclusive: "Esclusiva",
     // NUOVE TRADUZIONI AGGIUNTE
     paramsTitle: "Parametri",
-    paramsSubtitle: "Sviluppo Rete"
+    paramsSubtitle: "Sviluppo Rete",
+    optimizedFor: "Ottimizzato per tablet e PC/MAC"
   },
   de: {
     savings: "Du sparst",
@@ -104,7 +105,8 @@ const uiTexts = {
     exclusive: "Exklusiv",
     // NUOVE TRADUZIONI AGGIUNTE
     paramsTitle: "Netzwerk",
-    paramsSubtitle: "Parameter"
+    paramsSubtitle: "Parameter",
+    optimizedFor: "Optimiert für Tablet und PC/MAC"
   }
 };
 
@@ -260,25 +262,25 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
           {activeTab === 'my' && (
             <div className="animate-in slide-in-from-right-8 duration-300 space-y-4">
               <div className="p-1 rounded-3xl border border-orange-100 dark:border-orange-900/30 bg-orange-50 dark:bg-orange-900/10">
-                <CustomSlider label={`${txt.myUnitsGreen} (+${50 * multiplier}€)`} value={inputs.myPersonalUnitsGreen} onChange={(v: number) => onInputChange('myPersonalUnitsGreen', v)} min={0} max={10} colorBase="orange" icon={Home} suffix="" />
+                <CustomSlider label={`${txt.myUnitsGreen} (+${50 * multiplier}€)`} value={inputs.myPersonalUnitsGreen} onChange={(v: number) => onInputChange('myPersonalUnitsGreen', v)} min={0} max={100} colorBase="orange" icon={Home} suffix="" />
                 <p className="text-[10px] text-orange-600 dark:text-orange-400 font-bold text-center pb-2 uppercase tracking-wide">{txt.baseRent}: {(1.00 * multiplier).toFixed(2)}€/mese</p>
               </div>
               <div className="p-1 rounded-3xl border border-yellow-100 dark:border-yellow-900/30 bg-yellow-50 dark:bg-yellow-900/10">
-                <CustomSlider label={`${txt.myUnitsLight} (+${25 * multiplier}€)`} value={inputs.myPersonalUnitsLight} onChange={(v: number) => onInputChange('myPersonalUnitsLight', v)} min={0} max={10} colorBase="yellow" icon={Zap} suffix="" />
+                <CustomSlider label={`${txt.myUnitsLight} (+${25 * multiplier}€)`} value={inputs.myPersonalUnitsLight} onChange={(v: number) => onInputChange('myPersonalUnitsLight', v)} min={0} max={100} colorBase="yellow" icon={Zap} suffix="" />
                 <p className="text-[10px] text-yellow-600 dark:text-yellow-500 font-bold text-center pb-2 uppercase tracking-wide">{txt.baseRent}: {(0.50 * multiplier).toFixed(2)}€/mese</p>
               </div>
             </div>
           )}
           {activeTab === 'private' && (
             <div className="animate-in slide-in-from-right-8 duration-300 space-y-2">
-              <CustomSlider label={txt.clientGreen} value={inputs.personalClientsGreen} onChange={(v: number) => onInputChange('personalClientsGreen', v)} min={0} max={20} colorBase="green" icon={User} />
-              <CustomSlider label={txt.clientLight} value={inputs.personalClientsLight} onChange={(v: number) => onInputChange('personalClientsLight', v)} min={0} max={20} colorBase="blue" icon={User} />
+              <CustomSlider label={txt.clientGreen} value={inputs.personalClientsGreen} onChange={(v: number) => onInputChange('personalClientsGreen', v)} min={0} max={100} colorBase="green" icon={User} />
+              <CustomSlider label={txt.clientLight} value={inputs.personalClientsLight} onChange={(v: number) => onInputChange('personalClientsLight', v)} min={0} max={100} colorBase="blue" icon={User} />
             </div>
           )}
           {activeTab === 'business' && (
             <div className="animate-in slide-in-from-right-8 duration-300 space-y-2">
-              <CustomSlider label={txt.busGreen} value={inputs.personalClientsBusinessGreen} onChange={(v: number) => onInputChange('personalClientsBusinessGreen', v)} min={0} max={20} colorBase="purple" icon={Building2} />
-              <CustomSlider label={txt.busLight} value={inputs.personalClientsBusinessLight} onChange={(v: number) => onInputChange('personalClientsBusinessLight', v)} min={0} max={20} colorBase="cyan" icon={Building2} />
+              <CustomSlider label={txt.busGreen} value={inputs.personalClientsBusinessGreen} onChange={(v: number) => onInputChange('personalClientsBusinessGreen', v)} min={0} max={100} colorBase="purple" icon={Building2} />
+              <CustomSlider label={txt.busLight} value={inputs.personalClientsBusinessLight} onChange={(v: number) => onInputChange('personalClientsBusinessLight', v)} min={0} max={100} colorBase="cyan" icon={Building2} />
             </div>
           )}
         </div>
@@ -361,6 +363,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
               <div className="text-left">
                 <p className="text-[10px] font-bold text-blue-200 uppercase tracking-[0.2em]">{txt.exclusive}</p>
                 <p className="text-xl font-black text-white leading-none tracking-tight">{txt.viewStructure}</p>
+                <p className="text-[9px] text-blue-300 font-medium mt-1 opacity-80">{txt.optimizedFor}</p>
               </div>
               <ChevronRight className="ml-2 text-white/50 group-hover:translate-x-1 transition-transform" />
             </div>
