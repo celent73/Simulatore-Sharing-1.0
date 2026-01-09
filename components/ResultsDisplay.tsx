@@ -143,6 +143,14 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
     };
   });
 
+  // Calcoli per la visualizzazione delle card (mensile vs annuale)
+  const isAnnual = cashbackPeriod === 'annual';
+  const showYearlyRec1 = isAnnual ? (totalRecurringYear1 * 12 + monthlyCashback * 12) : (totalRecurringYear1 + monthlyCashback);
+  const showYearlyRec2 = isAnnual ? (totalRecurringYear2 * 12 + monthlyCashback * 12) : (totalRecurringYear2 + monthlyCashback);
+  const showYearlyRec3 = isAnnual ? (totalRecurringYear3 * 12 + monthlyCashback * 12) : (totalRecurringYear3 + monthlyCashback);
+  const recSuffix = isAnnual ? "/anno" : t('results.per_month');
+  const recTitleSuffix = isAnnual ? " (Annuale)" : "";
+
   const avgEarningsPerUser = totalUsers > 0 ? totalRecurringYear1 / totalUsers : 0;
   const totalEarningsYear1 = totalOneTimeBonus + (totalRecurringYear1 * 12);
   const directRecruits = planResult.levelData.find(l => l.level === 0)?.users || 0;
@@ -207,8 +215,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         onClose={() => setIsProjectionModalOpen(false)}
         years={projectionYears}
         onYearChange={setProjectionYears}
-        monthlyRecurring={totalRecurringYear3}
-        totalOneTime={totalOneTimeBonus}
+        monthlyRecurring={totalRecurringYear3 + monthlyCashback}
+        totalOneTime={oneTimeBonusWithoutCashback * multiplier}
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
@@ -220,9 +228,9 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           icon={<UsersIcon />}
         />
         <SummaryCard title={cashbackPeriod === 'annual' ? "Bonus Una Tantum" : t('results.one_time')} value={formatValueWithSuffix(totalOneTimeBonus).value} variant="gradient-blue" icon={<WalletIcon />} />
-        <SummaryCard title={t('results.rec_y1')} value={formatValueWithSuffix(totalRecurringYear1).value} suffix={t('results.per_month')} variant="glass" icon={<FireIcon className="text-union-orange-500" />} />
-        <SummaryCard title={t('results.rec_y2')} value={formatValueWithSuffix(totalRecurringYear2).value} suffix={t('results.per_month')} variant="glass" icon={<BoltIcon className="text-union-orange-500" />} />
-        <SummaryCard title={t('results.rec_y3')} value={formatValueWithSuffix(totalRecurringYear3).value} suffix={t('results.per_month')} variant="gradient-orange" icon={<StarIcon />} />
+        <SummaryCard title={t('results.rec_y1') + recTitleSuffix} value={formatValueWithSuffix(showYearlyRec1).value} suffix={recSuffix} variant="glass" icon={<FireIcon className="text-union-orange-500" />} />
+        <SummaryCard title={t('results.rec_y2') + recTitleSuffix} value={formatValueWithSuffix(showYearlyRec2).value} suffix={recSuffix} variant="glass" icon={<BoltIcon className="text-union-orange-500" />} />
+        <SummaryCard title={t('results.rec_y3') + recTitleSuffix} value={formatValueWithSuffix(showYearlyRec3).value} suffix={recSuffix} variant="gradient-orange" icon={<StarIcon />} />
       </div>
 
       <div className="bg-white dark:bg-black/40 backdrop-blur-xl p-4 sm:p-8 rounded-[2.5rem] shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10">
