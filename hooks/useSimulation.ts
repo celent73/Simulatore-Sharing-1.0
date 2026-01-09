@@ -168,12 +168,16 @@ export const useCompensationPlan = (inputs: PlanInput, viewMode: ViewMode = 'fam
             (myPersonalUnitsGreen * PERSONAL_RECURRING_BASE.MY_GREEN) +
             (myPersonalUnitsLight * PERSONAL_RECURRING_BASE.MY_LIGHT);
 
-        // Calculate panel yield (Monthly)
+        // Calculate panel yield (Monthly User Benefit)
         const monthlyPanelYield = (unionParkPanels || 0) * (unionParkPun || 0.20) * 33.4;
 
-        totalRecurringYear1 += (personalBaseRecurring * RECURRING_RATES_PER_YEAR[1]) + monthlyPanelYield;
-        totalRecurringYear2 += (personalBaseRecurring * RECURRING_RATES_PER_YEAR[2]) + monthlyPanelYield;
-        totalRecurringYear3 += (personalBaseRecurring * RECURRING_RATES_PER_YEAR[3]) + monthlyPanelYield;
+        // Calculate promoter recurring bonus from panel sale (Monthly)
+        // Formula: Production (33.4) * Num Panels * (0.12 - 0.09)
+        const panelSaleRecurringBonus = (unionParkPanels || 0) * 33.4 * (0.12 - 0.09);
+
+        totalRecurringYear1 += (personalBaseRecurring * RECURRING_RATES_PER_YEAR[1]) + monthlyPanelYield + panelSaleRecurringBonus;
+        totalRecurringYear2 += (personalBaseRecurring * RECURRING_RATES_PER_YEAR[2]) + monthlyPanelYield + panelSaleRecurringBonus;
+        totalRecurringYear3 += (personalBaseRecurring * RECURRING_RATES_PER_YEAR[3]) + monthlyPanelYield + panelSaleRecurringBonus;
 
         // Conteggio totale contratti
         const personalContractsCount = personalClientsGreen + personalClientsLight + personalClientsBusinessGreen + personalClientsBusinessLight + myPersonalUnitsGreen + myPersonalUnitsLight;
