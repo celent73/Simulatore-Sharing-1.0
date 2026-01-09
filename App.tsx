@@ -309,7 +309,7 @@ const AppContent = () => {
     });
   };
 
-  const handleResetPersonalClients = () => { setInputs({ ...inputs, personalClientsGreen: 0, personalClientsLight: 0, personalClientsBusinessGreen: 0, personalClientsBusinessLight: 0, myPersonalUnitsGreen: 0, myPersonalUnitsLight: 0 }); };
+  const handleResetPersonalClients = () => { setInputs({ ...inputs, personalClientsGreen: 0, personalClientsLight: 0, personalClientsBusinessGreen: 0, personalClientsBusinessLight: 0, myPersonalUnitsGreen: 0, myPersonalUnitsLight: 0, unionParkPanels: 0 }); };
   const handleCondoReset = () => setCondoInputs({ ...initialCondoInputs });
   const handleApplyTarget = (updates: Partial<PlanInput>) => setInputs({ ...inputs, ...updates });
   const toggleTheme = () => setIsDarkMode(!isDarkMode);

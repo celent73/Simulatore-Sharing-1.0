@@ -20,13 +20,13 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
     initialDuration = 26
 }) => {
     const { language } = useLanguage();
-    const [panels, setPanels] = useState(initialPanels || 1);
+    const [panels, setPanels] = useState(initialPanels ?? 1);
     const [pun, setPun] = useState(initialPun || 0.20);
     const [simulationYears, setSimulationYears] = useState(initialDuration || 26);
     const [monthlyBill, setMonthlyBill] = useState(0);
 
     const handleReset = () => {
-        setPanels(1);
+        setPanels(0);
         setPun(0.20);
         setSimulationYears(26);
         setMonthlyBill(0);
@@ -37,7 +37,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
 
     useEffect(() => {
         if (isOpen) {
-            setPanels(initialPanels || 1);
+            setPanels(initialPanels ?? 1);
         }
     }, [isOpen, initialPanels]);
 
