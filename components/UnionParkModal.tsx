@@ -66,6 +66,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
             panelsNeededLabel: "Pannelli necessari per azzerarla",
             purchaseCost: "Valore di Acquisto totale",
             annualYield: "Valore di resa ANNUALE*",
+            monthlyYield: "Valore di resa MENSILE*",
             totalYield: `Compensi stimati nei ${simulationYears} anni*`,
             roi: "ROI Totale",
             payback: "Payback stimato*",
@@ -84,6 +85,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
             panelsNeededLabel: "Benötigte Paneele zur Deckung",
             purchaseCost: "Gesamter Kaufwert",
             annualYield: "JÄHRLICHER Ertragswert*",
+            monthlyYield: "MONATLICHER Ertragswert*",
             totalYield: `Geschätzte Vergütung in ${simulationYears} Jahren*`,
             roi: "Gesamt-ROI",
             payback: "Geschätzter Payback*",
@@ -235,10 +237,14 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                         </div>
 
                         {/* Summary Mini Cards */}
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-3xl border border-gray-100 dark:border-gray-700/50">
                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-tight mb-1">{t.purchaseCost}</p>
                                 <p className="text-lg font-black text-gray-900 dark:text-white">€ {purchaseCostValue.toLocaleString('it-IT')}</p>
+                            </div>
+                            <div className="bg-emerald-50 dark:bg-emerald-900/10 p-4 rounded-3xl border border-emerald-100 dark:border-emerald-900/20">
+                                <p className="text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-1">{t.monthlyYield}</p>
+                                <p className="text-lg font-black text-emerald-600 dark:text-emerald-400">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                             </div>
                             <div className="bg-emerald-50 dark:bg-emerald-900/10 p-4 rounded-3xl border border-emerald-100 dark:border-emerald-900/20">
                                 <p className="text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-1">{t.annualYield}</p>
@@ -253,8 +259,16 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
 
                         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div>
-                                <p className="text-emerald-400 text-xs font-bold uppercase tracking-widest mb-1">{t.annualYield}</p>
-                                <p className="text-4xl font-black text-white mb-6">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</p>
+                                <div className="grid grid-cols-2 gap-4 mb-6">
+                                    <div>
+                                        <p className="text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-1">{t.monthlyYield}</p>
+                                        <p className="text-2xl sm:text-3xl font-black text-white">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2 })}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-1">{t.annualYield}</p>
+                                        <p className="text-2xl sm:text-3xl font-black text-white">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</p>
+                                    </div>
+                                </div>
 
                                 <div className="space-y-4">
                                     <div>
