@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sun, Info, TrendingUp, Wallet, Check } from 'lucide-react';
+import { X, Sun, Info, TrendingUp, Wallet, Check, RotateCcw } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface UnionParkModalProps {
@@ -24,6 +24,13 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
     const [pun, setPun] = useState(initialPun || 0.20);
     const [simulationYears, setSimulationYears] = useState(initialDuration || 26);
     const [monthlyBill, setMonthlyBill] = useState(0);
+
+    const handleReset = () => {
+        setPanels(initialPanels || 1);
+        setPun(initialPun || 0.20);
+        setSimulationYears(initialDuration || 26);
+        setMonthlyBill(0);
+    };
 
     // Suggest standard PUN values
     const PUN_OPTIONS = [0.15, 0.20, 0.25, 0.30];
@@ -71,6 +78,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
             roi: "ROI Totale",
             payback: "Payback stimato*",
             confirm: "Conferma e Salva",
+            reset: "Azzera",
             note: "* I valori di ricavo sono stime basate sul PUN medio impostato.",
             punHint: "Inserisci il valore PUN desiderato o scegline uno rapido:",
             zeroBillTitle: "Obiettivo Azzera Bolletta"
@@ -90,6 +98,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
             roi: "Gesamt-ROI",
             payback: "Geschätzter Payback*",
             confirm: "Bestätigen und Speichern",
+            reset: "Zurücksetzen",
             note: "* Die Ertragswerte sind Schätzungen basierend on dem eingestellten Durchschnitts-PUN.",
             punHint: "Geben Sie den PUN-Wert ein o. wählen Sie einen Schnellwert:",
             zeroBillTitle: "Ziel: Rechnung Null"
@@ -302,10 +311,18 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 sm:p-6 bg-white dark:bg-black/20 border-t border-gray-100 dark:border-white/5 shrink-0 safe-area-bottom pb-8 sm:pb-6">
+                <div className="p-4 sm:p-6 bg-white dark:bg-black/20 border-t border-gray-100 dark:border-white/5 shrink-0 safe-area-bottom pb-8 sm:pb-6 flex items-center gap-4">
+                    <button
+                        onClick={handleReset}
+                        className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-2xl sm:rounded-3xl transition-all shadow-sm hover:shadow-red-500/20 font-bold border border-red-100 hover:border-red-500 active:scale-95 group"
+                        title={t.reset}
+                    >
+                        <RotateCcw size={24} className="group-hover:rotate-[360deg] transition-transform duration-500" />
+                    </button>
+
                     <button
                         onClick={() => onConfirm(panels, pun, simulationYears)}
-                        className="w-full py-4 sm:py-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl sm:rounded-[1.5rem] font-bold text-lg sm:text-xl shadow-xl shadow-emerald-900/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
+                        className="flex-1 py-4 sm:py-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl sm:rounded-[1.5rem] font-bold text-lg sm:text-xl shadow-xl shadow-emerald-900/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
                     >
                         <Check size={24} strokeWidth={3} />
                         {t.confirm}
