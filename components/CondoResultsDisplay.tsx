@@ -240,8 +240,8 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                 <div className="flex flex-col">
                                     <span className="text-blue-400 dark:text-blue-300 uppercase text-[10px] font-black tracking-wider">Rendite (3€/Mese)</span>
                                     <div className="flex items-baseline gap-2">
-                                        <span className="text-slate-900 dark:text-white text-lg">{formatCurrency(results.familyUtilityEarnings!.year1.recurring - (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0))}</span>
-                                        <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold opacity-80">({formatCurrency((results.familyUtilityEarnings!.year1.recurring - (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0)) / 12)}/mese)</span>
+                                        <span className="text-slate-900 dark:text-white text-lg">{formatCurrency((results.familyUtilityEarnings!.year1.recurring - (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0)))}</span>
+                                        <span className="text-xs text-blue-600 dark:text-blue-400 font-bold opacity-80">({formatCurrency((results.familyUtilityEarnings!.year1.recurring - (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0)) / 12)}/mese)</span>
                                     </div>
                                 </div>
                             </div>
@@ -277,8 +277,8 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                 <div className="flex flex-col">
                                     <span className="text-blue-400 dark:text-blue-300 uppercase text-[10px] font-black tracking-wider">Rendite (Fino a 4€/M)</span>
                                     <div className="flex items-baseline gap-2">
-                                        <span className="text-slate-900 dark:text-white text-lg">{formatCurrency(results.familyUtilityEarnings!.year2.recurring - (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0))}</span>
-                                        <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold opacity-80">({formatCurrency((results.familyUtilityEarnings!.year2.recurring - (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0)) / 12)}/mese)</span>
+                                        <span className="text-slate-900 dark:text-white text-lg">{formatCurrency((results.familyUtilityEarnings!.year2.recurring - (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0)))}</span>
+                                        <span className="text-xs text-blue-600 dark:text-blue-400 font-bold opacity-80">({formatCurrency((results.familyUtilityEarnings!.year2.recurring - (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0)) / 12)}/mese)</span>
                                     </div>
                                 </div>
                             </div>
@@ -314,8 +314,8 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                 <div className="flex flex-col">
                                     <span className="text-blue-100 uppercase text-[10px] font-black tracking-wider">Rendite (Fino a 6€/M)</span>
                                     <div className="flex items-baseline gap-2">
-                                        <span className="text-xl">{formatCurrency(results.familyUtilityEarnings!.year3.recurring - (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0))}</span>
-                                        <span className="text-[10px] text-blue-100 font-bold opacity-80">({formatCurrency((results.familyUtilityEarnings!.year3.recurring - (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)) / 12)}/mese)</span>
+                                        <span className="text-xl">{formatCurrency((results.familyUtilityEarnings!.year3.recurring - (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)))}</span>
+                                        <span className="text-xs text-blue-100 font-bold opacity-80">({formatCurrency((results.familyUtilityEarnings!.year3.recurring - (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)) / 12)}/mese)</span>
                                     </div>
                                 </div>
                             </div>
