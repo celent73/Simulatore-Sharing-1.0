@@ -117,8 +117,11 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   const rawOneTimeBonus = planResult.totalOneTimeBonus;
 
   const oneTimeBonusWithoutCashback = rawOneTimeBonus - monthlyCashback;
-  const cashbackValue = cashbackPeriod === 'annual' ? monthlyCashback * 12 : monthlyCashback;
-  const totalOneTimeBonus = (oneTimeBonusWithoutCashback * multiplier) + cashbackValue;
+  const isAnnual = cashbackPeriod === 'annual';
+
+  // Se è annuale, il cashback NON appare nell'una tantum (va tutto nelle card anni 1/2/3)
+  // Se è mensile, appare SOLO nell'una tantum e non nelle ricorrenze
+  const totalOneTimeBonus = (oneTimeBonusWithoutCashback * multiplier) + (isAnnual ? 0 : monthlyCashback);
 
   const totalUsers = planResult.totalUsers;
   const totalContracts = planResult.totalContracts;
@@ -144,10 +147,9 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   });
 
   // Calcoli per la visualizzazione delle card (mensile vs annuale)
-  const isAnnual = cashbackPeriod === 'annual';
-  const showYearlyRec1 = isAnnual ? (totalRecurringYear1 * 12 + monthlyCashback * 12) : (totalRecurringYear1 + monthlyCashback);
-  const showYearlyRec2 = isAnnual ? (totalRecurringYear2 * 12 + monthlyCashback * 12) : (totalRecurringYear2 + monthlyCashback);
-  const showYearlyRec3 = isAnnual ? (totalRecurringYear3 * 12 + monthlyCashback * 12) : (totalRecurringYear3 + monthlyCashback);
+  const showYearlyRec1 = isAnnual ? (totalRecurringYear1 * 12 + monthlyCashback * 12) : totalRecurringYear1;
+  const showYearlyRec2 = isAnnual ? (totalRecurringYear2 * 12 + monthlyCashback * 12) : totalRecurringYear2;
+  const showYearlyRec3 = isAnnual ? (totalRecurringYear3 * 12 + monthlyCashback * 12) : totalRecurringYear3;
   const recSuffix = isAnnual ? "/anno" : t('results.per_month');
   const recTitleSuffix = isAnnual ? " (Annuale)" : "";
 
@@ -215,8 +217,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         onClose={() => setIsProjectionModalOpen(false)}
         years={projectionYears}
         onYearChange={setProjectionYears}
-        monthlyRecurring={totalRecurringYear3 + monthlyCashback}
-        totalOneTime={oneTimeBonusWithoutCashback * multiplier}
+        monthlyRecurring={totalRecurringYear3 + (isAnnual ? monthlyCashback : 0)}
+        totalOneTime={oneTimeBonusWithoutCashback * multiplier + (isAnnual ? 0 : monthlyCashback)}
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
