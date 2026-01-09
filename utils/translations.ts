@@ -136,7 +136,7 @@ export const translations = {
     },
     input: {
       network_params: "Parametri Sviluppo Rete",
-      personal_clients: "Clienti e utenze personali",
+      personal_clients: "Clienti, Utenze e Park",
       tab_residential: "Privati",
       tab_business: "Aziende / P.IVA",
       tab_my_units: "Le Mie Utenze",
@@ -581,7 +581,7 @@ export const translations = {
     },
     input: {
       network_params: "Netzwerk-Parameter",
-      personal_clients: "Persönliche Kunden und Verträge",
+      personal_clients: "Kunden, Utilities und Park",
       tab_residential: "Privat",
       tab_business: "Firmen / USt-IdNr.",
       tab_my_units: "Meine Verträge",
