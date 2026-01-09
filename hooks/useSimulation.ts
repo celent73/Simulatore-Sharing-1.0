@@ -146,7 +146,7 @@ export const useCompensationPlan = (inputs: PlanInput, viewMode: ViewMode = 'fam
         const myUnitsOneTime = (myPersonalUnitsGreen * PERSONAL_CLIENT_BONUS.MY_GREEN) + (myPersonalUnitsLight * PERSONAL_CLIENT_BONUS.MY_LIGHT);
 
         // One-time bonus on panels only applies in non-client modes
-        const unionParkOneTime = viewMode !== 'client' ? (unionParkPanels || 0) * 78 : 0;
+        const unionParkOneTime = viewMode !== 'client' ? (unionParkPanels || 0) * 50 : 0;
 
         totalOneTimeBonus += (residentialOneTime + businessOneTime + myUnitsOneTime + unionParkOneTime);
 
