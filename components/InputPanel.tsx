@@ -80,7 +80,10 @@ const uiTexts = {
     paramsTitle: "Parametri",
     paramsSubtitle: "Sviluppo Rete",
     optimizedFor: "Ottimizzato per tablet e PC/MAC",
-    advancedCalculator: "Calcolatore Avanzato"
+    advancedCalculator: "Calcolatore Avanzato",
+    configure: "Configura",
+    parkToken: "Gettone",
+    panelsLabel: "Pannelli"
   },
   de: {
     savings: "Du sparst",
@@ -113,7 +116,10 @@ const uiTexts = {
     paramsTitle: "Netzwerk",
     paramsSubtitle: "Parameter",
     optimizedFor: "Optimiert für Tablet und PC/MAC",
-    advancedCalculator: "Erweiterter Rechner"
+    advancedCalculator: "Erweiterter Rechner",
+    configure: "Konfigurieren",
+    parkToken: "Bonus",
+    panelsLabel: "Paneele"
   }
 };
 
@@ -289,19 +295,19 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
                   </div>
                   <div>
                     <h4 className="text-sm font-black text-emerald-700 dark:text-emerald-400">Union Park</h4>
-                    <p className="text-[10px] font-bold text-emerald-600/70 dark:text-emerald-500/60 uppercase">Gettone: +€78 / Pannello</p>
+                    <p className="text-[10px] font-bold text-emerald-600/70 dark:text-emerald-500/60 uppercase">{txt.parkToken}: +€50 / {txt.panelsLabel.slice(0, -1).toUpperCase()}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="text-right mr-2">
                     <p className="text-lg font-black text-emerald-600 dark:text-emerald-400 leading-none">{inputs.unionParkPanels || 0}</p>
-                    <p className="text-[8px] font-bold text-emerald-500 uppercase tracking-tighter">Pannelli</p>
+                    <p className="text-[8px] font-bold text-emerald-500 uppercase tracking-tighter">{txt.panelsLabel}</p>
                   </div>
                   <button
                     onClick={() => setUnionParkOpen(true)}
                     className="px-3 py-2 bg-emerald-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors shadow-md active:scale-95"
                   >
-                    Configura
+                    {txt.configure}
                   </button>
                 </div>
               </div>

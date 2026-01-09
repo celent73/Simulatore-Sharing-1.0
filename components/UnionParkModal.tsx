@@ -26,9 +26,9 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
     const [monthlyBill, setMonthlyBill] = useState(0);
 
     const handleReset = () => {
-        setPanels(initialPanels || 1);
-        setPun(initialPun || 0.20);
-        setSimulationYears(initialDuration || 26);
+        setPanels(1);
+        setPun(0.20);
+        setSimulationYears(26);
         setMonthlyBill(0);
     };
 
