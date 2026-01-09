@@ -3,6 +3,7 @@ import React from 'react';
 import { CondoInput } from '../types';
 import InputGroup from './InputGroup';
 import { useLanguage } from '../contexts/LanguageContext';
+import { Users, Info, TrendingUp } from 'lucide-react';
 
 interface CondoInputPanelProps {
     inputs: CondoInput;
@@ -39,7 +40,60 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                 </button>
             </div>
 
-            <div className="space-y-6 overflow-y-auto custom-scrollbar pr-1" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+            {/* RECRUITER TOGGLES */}
+            <div className="mb-6 space-y-3">
+                {/* Main Recruiter Toggle */}
+                <button
+                    onClick={() => onInputChange('showFamilyUtilityView' as any, !inputs.showFamilyUtilityView ? 1 : 0)}
+                    className={`w-full p-4 rounded-2xl border-2 transition-all flex items-center justify-between group ${inputs.showFamilyUtilityView
+                        ? 'bg-union-blue-500 border-union-blue-600 text-white shadow-lg shadow-union-blue-500/30'
+                        : 'bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-union-blue-300 dark:hover:border-union-blue-500/30'
+                        }`}
+                >
+                    <div className="flex items-center gap-3 text-left">
+                        <div className={`p-2 rounded-lg transition-colors ${inputs.showFamilyUtilityView ? 'bg-white/20' : 'bg-gray-200 dark:bg-white/10'}`}>
+                            <Users size={20} className={inputs.showFamilyUtilityView ? 'text-white' : 'text-gray-500 dark:text-gray-400'} />
+                        </div>
+                        <div>
+                            <div className="text-sm font-bold leading-tight">Vista Family Utility</div>
+                            <div className={`text-[10px] opacity-70 font-medium ${inputs.showFamilyUtilityView ? 'text-blue-50' : ''}`}>
+                                {inputs.showFamilyUtilityView ? 'Stai vedendo i TUOI guadagni' : 'Sei il Recruiter dell\'Amministratore?'}
+                            </div>
+                        </div>
+                    </div>
+                    <div className={`w-10 h-6 rounded-full p-1 transition-colors duration-300 flex items-center ${inputs.showFamilyUtilityView ? 'bg-white' : 'bg-gray-300 dark:bg-white/20'}`}>
+                        <div className={`w-4 h-4 rounded-full shadow-sm transition-transform duration-300 bg-union-blue-500 transform ${inputs.showFamilyUtilityView ? 'translate-x-4' : 'translate-x-0'}`} />
+                    </div>
+                </button>
+
+                {/* includeMainNetworkEarnings Toggle */}
+                {inputs.showFamilyUtilityView && (
+                    <button
+                        onClick={() => onInputChange('includeMainNetworkEarnings' as any, !inputs.includeMainNetworkEarnings ? 1 : 0)}
+                        className={`w-full p-4 rounded-2xl border-2 transition-all flex items-center justify-between group animate-in slide-in-from-top-2 duration-300 ${inputs.includeMainNetworkEarnings
+                            ? 'bg-purple-600 border-purple-700 text-white shadow-lg shadow-purple-500/30'
+                            : 'bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-purple-300 dark:hover:border-purple-500/30'
+                            }`}
+                    >
+                        <div className="flex items-center gap-3 text-left">
+                            <div className={`p-2 rounded-lg transition-colors ${inputs.includeMainNetworkEarnings ? 'bg-white/20' : 'bg-gray-200 dark:bg-white/10'}`}>
+                                <TrendingUp size={20} className={inputs.includeMainNetworkEarnings ? 'text-white' : 'text-gray-500 dark:text-gray-400'} />
+                            </div>
+                            <div>
+                                <div className="text-sm font-bold leading-tight">{t('input.include_main_net')}</div>
+                                <div className={`text-[10px] opacity-70 font-medium ${inputs.includeMainNetworkEarnings ? 'text-purple-50' : ''}`}>
+                                    {t('input.include_main_net_desc')}
+                                </div>
+                            </div>
+                        </div>
+                        <div className={`w-10 h-6 rounded-full p-1 transition-colors duration-300 flex items-center ${inputs.includeMainNetworkEarnings ? 'bg-white' : 'bg-gray-300 dark:bg-white/20'}`}>
+                            <div className={`w-4 h-4 rounded-full shadow-sm transition-transform duration-300 bg-purple-600 transform ${inputs.includeMainNetworkEarnings ? 'translate-x-4' : 'translate-x-0'}`} />
+                        </div>
+                    </button>
+                )}
+            </div>
+
+            <div className="space-y-6 overflow-y-auto custom-scrollbar pr-1" style={{ maxHeight: 'calc(100vh - 250px)' }}>
                 {/* GREEN SECTION */}
                 <div className="bg-green-50/50 dark:bg-green-900/10 p-5 rounded-3xl border border-green-100 dark:border-green-500/20">
                     <h3 className="text-green-700 dark:text-green-400 font-bold text-xs mb-4 uppercase tracking-widest flex items-center gap-2">

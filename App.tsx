@@ -29,75 +29,18 @@ import { LegalFooter } from './components/LegalFooter';
 import { LegalModal } from './components/LegalModal';
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 import { PremiumModal } from './components/PremiumModal';
+import { InAppBrowserOverlay } from './components/InAppBrowserOverlay';
 import { Lock, Copy, Check, PartyPopper, Gem, Building2, ExternalLink, Download, Users } from 'lucide-react';
 
-// --- ICONE SVG MANUALI ---
-const SunIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-6.364-.386 1.591-1.591M3 12h2.25m.386-6.364 1.591 1.591" /></svg>);
-const MoonIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" /></svg>);
-const TargetIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672 13.684 16.6m0 0-2.51 2.225.569-9.47 5.227 7.917-3.286-.672ZM12 2.25V4.5m5.834.166-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243-1.59-1.59" /></svg>);
-const ClientModeIcon = () => (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 w-6 h-6"><path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" fill="#3b9eff" /><path d="M6 21V19C6 15.6863 8.68629 13 12 13C15.3137 13 18 15.6863 18 19V21" stroke="#3b9eff" strokeWidth="2" strokeLinecap="round" /><path d="M16 5L17.5 8H14.5L16 5Z" fill="#fb923c" className="text-union-orange-400" /></svg>);
-const FamilyModeIcon = () => (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 w-6 h-6"><circle cx="12" cy="7" r="3" fill="#3b9eff" /><path d="M12 11C9.23858 11 7 13.2386 7 16V17C7 17.5523 7.44772 18 8 18H16C16.5523 18 17 17.5523 17 17V16C17 13.2386 14.7614 11 12 11Z" fill="#3b9eff" /><circle cx="18.5" cy="9.5" r="2.5" fill="#fb923c" /><path d="M18.5 13C16.567 13 15 14.567 15 16.5V17C15 17.5523 15.4477 18 16 18H21C21.5523 18 22 17.5523 22 17V16.5C22 14.567 20.433 13 18.5 13Z" fill="#fb923c" /><circle cx="5.5" cy="9.5" r="2.5" fill="#fb923c" /><path d="M5.5 13C3.567 13 2 14.567 2 16.5V17C2 17.5523 2.44772 18 3 18H8C8.55228 18 9 17.5523 9 17V16.5C9 14.567 7.433 13 5.5 13Z" fill="#fb923c" /></svg>);
-const CondoModeIcon = () => (<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 w-6 h-6"><path d="M4 21H10V8C10 7.44772 9.55228 7 9 7H5C4.44772 7 4 7.44772 4 8V21Z" fill="#fb923c" /><path d="M14 21H20V4C20 3.44772 19.5523 3 19 3H15C14.4477 3 14 3.44772 14 4V21Z" fill="#3b9eff" /><rect x="6" y="9" width="2" height="2" rx="0.5" fill="white" fillOpacity="0.8" /><rect x="6" y="13" width="2" height="2" rx="0.5" fill="white" fillOpacity="0.8" /><rect x="6" y="17" width="2" height="2" rx="0.5" fill="white" fillOpacity="0.8" /><rect x="16" y="6" width="2" height="2" rx="0.5" fill="white" fillOpacity="0.8" /><rect x="16" y="10" width="2" height="2" rx="0.5" fill="white" fillOpacity="0.8" /><rect x="16" y="14" width="2" height="2" rx="0.5" fill="white" fillOpacity="0.8" /><rect x="16" y="18" width="2" height="2" rx="0.5" fill="white" fillOpacity="0.8" /><path d="M2 21H22" stroke="#64748b" strokeWidth="2" strokeLinecap="round" /></svg>);
-const ItalyFlag = () => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" className="w-6 h-6 rounded-full shadow-sm object-cover"><path fill="#fff" d="M0 0h640v480H0z" /><path fill="#009246" d="M0 0h213.3v480H0z" /><path fill="#ce2b37" d="M426.7 0H640v480H426.7z" /></svg>);
-const GermanyFlag = () => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" className="w-6 h-6 rounded-full shadow-sm object-cover"><path fill="#ffce00" d="M0 320h640v160H0z" /><path fill="#000" d="M0 0h640v160H0z" /><path fill="#d00" d="M0 160h640v160H0z" /></svg>);
-const CrownIconSVG = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14" />
-  </svg>
-);
-
-const BackgroundMesh = () => (
-  <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none hidden dark:block">
-    <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-500/10 blur-[100px] animate-pulse" />
-    <div className="absolute top-[20%] right-[-5%] w-[30%] h-[30%] rounded-full bg-purple-500/10 blur-[100px]" />
-    <div className="absolute bottom-[-10%] left-[20%] w-[35%] h-[35%] rounded-full bg-blue-600/10 blur-[100px]" />
-  </div>
-);
-
-const DisclaimerModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-  const { t } = useLanguage();
-  if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/30 max-w-md w-full p-6 md:p-8 relative transform transition-all animate-in zoom-in-95 duration-200">
-        <h3 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">{t('app.disclaimer_btn')}</h3>
-        <div className="text-sm text-gray-600 dark:text-gray-300 space-y-4 leading-relaxed text-justify">
-          <p>{t('app.simulation_note')}</p>
-          <p>Il presente simulatore ha finalità puramente illustrative. Gli importi mostrati rappresentano una stima teorica basata sui dati inseriti manualmente dall'utente.</p>
-        </div>
-        <button onClick={onClose} className="mt-8 w-full bg-union-blue-500/90 hover:bg-union-blue-600 text-white font-bold py-3 px-4 rounded-2xl transition-colors duration-200 shadow-lg shadow-union-blue-500/30 focus:outline-none">
-          {t('app.disclaimer_btn').replace('Leggi il ', '').replace('Completo', 'Chiudi').replace('Disclaimer', 'OK')}
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const PaymentSuccessModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-  if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="bg-white dark:bg-gray-900 rounded-[2rem] shadow-2xl w-full max-w-md p-8 relative border border-union-orange-400/50 text-center animate-in zoom-in-95">
-        <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(74,222,128,0.4)] relative">
-          <CrownIconSVG className="w-10 h-10 text-green-600 dark:text-green-400 animate-bounce" />
-          <div className="absolute -top-2 -right-2 text-3xl animate-pulse">🎉</div>
-        </div>
-        <h2 className="text-3xl font-black text-gray-900 dark:text-white mb-2">Pagamento Riuscito!</h2>
-        <p className="text-lg text-green-600 dark:text-green-400 font-bold mb-6">Grazie per il tuo acquisto</p>
-        <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl mb-6 text-left border border-blue-100 dark:border-blue-800">
-          <p className="text-gray-700 dark:text-gray-200 text-sm leading-relaxed font-medium">
-            Il sistema sta generando la tua licenza univoca.
-            <br /><br />
-            📩 <strong>Controlla la tua Email:</strong> riceverai il tuo CODICE DI ATTIVAZIONE personale entro pochi minuti.
-          </p>
-        </div>
-        <button onClick={onClose} className="w-full py-4 bg-union-blue-600 text-white rounded-xl font-bold text-lg hover:scale-105 transition-transform shadow-lg shadow-blue-500/30">
-          Ho capito, controllo la mail
-        </button>
-      </div>
-    </div>
-  );
-};
+import SunIcon from './components/icons/SunIcon';
+import MoonIcon from './components/icons/MoonIcon';
+import TargetIcon from './components/icons/TargetIcon';
+import { ClientModeIcon, FamilyModeIcon, CondoModeIcon } from './components/icons/ModeIcons';
+import { ItalyFlag, GermanyFlag } from './components/icons/Flags';
+import CrownIconSVG from './components/icons/CrownIcon';
+import BackgroundMesh from './components/BackgroundMesh';
+import DisclaimerModal from './components/DisclaimerModal';
+import PaymentSuccessModal from './components/PaymentSuccessModal';
 
 const initialInputs: PlanInput = {
   directRecruits: 0, contractsPerUser: 0, indirectRecruits: 0, networkDepth: 1, realizationTimeMonths: 12,
@@ -142,8 +85,8 @@ const AppContent = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const [viewMode, setViewMode] = useState<ViewMode>('family');
-  const [condoInputs, setCondoInputs] = useState<CondoInput>(initialCondoInputs);
+  const { state: viewMode, set: setViewMode } = useSmartState<ViewMode>('family', 'sim_view_mode_v1');
+  const { state: condoInputs, set: setCondoInputs } = useSmartState<CondoInput>(initialCondoInputs, 'condo_sim_state_v1');
   const [isContractInfoModalOpen, setIsContractInfoModalOpen] = useState(false);
   const [cashbackPeriod, setCashbackPeriod] = useState<'monthly' | 'annual'>('monthly');
   const isInitialMount = useRef(true);
@@ -151,10 +94,10 @@ const AppContent = () => {
   const [installPrompt, setInstallPrompt] = useState<any>(null); // State for the prompt event
 
   const { language, setLanguage, t } = useLanguage();
-  const { state: inputs, set: setInputs, undo, redo, canUndo, canRedo, reset } = useSmartState<PlanInput>(initialInputs);
+  const { state: inputs, set: setInputs, undo, redo, canUndo, canRedo, reset } = useSmartState<PlanInput>(initialInputs, 'sim_state_v1');
 
-  const planResult = useCompensationPlan(inputs);
-  const condoResult = useCondoSimulation(condoInputs);
+  const planResult = useCompensationPlan(inputs, viewMode);
+  const condoResult = useCondoSimulation(condoInputs, planResult);
 
   const targetButtonText = language === 'it' ? "Calcola Obiettivo" : "Ziel berechnen";
 
@@ -202,11 +145,12 @@ const AppContent = () => {
 
       const data = licenses[0]; // Usiamo il primo record trovato
 
-      // 2. CONTROLLA IL LIMITE (Max 3)
+      // 2. CONTROLLA IL LIMITE (Dinamico da DB o Default 3)
       const currentUses = data.uses || 0;
+      const maxUses = data.max_uses || 3; // Usa il valore dal DB o 3 di default
 
-      if (currentUses >= 3) {
-        setError('Hai raggiunto il limite massimo di 3 dispositivi per questa licenza.');
+      if (currentUses >= maxUses) {
+        setError(`Hai raggiunto il limite massimo di ${maxUses} dispositivi per questa licenza.`);
         setLoading(false);
         return;
       }
@@ -325,9 +269,13 @@ const AppContent = () => {
     if (newCount >= 5) { setShowPremiumModal(true); setSecretClickCount(0); }
   };
 
-  const handleInputChange = (field: keyof PlanInput, value: number) => {
+  const handleInputChange = (field: keyof PlanInput, value: number | any) => {
     if (field === 'realizationTimeMonths') {
       setInputs({ ...inputs, [field]: value });
+      return;
+    }
+    if (field === 'cashbackDetails') {
+      setInputs(prev => ({ ...prev, cashbackDetails: value }));
       return;
     }
     if (!isPremium) {
@@ -398,6 +346,7 @@ const AppContent = () => {
         forceLock={false}
       />
 
+      <InAppBrowserOverlay />
       {showLegalModal && <LegalModal isOpen={showLegalModal} onAccept={handleAcceptLegal} onClose={() => setShowLegalModal(false)} type={legalDocType} mode={legalMode} />}
       <PaymentSuccessModal isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
       <ScrollToTopButton />
@@ -451,7 +400,7 @@ const AppContent = () => {
 
               {!isPremium && <button onClick={() => setShowPremiumModal(true)} className="flex items-center justify-center w-auto px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-xl shadow-lg hover:scale-105 transition-all font-bold text-sm border border-yellow-300">Sblocca PRO</button>}
 
-              {!isStandalone && (canInstall || /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase())) && (
+              {!isStandalone && (canInstall || /iphone|ipad|ipod|android/i.test(window.navigator.userAgent.toLowerCase())) && (
                 <button onClick={() => setShowInstallModal(true)} className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl shadow-lg hover:bg-black transition-all font-bold text-sm border border-gray-700 animate-pulse">
                   <Download size={18} />
                   <span className="hidden lg:inline">Scarica App</span>

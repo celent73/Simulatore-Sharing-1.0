@@ -1,5 +1,16 @@
 // src/types.ts
 
+export interface CashbackCategory {
+  id: string;
+  name: string;
+  amount: number;
+  brand: string;
+  percentage: number;
+  fixedAmount?: number;
+  icon?: string;
+  isExtra?: boolean;
+}
+
 export interface PlanInput {
   directRecruits: number;
   contractsPerUser: number;
@@ -14,6 +25,10 @@ export interface PlanInput {
   myPersonalUnitsLight: number; // Mie Utenze Light (25€ bonus, 0.5€ ricorrente base)
   cashbackSpending: number;
   cashbackPercentage: number;
+  cashbackDetails?: CashbackCategory[]; // New field for detailed breakdown
+  unionParkPanels?: number; // New field for Union Park panels
+  unionParkPun?: number; // New field for Union Park PUN
+  unionParkDuration?: number; // New field for Union Park duration
 }
 
 export interface CondoInput {
@@ -25,6 +40,8 @@ export interface CondoInput {
   managedCondos: number;
   familiesPerCondo: number;
   networkConversionRate: number; // 0-100
+  showFamilyUtilityView?: boolean;
+  includeMainNetworkEarnings?: boolean; // New toggle
 }
 
 export type ViewMode = 'family' | 'client' | 'condo';
@@ -92,5 +109,26 @@ export interface CondoSimulationResult {
     totalAnnualYear1: number;
     totalAnnualYear2: number;
     totalAnnualYear3: number;
+  };
+  familyUtilityEarnings?: {
+    year1: {
+      total: number;
+      oneTime: number;
+      recurring: number;
+      networkPart: { oneTime: number; recurring: number };
+    };
+    year2: {
+      total: number;
+      oneTime: number;
+      recurring: number;
+      networkPart: { oneTime: number; recurring: number };
+    };
+    year3: {
+      total: number;
+      oneTime: number;
+      recurring: number;
+      networkPart: { oneTime: number; recurring: number };
+    };
+    total3Years: number;
   };
 }

@@ -171,6 +171,8 @@ export const translations = {
       network_new_clients: "Nuovi Clienti",
       condos_parens: "(Condomini)",
       families_parens: "(Famiglie)",
+      include_main_net: "Includi Sviluppo Rete Esterna",
+      include_main_net_desc: "Aggiungi i guadagni della simulazione principale",
     },
     results: {
       total_users: "Totale Utenti",
@@ -402,9 +404,9 @@ export const translations = {
       your_saving: "Tuo Risparmio",
       simulate_cashback: "Clicca qui per simulare il tuo cashback!",
       network_title: "Il Passaparola che Ti Premia",
-      network_desc: "Anche da cliente, se presenti Union ad amici, guadagni sulla loro spesa fino a 5 livelli (la metà di un Family Utility).",
+      network_desc: "Anche da cliente, se presenti Union ad amici, guadagni sulla loro spesa fino a 5 livelli.",
       cta_text: "Vedi il potenziale? Diventa Family Utility per",
-      cta_highlight: "RADDOPPIARE i tuoi guadagni!"
+      cta_highlight: "POTENZIARE i tuoi guadagni!"
     },
     golden_no: {
       tag: "MINDSET VINCENTE",
@@ -614,6 +616,8 @@ export const translations = {
       network_new_clients: "Neue Kunden",
       condos_parens: "(Objekte)",
       families_parens: "(Familien)",
+      include_main_net: "Haupt-Netzwerkentwicklung einbeziehen",
+      include_main_net_desc: "Einnahmen aus der Hauptsimulation hinzufügen",
     },
     results: {
       total_users: "Gesamtbenutzer",

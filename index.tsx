@@ -22,11 +22,11 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations().then(registrations => {
       for (let registration of registrations) {
         // Optional: unregister only if scope or other criteria match, but for now clean slate is safer
-        // registration.unregister(); 
+        registration.unregister();
       }
 
       // Register new one with version query param
-      navigator.serviceWorker.register('/service-worker.js?v=1.0.3')
+      navigator.serviceWorker.register('/service-worker.js?v=1.1.0')
         .then((registration) => {
           console.log('ServiceWorker registration successful with scope: ', registration.scope);
 

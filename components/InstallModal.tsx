@@ -9,6 +9,8 @@ interface InstallModalProps {
 
 export const InstallModal: React.FC<InstallModalProps> = ({ isOpen, onClose, installPrompt }) => {
     const [isIOS, setIsIOS] = useState(false);
+    const [isSafari, setIsSafari] = useState(false);
+    const [isSamsungBrowser, setIsSamsungBrowser] = useState(false);
     // Use prop as initial value if available
     const [deferredPrompt, setDeferredPrompt] = useState<any>(installPrompt || null);
 
@@ -20,10 +22,18 @@ export const InstallModal: React.FC<InstallModalProps> = ({ isOpen, onClose, ins
     }, [installPrompt]);
 
     useEffect(() => {
-        // Check if device is iOS
         const userAgent = window.navigator.userAgent.toLowerCase();
         const isIosDevice = /iphone|ipad|ipod/.test(userAgent);
         setIsIOS(isIosDevice);
+
+        // Samsung Browser detection
+        const isSamsung = /samsungbrowser/.test(userAgent);
+        setIsSamsungBrowser(isSamsung);
+
+        // Check if browser is Safari (and not Chrome/Others on iOS)
+        const isChromeIOS = /crios/.test(userAgent);
+        const isSafariBrowser = isIosDevice && !isChromeIOS && /safari/.test(userAgent);
+        setIsSafari(isSafariBrowser || isIosDevice);
 
         // Fallback: Get the deferred prompt from window if not passed via props
         // @ts-ignore
@@ -32,7 +42,6 @@ export const InstallModal: React.FC<InstallModalProps> = ({ isOpen, onClose, ins
             setDeferredPrompt(window.deferredPrompt);
         }
 
-        // Listen for the event in case it happens after mount (self-contained backup)
         const handler = (e: any) => {
             e.preventDefault();
             setDeferredPrompt(e);
@@ -44,11 +53,13 @@ export const InstallModal: React.FC<InstallModalProps> = ({ isOpen, onClose, ins
         return () => window.removeEventListener('beforeinstallprompt', handler);
     }, [installPrompt]);
 
+    const [showAndroidInstructions, setShowAndroidInstructions] = useState(false);
+
     const handleInstallClick = async () => {
         if (!deferredPrompt) {
             if (!isIOS) {
-                // Fallback for desktop/debugging if no prompt captured yet
-                alert("Impossibile avviare l'installazione automaticamente. Usa il menu del browser.");
+                // Invece dell'alert, mostriamo le istruzioni nel modale
+                setShowAndroidInstructions(true);
             }
             return;
         }
@@ -95,28 +106,87 @@ export const InstallModal: React.FC<InstallModalProps> = ({ isOpen, onClose, ins
                     </p>
 
                     {!isIOS ? (
-                        <button
-                            onClick={handleInstallClick}
-                            disabled={!deferredPrompt}
-                            className={`w-full py-3.5 rounded-xl font-bold text-white shadow-lg shadow-blue-500/30 transition-all flex items-center justify-center gap-2
-                ${deferredPrompt
-                                    ? 'bg-union-blue-600 hover:bg-union-blue-700 active:scale-95'
-                                    : 'bg-gray-400 cursor-not-allowed opacity-70'}`}
-                        >
-                            <Download size={20} />
-                            {deferredPrompt ? 'Installa Ora' : 'Installazione non disponibile'}
-                        </button>
+                        <>
+                            {!showAndroidInstructions ? (
+                                <>
+                                    <button
+                                        onClick={handleInstallClick}
+                                        className={`w-full py-3.5 rounded-xl font-bold text-white shadow-lg shadow-blue-500/30 transition-all flex items-center justify-center gap-2
+                                        ${deferredPrompt
+                                                ? 'bg-union-blue-600 hover:bg-union-blue-700 active:scale-95'
+                                                : 'bg-union-blue-500 hover:bg-union-blue-600'
+                                            }`}
+                                    >
+                                        <Download size={20} />
+                                        {deferredPrompt ? 'Installa Ora' : 'Installa (Manuale)'}
+                                    </button>
+
+                                    {!deferredPrompt && (
+                                        <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                                            Se il tasto non funziona, ti mostreremo come fare.
+                                        </p>
+                                    )}
+                                </>
+                            ) : (
+                                <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 w-full text-left space-y-3 border border-gray-100 dark:border-gray-700 animate-in fade-in zoom-in duration-200">
+                                    <div className="p-3 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-lg text-xs font-bold mb-2">
+                                        ℹ️ Installazione Manuale {isSamsungBrowser ? '(Samsung)' : ''}
+                                    </div>
+
+                                    {isSamsungBrowser ? (
+                                        <>
+                                            <p className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                                                <span className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+                                                <span>Tocca il <span className="font-bold">Menu</span> <span className="text-xs text-gray-400">(≡ in basso a destra)</span></span>
+                                            </p>
+                                            <div className="h-px bg-gray-200 dark:bg-gray-700 w-full" />
+                                            <p className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                                                <span className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                                                <span>Seleziona <span className="font-bold">"Aggiungi pagina a"</span></span>
+                                            </p>
+                                            <div className="h-px bg-gray-200 dark:bg-gray-700 w-full" />
+                                            <p className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                                                <span className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>
+                                                <span>Scegli <span className="font-bold">"Schermata Home"</span></span>
+                                                <PlusSquare size={16} className="text-gray-500" />
+                                            </p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                                                <span className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+                                                <span>Apri il menu del browser <span className="text-xs text-gray-400">(di solito ... o tre linee)</span></span>
+                                            </p>
+                                            <div className="h-px bg-gray-200 dark:bg-gray-700 w-full" />
+                                            <p className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                                                <span className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                                                <span>Cerca "Installa App" o "Aggiungi a Home"</span>
+                                                <PlusSquare size={16} className="text-gray-500" />
+                                            </p>
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                        </>
                     ) : (
                         <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 w-full text-left space-y-3 border border-gray-100 dark:border-gray-700">
+
+                            {/* Warning per Chrome su iOS */}
+                            {isIOS && navigator.userAgent.match(/crios/i) && (
+                                <div className="p-3 bg-orange-100 text-orange-800 rounded-lg text-xs font-bold mb-2">
+                                    ⚠️ Usa <strong>Safari</strong> per installare l'app. Chrome su iOS potrebbe non supportare questa funzione.
+                                </div>
+                            )}
+
                             <p className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                 <span className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
-                                <span>Tocca il tasto Condividi</span>
+                                <span>Tocca il tasto Condividi <span className="text-xs text-gray-400">(icona quadrata con freccia)</span></span>
                                 <Share size={16} className="text-blue-500" />
                             </p>
                             <div className="h-px bg-gray-200 dark:bg-gray-700 w-full" />
                             <p className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                 <span className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
-                                <span>Scegli "Aggiungi alla Home"</span>
+                                <span>Scorri e scegli "Aggiungi alla Home"</span>
                                 <PlusSquare size={16} className="text-gray-500" />
                             </p>
                         </div>

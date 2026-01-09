@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { PlanInput, LevelData, CompensationPlanResult, MonthlyGrowthData } from '../types';
+import { PlanInput, LevelData, CompensationPlanResult, MonthlyGrowthData, ViewMode } from '../types';
 
 // --- CONFIGURAZIONE TARIFFE UNA TANTUM (Differenziate 1° vs Extra) ---
 const BONUS_RATES: { [key: number]: { first: number, extra: number } } = {
@@ -40,7 +40,7 @@ const PERSONAL_RECURRING_BASE = {
     MY_LIGHT: 0.5
 };
 
-export const useCompensationPlan = (inputs: PlanInput): CompensationPlanResult => {
+export const useCompensationPlan = (inputs: PlanInput, viewMode: ViewMode = 'family'): CompensationPlanResult => {
     return useMemo(() => {
         const {
             directRecruits,
@@ -55,7 +55,9 @@ export const useCompensationPlan = (inputs: PlanInput): CompensationPlanResult =
             myPersonalUnitsGreen = 0,
             myPersonalUnitsLight = 0,
             cashbackSpending = 0,
-            cashbackPercentage = 0
+            cashbackPercentage = 0,
+            unionParkPanels = 0,
+            unionParkPun = 0.20
         } = inputs;
 
         // Helper per calcolare il bonus una tantum complesso
@@ -143,7 +145,10 @@ export const useCompensationPlan = (inputs: PlanInput): CompensationPlanResult =
         const businessOneTime = (personalClientsBusinessGreen * PERSONAL_CLIENT_BONUS.BUSINESS_GREEN) + (personalClientsBusinessLight * PERSONAL_CLIENT_BONUS.BUSINESS_LIGHT);
         const myUnitsOneTime = (myPersonalUnitsGreen * PERSONAL_CLIENT_BONUS.MY_GREEN) + (myPersonalUnitsLight * PERSONAL_CLIENT_BONUS.MY_LIGHT);
 
-        totalOneTimeBonus += (residentialOneTime + businessOneTime + myUnitsOneTime);
+        // One-time bonus on panels only applies in non-client modes
+        const unionParkOneTime = viewMode !== 'client' ? (unionParkPanels || 0) * 78 : 0;
+
+        totalOneTimeBonus += (residentialOneTime + businessOneTime + myUnitsOneTime + unionParkOneTime);
 
         // --- AGGIUNTA CASHBACK ---
         const monthlyCashback = cashbackSpending * (cashbackPercentage / 100);
@@ -163,9 +168,12 @@ export const useCompensationPlan = (inputs: PlanInput): CompensationPlanResult =
             (myPersonalUnitsGreen * PERSONAL_RECURRING_BASE.MY_GREEN) +
             (myPersonalUnitsLight * PERSONAL_RECURRING_BASE.MY_LIGHT);
 
-        totalRecurringYear1 += personalBaseRecurring * RECURRING_RATES_PER_YEAR[1];
-        totalRecurringYear2 += personalBaseRecurring * RECURRING_RATES_PER_YEAR[2];
-        totalRecurringYear3 += personalBaseRecurring * RECURRING_RATES_PER_YEAR[3];
+        // Calculate panel yield
+        const annualPanelYield = (unionParkPanels || 0) * (unionParkPun || 0.20) * 33.4 * 12;
+
+        totalRecurringYear1 += (personalBaseRecurring * RECURRING_RATES_PER_YEAR[1]) + annualPanelYield;
+        totalRecurringYear2 += (personalBaseRecurring * RECURRING_RATES_PER_YEAR[2]) + annualPanelYield;
+        totalRecurringYear3 += (personalBaseRecurring * RECURRING_RATES_PER_YEAR[3]) + annualPanelYield;
 
         // Conteggio totale contratti
         const personalContractsCount = personalClientsGreen + personalClientsLight + personalClientsBusinessGreen + personalClientsBusinessLight + myPersonalUnitsGreen + myPersonalUnitsLight;
@@ -174,84 +182,45 @@ export const useCompensationPlan = (inputs: PlanInput): CompensationPlanResult =
         // --- 2. Dati crescita mensile (ESPONENZIALE) ---
         const monthlyData: MonthlyGrowthData[] = [];
 
-        const hasAnyActivity = cumulativeUsers > 0 || personalContractsCount > 0 || monthlyCashback > 0;
+        const hasAnyActivity = cumulativeUsers > 0 || personalContractsCount > 0 || monthlyCashback > 0 || (unionParkPanels || 0) > 0;
 
         if (realizationTimeMonths > 0 && hasAnyActivity) {
-            // Logica Crescita: usiamo una curva esponenziale per simulare la crescita della rete
-
-            // Valore iniziale (Mese 1):
-            // Se c'è una rete, ipotizziamo di partire piccoli (es. 1/10 del target o basato sui diretti)
-            // Se non c'è rete ma solo personali, la crescita è più lineare o immediata
-
+            // Logica Crescita
             const targetRecurring = totalRecurringYear1;
             const targetOneTime = totalOneTimeBonus;
-
-            // Calcoliamo il tasso di crescita necessario per arrivare da Start a Target in N mesi
-            // Formula: Final = Start * (1 + r)^months
-            // Ma per semplificare e avere una curva bella: usiamo una interpolazione esponenziale
-
-            // Start Value: Ipotizziamo che al mese 1 tu abbia circa il 5-10% del risultato finale 
-            // (o il valore dei soli diretti se presenti)
-
-            // Base di partenza per la curva (evitiamo 0 per la matematica)
-            const baseStartRatio = 0.05; // Partiamo dal 5%
+            const baseStartRatio = 0.05;
 
             for (let month = 1; month <= realizationTimeMonths; month++) {
-                // Progresso temporale (0.0 a 1.0)
                 const t = month / realizationTimeMonths;
-
-                // Curva di crescita: t^2 o t^3 per effetto "a valanga"
-                // Usiamo una funzione di easing: easeInQuad (t^2) è realistica per il network marketing
-                // (lento all'inizio, esplode alla fine)
-                // Oppure t^1.5 per essere meno aggressivi
                 const growthFactor = Math.pow(t, 1.5);
 
-                // Calcolo Valori Cumulativi a questo mese
-                // Nota: per OneTime (Una Tantum), il "Cumulativo" è quanto ho guadagnato in totale fino ad ora.
-                // Il "Mensile" è la differenza rispetto al mese precedente (il Delta).
-
                 const currentCumulativeOneTime = targetOneTime * growthFactor;
-
-                // Per il ricorrente, il "Valore Mensile" è il livello raggiunto (lo stock),
-                // mentre il "Cumulativo" è la somma dei bonifici ricevuti (integrale).
                 const currentMonthlyRecurring = targetRecurring * growthFactor;
 
-                // Recuperiamo i dati del mese precedente per calcolare i delta
                 const prevCumulativeOneTime = month === 1 ? 0 : monthlyData[month - 2].cumulativeOneTimeBonus;
                 const prevCumulativeRecurring = month === 1 ? 0 : monthlyData[month - 2].cumulativeRecurring;
 
-                // Flow Mensile (Il Bonifico del mese)
-                // OneTantum: è il NUOVO fatturato generato in questo mese (Delta del cumulativo)
                 const monthlyOneTimeFlow = currentCumulativeOneTime - prevCumulativeOneTime;
-
-                // Ricorrente: è il livello raggiunto in questo mese
                 const monthlyRecurringFlow = currentMonthlyRecurring;
-
-                // Totale Bonifico Mensile
                 const monthlyTotalCheck = monthlyOneTimeFlow + monthlyRecurringFlow;
-
-                // Cumulativo Totale (Tutti i soldi incassati da inizio attività)
                 const totalCashInPocket = prevCumulativeRecurring + monthlyTotalCheck;
 
                 monthlyData.push({
                     month,
                     users: Math.floor(cumulativeUsers * growthFactor),
-                    // Flow Mensile (Per il grafico "Mensile")
                     monthlyOneTimeBonus: parseFloat(monthlyOneTimeFlow.toFixed(2)),
                     monthlyRecurring: parseFloat(monthlyRecurringFlow.toFixed(2)),
                     monthlyTotalEarnings: parseFloat(monthlyTotalCheck.toFixed(2)),
-
-                    // Dati Cumulativi (Per il grafico "Cumulativo")
                     cumulativeOneTimeBonus: parseFloat(currentCumulativeOneTime.toFixed(2)),
-                    cumulativeRecurring: parseFloat((prevCumulativeRecurring + monthlyRecurringFlow).toFixed(2)), // Somma dei flussi ricorrenti
-                    cumulativeEarnings: parseFloat(totalCashInPocket.toFixed(2)) // Totale incassato (OneTime + Recurring)
+                    cumulativeRecurring: parseFloat((prevCumulativeRecurring + monthlyRecurringFlow).toFixed(2)),
+                    cumulativeEarnings: parseFloat(totalCashInPocket.toFixed(2))
                 });
             }
         }
 
         return {
             levelData,
-            levels: levelData, // Alias per compatibilità
+            levels: levelData,
             totalUsers: cumulativeUsers,
             totalContracts,
             totalOneTimeBonus: parseFloat(totalOneTimeBonus.toFixed(2)),
@@ -261,5 +230,5 @@ export const useCompensationPlan = (inputs: PlanInput): CompensationPlanResult =
             monthlyCashback: parseFloat(monthlyCashback.toFixed(2)),
             monthlyData
         };
-    }, [inputs]);
+    }, [inputs, viewMode]);
 };

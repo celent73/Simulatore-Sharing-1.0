@@ -21,13 +21,18 @@ import {
   Building2,
   Info,
   Network,
-  Calculator
+  Calculator,
+  Sun
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 // Importazione del visualizzatore
+// FIX: Removing extra imports done manually in previous step if they exist or ensuring clean block
 import { NetworkVisualizerModal } from './NetworkVisualizerModal';
 import { AnalisiUtenzeModal } from './AnalisiUtenzeModal';
+import { CashbackDetailedModal } from './CashbackDetailedModal';
+import { UnionParkModal } from './UnionParkModal';
+import { CashbackCategory } from '../types';
 
 interface InputPanelProps {
   inputs: PlanInput;
@@ -74,7 +79,8 @@ const uiTexts = {
     // NUOVE TRADUZIONI AGGIUNTE
     paramsTitle: "Parametri",
     paramsSubtitle: "Sviluppo Rete",
-    optimizedFor: "Ottimizzato per tablet e PC/MAC"
+    optimizedFor: "Ottimizzato per tablet e PC/MAC",
+    advancedCalculator: "Calcolatore Avanzato"
   },
   de: {
     savings: "Du sparst",
@@ -87,7 +93,7 @@ const uiTexts = {
     personalTitle: "Kunden & eigene Utilities",
     estimatedBonus: "Geschätzter Bonus",
     clientMode: "Kundenmodus",
-    clientModeDesc: "Direkte Einnahmen und Renten betragen 50% im Vergleich zum Family-Modus.",
+    clientModeDesc: "Direkte Einnahmen und Renten werden gemäß dem Union-Vergütungsplan berechnet.",
     myUnits: "Meine Utilities",
     private: "Privat",
     business: "Geschäftlich",
@@ -106,7 +112,8 @@ const uiTexts = {
     // NUOVE TRADUZIONI AGGIUNTE
     paramsTitle: "Netzwerk",
     paramsSubtitle: "Parameter",
-    optimizedFor: "Optimiert für Tablet und PC/MAC"
+    optimizedFor: "Optimiert für Tablet und PC/MAC",
+    advancedCalculator: "Erweiterter Rechner"
   }
 };
 
@@ -184,7 +191,7 @@ const CustomSlider = ({ label, value, onChange, min, max, step = 1, icon: Icon, 
 };
 
 // ... MODALI ...
-const CashbackModal = ({ isOpen, onClose, inputs, onInputChange, onReset, txt, period }: any) => {
+const CashbackModal = ({ isOpen, onClose, inputs, onInputChange, onReset, txt, period, OpenDetailed }: any) => {
   if (!isOpen) return null;
   const monthlySaving = (inputs.cashbackSpending * inputs.cashbackPercentage) / 100;
   const saving = period === 'annual' ? monthlySaving * 12 : monthlySaving;
@@ -214,7 +221,10 @@ const CashbackModal = ({ isOpen, onClose, inputs, onInputChange, onReset, txt, p
         <div className="px-8 pb-8 space-y-2">
           <CustomSlider label={txt.monthlySpend} value={inputs.cashbackSpending} onChange={(v: number) => onInputChange('cashbackSpending', v)} min={0} max={50000} step={50} colorBase="purple" />
           <CustomSlider label={txt.cashbackPercent} value={inputs.cashbackPercentage} onChange={(v: number) => onInputChange('cashbackPercentage', v)} min={0} max={20} step={0.5} colorBase="purple" />
-          <button onClick={onClose} className="w-full py-4 bg-gray-900 dark:bg-gray-800 text-white rounded-2xl font-bold text-lg hover:bg-gray-800 dark:hover:bg-gray-700 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 mt-4">{txt.confirm}</button>
+          <div className="flex gap-2">
+            <button onClick={() => OpenDetailed()} className="flex-1 py-4 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300 rounded-2xl font-bold text-lg hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-all border border-purple-200 dark:border-purple-500/20">{txt.advancedCalculator}</button>
+            <button onClick={onClose} className="flex-1 py-4 bg-gray-900 dark:bg-gray-800 text-white rounded-2xl font-bold text-lg hover:bg-gray-800 dark:hover:bg-gray-700 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">{txt.confirm}</button>
+          </div>
         </div>
       </div>
     </div>
@@ -224,8 +234,9 @@ const CashbackModal = ({ isOpen, onClose, inputs, onInputChange, onReset, txt, p
 const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset, viewMode, txt }: any) => {
   if (!isOpen) return null;
   const [activeTab, setActiveTab] = useState<'my' | 'private' | 'business'>('my');
+  const [unionParkOpen, setUnionParkOpen] = useState(false);
   const isClientMode = viewMode === 'client';
-  const multiplier = isClientMode ? 0.5 : 1;
+  const multiplier = 1;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 dark:bg-black/80 backdrop-blur-md animate-in fade-in">
       <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden relative animate-in zoom-in-95 duration-300 max-h-[90vh] flex flex-col border border-gray-100 dark:border-gray-700">
@@ -269,6 +280,45 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
                 <CustomSlider label={`${txt.myUnitsLight} (+${25 * multiplier}€)`} value={inputs.myPersonalUnitsLight} onChange={(v: number) => onInputChange('myPersonalUnitsLight', v)} min={0} max={100} colorBase="yellow" icon={Zap} suffix="" />
                 <p className="text-[10px] text-yellow-600 dark:text-yellow-500 font-bold text-center pb-2 uppercase tracking-wide">{txt.baseRent}: {(0.50 * multiplier).toFixed(2)}€/mese</p>
               </div>
+
+              {/* UNION PARK CARD */}
+              <div className="p-4 rounded-3xl border border-emerald-100 dark:border-emerald-900/30 bg-emerald-50 dark:bg-emerald-900/10 flex items-center justify-between group/park transition-all hover:bg-emerald-100/50 dark:hover:bg-emerald-900/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <Sun size={20} />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-black text-emerald-700 dark:text-emerald-400">Union Park</h4>
+                    <p className="text-[10px] font-bold text-emerald-600/70 dark:text-emerald-500/60 uppercase">Gettone: +€78 / Pannello</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="text-right mr-2">
+                    <p className="text-lg font-black text-emerald-600 dark:text-emerald-400 leading-none">{inputs.unionParkPanels || 0}</p>
+                    <p className="text-[8px] font-bold text-emerald-500 uppercase tracking-tighter">Pannelli</p>
+                  </div>
+                  <button
+                    onClick={() => setUnionParkOpen(true)}
+                    className="px-3 py-2 bg-emerald-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors shadow-md active:scale-95"
+                  >
+                    Configura
+                  </button>
+                </div>
+              </div>
+
+              <UnionParkModal
+                isOpen={unionParkOpen}
+                onClose={() => setUnionParkOpen(false)}
+                initialPanels={inputs.unionParkPanels}
+                initialPun={inputs.unionParkPun}
+                initialDuration={inputs.unionParkDuration}
+                onConfirm={(panels, pun, duration) => {
+                  onInputChange('unionParkPanels', panels);
+                  onInputChange('unionParkPun', pun);
+                  onInputChange('unionParkDuration', duration);
+                  setUnionParkOpen(false);
+                }}
+              />
             </div>
           )}
           {activeTab === 'private' && (
@@ -307,7 +357,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
   setCashbackPeriod
 }) => {
   const { t, language } = useLanguage();
-  const [modalOpen, setModalOpen] = useState<'none' | 'cashback' | 'personal' | 'visualizer' | 'analisi'>('none');
+  const [modalOpen, setModalOpen] = useState<'none' | 'cashback' | 'cashback-detailed' | 'personal' | 'visualizer' | 'analisi'>('none');
   const lang = language === 'it' ? 'it' : 'de';
   const txt = uiTexts[lang];
 
@@ -506,6 +556,28 @@ const InputPanel: React.FC<InputPanelProps> = ({
         }}
         txt={txt}
         period={cashbackPeriod}
+        OpenDetailed={() => setModalOpen('cashback-detailed')}
+      />
+      <CashbackDetailedModal
+        isOpen={modalOpen === 'cashback-detailed'}
+        onClose={() => setModalOpen('none')}
+        initialDetails={inputs.cashbackDetails}
+        onConfirm={(spend, cashback, details) => {
+          // Calculate the effective percentage to ensure derived calculations are correct
+          // If spend is 0 but we have fixed cashback, we set spend = cashback and percentage = 100
+          let finalSpend = spend;
+          let finalPercentage = spend > 0 ? (cashback / spend) * 100 : 0;
+
+          if (spend === 0 && cashback > 0) {
+            finalSpend = cashback;
+            finalPercentage = 100;
+          }
+
+          onInputChange('cashbackSpending', finalSpend);
+          onInputChange('cashbackPercentage', finalPercentage);
+          (onInputChange as any)('cashbackDetails', details);
+          setModalOpen('none'); // Close all modals immediately
+        }}
       />
       <PersonalClientsModal isOpen={modalOpen === 'personal'} onClose={() => setModalOpen('none')} inputs={inputs} onInputChange={onInputChange} onReset={onResetPersonalClients} viewMode={viewMode} txt={txt} />
 

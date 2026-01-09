@@ -111,7 +111,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   const { t } = useLanguage();
 
   const isClientMode = viewMode === 'client';
-  const multiplier = isClientMode ? 0.5 : 1.0;
+  const multiplier = 1.0; // Rimosso il dimezzamento per la modalità cliente
 
   const monthlyCashback = planResult.monthlyCashback;
   const rawOneTimeBonus = planResult.totalOneTimeBonus;
