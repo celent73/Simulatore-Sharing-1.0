@@ -269,9 +269,9 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">{getLevelLabel(row.level)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 font-mono">{row.users.toLocaleString('it-IT')}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.oneTimeBonus * multiplier)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{formatCurrency(row.recurringYear1 * multiplier)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{formatCurrency(row.recurringYear2 * multiplier)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{formatCurrency(row.recurringYear3 * multiplier)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{formatCurrency(row.recurringYear1 * multiplier * (isAnnual ? 12 : 1))}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{formatCurrency(row.recurringYear2 * multiplier * (isAnnual ? 12 : 1))}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{formatCurrency(row.recurringYear3 * multiplier * (isAnnual ? 12 : 1))}</td>
                 </tr>
               ))}
             </tbody>
@@ -312,21 +312,21 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                 <td className="px-6 py-4 text-left text-sm font-black text-gray-900 dark:text-white font-mono">{totalUsers.toLocaleString('it-IT')}</td>
                 <td className="px-6 py-4 text-left text-lg font-black text-emerald-600 dark:text-emerald-400">{formatCurrency(totalOneTimeBonus)}</td>
                 <td className="px-6 py-4 text-left">
-                  <div className="text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(totalRecurringYear1)}</div>
+                  <div className="text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec1)}</div>
                   <div className="text-xs font-bold text-gray-400 mt-1">
-                    {projectionYears === 1 ? t('projection.in_1_year') : t('projection.in_y_years').replace('{{years}}', projectionYears.toString())} <span className="text-gray-600 dark:text-gray-300">{formatCurrency(totalRecurringYear1 * 12 * projectionYears)}</span>
+                    {projectionYears === 1 ? t('projection.in_1_year') : t('projection.in_y_years').replace('{{years}}', projectionYears.toString())} <span className="text-gray-600 dark:text-gray-300">{formatCurrency(showYearlyRec1 * projectionYears * (isAnnual ? 1 : 12))}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4 text-left">
-                  <div className="text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(totalRecurringYear2)}</div>
+                  <div className="text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec2)}</div>
                   <div className="text-xs font-bold text-gray-400 mt-1">
-                    {projectionYears === 1 ? t('projection.in_1_year') : t('projection.in_y_years').replace('{{years}}', projectionYears.toString())} <span className="text-gray-600 dark:text-gray-300">{formatCurrency(totalRecurringYear2 * 12 * projectionYears)}</span>
+                    {projectionYears === 1 ? t('projection.in_1_year') : t('projection.in_y_years').replace('{{years}}', projectionYears.toString())} <span className="text-gray-600 dark:text-gray-300">{formatCurrency(showYearlyRec2 * projectionYears * (isAnnual ? 1 : 12))}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4 text-left">
-                  <div className="text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(totalRecurringYear3)}</div>
+                  <div className="text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec3)}</div>
                   <div className="text-xs font-bold text-gray-400 mt-1">
-                    {projectionYears === 1 ? t('projection.in_1_year') : t('projection.in_y_years').replace('{{years}}', projectionYears.toString())} <span className="text-gray-600 dark:text-gray-300">{formatCurrency(totalRecurringYear3 * 12 * projectionYears)}</span>
+                    {projectionYears === 1 ? t('projection.in_1_year') : t('projection.in_y_years').replace('{{years}}', projectionYears.toString())} <span className="text-gray-600 dark:text-gray-300">{formatCurrency(showYearlyRec3 * projectionYears * (isAnnual ? 1 : 12))}</span>
                   </div>
                 </td>
               </tr>

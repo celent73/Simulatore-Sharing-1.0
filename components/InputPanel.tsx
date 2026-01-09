@@ -489,7 +489,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
                   <p className="text-lg font-black text-gray-900 dark:text-white leading-tight">{txt.cashbackTitle}</p>
 
                   <p className="text-xs font-bold text-purple-600 dark:text-purple-400 mt-1 inline-block bg-purple-100 dark:bg-purple-900/30 px-2 py-0.5 rounded-md border border-purple-200 dark:border-purple-500/20">
-                    +€{(((inputs.cashbackSpending * inputs.cashbackPercentage) / 100) * (cashbackPeriod === 'annual' ? 12 : 1)).toFixed(2)} {cashbackPeriod === 'annual' ? 'Bonus una tantum' : 'Bonus'}
+                    +€{(((inputs.cashbackSpending * inputs.cashbackPercentage) / 100) * (cashbackPeriod === 'annual' ? 12 : 1)).toFixed(2)} {cashbackPeriod === 'annual' ? 'Extra/anno (integrato)' : 'Bonus Una Tantum'}
                   </p>
                 </div>
               </div>
