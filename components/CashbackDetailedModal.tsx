@@ -206,8 +206,8 @@ const uiTexts = {
         selectBrand: "SELEZIONA BRAND",
         other: "ALTRO...",
         return: "ritorno",
-        reset: "AZZERA",
-        confirm: "Conferma e Applica Budget",
+        reset: "RESET",
+        confirm: "CONFERMA",
         addCategory: "Aggiungi Altra Categoria",
         categories: "categorie",
         cat: {
@@ -226,7 +226,7 @@ const uiTexts = {
         estimatedBill: "BOLLETTA STIMATA",
         payOnly: "Paghi solo",
         save: "Risparmi",
-        billZero: "BOLLETTA AZZERATA! Stai guadagnando",
+        billZero: "RECHNUNG AUF NULL!",
         coveredPart: "Hai coperto il",
         extra: "extra!"
     },
@@ -238,8 +238,8 @@ const uiTexts = {
         selectBrand: "MARKE WÄHLEN",
         other: "ANDERE...",
         return: "Rückvergütung",
-        reset: "ZURÜCKSETZEN",
-        confirm: "Budget bestätigen",
+        reset: "RESET",
+        confirm: "CONFERMA",
         addCategory: "Kategorie hinzufügen",
         categories: "Kategorien",
         cat: {
@@ -258,7 +258,7 @@ const uiTexts = {
         estimatedBill: "GESCHÄTZTE RECHNUNG",
         payOnly: "Nur noch",
         save: "Ersparnis",
-        billZero: "RECHNUNG AUF NULL! Sie verdienen",
+        billZero: "RECHNUNG AUF NULL!",
         coveredPart: "Sie haben",
         extra: "extra!"
     }
@@ -378,155 +378,132 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
 
     return (
         <div ref={modalRef} className="fixed inset-0 z-[60] flex items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
-            <div className="share-modal-content bg-white dark:bg-gray-900 w-full h-full sm:h-auto sm:max-w-4xl sm:rounded-[3rem] shadow-2xl flex flex-col max-h-[100vh] sm:max-h-[95vh] overflow-hidden border border-purple-500/20">
+            <div className="share-modal-content bg-white dark:bg-gray-900 w-full h-full sm:h-auto sm:max-w-2xl sm:rounded-[2rem] shadow-2xl flex flex-col max-h-[100vh] sm:max-h-[95vh] overflow-hidden border border-purple-500/20">
 
                 {/* Header */}
-                <div className="p-5 sm:p-10 bg-gradient-to-br from-purple-700 via-purple-600 to-blue-700 text-white shrink-0 relative overflow-hidden">
+                <div className="p-3 sm:p-4 bg-gradient-to-br from-purple-700 via-purple-600 to-blue-700 text-white shrink-0 relative overflow-hidden">
                     {/* Background patterns */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
                     <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-2xl -ml-10 -mb-10"></div>
 
-                    <div className="flex justify-between items-center mb-4 sm:mb-8 relative z-10">
-                        <div>
-                            <h2 className="text-2xl sm:text-4xl font-black flex items-center gap-3 tracking-tight">
-                                <div className="p-2 sm:p-3 bg-white/20 rounded-2xl backdrop-blur-md">
-                                    <ShoppingBag size={24} className="text-purple-100" />
-                                </div>
+                    <div className="flex justify-between items-center mb-2 sm:mb-3 relative z-10">
+                        <div className="flex items-center gap-2">
+                            <div className="p-1 sm:p-1.5 bg-white/20 rounded-xl backdrop-blur-md">
+                                <ShoppingBag size={18} className="text-purple-100 sm:w-4 sm:h-4" />
+                            </div>
+                            <h2 className="text-lg sm:text-xl font-black tracking-tight uppercase">
                                 {txt.title}
                             </h2>
-                            <p className="text-purple-100/80 mt-2 text-xs sm:text-lg font-medium max-w-xs sm:max-w-none">{txt.subtitle}</p>
                         </div>
-                        <div className="flex items-center gap-2">
-
-                            <button onClick={onClose} className="p-1 sm:p-2 hover:bg-white/10 rounded-full transition-colors">
-                                <X size={24} className="sm:w-6 sm:h-6" />
-                            </button>
-                        </div>
+                        <button onClick={onClose} className="p-1 sm:p-1.5 hover:bg-white/10 rounded-full transition-colors">
+                            <X size={20} className="sm:w-5 sm:h-5" />
+                        </button>
                     </div>
 
-                    <div className="share-header-cards grid grid-cols-2 gap-3 sm:gap-6 mt-4 sm:mt-8 relative z-10">
-                        <div className="bg-white/10 backdrop-blur-xl rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 flex-1 border border-white/20 shadow-lg">
-                            <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-purple-200/70 mb-1">{txt.totalSpend}</p>
+                    <div className="grid grid-cols-2 gap-2 sm:gap-3 mt-1 sm:mt-2 relative z-10">
+                        <div className="bg-white/10 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2 sm:p-3 flex-1 border border-white/20 shadow-lg">
+                            <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-purple-200/70 mb-0.5">{txt.totalSpend}</p>
                             <div className="flex items-end justify-between">
-                                <p className="text-2xl sm:text-4xl font-black tracking-tighter">€ {totalSpend.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE')}</p>
-                                <Calculator className="text-purple-200/40 mb-1 hidden sm:block" size={20} />
+                                <p className="text-lg sm:text-xl font-black tracking-tighter">€ {totalSpend.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE')}</p>
                             </div>
                         </div>
-                        <div className="bg-white text-gray-900 rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 flex-1 shadow-2xl shadow-purple-900/40 border border-white/50">
-                            <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-purple-600 mb-1">{txt.monthlyReturn}</p>
+                        <div className="bg-white text-gray-900 rounded-xl sm:rounded-2xl p-2 sm:p-3 flex-1 shadow-2xl shadow-purple-900/40 border border-white/50">
+                            <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-purple-600 mb-0.5">{txt.monthlyReturn}</p>
                             <div className="flex items-end justify-between">
-                                <p className="text-2xl sm:text-4xl font-black tracking-tighter text-purple-900">€ {totalCashback.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                                <RefreshCw className="text-purple-600/20 mb-1 hidden sm:block" size={20} />
+                                <p className="text-lg sm:text-xl font-black tracking-tighter text-purple-900">€ {totalCashback.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                             </div>
                         </div>
                     </div>
 
                     {/* BILL ERASER SECTION */}
-                    <div className="bg-white/10 backdrop-blur-xl mt-6 sm:mt-10 rounded-[1.5rem] sm:rounded-[2.5rem] p-4 sm:p-8 shadow-inner border border-white/20 relative z-10 transition-all hover:bg-white/15">
-                        <div className="flex justify-between items-center mb-4 sm:mb-6 px-1">
-                            <div>
-                                <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] text-purple-200 mb-2">{txt.estimatedBill}</p>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-white/60 font-black text-2xl sm:text-4xl">€</span>
-                                    <input
-                                        type="number"
-                                        value={targetBill || ''}
-                                        onChange={(e) => setTargetBill(Math.max(0, parseFloat(e.target.value) || 0))}
-                                        onFocus={(e) => e.target.select()}
-                                        placeholder="0"
-                                        className="w-24 sm:w-40 font-black text-3xl sm:text-6xl text-white bg-transparent outline-none p-0 placeholder:text-white/20"
-                                    />
+                    <div className="bg-white/10 backdrop-blur-xl mt-2 sm:mt-3 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 border border-white/20 relative z-10">
+                        <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:mb-3">
+                            <div className="flex-1 w-full sm:w-auto">
+                                <div className="flex items-center justify-between sm:block">
+                                    <p className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.1em] text-purple-200">{txt.estimatedBill}</p>
+                                    <div className="flex items-center gap-1 sm:mt-1">
+                                        <span className="text-white/60 font-black text-xs sm:text-xl">€</span>
+                                        <input
+                                            type="number"
+                                            value={targetBill || ''}
+                                            onChange={(e) => setTargetBill(Math.max(0, parseFloat(e.target.value) || 0))}
+                                            onFocus={(e) => e.target.select()}
+                                            placeholder="0"
+                                            className="w-16 sm:w-28 font-black text-sm sm:text-3xl text-white bg-transparent outline-none p-0 placeholder:text-white/20 transition-all focus:scale-105"
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="text-right">
-                                {isBillCovered ? (
-                                    <div className="animate-in slide-in-from-bottom duration-300">
-                                        <div className="inline-block px-3 py-1 bg-green-400 rounded-full text-[10px] font-black text-green-950 uppercase tracking-widest mb-1 shadow-lg shadow-green-500/40">OTTIMO</div>
-                                        <p className="text-xs sm:text-base font-bold text-white uppercase tracking-wider">{txt.billZero}</p>
-                                        <p className="font-black text-xl sm:text-2xl text-green-400">+€ {extraProfit.toFixed(2)} {txt.extra}</p>
+                            <div className="text-right flex-1 w-full sm:w-auto">
+                                <div className="bg-white/10 rounded-xl p-2 border border-white/10 backdrop-blur-md">
+                                    <div className="flex justify-between sm:justify-end items-center sm:items-baseline gap-2">
+                                        <p className="text-[8px] sm:text-[9px] font-bold text-purple-200 uppercase">{txt.payOnly}</p>
+                                        <p className="font-black text-sm sm:text-xl text-white">€{remainingToPay.toFixed(0)}</p>
                                     </div>
-                                ) : (
-                                    <div className="bg-white/10 rounded-2xl p-3 border border-white/10 backdrop-blur-md">
-                                        <p className="text-[10px] sm:text-xs font-bold text-purple-200 uppercase tracking-wider mb-1">{txt.payOnly}</p>
-                                        <div className="flex flex-col items-end">
-                                            <p className="font-black text-2xl sm:text-4xl text-white">€ {remainingToPay.toFixed(0)}</p>
-                                            <div className="text-[10px] sm:text-xs font-bold text-purple-200 leading-tight text-right mt-1 opacity-80">
-                                                {txt.save} <span className="text-white">€{totalCashback.toFixed(0)}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
+                                    <p className="text-[7px] sm:text-[8px] font-bold text-purple-200 text-right opacity-80">
+                                        Risparmi <span className="text-white">€{totalCashback.toFixed(0)}</span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
-                        {/* Progress Bar Container */}
-                        <div className="h-3 sm:h-4 bg-gray-100 rounded-full overflow-hidden relative shadow-inner">
-                            {/* Fill Bar */}
+                        <div className="h-1.5 sm:h-2 bg-gray-100/30 rounded-full overflow-hidden relative sm:mt-2">
                             <div
-                                className={`h-full transition-all duration-700 ease-out flex items-center justify-end pr-1 shadow-lg relative ${isBillCovered
-                                    ? 'bg-gradient-to-r from-emerald-500 to-green-400'
-                                    : 'bg-gradient-to-r from-orange-500 to-indigo-500'
-                                    }`}
+                                className="h-full bg-white transition-all duration-700 ease-out shadow-[0_0_10px_rgba(255,255,255,0.5)]"
                                 style={{ width: `${Math.min(100, percentageCovered)}%` }}
-                            >
-                                <span className="text-[7px] sm:text-[8px] font-black text-white drop-shadow-md whitespace-nowrap z-10 leading-none">
-                                    {percentageCovered >= 100 ? '100%' : `${percentageCovered.toFixed(0)}%`}
-                                </span>
-                            </div>
+                            ></div>
                         </div>
                     </div>
                 </div>
 
                 {/* Content - Scrollable List */}
-                <div className="share-scroll-container flex-1 overflow-y-auto p-4 sm:p-8 space-y-4 sm:space-y-8 bg-gray-50/50 dark:bg-gray-950/50 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3 bg-gray-50/50 dark:bg-gray-950 custom-scrollbar">
                     {categories.map((cat) => (
-                        <div key={cat.id} className="bg-white dark:bg-gray-900 p-5 sm:p-8 rounded-[2rem] shadow-sm border border-gray-100 dark:border-white/5 hover:border-purple-200 dark:hover:border-purple-500/30 transition-all group hover:shadow-xl hover:shadow-purple-500/5">
-                            {/* MOBILE LAYOUT (Flex Col) / DESKTOP LAYOUT (Flex Row) */}
-                            <div className="flex flex-col gap-4 sm:gap-8">
+                        <div key={cat.id} className="bg-white dark:bg-gray-900 p-4 rounded-2xl sm:rounded-[2rem] shadow-sm border border-gray-100 dark:border-white/5 transition-all group hover:border-purple-200">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
 
-                                {/* TOP ROW Mobile: Icon + Name + Result */}
-                                <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-1/3 justify-between sm:justify-start">
-                                    <div className="flex items-center gap-4 sm:gap-6 flex-1">
-                                        <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-inner ${cat.isExtra ? 'bg-orange-100 text-orange-600 dark:bg-orange-950/30 dark:text-orange-400' : 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400'}`}>
-                                            {React.cloneElement(getIcon(cat.icon), { size: 28 })}
+                                {/* LEFT SECTION: Icon + Name (Desktop) / TOP ROW (Mobile) */}
+                                <div className="flex items-center justify-between sm:justify-start sm:w-[35%] shrink-0">
+                                    <div className="flex items-center gap-3 flex-1">
+                                        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm ${cat.isExtra ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/40' : 'bg-gradient-to-br from-purple-100 to-indigo-100 text-purple-600 dark:from-purple-900/40 dark:to-indigo-900/40'}`}>
+                                            {React.cloneElement(getIcon(cat.icon), { size: 20, className: "sm:w-6 sm:h-6" })}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h3 className="font-black text-lg sm:text-2xl text-gray-900 dark:text-white truncate">{cat.name}</h3>
-                                            <p className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">{cat.isExtra ? 'Promozione' : 'Budget Famiglia'}</p>
+                                            <h3 className="font-black text-sm sm:text-base text-gray-900 dark:text-white truncate uppercase sm:normal-case tracking-tight">{cat.name}</h3>
+                                            <p className="hidden sm:block text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{cat.isExtra ? 'Promozione' : 'Budget Famiglia'}</p>
                                         </div>
                                     </div>
 
-                                    {/* Mobile Result */}
+                                    {/* Mobile Result (Hidden sm) */}
                                     <div className="text-right sm:hidden">
                                         <p className="font-black text-sm text-gray-900 dark:text-white">
-                                            € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(2) : '0.00') : (cat.amount * cat.percentage / 100).toFixed(0)}
+                                            € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 0 })}
                                         </p>
                                     </div>
                                 </div>
 
-                                {/* BOTTOM ROW Mobile: Inputs Grid */}
-                                <div className="grid grid-cols-12 gap-2 sm:gap-3 w-full sm:w-2/3 items-center">
+                                {/* RIGHT SECTION: Inputs Grid (Desktop) / BOTTOM ROW (Mobile) */}
+                                <div className="grid grid-cols-12 sm:flex-1 items-center gap-2">
 
                                     {/* Amount Input */}
-                                    <div className="col-span-4 sm:col-span-3 relative">
-                                        <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs sm:text-base">€</div>
+                                    <div className="col-span-4 sm:flex-1 relative">
+                                        <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[10px] sm:text-xs">€</div>
                                         <input
                                             type="number"
                                             value={cat.amount || ''}
                                             onChange={(e) => handleUpdate(cat.id, 'amount', parseFloat(e.target.value) || 0)}
                                             onFocus={(e) => e.target.select()}
                                             placeholder="0"
-                                            className="w-full pl-5 sm:pl-7 pr-1 sm:pr-2 py-1.5 sm:py-2 bg-gray-100 dark:bg-gray-900 rounded-lg text-right font-black text-sm sm:text-base text-gray-900 dark:text-white border border-transparent hover:border-gray-200 focus:border-purple-500 outline-none transition-all h-8 sm:h-auto"
+                                            className="w-full pl-5 pr-1 py-2 sm:py-2.5 bg-gray-50 dark:bg-gray-800/80 rounded-lg text-right font-black text-xs sm:text-sm text-gray-900 dark:text-white border border-gray-100 dark:border-white/10 outline-none transition-all shadow-inner"
                                         />
                                     </div>
 
                                     {/* Brand Dropdown */}
-                                    <div className="col-span-4 sm:col-span-4">
+                                    <div className="col-span-4 sm:flex-[1.5] relative">
                                         <select
                                             value={cat.brand}
                                             onChange={(e) => handleUpdate(cat.id, 'brand', e.target.value)}
-                                            className="w-full py-1.5 sm:py-2 pl-1 sm:pl-2 pr-4 sm:pr-6 appearance-none bg-gray-50 dark:bg-gray-900 rounded-lg text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-300 tracking-wide uppercase border border-transparent hover:border-gray-200 focus:border-purple-500 outline-none transition-all cursor-pointer text-center truncate h-8 sm:h-auto"
-                                            style={{ backgroundImage: 'none' }}
+                                            className="w-full py-2 sm:py-2.5 px-1 sm:px-2 appearance-none bg-gray-50 dark:bg-gray-800/80 rounded-lg text-[8px] sm:text-[10px] font-black text-gray-600 dark:text-gray-200 tracking-wide uppercase border border-gray-100 dark:border-white/10 outline-none cursor-pointer text-center truncate shadow-inner"
                                         >
                                             <option value="">{txt.selectBrand}</option>
                                             {BRANDS_DATA
@@ -535,38 +512,36 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                                     <option key={brand.name} value={brand.name}>{brand.name}</option>
                                                 ))
                                             }
-
                                         </select>
                                     </div>
 
                                     {/* Percentage Input */}
-                                    <div className="col-span-4 sm:col-span-2 relative group/percent">
+                                    <div className="col-span-4 sm:flex-[0.8] relative">
                                         {cat.fixedAmount !== undefined ? (
-                                            <div className="w-full py-1.5 sm:py-2 text-right font-black text-sm sm:text-base text-purple-600 dark:text-purple-400 h-8 sm:h-auto border-b-2 border-transparent">
-                                                €{cat.fixedAmount.toFixed(2)}
+                                            <div className="w-full py-2 text-right font-black text-xs sm:text-sm text-purple-600 dark:text-purple-400">
+                                                €{cat.fixedAmount.toFixed(0)}
                                             </div>
                                         ) : (
-                                            <>
+                                            <div className="relative">
                                                 <input
                                                     type="number"
                                                     value={cat.percentage || ''}
                                                     onChange={(e) => handleUpdate(cat.id, 'percentage', parseFloat(e.target.value) || 0)}
                                                     onFocus={(e) => e.target.select()}
                                                     placeholder="0"
-                                                    className="w-full pr-4 sm:pr-6 py-1.5 sm:py-2 bg-transparent text-right font-black text-sm sm:text-base text-purple-600 dark:text-purple-400 border-b-2 border-purple-100 dark:border-purple-900 focus:border-purple-500 outline-none transition-all h-8 sm:h-auto"
+                                                    className="w-full pr-4 sm:pr-5 py-2 sm:py-2.5 bg-transparent text-right font-black text-xs sm:text-sm text-purple-600 dark:text-purple-400 border-b border-purple-100 dark:border-purple-900/50 outline-none"
                                                     step="0.1"
                                                 />
-                                                <span className="absolute right-0 sm:right-1 top-1/2 -translate-y-1/2 text-[10px] sm:text-xs text-purple-400 font-bold pointer-events-none">%</span>
-                                            </>
+                                                <span className="absolute right-0 top-1/2 -translate-y-1/2 text-[10px] sm:text-xs text-purple-400 font-bold pointer-events-none">%</span>
+                                            </div>
                                         )}
                                     </div>
 
-                                    {/* Desktop Result */}
-                                    <div className="hidden sm:block sm:col-span-3 text-right">
-                                        <p className="font-black text-base text-gray-900 dark:text-white">
-                                            € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(2) : '0.00') : (cat.amount * cat.percentage / 100).toFixed(2)}
+                                    {/* Desktop Result (Visible sm only) */}
+                                    <div className="hidden sm:block sm:w-20 text-right shrink-0">
+                                        <p className="font-black text-lg text-gray-900 dark:text-white truncate">
+                                            € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 0 })}
                                         </p>
-                                        <p className="text-[10px] text-gray-400 uppercase tracking-wider">{txt.return}</p>
                                     </div>
                                 </div>
                             </div>
@@ -575,19 +550,21 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 sm:p-8 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-gray-900 z-10 safe-area-bottom pb-10 sm:pb-8 flex flex-row items-center gap-4">
+                <div className="p-4 sm:p-6 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-gray-900 z-10 safe-area-bottom pb-8 sm:pb-8 flex flex-row items-center gap-3">
                     <button
                         onClick={handleReset}
-                        className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-2xl sm:rounded-3xl transition-all shadow-sm hover:shadow-red-500/20 font-bold border border-red-100 hover:border-red-500 active:scale-95 group"
+                        className="flex items-center gap-2 px-4 py-3 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-xl transition-all shadow-sm font-bold border border-red-100 active:scale-95 group"
                     >
-                        <RotateCcw size={24} className="group-hover:rotate-[360deg] transition-transform duration-500" />
+                        <RotateCcw size={16} />
+                        <span className="text-[10px] sm:text-xs uppercase font-black">{txt.reset}</span>
                     </button>
 
                     <button
                         onClick={() => onConfirm(totalSpend, totalCashback, categories)}
-                        className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black py-5 sm:py-6 rounded-2xl sm:rounded-3xl shadow-xl shadow-purple-500/30 active:scale-[0.98] transition-all text-lg sm:text-2xl tracking-tight"
+                        className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-black py-4 rounded-xl sm:rounded-2xl shadow-xl hover:shadow-purple-500/40 active:scale-[0.98] transition-all text-xs sm:text-sm uppercase tracking-widest flex items-center justify-center gap-2"
                     >
                         {txt.confirm}
+                        <Check size={18} />
                     </button>
                 </div>
 
