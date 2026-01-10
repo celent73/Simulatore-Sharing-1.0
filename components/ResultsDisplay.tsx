@@ -312,21 +312,21 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                 <td className="px-6 py-4 text-left text-sm font-black text-gray-900 dark:text-white font-mono">{totalUsers.toLocaleString('it-IT')}</td>
                 <td className="px-6 py-4 text-left text-lg font-black text-emerald-600 dark:text-emerald-400">{formatCurrency(totalOneTimeBonus)}</td>
                 <td className="px-6 py-4 text-left">
-                  <div className="text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec1)}</div>
-                  <div className="text-xs font-bold text-gray-400 mt-1">
-                    {t('results.per_month').replace('/', '')}: <span className="text-gray-600 dark:text-gray-300">{formatCurrency(showYearlyRec1 / 12)}</span>
+                  <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec1 / 12)}</div>
+                  <div className="text-[10px] font-bold text-gray-400 mt-1">
+                    anno: <span className="text-gray-500 dark:text-gray-400">{formatCurrency(showYearlyRec1)}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4 text-left">
-                  <div className="text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec2)}</div>
-                  <div className="text-xs font-bold text-gray-400 mt-1">
-                    {t('results.per_month').replace('/', '')}: <span className="text-gray-600 dark:text-gray-300">{formatCurrency(showYearlyRec2 / 12)}</span>
+                  <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec2 / 12)}</div>
+                  <div className="text-[10px] font-bold text-gray-400 mt-1">
+                    anno: <span className="text-gray-500 dark:text-gray-400">{formatCurrency(showYearlyRec2)}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4 text-left">
-                  <div className="text-lg font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec3)}</div>
-                  <div className="text-xs font-bold text-gray-400 mt-1">
-                    {t('results.per_month').replace('/', '')}: <span className="text-gray-600 dark:text-gray-300">{formatCurrency(showYearlyRec3 / 12)}</span>
+                  <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec3 / 12)}</div>
+                  <div className="text-[10px] font-bold text-gray-400 mt-1">
+                    anno: <span className="text-gray-500 dark:text-gray-400">{formatCurrency(showYearlyRec3)}</span>
                   </div>
                 </td>
               </tr>
