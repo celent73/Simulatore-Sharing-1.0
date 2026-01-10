@@ -405,7 +405,7 @@ export const translations = {
       simulate_cashback: "Clicca qui per simulare il tuo cashback!",
       network_title: "Il Passaparola che Ti Premia",
       network_desc: "Anche da cliente, se presenti Union ad amici, guadagni sulla loro spesa fino a 5 livelli.",
-      cta_text: "Vedi il potenziale? Diventa Family Utility per",
+      cta_text: "Vedi il potenziale? Diventa Partner Sharing (FU) per",
       cta_highlight: "POTENZIARE i tuoi guadagni!"
     },
     golden_no: {
@@ -559,7 +559,7 @@ export const translations = {
         card_chart_desc: "Visualisiere das Wachstum im Zeitverlauf.",
         network_title: "Baue dein Netzwerk auf",
         network_desc: "Das Herz des Systems. Du musst nicht alles alleine machen: Die Kraft liegt in der Duplikation.",
-        network_p1: "<strong>Direkte Family Utility:</strong> Die Personen, die du persönlich einbeziehst. Je höher diese Zahl, desto solider die Basis.",
+        network_p1: "<strong>Direkte Partner Sharing (FU):</strong> Die Personen, die du persönlich einbeziehst. Je höher diese Zahl, desto solider die Basis.",
         network_p2: "<strong>Duplikation:</strong> Die Magie des Netzwerks. Wie viele Personen bringt jeder deiner Partner ein? Wenn du 3 bringst und sie 3 bringen...",
         network_p3: "<strong>Tiefe:</strong> Bis zu welcher Ebene wirst du bezahlt? Der Simulator berechnet die Einnahmen auf allen aktiven Ebenen.",
         bonus_title: "Nicht nur Rente",
@@ -850,7 +850,7 @@ export const translations = {
       simulate_cashback: "Hier klicken, um Cashback zu simulieren!",
       network_title: "Mundpropaganda, die belohnt",
       network_desc: "Auch als Kunde, wenn du Union Freunden empfiehlst, verdienst du an deren Ausgaben bis zu 5 Ebenen tief (die Hälfte eines Family Utility).",
-      cta_text: "Siehst du das Potenzial? Werde Family Utility und",
+      cta_text: "Siehst du das Potenzial? Werde Partner Sharing (FU) und",
       cta_highlight: "VERDOPPLE deine Einnahmen!"
     },
     golden_no: {
@@ -881,7 +881,7 @@ export const translations = {
       economy_option: "Economy-Option",
       become_client: "Werde Vorzugskunde",
       business_option: "Business-Option",
-      become_promoter: "Werde Family Utility",
+      become_promoter: "Werde Partner Sharing (FU)",
       recommended: "Empfohlen"
     },
   }
