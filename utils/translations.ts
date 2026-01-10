@@ -160,7 +160,7 @@ export const translations = {
       light_units_init: "Utenze Light Iniziali (1° Anno)",
       light_units_new: "Nuove Utenze Light all'anno",
       families_per_condo: "Famiglie per Condominio (Media)",
-      network_conversion: "Passaggi a Union Energia",
+      network_conversion: "Passaggi di utenza",
       network_directs_title: "Clienti Network Extra",
       network_directs_desc: "Imposta quanti condomini diventano clienti/promoter",
       network_assumption_note: "Nota: Il calcolo considera l'attivazione di 2 contratti per cliente (1 Green + 1 Light).",
