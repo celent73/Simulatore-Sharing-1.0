@@ -230,9 +230,27 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           icon={<UsersIcon />}
         />
         <SummaryCard title={cashbackPeriod === 'annual' ? "Bonus Una Tantum" : t('results.one_time')} value={formatValueWithSuffix(totalOneTimeBonus).value} variant="gradient-blue" icon={<WalletIcon />} />
-        <SummaryCard title={t('results.rec_y1') + recTitleSuffix} value={formatValueWithSuffix(showYearlyRec1).value} suffix={recSuffix} variant="glass" icon={<FireIcon className="text-union-orange-500" />} />
-        <SummaryCard title={t('results.rec_y2') + recTitleSuffix} value={formatValueWithSuffix(showYearlyRec2).value} suffix={recSuffix} variant="glass" icon={<BoltIcon className="text-union-orange-500" />} />
-        <SummaryCard title={t('results.rec_y3') + recTitleSuffix} value={formatValueWithSuffix(showYearlyRec3).value} suffix={recSuffix} variant="gradient-orange" icon={<StarIcon />} />
+        <SummaryCard
+          title={t('results.rec_y1') + recTitleSuffix}
+          value={formatValueWithSuffix(showYearlyRec1 / 12).value}
+          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/mese</span><span className="text-[8px] opacity-60">anno: {formatCurrency(showYearlyRec1)}</span></div>}
+          variant="glass"
+          icon={<FireIcon className="text-union-orange-500" />}
+        />
+        <SummaryCard
+          title={t('results.rec_y2') + recTitleSuffix}
+          value={formatValueWithSuffix(showYearlyRec2 / 12).value}
+          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/mese</span><span className="text-[8px] opacity-60">anno: {formatCurrency(showYearlyRec2)}</span></div>}
+          variant="glass"
+          icon={<BoltIcon className="text-union-orange-500" />}
+        />
+        <SummaryCard
+          title={t('results.rec_y3') + recTitleSuffix}
+          value={formatValueWithSuffix(showYearlyRec3 / 12).value}
+          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/mese</span><span className="text-[8px] opacity-60">anno: {formatCurrency(showYearlyRec3)}</span></div>}
+          variant="gradient-orange"
+          icon={<StarIcon />}
+        />
       </div>
 
       <div className="bg-white dark:bg-black/40 backdrop-blur-xl p-4 sm:p-8 rounded-[2.5rem] shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10">
