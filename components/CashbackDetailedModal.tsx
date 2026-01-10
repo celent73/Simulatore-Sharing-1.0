@@ -421,16 +421,24 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                             <div className="flex-1 w-full sm:w-auto">
                                 <div className="flex items-center justify-between sm:block">
                                     <p className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.1em] text-purple-200">{txt.estimatedBill}</p>
-                                    <div className="flex items-center gap-1 sm:mt-1">
-                                        <span className="text-white/60 font-black text-xs sm:text-xl">€</span>
+                                    <div className="flex items-center gap-2 sm:mt-1 bg-white/10 hover:bg-white/20 focus-within:bg-white/20 focus-within:ring-2 focus-within:ring-white/30 px-3 py-1.5 rounded-xl border border-white/20 transition-all cursor-text group/input" onClick={(e) => {
+                                        const input = e.currentTarget.querySelector('input');
+                                        if (input) input.focus();
+                                    }}>
+                                        <span className="text-white font-black text-xs sm:text-xl">€</span>
                                         <input
                                             type="number"
                                             value={targetBill || ''}
                                             onChange={(e) => setTargetBill(Math.max(0, parseFloat(e.target.value) || 0))}
                                             onFocus={(e) => e.target.select()}
                                             placeholder="0"
-                                            className="w-16 sm:w-28 font-black text-sm sm:text-3xl text-white bg-transparent outline-none p-0 placeholder:text-white/20 transition-all focus:scale-105"
+                                            className="w-16 sm:w-28 font-black text-sm sm:text-3xl text-white bg-transparent outline-none p-0 placeholder:text-white/20 transition-all"
                                         />
+                                        <div className="p-1 rounded-lg bg-white/10 text-white/40 group-hover/input:text-white/70 transition-colors">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                            </svg>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
