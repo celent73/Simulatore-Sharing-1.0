@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sun, Info, TrendingUp, Wallet, Check, RotateCcw } from 'lucide-react';
+import { X, Sun, Info, TrendingUp, Wallet, Check, RotateCcw, Minus, Plus } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface UnionParkModalProps {
@@ -179,14 +179,28 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                                     />
                                 </div>
                             </div>
-                            <input
-                                type="range"
-                                min="1"
-                                max="100"
-                                value={panels}
-                                onChange={(e) => setPanels(parseInt(e.target.value))}
-                                className="w-full h-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-full appearance-none cursor-pointer accent-emerald-600"
-                            />
+                            <div className="flex items-center gap-4">
+                                <button
+                                    onClick={() => setPanels(prev => Math.max(1, prev - 1))}
+                                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 border border-emerald-100 dark:border-emerald-500/20 transition-all active:scale-95"
+                                >
+                                    <Minus size={20} strokeWidth={3} />
+                                </button>
+                                <input
+                                    type="range"
+                                    min="1"
+                                    max="100"
+                                    value={panels}
+                                    onChange={(e) => setPanels(parseInt(e.target.value))}
+                                    className="flex-1 h-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-full appearance-none cursor-pointer accent-emerald-600"
+                                />
+                                <button
+                                    onClick={() => setPanels(prev => Math.min(100, prev + 1))}
+                                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 border border-emerald-100 dark:border-emerald-500/20 transition-all active:scale-95"
+                                >
+                                    <Plus size={20} strokeWidth={3} />
+                                </button>
+                            </div>
                             <div className="flex justify-between text-[10px] font-bold text-gray-400">
                                 <span>1</span>
                                 <span>50</span>
