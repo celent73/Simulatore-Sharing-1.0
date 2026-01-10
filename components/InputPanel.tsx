@@ -329,14 +329,14 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
           )}
           {activeTab === 'private' && (
             <div className="animate-in slide-in-from-right-8 duration-300 space-y-2">
-              <CustomSlider label={txt.clientGreen} value={inputs.personalClientsGreen} onChange={(v: number) => onInputChange('personalClientsGreen', v)} min={0} max={100} colorBase="green" icon={User} />
-              <CustomSlider label={txt.clientLight} value={inputs.personalClientsLight} onChange={(v: number) => onInputChange('personalClientsLight', v)} min={0} max={100} colorBase="blue" icon={User} />
+              <CustomSlider label={txt.clientGreen} value={inputs.personalClientsGreen} onChange={(v: number) => onInputChange('personalClientsGreen', v)} min={0} max={1000} colorBase="green" icon={User} />
+              <CustomSlider label={txt.clientLight} value={inputs.personalClientsLight} onChange={(v: number) => onInputChange('personalClientsLight', v)} min={0} max={1000} colorBase="blue" icon={User} />
             </div>
           )}
           {activeTab === 'business' && (
             <div className="animate-in slide-in-from-right-8 duration-300 space-y-2">
-              <CustomSlider label={txt.busGreen} value={inputs.personalClientsBusinessGreen} onChange={(v: number) => onInputChange('personalClientsBusinessGreen', v)} min={0} max={100} colorBase="purple" icon={Building2} />
-              <CustomSlider label={txt.busLight} value={inputs.personalClientsBusinessLight} onChange={(v: number) => onInputChange('personalClientsBusinessLight', v)} min={0} max={100} colorBase="cyan" icon={Building2} />
+              <CustomSlider label={txt.busGreen} value={inputs.personalClientsBusinessGreen} onChange={(v: number) => onInputChange('personalClientsBusinessGreen', v)} min={0} max={1000} colorBase="purple" icon={Building2} />
+              <CustomSlider label={txt.busLight} value={inputs.personalClientsBusinessLight} onChange={(v: number) => onInputChange('personalClientsBusinessLight', v)} min={0} max={1000} colorBase="cyan" icon={Building2} />
             </div>
           )}
         </div>
