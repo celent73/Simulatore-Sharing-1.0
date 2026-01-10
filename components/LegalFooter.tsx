@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface LegalFooterProps {
-    onOpenLegal: (type: 'privacy' | 'terms' | 'cookie') => void;
+  onOpenLegal: (type: 'privacy' | 'terms' | 'cookie') => void;
 }
 
 export const LegalFooter: React.FC<LegalFooterProps> = ({ onOpenLegal }) => {
@@ -13,7 +13,7 @@ export const LegalFooter: React.FC<LegalFooterProps> = ({ onOpenLegal }) => {
         <p className="mb-4 text-xs uppercase tracking-widest opacity-70">
           &copy; {currentYear} Simulatore Sharing. Tutti i diritti riservati.
         </p>
-        
+
         <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 mb-6">
           <button onClick={() => onOpenLegal('privacy')} className="hover:text-union-blue-600 dark:hover:text-union-blue-400 transition-colors underline decoration-dotted">
             Privacy Policy
@@ -28,8 +28,9 @@ export const LegalFooter: React.FC<LegalFooterProps> = ({ onOpenLegal }) => {
 
         <div className="max-w-2xl mx-auto text-[10px] text-gray-400 dark:text-gray-600 space-y-2 leading-tight">
           <p>
-            DISCLAIMER: Applicazione indipendente a scopo illustrativo. Non affiliata ufficialmente a Union Energia.
-            I risultati sono proiezioni matematiche basate sull'input utente.
+            DISCLAIMER: Applicazione indipendente a scopo puramente illustrativo ed educativo.
+            NON è un prodotto ufficiale di Union Energia S.p.A.
+            I risultati sono proiezioni matematiche e non costituiscono garanzia di guadagno.
           </p>
         </div>
       </div>

@@ -1,16 +1,15 @@
-
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface CustomerBenefitCardProps {
-  totalRecurringYear1: number; // Guadagno totale potenziale di un Family Utility
+  totalRecurringYear1: number; // Guadagno totale potenziale di un Partner Sharing (FU)
   monthlyCashback: number; // Cashback mensile
 }
 
 const CustomerBenefitCard: React.FC<CustomerBenefitCardProps> = ({ totalRecurringYear1, monthlyCashback }) => {
   const { t } = useLanguage();
 
-  // Il guadagno di un cliente che fa rete è lo STESSO di quello di un Family Utility
+  // Il guadagno di un cliente che fa rete è lo STESSO di quello di un Partner Sharing (FU)
   const customerPotentialEarnings = totalRecurringYear1;
 
   const scrollToInput = () => {
@@ -58,7 +57,7 @@ const CustomerBenefitCard: React.FC<CustomerBenefitCardProps> = ({ totalRecurrin
           <div className="mt-auto">
             <div className="flex justify-between items-end mb-1">
               <span className="text-xs uppercase font-bold opacity-70">{t('customer_benefit.your_saving')}</span>
-              <span className="text-2xl font-extrabold">{monthlyCashback > 0 ? `€${monthlyCashback.toFixed(2)}` : '€0'}</span>
+              <span className="text-2xl font-extrabold">{monthlyCashback > 0 ? `€${monthlyCashback.toFixed(2)} ` : '€0'}</span>
             </div>
             <div className="w-full bg-black/20 h-2 rounded-full overflow-hidden">
               <div
@@ -89,7 +88,7 @@ const CustomerBenefitCard: React.FC<CustomerBenefitCardProps> = ({ totalRecurrin
           <div className="flex gap-2 items-end h-32">
             {/* Family Bar */}
             <div className="flex-1 flex flex-col items-center gap-1 opacity-50 grayscale hover:grayscale-0 transition-all duration-300 h-full justify-end">
-              <span className="text-[10px] font-bold uppercase text-gray-400">Family Utility</span>
+              <span className="text-[10px] font-bold uppercase text-gray-400">Partner Sharing (FU)</span>
               <div className="w-full bg-gray-200 rounded-t-lg h-full relative overflow-hidden">
                 <div className="absolute bottom-0 w-full bg-union-blue-500 h-full"></div>
               </div>

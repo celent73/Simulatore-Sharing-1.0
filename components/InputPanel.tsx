@@ -57,10 +57,10 @@ const uiTexts = {
     cashbackPercent: "Percentuale Cashback (%)",
     confirm: "Conferma",
     yourWork: "Il Tuo Lavoro",
-    personalTitle: "Clienti, Utenze e Park",
+    personalTitle: "Clienti, Utenze e Sharing Park",
     estimatedBonus: "Bonus Stimato",
     clientMode: "Modalità Cliente",
-    clientModeDesc: "I guadagni diretti e le rendite sono al 50% rispetto alla modalità Family.",
+    clientModeDesc: "I guadagni diretti e le rendite sono al 50% rispetto alla modalità Partner Sharing (FU).",
     myUnits: "Le Mie Utenze",
     private: "Privati",
     business: "Aziende",
@@ -294,7 +294,7 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
                     <Sun size={20} />
                   </div>
                   <div>
-                    <h4 className="text-sm font-black text-emerald-700 dark:text-emerald-400">Union Park</h4>
+                    <h4 className="text-sm font-black text-emerald-700 dark:text-emerald-400">Sharing Park</h4>
                     <p className="text-[10px] font-bold text-emerald-600/70 dark:text-emerald-500/60 uppercase">{txt.parkToken}: +€50 / {txt.panelsLabel.slice(0, -1).toUpperCase()}</p>
                   </div>
                 </div>
@@ -381,7 +381,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
             border: 2px solid #fff !important;
           }
           .pallina-status::after {
-            content: "Rendi Fmamily Pro";
+            content: "Rendi Partner Sharing";
             position: absolute;
             bottom: 140%;
             left: 50%;

@@ -64,7 +64,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
 
     const texts = {
         it: {
-            title: "Simulatore Union Park",
+            title: "Simulatore Sharing Park",
             subtitle: "Configura i tuoi pannelli fotovoltaici condivisi",
             panelsLabel: "Numero di Pannelli desiderati",
             punLabel: "Prezzo Zonale (PUN) stimato",
@@ -84,7 +84,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
             zeroBillTitle: "Obiettivo Azzera Bolletta"
         },
         de: {
-            title: "Union Park Simulator",
+            title: "Sharing Park Simulator",
             subtitle: "Konfigurieren Sie Ihre geteilten PV-Paneele",
             panelsLabel: "Anzahl der gewünschten Paneele",
             punLabel: "Geschätzter Zonenpreis (PUN)",
@@ -117,7 +117,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                     <div className="relative z-10 flex justify-between items-start">
                         <div>
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-2 sm:mb-4 shadow-lg">
-                                <Sun size={14} className="animate-pulse" /> Union Park
+                                <Sun size={14} className="animate-pulse" /> Sharing Park
                             </div>
                             <h2 className="text-2xl sm:text-3xl font-black tracking-tight mb-1">{t.title}</h2>
                             <p className="text-emerald-100 text-sm sm:text-base font-medium opacity-90">{t.subtitle}</p>

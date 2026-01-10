@@ -152,7 +152,7 @@ const RecruiterCard = ({ fullResults }: { fullResults: CondoSimulationResult }) 
                     {fullResults.familyUtilityEarnings?.total3Years !== undefined && fullResults.familyUtilityEarnings.total3Years > (fullResults.networkStats?.totalAnnualYear1 || 0) + (fullResults.networkStats?.totalAnnualYear2 || 0) + (fullResults.networkStats?.totalAnnualYear3 || 0) + (earnings.year1.oneTime - (fullResults.networkStats?.oneTimeBonus || 0)) && (
                         <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold bg-purple-500/30 px-3 py-1.5 rounded-full text-purple-100 border border-purple-400/30 animate-pulse">
                             <Gem size={14} className="text-purple-300" />
-                            + Rete Family Utility Inclusa
+                            + Rete Partner Sharing (FU) Inclusa
                         </div>
                     )}
                 </div>

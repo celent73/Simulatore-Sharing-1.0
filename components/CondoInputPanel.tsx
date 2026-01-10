@@ -55,7 +55,7 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                             <Users size={20} className={inputs.showFamilyUtilityView ? 'text-white' : 'text-gray-500 dark:text-gray-400'} />
                         </div>
                         <div>
-                            <div className="text-sm font-bold leading-tight">Vista Family Utility</div>
+                            <div className="text-sm font-bold leading-tight">Vista Partner Sharing (FU)</div>
                             <div className={`text-[10px] opacity-70 font-medium ${inputs.showFamilyUtilityView ? 'text-blue-50' : ''}`}>
                                 {inputs.showFamilyUtilityView ? 'Stai vedendo i TUOI guadagni' : 'Sei il Recruiter dell\'Amministratore?'}
                             </div>
