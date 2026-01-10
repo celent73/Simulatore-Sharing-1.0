@@ -29,7 +29,7 @@ export const LegalFooter: React.FC<LegalFooterProps> = ({ onOpenLegal }) => {
         <div className="max-w-2xl mx-auto text-[10px] text-gray-400 dark:text-gray-600 space-y-2 leading-tight">
           <p>
             DISCLAIMER: Applicazione indipendente a scopo puramente illustrativo ed educativo.
-            NON è un prodotto ufficiale di Union Energia S.p.A.
+            NON è un prodotto ufficiale di Union Energia S.r.l.
             I risultati sono proiezioni matematiche e non costituiscono garanzia di guadagno.
           </p>
         </div>
