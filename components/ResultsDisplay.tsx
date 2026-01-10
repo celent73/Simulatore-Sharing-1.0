@@ -210,6 +210,9 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
       });
   }, [tableRef]);
 
+  const hasPark = (inputs.unionParkPanels || 0) > 0;
+  const parkSuffix = hasPark ? " (+ Park)" : "";
+
   return (
     <div className="space-y-8 relative">
       <ProjectionModal
@@ -233,21 +236,21 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         <SummaryCard
           title={t('results.rec_y1') + recTitleSuffix}
           value={formatValueWithSuffix(showYearlyRec1 / 12).value}
-          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/mese</span><span className="text-[8px] opacity-60">anno: {formatCurrency(showYearlyRec1)}</span></div>}
+          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/mese</span><span className="text-[8px] opacity-60">anno: {formatCurrency(showYearlyRec1)}{parkSuffix}</span></div>}
           variant="glass"
           icon={<FireIcon className="text-union-orange-500" />}
         />
         <SummaryCard
           title={t('results.rec_y2') + recTitleSuffix}
           value={formatValueWithSuffix(showYearlyRec2 / 12).value}
-          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/mese</span><span className="text-[8px] opacity-60">anno: {formatCurrency(showYearlyRec2)}</span></div>}
+          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/mese</span><span className="text-[8px] opacity-60">anno: {formatCurrency(showYearlyRec2)}{parkSuffix}</span></div>}
           variant="glass"
           icon={<BoltIcon className="text-union-orange-500" />}
         />
         <SummaryCard
           title={t('results.rec_y3') + recTitleSuffix}
           value={formatValueWithSuffix(showYearlyRec3 / 12).value}
-          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/mese</span><span className="text-[8px] opacity-60">anno: {formatCurrency(showYearlyRec3)}</span></div>}
+          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/mese</span><span className="text-[8px] opacity-60">anno: {formatCurrency(showYearlyRec3)}{parkSuffix}</span></div>}
           variant="gradient-orange"
           icon={<StarIcon />}
         />
@@ -332,19 +335,19 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                 <td className="px-6 py-4 text-left">
                   <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec1 / 12 * projectionYears)}</div>
                   <div className="text-[10px] font-bold text-gray-400 mt-1">
-                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-500 dark:text-gray-400">{formatCurrency(showYearlyRec1 * projectionYears)}</span>
+                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-500 dark:text-gray-400">{formatCurrency(showYearlyRec1 * projectionYears)}{parkSuffix}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4 text-left">
                   <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec2 / 12 * projectionYears)}</div>
                   <div className="text-[10px] font-bold text-gray-400 mt-1">
-                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-500 dark:text-gray-400">{formatCurrency(showYearlyRec2 * projectionYears)}</span>
+                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-500 dark:text-gray-400">{formatCurrency(showYearlyRec2 * projectionYears)}{parkSuffix}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4 text-left">
                   <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec3 / 12 * projectionYears)}</div>
                   <div className="text-[10px] font-bold text-gray-400 mt-1">
-                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-500 dark:text-gray-400">{formatCurrency(showYearlyRec3 * projectionYears)}</span>
+                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-500 dark:text-gray-400">{formatCurrency(showYearlyRec3 * projectionYears)}{parkSuffix}</span>
                   </div>
                 </td>
               </tr>
