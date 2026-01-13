@@ -111,7 +111,7 @@ export const analyzeBillImage = async (inputBase64: string, priorityType: 'elect
         }
 
         const base64Data = imageToSend.includes("base64,") ? imageToSend.split(",")[1] : imageToSend;
-        const modelsToTry = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-2.0-flash-lite-001", "gemini-2.0-flash"];
+        const modelsToTry = ["gemini-2.5-flash", "gemini-1.5-flash-001", "gemini-1.5-flash-8b", "gemini-2.0-flash-lite-001", "gemini-2.0-flash"];
         let errors: string[] = [];
         let responseText = null;
 
@@ -161,7 +161,7 @@ export const analyzeBillImage = async (inputBase64: string, priorityType: 'elect
             `;
 
                 const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error(`Timeout model ${modelName}`)), 45000)
+                    setTimeout(() => reject(new Error(`Timeout model ${modelName}`)), 60000)
                 );
 
                 const result = await Promise.race([
