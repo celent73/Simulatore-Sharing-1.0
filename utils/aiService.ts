@@ -111,7 +111,7 @@ export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBi
         }
 
         const base64Data = imageToSend.includes("base64,") ? imageToSend.split(",")[1] : imageToSend;
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
 
         console.log("Analyzing document as:", mimeType);
 
