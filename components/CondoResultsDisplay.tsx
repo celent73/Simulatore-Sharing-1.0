@@ -227,6 +227,10 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                 <span className="opacity-70">{t('condo_results.rec_annual_breakdown')}:</span>
                                 <span className="font-bold">{formatCurrency(results.year1.recurringMonthly * 12)}</span>
                             </div>
+                            <div className="flex justify-between items-center text-xs">
+                                <span className="opacity-70">{t('condo_results.rec_end_year')}:</span>
+                                <span className="font-bold">{formatCurrency(results.year1.recurringMonthly)}</span>
+                            </div>
                         </div>
                     ) : (
                         <div className="mt-2 pt-2 border-t border-blue-400/20 text-xs font-bold flex flex-col gap-2">

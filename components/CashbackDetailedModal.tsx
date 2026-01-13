@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Calculator, RefreshCw, ShoppingBag, Car, ShoppingCart, Gift, Plane, Home, BookOpen, Coffee, Check, Trash2, PlusCircle, RotateCcw } from 'lucide-react';
+import { X, Calculator, RefreshCw, ShoppingBag, Car, ShoppingCart, Gift, Plane, Home, BookOpen, Coffee, Check, Trash2, PlusCircle, RotateCcw, Camera, Loader2 } from 'lucide-react';
 
 import { CashbackCategory } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
+import { analyzeBillImage, ExtractedBillData } from '../utils/aiService';
+import AIScannerModal from './AIScannerModal';
 
 interface CashbackDetailedModalProps {
     isOpen: boolean;
@@ -54,6 +56,9 @@ const BRANDS_DATA = [
     { name: 'Rossetto', percentage: 2.25, categories: ['alim'] },
     { name: 'EKOM', percentage: 2.78, categories: ['alim', 'md'] },
     { name: 'MD', percentage: 1.95, categories: ['alim', 'md'] },
+    { name: 'Todis', percentage: 1.88, categories: ['alim'] },
+    { name: 'Eurospin', percentage: 0.5, categories: ['alim'] },
+
 
     // CARBURANTE
     { name: 'Tamoil', percentage: 1.88, categories: ['carb'] },
@@ -275,6 +280,8 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
     const lang = (language === 'de') ? 'de' : 'it';
     const txt = uiTexts[lang];
     const modalRef = useRef<HTMLDivElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isScannerModalOpen, setIsScannerModalOpen] = useState(false);
 
 
     const defaultCategories: CashbackCategory[] = [
@@ -348,7 +355,77 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
         }));
     };
 
+    const handleScanClick = () => {
+        fileInputRef.current?.click();
+    };
 
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        setIsScanning(true);
+        try {
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const base64 = e.target?.result as string;
+                if (base64) {
+                    const extracted = await analyzeBillImage(base64);
+                    if (extracted) {
+                        const electricityTotal = extracted.electricity?.totalAmount || 0;
+                        const gasTotal = extracted.gas?.totalAmount || 0;
+                        let total = 0;
+
+                        if (electricityTotal > 0 || gasTotal > 0) {
+                            setTargetBill(Math.round(electricityTotal + gasTotal));
+                        } else if (extracted.electricity?.consumption && (extracted.electricity?.pun || extracted.electricity?.spread)) {
+                            total += ((extracted.electricity.pun || 0) + (extracted.electricity.spread || 0)) * extracted.electricity.consumption + (extracted.electricity.fixedCosts || 0);
+                        } else if (extracted.gas?.consumption && (extracted.gas?.psv || extracted.gas?.spread)) {
+                            total += ((extracted.gas.psv || 0) + (extracted.gas.spread || 0)) * extracted.gas.consumption + (extracted.gas.fixedCosts || 0);
+                        }
+
+                        // If technical extraction failed to compute a total, we could rely on a "totalAmount" field
+                        // but for now let's just use what we have or inform the user.
+                        if (total > 0) {
+                            setTargetBill(Math.round(total));
+                        } else {
+                            // Fallback: search for a generic total in the image if technical fields aren't enough
+                            // I should probably update aiService to also return a generic totalAmount.
+                            alert("Dati estratti, ma non è stato possibile calcolare il totale esatto. Inseriscilo manualmente.");
+                        }
+                    } else {
+                        alert("Non è stato possibile estrarre i dati. \n\nPossibili motivi:\n1. API Key mancante o non caricata (serve riavvio npm run dev)\n2. Il file è un PDF protetto da password o illeggibile.");
+                    }
+                }
+                setIsScanning(false);
+            };
+            reader.readAsDataURL(file);
+        } catch (error) {
+            console.error("Scan error:", error);
+            setIsScanning(false);
+        }
+    };
+
+
+
+    const handleScanResult = (extracted: ExtractedBillData) => {
+        const electricityTotal = extracted.electricity?.totalAmount || 0;
+        const gasTotal = extracted.gas?.totalAmount || 0;
+        let total = 0;
+
+        if (electricityTotal > 0 || gasTotal > 0) {
+            setTargetBill(Math.round(electricityTotal + gasTotal));
+        } else if (extracted.electricity?.consumption && (extracted.electricity?.pun || extracted.electricity?.spread)) {
+            total += ((extracted.electricity.pun || 0) + (extracted.electricity.spread || 0)) * extracted.electricity.consumption + (extracted.electricity.fixedCosts || 0);
+        } else if (extracted.gas?.consumption && (extracted.gas?.psv || extracted.gas?.spread)) {
+            total += ((extracted.gas.psv || 0) + (extracted.gas.spread || 0)) * extracted.gas.consumption + (extracted.gas.fixedCosts || 0);
+        }
+
+        if (total > 0) {
+            setTargetBill(Math.round(total));
+        } else if (!(electricityTotal > 0 || gasTotal > 0)) {
+            alert("Dati estratti, ma non è stato possibile calcolare il totale. Inseriscilo manualmente.");
+        }
+    };
 
     const handleReset = () => {
         setCategories(categories.map(cat => ({ ...cat, amount: 0, brand: '', percentage: 0, fixedAmount: undefined })));
@@ -440,6 +517,13 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                             </svg>
                                         </div>
                                     </div>
+                                    <button
+                                        onClick={() => setIsScannerModalOpen(true)}
+                                        className="mt-2 flex items-center justify-center gap-2 w-full py-2 rounded-xl border border-white/20 transition-all font-bold text-[10px] uppercase bg-white/10 hover:bg-white/20"
+                                    >
+                                        <Camera size={12} />
+                                        Scansiona Bolletta
+                                    </button>
                                 </div>
                             </div>
                             <div className="text-right flex-1 w-full sm:w-auto">
@@ -575,8 +659,13 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                         <Check size={18} />
                     </button>
                 </div>
-
             </div >
+
+            <AIScannerModal
+                isOpen={isScannerModalOpen}
+                onClose={() => setIsScannerModalOpen(false)}
+                onConfirm={handleScanResult}
+            />
         </div >
     );
 };

@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { X, Calculator, Wallet, ArrowRight, Settings, ChevronDown, ChevronUp, Plus, Minus, Edit2, RotateCcw, Download } from 'lucide-react';
+import { X, Calculator, Wallet, ArrowRight, Settings, ChevronDown, ChevronUp, Plus, Minus, Edit2, RotateCcw, Download, Camera, Loader2, RefreshCcw } from 'lucide-react';
 import { PlanInput } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
-import { jsPDF } from 'jspdf';
-import { toPng } from 'html-to-image';
+import { analyzeBillImage, ExtractedBillData } from '../utils/aiService';
+import AIScannerModal from './AIScannerModal';
 
 interface AnalisiUtenzeModalProps {
     isOpen: boolean;
@@ -102,6 +102,34 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
     const [gasFixed, setGasFixed] = useState<string>('');
     const [isEditingCashback, setIsEditingCashback] = useState(false); // Toggle for cashback edit section
     const [includeSpread, setIncludeSpread] = useState(true); // New Toggle for Spread
+    const [isScannerModalOpen, setIsScannerModalOpen] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const openScanner = () => {
+        setIsScannerModalOpen(true);
+    };
+
+    const applyExtractedData = (data: ExtractedBillData) => {
+        console.log("Applying data:", data);
+        let foundAny = false;
+
+        if (data.electricity) {
+            if (data.electricity.consumption) { setElectricityConsumption(data.electricity.consumption.toString()); foundAny = true; }
+            if (data.electricity.fixedCosts) { setElectricityFixed(data.electricity.fixedCosts.toString()); foundAny = true; }
+            if (data.electricity.pun) { setPunValue(data.electricity.pun.toString()); foundAny = true; }
+            if (data.electricity.spread) { setElectricityPrice(data.electricity.spread.toString()); foundAny = true; }
+        }
+        if (data.gas) {
+            if (data.gas.consumption) { setGasConsumption(data.gas.consumption.toString()); foundAny = true; }
+            if (data.gas.fixedCosts) { setGasFixed(data.gas.fixedCosts.toString()); foundAny = true; }
+            if (data.gas.psv) { setPsvValue(data.gas.psv.toString()); foundAny = true; }
+            if (data.gas.spread) { setGasPrice(data.gas.spread.toString()); foundAny = true; }
+        }
+
+        if (!foundAny) {
+            alert("L'AI ha analizzato il documento ma non ha trovato dati tecnici compatibili (PUN, PSV, Consumi). Prova con una pagina più chiara del riepilogo.");
+        }
+    };
 
     const handleReset = () => {
         setElectricityPrice('');
@@ -184,6 +212,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
             await new Promise(resolve => setTimeout(resolve, 250));
 
             // 6. Capture
+            const { toPng } = await import('html-to-image');
             const dataUrl = await toPng(clone, {
                 cacheBust: true,
                 pixelRatio: 2,
@@ -193,6 +222,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
             });
 
             // 7. Generate PDF
+            const { jsPDF } = await import('jspdf');
             const pdf = new jsPDF('p', 'mm', 'a4');
             const imgProps = pdf.getImageProperties(dataUrl);
             const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -289,6 +319,13 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                             <p className="text-indigo-100 font-medium text-base md:text-lg opacity-90">{txt.subtitle}</p>
                         </div>
                         <div className="flex items-center gap-2">
+                            <button
+                                onClick={openScanner}
+                                className="p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 shadow-lg group relative"
+                                title="Scansiona Bolletta"
+                            >
+                                <Camera size={24} className="group-hover:scale-110 transition-transform" />
+                            </button>
                             <button
                                 onClick={handleExportPDF}
                                 className="p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 shadow-lg group"
@@ -633,8 +670,13 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                         {txt.understood}
                     </button>
                 </div>
-
             </div>
+
+            <AIScannerModal
+                isOpen={isScannerModalOpen}
+                onClose={() => setIsScannerModalOpen(false)}
+                onConfirm={applyExtractedData}
+            />
         </div>
     );
 };
