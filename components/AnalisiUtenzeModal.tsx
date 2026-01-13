@@ -719,12 +719,14 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                 </div>
             </div>
 
-            <AIScannerModal
-                isOpen={isScannerModalOpen}
-                onClose={() => setIsScannerModalOpen(false)}
-                onConfirm={applyExtractedData}
-                scanType={scanType}
-            />
+            {isScannerModalOpen && (
+                <AIScannerModal
+                    isOpen={isScannerModalOpen}
+                    onClose={() => setIsScannerModalOpen(false)}
+                    onConfirm={applyExtractedData}
+                    scanType={scanType}
+                />
+            )}
         </div>
     );
 };
