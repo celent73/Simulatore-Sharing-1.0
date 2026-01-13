@@ -111,7 +111,7 @@ export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBi
         }
 
         const base64Data = imageToSend.includes("base64,") ? imageToSend.split(",")[1] : imageToSend;
-        const modelsToTry = ["gemini-1.5-flash", "gemini-1.5-flash-001", "gemini-2.0-flash", "gemini-2.0-flash-001"];
+        const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash-lite-001", "gemini-2.0-flash"];
         let errors: string[] = [];
         let responseText = null;
 
