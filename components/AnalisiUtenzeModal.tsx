@@ -342,20 +342,14 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
 
                     <div className="relative z-10 flex justify-between items-start">
                         <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-xs font-bold uppercase tracking-widest mb-4 shadow-lg">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-2 shadow-lg">
                                 <span>✨</span> {txt.premiumAnalysis}
                             </div>
-                            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tight mb-2 drop-shadow-md">{txt.title}</h2>
-                            <p className="text-indigo-100 font-medium text-base md:text-lg opacity-90">{txt.subtitle}</p>
+                            <h2 className="text-xl md:text-3xl lg:text-4xl font-black tracking-tight mb-1 drop-shadow-md leading-tight">{txt.title}</h2>
+                            <p className="text-indigo-100 font-medium text-xs md:text-lg opacity-90 hidden sm:block">{txt.subtitle}</p>
                         </div>
                         <div className="flex items-center gap-2">
-                            <button
-                                onClick={() => openScanner('any')}
-                                className="p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 shadow-lg group relative"
-                                title="Scansiona Bolletta (Qualsiasi)"
-                            >
-                                <Camera size={24} className="group-hover:scale-110 transition-transform" />
-                            </button>
+
                             <button
                                 onClick={handleExportPDF}
                                 className="p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 shadow-lg group"
