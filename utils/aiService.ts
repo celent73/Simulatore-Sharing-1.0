@@ -88,7 +88,7 @@ async function convertPdfToImage(base64Pdf: string): Promise<string> {
     }
 }
 
-export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBillData | null> => {
+export const analyzeBillImage = async (inputBase64: string, priorityType: 'electricity' | 'gas' | 'any' = 'any'): Promise<ExtractedBillData | null> => {
     if (!genAI) {
         console.error("Gemini API Key missing. Please add VITE_GEMINI_API_KEY to .env.local");
         return null;
@@ -115,6 +115,13 @@ export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBi
         let errors: string[] = [];
         let responseText = null;
 
+        let focusInstruction = "";
+        if (priorityType === 'electricity') {
+            focusInstruction = "CONCENTRATI ESCLUSIVAMENTE SUI DATI DELL'ENERGIA ELETTRICA (LUCE). Se trovi anche Gas, ignoralo o estrailo solo se evidente.";
+        } else if (priorityType === 'gas') {
+            focusInstruction = "CONCENTRATI ESCLUSIVAMENTE SUI DATI DEL GAS METANO. Se trovi anche Luce, ignorala o estraila solo se evidente.";
+        }
+
         for (const modelName of modelsToTry) {
             try {
                 console.log(`Attempting analysis with model: ${modelName}`);
@@ -123,6 +130,7 @@ export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBi
                 const prompt = `
               Analizza questa immagine (contenente le prime 3 pagine della bolletta).
               Il tuo obiettivo è estrarre i dati tecnici specifici per una simulazione precisa.
+              ${focusInstruction}
               
               IMPORTANTE SU CALCOLI E FORMATO JSON:
               - NON SCRIVERE OPERAZIONI MATEMATICHE (es. "24.90 + 1.90"). È VIETATO!

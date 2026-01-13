@@ -103,9 +103,11 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
     const [isEditingCashback, setIsEditingCashback] = useState(false); // Toggle for cashback edit section
     const [includeSpread, setIncludeSpread] = useState(true); // New Toggle for Spread
     const [isScannerModalOpen, setIsScannerModalOpen] = useState(false);
+    const [scanType, setScanType] = useState<'electricity' | 'gas' | 'any'>('any');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const openScanner = () => {
+    const openScanner = (type: 'electricity' | 'gas' | 'any' = 'any') => {
+        setScanType(type);
         setIsScannerModalOpen(true);
     };
 
@@ -347,9 +349,9 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                         </div>
                         <div className="flex items-center gap-2">
                             <button
-                                onClick={openScanner}
+                                onClick={() => openScanner('any')}
                                 className="p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 shadow-lg group relative"
-                                title="Scansiona Bolletta"
+                                title="Scansiona Bolletta (Qualsiasi)"
                             >
                                 <Camera size={24} className="group-hover:scale-110 transition-transform" />
                             </button>
@@ -381,14 +383,23 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                     {/* Electricity Section */}
                     <div className="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-yellow-400/10 rounded-bl-full transition-all group-hover:scale-110"></div>
-                        <div className="flex items-center gap-4 mb-6 relative z-10">
-                            <div className="w-12 h-12 rounded-2xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 dark:text-yellow-400 shadow-sm">
-                                <Calculator size={24} fill="currentColor" />
+                        <div className="flex items-center justify-between mb-6 relative z-10">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-2xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 dark:text-yellow-400 shadow-sm">
+                                    <Calculator size={24} fill="currentColor" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">{txt.electricity}</h3>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{txt.enterData}</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{txt.electricity}</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{txt.enterData}</p>
-                            </div>
+                            <button
+                                onClick={() => openScanner('electricity')}
+                                className="p-2 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 rounded-xl transition-colors border border-yellow-500/20"
+                                title="Scansiona Luce"
+                            >
+                                <Camera size={20} />
+                            </button>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -461,14 +472,23 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                     {/* Gas Section */}
                     <div className="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-orange-400/10 rounded-bl-full transition-all group-hover:scale-110"></div>
-                        <div className="flex items-center gap-4 mb-6 relative z-10">
-                            <div className="w-12 h-12 rounded-2xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 shadow-sm">
-                                <Calculator size={24} fill="currentColor" />
+                        <div className="flex items-center justify-between mb-6 relative z-10">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-2xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 shadow-sm">
+                                    <Calculator size={24} fill="currentColor" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">{txt.gas}</h3>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{txt.enterData}</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{txt.gas}</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{txt.enterData}</p>
-                            </div>
+                            <button
+                                onClick={() => openScanner('gas')}
+                                className="p-2 bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 dark:text-orange-400 rounded-xl transition-colors border border-orange-500/20"
+                                title="Scansiona Gas"
+                            >
+                                <Camera size={20} />
+                            </button>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -703,6 +723,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                 isOpen={isScannerModalOpen}
                 onClose={() => setIsScannerModalOpen(false)}
                 onConfirm={applyExtractedData}
+                scanType={scanType}
             />
         </div>
     );

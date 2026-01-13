@@ -6,9 +6,10 @@ interface AIScannerModalProps {
     isOpen: boolean;
     onClose: () => void;
     onConfirm: (data: ExtractedBillData) => void;
+    scanType?: 'electricity' | 'gas' | 'any';
 }
 
-const AIScannerModal: React.FC<AIScannerModalProps> = ({ isOpen, onClose, onConfirm }) => {
+const AIScannerModal: React.FC<AIScannerModalProps> = ({ isOpen, onClose, onConfirm, scanType = 'any' }) => {
     const [isScanning, setIsScanning] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [extractedData, setExtractedData] = useState<ExtractedBillData | null>(null);
@@ -17,6 +18,14 @@ const AIScannerModal: React.FC<AIScannerModalProps> = ({ isOpen, onClose, onConf
     const [showDiagnostics, setShowDiagnostics] = useState(false);
 
     if (!isOpen) return null;
+
+    const getTitle = () => {
+        switch (scanType) {
+            case 'electricity': return "Scanner Luce";
+            case 'gas': return "Scanner Gas";
+            default: return "Scanner AI Premium";
+        }
+    };
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -35,7 +44,8 @@ const AIScannerModal: React.FC<AIScannerModalProps> = ({ isOpen, onClose, onConf
 
             setIsScanning(true);
             try {
-                const data = await analyzeBillImage(base64);
+                // Pass scanType to analyze function (to be updated)
+                const data = await analyzeBillImage(base64, scanType);
                 if (data) {
                     // Check if actually found technical data
                     const hasElectricity = data.electricity && (data.electricity.consumption || data.electricity.pun || data.electricity.totalAmount);
@@ -75,7 +85,7 @@ const AIScannerModal: React.FC<AIScannerModalProps> = ({ isOpen, onClose, onConf
                             <Camera className="w-5 h-5 text-purple-400" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-bold text-white">Scanner AI Premium</h2>
+                            <h2 className="text-xl font-bold text-white">{getTitle()}</h2>
                             <p className="text-sm text-gray-400">Analisi intelligente bolletta</p>
                         </div>
                     </div>
