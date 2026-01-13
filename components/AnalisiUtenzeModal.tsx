@@ -125,8 +125,9 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
             return false;
         };
 
-        if (data.electricity) {
+        if (data.electricity && (scanType === 'electricity' || scanType === 'any')) {
             let hasElec = false;
+            // Only update if we are in specific mode OR if value is valid and we are in 'any' mode
             if (updateIfValid(data.electricity.consumption, setElectricityConsumption, 'consumption')) hasElec = true;
             if (updateIfValid(data.electricity.fixedCosts, setElectricityFixed, 'fixedCosts')) hasElec = true;
             if (updateIfValid(data.electricity.pun, setPunValue, 'pun')) hasElec = true;
@@ -138,7 +139,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
             }
         }
 
-        if (data.gas) {
+        if (data.gas && (scanType === 'gas' || scanType === 'any')) {
             let hasGas = false;
             if (updateIfValid(data.gas.consumption, setGasConsumption, 'consumption')) hasGas = true;
             if (updateIfValid(data.gas.fixedCosts, setGasFixed, 'fixedCosts')) hasGas = true;
