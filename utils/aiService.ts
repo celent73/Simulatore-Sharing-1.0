@@ -111,71 +111,89 @@ export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBi
         }
 
         const base64Data = imageToSend.includes("base64,") ? imageToSend.split(",")[1] : imageToSend;
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
+        const modelsToTry = ["gemini-1.5-flash-001", "gemini-1.5-flash", "gemini-pro-vision"];
+        let lastError = null;
+        let responseText = null;
 
-        console.log("Analyzing document as:", mimeType);
+        for (const modelName of modelsToTry) {
+            try {
+                console.log(`Attempting analysis with model: ${modelName}`);
+                const model = genAI.getGenerativeModel({ model: modelName });
 
-        const prompt = `
-      Analizza questa immagine (contenente le prime 3 pagine della bolletta).
-      Il tuo obiettivo è estrarre i dati tecnici specifici per una simulazione precisa.
-      
-      IMPORTANTE SU CALCOLI E FORMATO JSON:
-      - NON SCRIVERE OPERAZIONI MATEMATICHE (es. "24.90 + 1.90"). È VIETATO!
-      - FAI I CALCOLI MENTALMENTE e scrivi SOLO IL RISULTATO FINALE (es. "26.80").
-      - Usa il PUNTO per i decimali (es. 0.05). Usa null se assente.
+                const prompt = `
+              Analizza questa immagine (contenente le prime 3 pagine della bolletta).
+              Il tuo obiettivo è estrarre i dati tecnici specifici per una simulazione precisa.
+              
+              IMPORTANTE SU CALCOLI E FORMATO JSON:
+              - NON SCRIVERE OPERAZIONI MATEMATICHE (es. "24.90 + 1.90"). È VIETATO!
+              - FAI I CALCOLI MENTALMENTE e scrivi SOLO IL RISULTATO FINALE (es. "26.80").
+              - Usa il PUNTO per i decimali (es. 0.05). Usa null se assente.
 
-      ESTRAI I SEGUENTI DATI CON PRECISIONE:
+              ESTRAI I SEGUENTI DATI CON PRECISIONE:
 
-      1. ENERGIA ELETTRICA (Luce):
-         - "consumption": CONSUMO MENS (kWh).
-         - "fixedCosts": COSTO FISSO MENS (€). Cerca e SOMMA INTERNAMENTE: PCV, CCV, Quote fisse vendita, Dispacciamento. Scrivi SOLO IL TOTALE.
-         - "pun": Prezzo €/kWh (solo quota energia, escluso spread).
-         - "spread": SPREAD / MARGINE (€/kWh).
-         - "totalAmount": Totale bolletta.
+              1. ENERGIA ELETTRICA (Luce):
+                 - "consumption": CONSUMO MENS (kWh).
+                 - "fixedCosts": COSTO FISSO MENS (€). Cerca e SOMMA INTERNAMENTE: PCV, CCV, Quote fisse vendita, Dispacciamento. Scrivi SOLO IL TOTALE.
+                 - "pun": Prezzo €/kWh (solo quota energia, escluso spread).
+                 - "spread": SPREAD / MARGINE (€/kWh).
+                 - "totalAmount": Totale bolletta.
 
-      2. GAS NATURALE:
-         - "consumption": CONSUMO MENS (Smc).
-         - "fixedCosts": COSTO FISSO MENS (€). Cerca e SOMMA INTERNAMENTE: QVD, Quote fisse, Oneri fissi. Scrivi SOLO IL TOTALE.
-         - "psv": Prezzo €/Smc.
-         - "spread": SPREAD / MARGINE (€/Smc).
+              2. GAS NATURALE:
+                 - "consumption": CONSUMO MENS (Smc).
+                 - "fixedCosts": COSTO FISSO MENS (€). Cerca e SOMMA INTERNAMENTE: QVD, Quote fisse, Oneri fissi. Scrivi SOLO IL TOTALE.
+                 - "psv": Prezzo €/Smc.
+                 - "spread": SPREAD / MARGINE (€/Smc).
 
-      Rispondi SOLO JSON:
-      {
-        "type": "electricity" | "gas" | "both" | "unknown",
-        "electricity": { "consumption": number|null, "fixedCosts": number|null, "pun": number|null, "spread": number|null, "totalAmount": number|null },
-        "gas": { "consumption": number|null, "fixedCosts": number|null, "psv": number|null, "spread": number|null, "totalAmount": number|null }
-      }
-    `;
+              Rispondi SOLO JSON:
+              {
+                "type": "electricity" | "gas" | "both" | "unknown",
+                "electricity": { "consumption": number|null, "fixedCosts": number|null, "pun": number|null, "spread": number|null, "totalAmount": number|null },
+                "gas": { "consumption": number|null, "fixedCosts": number|null, "psv": number|null, "spread": number|null, "totalAmount": number|null }
+              }
+            `;
 
-        const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("Timeout: l'analisi ha impiegato troppo tempo (60s). Riprova con un'immagine più leggera o meno pagine.")), 60000)
-        );
+                const timeoutPromise = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error(`Timeout model ${modelName}`)), 45000)
+                );
 
-        const result = await Promise.race([
-            model.generateContent([
-                prompt,
-                {
-                    inlineData: {
-                        data: base64Data,
-                        mimeType: mimeType,
-                    },
-                },
-            ]),
-            timeoutPromise
-        ]) as any;
+                const result = await Promise.race([
+                    model.generateContent([
+                        prompt,
+                        {
+                            inlineData: {
+                                data: base64Data,
+                                mimeType: mimeType,
+                            },
+                        },
+                    ]),
+                    timeoutPromise
+                ]) as any;
 
-        const response = await result.response;
-        const text = response.text();
-        console.log("--- GEMINI RESPONSE START ---");
-        console.log(text);
-        console.log("--- GEMINI RESPONSE END ---");
+                const response = await result.response;
+                responseText = response.text();
 
-        if (!text || text.trim().length === 0) {
-            throw new Error("L'IA ha restituito una risposta vuota.");
+                if (responseText && responseText.trim().length > 0) {
+                    console.log(`Success with model: ${modelName}`);
+                    break; // Success!
+                }
+
+            } catch (err: any) {
+                console.warn(`Failed with model ${modelName}:`, err.message);
+                lastError = err;
+                // Continue to next model
+            }
         }
 
+        if (!responseText || responseText.trim().length === 0) {
+            throw lastError || new Error("Tutti i modelli AI hanno fallito.");
+        }
+
+        console.log("--- GEMINI RESPONSE START ---");
+        console.log(responseText);
+        console.log("--- GEMINI RESPONSE END ---");
+
         // Extract JSON from response (sometimes AI wraps in ```json)
-        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
             try {
                 const parsed = JSON.parse(jsonMatch[0]);
