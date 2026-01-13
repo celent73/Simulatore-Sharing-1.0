@@ -111,7 +111,7 @@ export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBi
         }
 
         const base64Data = imageToSend.includes("base64,") ? imageToSend.split(",")[1] : imageToSend;
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         console.log("Analyzing document as:", mimeType);
 
@@ -148,7 +148,7 @@ export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBi
     `;
 
         const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("Timeout: l'analisi ha impiegato troppo tempo")), 60000)
+            setTimeout(() => reject(new Error("Timeout: l'analisi ha impiegato troppo tempo (60s). Riprova con un'immagine più leggera o meno pagine.")), 60000)
         );
 
         const result = await Promise.race([
@@ -171,8 +171,7 @@ export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBi
         console.log("--- GEMINI RESPONSE END ---");
 
         if (!text || text.trim().length === 0) {
-            console.error("Gemini returned an empty response.");
-            return null;
+            throw new Error("L'IA ha restituito una risposta vuota.");
         }
 
         // Extract JSON from response (sometimes AI wraps in ```json)
@@ -184,17 +183,25 @@ export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBi
                 return parsed as ExtractedBillData;
             } catch (pErr) {
                 console.error("JSON Parse Error:", pErr, "Original text:", jsonMatch[0]);
-                return null;
+                throw new Error("Errore nel parsing della risposta dell'IA.");
             }
         }
 
         console.warn("No JSON pattern found in AI response.");
-        return null;
+        throw new Error("L'IA non ha restituito un formato valido.");
+
     } catch (error: any) {
         console.error("CRITICAL ERROR in analyzeBillImage:", error);
+
+        // Propagate specific errors
         if (error.message?.includes("API key")) {
-            console.error("API Key Issue detected. Please check your .env.local and restart the server.");
+            throw new Error("Chiave API mancante o non valida.");
         }
-        return null;
+        if (error.message?.includes("convertire il PDF")) {
+            throw error; // Re-throw PDF errors as is
+        }
+
+        // Generic fallback
+        throw new Error(error.message || "Errore sconosciuto durante l'analisi.");
     }
 };
