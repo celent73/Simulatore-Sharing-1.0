@@ -141,14 +141,14 @@ export const analyzeBillImage = async (inputBase64: string, priorityType: 'elect
 
               1. ENERGIA ELETTRICA (Luce):
                  - "consumption": CONSUMO MENS (kWh).
-                 - "fixedCosts": COSTO FISSO MENS (€). Cerca e SOMMA: PCV, Quota fisse, "Spesa trasporto e gestione contatore", "Oneri di sistema". TUTTO ciò che non è consumo energia.
+                 - "fixedCosts": COSTO FISSO MENS (€). SOMMA: PCV, Quota fisse, "Spesa trasporto e gestione contatore", "Oneri di sistema", "ACCISE", "IVA/Imposte", "Canone RAI". Tutto tranne la materia energia.
                  - "pun": Prezzo €/kWh (solo quota energia, escluso spread).
                  - "spread": SPREAD / MARGINE (€/kWh).
                  - "totalAmount": Totale bolletta.
 
               2. GAS NATURALE:
                  - "consumption": CONSUMO MENS (Smc).
-                 - "fixedCosts": COSTO FISSO MENS (€). Cerca e SOMMA: QVD, Quota fisse, "Spesa trasporto", "Oneri di sistema". TUTTO ciò che non è consumo materia prima.
+                 - "fixedCosts": COSTO FISSO MENS (€). SOMMA: QVD, Quota fisse, "Spesa trasporto", "Oneri di sistema", "ACCISE", "IVA/Imposte". Tutto tranne materia prima.
                  - "psv": Prezzo €/Smc.
                  - "spread": SPREAD / MARGINE (€/Smc). Cerca: "Spread", "Fee", "Corrispettivo variabile", "Quota vendita". Se esplicito.
 
