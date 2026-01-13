@@ -213,14 +213,11 @@ export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBi
         console.error("CRITICAL ERROR in analyzeBillImage:", error);
 
         // Propagate specific errors
-        if (error.message?.includes("API key")) {
-            throw new Error("Chiave API mancante o non valida.");
-        }
         if (error.message?.includes("convertire il PDF")) {
             throw error; // Re-throw PDF errors as is
         }
 
-        // Generic fallback
-        throw new Error(error.message || "Errore sconosciuto durante l'analisi.");
+        // Throw the raw error to see the details in the UI
+        throw error;
     }
 };
