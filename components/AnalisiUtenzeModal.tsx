@@ -112,22 +112,49 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
     const applyExtractedData = (data: ExtractedBillData) => {
         console.log("Applying data:", data);
         let foundAny = false;
+        let updatedFields: string[] = [];
+
+        // Helper to update only if value is valid
+        const updateIfValid = (value: number | undefined | null, setter: (v: string) => void, fieldName: string) => {
+            if (value !== undefined && value !== null && value > 0) {
+                setter(value.toString());
+                return true;
+            }
+            return false;
+        };
 
         if (data.electricity) {
-            if (data.electricity.consumption) { setElectricityConsumption(data.electricity.consumption.toString()); foundAny = true; }
-            if (data.electricity.fixedCosts) { setElectricityFixed(data.electricity.fixedCosts.toString()); foundAny = true; }
-            if (data.electricity.pun) { setPunValue(data.electricity.pun.toString()); foundAny = true; }
-            if (data.electricity.spread) { setElectricityPrice(data.electricity.spread.toString()); foundAny = true; }
+            let hasElec = false;
+            if (updateIfValid(data.electricity.consumption, setElectricityConsumption, 'consumption')) hasElec = true;
+            if (updateIfValid(data.electricity.fixedCosts, setElectricityFixed, 'fixedCosts')) hasElec = true;
+            if (updateIfValid(data.electricity.pun, setPunValue, 'pun')) hasElec = true;
+            if (updateIfValid(data.electricity.spread, setElectricityPrice, 'spread')) hasElec = true;
+
+            if (hasElec) {
+                foundAny = true;
+                updatedFields.push("Energia Elettrica");
+            }
         }
+
         if (data.gas) {
-            if (data.gas.consumption) { setGasConsumption(data.gas.consumption.toString()); foundAny = true; }
-            if (data.gas.fixedCosts) { setGasFixed(data.gas.fixedCosts.toString()); foundAny = true; }
-            if (data.gas.psv) { setPsvValue(data.gas.psv.toString()); foundAny = true; }
-            if (data.gas.spread) { setGasPrice(data.gas.spread.toString()); foundAny = true; }
+            let hasGas = false;
+            if (updateIfValid(data.gas.consumption, setGasConsumption, 'consumption')) hasGas = true;
+            if (updateIfValid(data.gas.fixedCosts, setGasFixed, 'fixedCosts')) hasGas = true;
+            if (updateIfValid(data.gas.psv, setPsvValue, 'psv')) hasGas = true;
+            if (updateIfValid(data.gas.spread, setGasPrice, 'spread')) hasGas = true;
+
+            if (hasGas) {
+                foundAny = true;
+                updatedFields.push("Gas");
+            }
         }
 
         if (!foundAny) {
-            alert("L'AI ha analizzato il documento ma non ha trovato dati tecnici compatibili (PUN, PSV, Consumi). Prova con una pagina più chiara del riepilogo.");
+            alert("L'AI ha analizzato il documento ma non ha trovato dati tecnici validi (> 0). Prova con una pagina più chiara.");
+        } else {
+            // Show a simple success feedback
+            // Optional: You could improve this UI later
+            console.log(`Updated sections: ${updatedFields.join(", ")}`);
         }
     };
 
