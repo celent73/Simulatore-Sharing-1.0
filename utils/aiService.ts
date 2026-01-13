@@ -111,8 +111,8 @@ export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBi
         }
 
         const base64Data = imageToSend.includes("base64,") ? imageToSend.split(",")[1] : imageToSend;
-        const modelsToTry = ["gemini-1.5-flash-001", "gemini-1.5-flash", "gemini-pro-vision"];
-        let lastError = null;
+        const modelsToTry = ["gemini-1.5-flash", "gemini-1.5-flash-001", "gemini-1.5-flash-8b", "gemini-1.5-pro"];
+        let errors: string[] = [];
         let responseText = null;
 
         for (const modelName of modelsToTry) {
@@ -179,13 +179,14 @@ export const analyzeBillImage = async (inputBase64: string): Promise<ExtractedBi
 
             } catch (err: any) {
                 console.warn(`Failed with model ${modelName}:`, err.message);
-                lastError = err;
+                errors.push(`${modelName}: ${err.message}`);
                 // Continue to next model
             }
         }
 
         if (!responseText || responseText.trim().length === 0) {
-            throw lastError || new Error("Tutti i modelli AI hanno fallito.");
+            const errorMsg = errors.length > 0 ? errors.join(" | ") : "Tutti i modelli hanno fallito senza errori specifici.";
+            throw new Error(`Analisi fallita. Dettagli errori: ${errorMsg}`);
         }
 
         console.log("--- GEMINI RESPONSE START ---");
