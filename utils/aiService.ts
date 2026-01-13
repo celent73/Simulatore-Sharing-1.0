@@ -150,7 +150,7 @@ export const analyzeBillImage = async (inputBase64: string, priorityType: 'elect
                  - "consumption": CONSUMO MENS (Smc).
                  - "fixedCosts": COSTO FISSO MENS (€). Cerca e SOMMA INTERNAMENTE: QVD, Quote fisse, Oneri fissi. Scrivi SOLO IL TOTALE.
                  - "psv": Prezzo €/Smc.
-                 - "spread": SPREAD / MARGINE (€/Smc).
+                 - "spread": SPREAD / MARGINE (€/Smc). Cerca: "Spread", "Fee", "Corrispettivo variabile", "Quota vendita". Se esplicito.
 
               Rispondi SOLO JSON:
               {

@@ -390,10 +390,12 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                             </div>
                             <button
                                 onClick={() => openScanner('electricity')}
-                                className="p-2 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 rounded-xl transition-colors border border-yellow-500/20"
+                                className="px-3 py-2 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 rounded-xl transition-colors border border-yellow-500/20 flex items-center gap-2"
                                 title="Scansiona Luce"
                             >
-                                <Camera size={20} />
+                                <Camera size={18} />
+                                <span className="hidden sm:inline text-xs font-bold uppercase tracking-wide">Scansiona Luce</span>
+                                <span className="sm:hidden text-[10px] font-bold uppercase tracking-wide">Luce</span>
                             </button>
                         </div>
 
@@ -479,10 +481,12 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                             </div>
                             <button
                                 onClick={() => openScanner('gas')}
-                                className="p-2 bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 dark:text-orange-400 rounded-xl transition-colors border border-orange-500/20"
+                                className="px-3 py-2 bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 dark:text-orange-400 rounded-xl transition-colors border border-orange-500/20 flex items-center gap-2"
                                 title="Scansiona Gas"
                             >
-                                <Camera size={20} />
+                                <Camera size={18} />
+                                <span className="hidden sm:inline text-xs font-bold uppercase tracking-wide">Scansiona Gas</span>
+                                <span className="sm:hidden text-[10px] font-bold uppercase tracking-wide">Gas</span>
                             </button>
                         </div>
 
