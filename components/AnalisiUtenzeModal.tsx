@@ -2,8 +2,7 @@ import React, { useState, useRef } from 'react';
 import { X, Calculator, Wallet, ArrowRight, Settings, ChevronDown, ChevronUp, Plus, Minus, Edit2, RotateCcw, Download, Camera, Loader2, RefreshCcw } from 'lucide-react';
 import { PlanInput } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
-import { analyzeBillImage, ExtractedBillData } from '../utils/aiService';
-import AIScannerModal from './AIScannerModal';
+
 
 interface AnalisiUtenzeModalProps {
     isOpen: boolean;
@@ -102,64 +101,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
     const [gasFixed, setGasFixed] = useState<string>('');
     const [isEditingCashback, setIsEditingCashback] = useState(false); // Toggle for cashback edit section
     const [includeSpread, setIncludeSpread] = useState(true); // New Toggle for Spread
-    const [isScannerModalOpen, setIsScannerModalOpen] = useState(false);
-    const [scanType, setScanType] = useState<'electricity' | 'gas' | 'any'>('any');
-    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const openScanner = (type: 'electricity' | 'gas' | 'any' = 'any') => {
-        setScanType(type);
-        setIsScannerModalOpen(true);
-    };
-
-    const applyExtractedData = (data: ExtractedBillData) => {
-        console.log("Applying data:", data);
-        let foundAny = false;
-        let updatedFields: string[] = [];
-
-        // Helper to update only if value is valid
-        const updateIfValid = (value: number | undefined | null, setter: (v: string) => void, fieldName: string) => {
-            if (value !== undefined && value !== null && value > 0) {
-                setter(value.toString());
-                return true;
-            }
-            return false;
-        };
-
-        if (data.electricity && (scanType === 'electricity' || scanType === 'any')) {
-            let hasElec = false;
-            // Only update if we are in specific mode OR if value is valid and we are in 'any' mode
-            if (updateIfValid(data.electricity.consumption, setElectricityConsumption, 'consumption')) hasElec = true;
-            if (updateIfValid(data.electricity.fixedCosts, setElectricityFixed, 'fixedCosts')) hasElec = true;
-            if (updateIfValid(data.electricity.pun, setPunValue, 'pun')) hasElec = true;
-            if (updateIfValid(data.electricity.spread, setElectricityPrice, 'spread')) hasElec = true;
-
-            if (hasElec) {
-                foundAny = true;
-                updatedFields.push("Energia Elettrica");
-            }
-        }
-
-        if (data.gas && (scanType === 'gas' || scanType === 'any')) {
-            let hasGas = false;
-            if (updateIfValid(data.gas.consumption, setGasConsumption, 'consumption')) hasGas = true;
-            if (updateIfValid(data.gas.fixedCosts, setGasFixed, 'fixedCosts')) hasGas = true;
-            if (updateIfValid(data.gas.psv, setPsvValue, 'psv')) hasGas = true;
-            if (updateIfValid(data.gas.spread, setGasPrice, 'spread')) hasGas = true;
-
-            if (hasGas) {
-                foundAny = true;
-                updatedFields.push("Gas");
-            }
-        }
-
-        if (!foundAny) {
-            alert("L'AI ha analizzato il documento ma non ha trovato dati tecnici validi (> 0). Prova con una pagina più chiara.");
-        } else {
-            // Show a simple success feedback
-            // Optional: You could improve this UI later
-            console.log(`Updated sections: ${updatedFields.join(", ")}`);
-        }
-    };
 
     const handleReset = () => {
         setElectricityPrice('');
@@ -388,15 +330,6 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                     <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{txt.enterData}</p>
                                 </div>
                             </div>
-                            <button
-                                onClick={() => openScanner('electricity')}
-                                className="px-3 py-2 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 rounded-xl transition-colors border border-yellow-500/20 flex items-center gap-2"
-                                title="Scansiona Luce"
-                            >
-                                <Camera size={18} />
-                                <span className="hidden sm:inline text-xs font-bold uppercase tracking-wide">Scansiona Luce</span>
-                                <span className="sm:hidden text-[10px] font-bold uppercase tracking-wide">Luce</span>
-                            </button>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -479,15 +412,6 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                     <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{txt.enterData}</p>
                                 </div>
                             </div>
-                            <button
-                                onClick={() => openScanner('gas')}
-                                className="px-3 py-2 bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 dark:text-orange-400 rounded-xl transition-colors border border-orange-500/20 flex items-center gap-2"
-                                title="Scansiona Gas"
-                            >
-                                <Camera size={18} />
-                                <span className="hidden sm:inline text-xs font-bold uppercase tracking-wide">Scansiona Gas</span>
-                                <span className="sm:hidden text-[10px] font-bold uppercase tracking-wide">Gas</span>
-                            </button>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -718,14 +642,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                 </div>
             </div>
 
-            {isScannerModalOpen && (
-                <AIScannerModal
-                    isOpen={isScannerModalOpen}
-                    onClose={() => setIsScannerModalOpen(false)}
-                    onConfirm={applyExtractedData}
-                    scanType={scanType}
-                />
-            )}
+
         </div>
     );
 };
