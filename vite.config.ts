@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite' // Deploy Trigger v8.1
 import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
