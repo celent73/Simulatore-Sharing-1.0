@@ -110,55 +110,39 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   const [isProjectionModalOpen, setIsProjectionModalOpen] = useState(false);
   const { t } = useLanguage();
 
-  const isClientMode = viewMode === 'client';
-  const multiplier = 1.0; // Rimosso il dimezzamento per la modalità cliente
-
   const monthlyCashback = planResult.monthlyCashback;
-  const rawOneTimeBonus = planResult.totalOneTimeBonus;
-
-  const oneTimeBonusWithoutCashback = rawOneTimeBonus - monthlyCashback;
+  const monthlyData = planResult.monthlyData;
+  const isClientMode = viewMode === 'client';
+  const hasCashback = monthlyCashback > 0;
   const isAnnual = cashbackPeriod === 'annual';
 
-  // Se è annuale, il cashback NON appare nell'una tantum (va tutto nelle card anni 1/2/3)
-  // Se è mensile, appare SOLO nell'una tantum e non nelle ricorrenze
-  const totalOneTimeBonus = (oneTimeBonusWithoutCashback * multiplier) + (isAnnual ? 0 : monthlyCashback);
+  const rawOneTimeBonus = planResult.totalOneTimeBonus;
+  const oneTimeBonusWithoutCashback = rawOneTimeBonus - monthlyCashback;
+
+  // Se è annuale, il cashback NON appare nell'una tantum (va INTEGRATO nelle ricorrenze)
+  const totalOneTimeBonus = oneTimeBonusWithoutCashback + (isAnnual ? 0 : monthlyCashback);
 
   const totalUsers = planResult.totalUsers;
   const totalContracts = planResult.totalContracts;
 
-  const totalRecurringYear1 = (planResult.totalRecurringYear1 * multiplier) + managerBonus;
-  const totalRecurringYear2 = (planResult.totalRecurringYear2 * multiplier) + managerBonus;
-  const totalRecurringYear3 = (planResult.totalRecurringYear3 * multiplier) + managerBonus;
+  // I valori del piano sono già mensili
+  const totalRecurringYear1 = planResult.totalRecurringYear1 + managerBonus;
+  const totalRecurringYear2 = planResult.totalRecurringYear2 + managerBonus;
+  const totalRecurringYear3 = planResult.totalRecurringYear3 + managerBonus;
 
-  const monthlyData = planResult.monthlyData.map(d => {
-    const ratioCashback = rawOneTimeBonus > 0 ? monthlyCashback / rawOneTimeBonus : 0;
-    const cashbackPartInCumulative = d.cumulativeOneTimeBonus * ratioCashback;
-    const lostCashback = cashbackPartInCumulative * (1 - multiplier);
+  // Calcoli per la visualizzazione delle card: SEMPRE MENSILE COME GRANDE
+  const displayMonthlyRec1 = totalRecurringYear1 + (isAnnual ? monthlyCashback : 0);
+  const displayMonthlyRec2 = totalRecurringYear2 + (isAnnual ? monthlyCashback : 0);
+  const displayMonthlyRec3 = totalRecurringYear3 + (isAnnual ? monthlyCashback : 0);
 
-    return {
-      ...d,
-      cumulativeEarnings: (d.cumulativeEarnings * multiplier) + lostCashback,
-      monthlyRecurring: (d.monthlyRecurring * multiplier) + managerBonus,
-      monthlyOneTimeBonus: (d.monthlyOneTimeBonus * multiplier) + (d.monthlyOneTimeBonus * ratioCashback * (1 - multiplier)),
-      monthlyTotalEarnings: ((d.monthlyOneTimeBonus + d.monthlyRecurring) * multiplier) + (d.monthlyOneTimeBonus * ratioCashback * (1 - multiplier)) + managerBonus,
-      cumulativeOneTimeBonus: (d.cumulativeOneTimeBonus * multiplier) + lostCashback,
-      cumulativeRecurring: (d.cumulativeRecurring * multiplier) + (managerBonus * 12),
-    };
-  });
-
-  // Calcoli per la visualizzazione delle card (Sempre annuali per Anno 1, 2, 3)
-  const showYearlyRec1 = (totalRecurringYear1 * 12) + (isAnnual ? monthlyCashback * 12 : 0);
-  const showYearlyRec2 = (totalRecurringYear2 * 12) + (isAnnual ? monthlyCashback * 12 : 0);
-  const showYearlyRec3 = (totalRecurringYear3 * 12) + (isAnnual ? monthlyCashback * 12 : 0);
-  const recSuffix = "/anno";
-  const recTitleSuffix = isAnnual ? " (+Cashback)" : "";
+  const recTitleSuffix = (isAnnual && hasCashback) ? " (+Cashback)" : "";
 
   const avgEarningsPerUser = totalUsers > 0 ? totalRecurringYear1 / totalUsers : 0;
   const totalEarningsYear1 = totalOneTimeBonus + (totalRecurringYear1 * 12);
   const directRecruits = planResult.levelData.find(l => l.level === 0)?.users || 0;
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
+    return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
   };
 
   const getLevelLabel = (level: number) => {
@@ -221,7 +205,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         years={projectionYears}
         onYearChange={setProjectionYears}
         monthlyRecurring={totalRecurringYear3 + (isAnnual ? monthlyCashback : 0)}
-        totalOneTime={oneTimeBonusWithoutCashback * multiplier + (isAnnual ? 0 : monthlyCashback)}
+        totalOneTime={oneTimeBonusWithoutCashback + (isAnnual ? 0 : monthlyCashback)}
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
@@ -235,22 +219,22 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         <SummaryCard title={cashbackPeriod === 'annual' ? "Bonus Una Tantum" : t('results.one_time')} value={formatValueWithSuffix(totalOneTimeBonus).value} variant="gradient-blue" icon={<WalletIcon />} />
         <SummaryCard
           title={t('results.rec_y1') + recTitleSuffix}
-          value={formatValueWithSuffix(showYearlyRec1 / 12).value}
-          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/mese</span><span className="text-[8px] opacity-60">anno: {formatCurrency(showYearlyRec1)}{parkSuffix}</span></div>}
+          value={formatValueWithSuffix(displayMonthlyRec1).value}
+          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/ mese</span><span className="text-[8px] opacity-60 font-bold">anno: {formatCurrency(displayMonthlyRec1 * 12)}{parkSuffix}</span></div>}
           variant="glass"
           icon={<FireIcon className="text-union-orange-500" />}
         />
         <SummaryCard
           title={t('results.rec_y2') + recTitleSuffix}
-          value={formatValueWithSuffix(showYearlyRec2 / 12).value}
-          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/mese</span><span className="text-[8px] opacity-60">anno: {formatCurrency(showYearlyRec2)}{parkSuffix}</span></div>}
+          value={formatValueWithSuffix(displayMonthlyRec2).value}
+          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/ mese</span><span className="text-[8px] opacity-60 font-bold">anno: {formatCurrency(displayMonthlyRec2 * 12)}{parkSuffix}</span></div>}
           variant="glass"
           icon={<BoltIcon className="text-union-orange-500" />}
         />
         <SummaryCard
           title={t('results.rec_y3') + recTitleSuffix}
-          value={formatValueWithSuffix(showYearlyRec3 / 12).value}
-          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/mese</span><span className="text-[8px] opacity-60">anno: {formatCurrency(showYearlyRec3)}{parkSuffix}</span></div>}
+          value={formatValueWithSuffix(displayMonthlyRec3).value}
+          suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/ mese</span><span className="text-[8px] opacity-60 font-bold">anno: {formatCurrency(displayMonthlyRec3 * 12)}{parkSuffix}</span></div>}
           variant="gradient-orange"
           icon={<StarIcon />}
         />
@@ -289,12 +273,42 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                 <tr key={row.level} className="hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">{getLevelLabel(row.level)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 font-mono">{row.users.toLocaleString('it-IT')}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.oneTimeBonus * multiplier)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{formatCurrency(row.recurringYear1 * multiplier * 12)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{formatCurrency(row.recurringYear2 * multiplier * 12)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-medium">{formatCurrency(row.recurringYear3 * multiplier * 12)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.oneTimeBonus)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.recurringYear1)}</div>
+                    <div className="text-[10px] text-gray-400 font-medium">anno: {formatCurrency(row.recurringYear1 * 12)}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.recurringYear2)}</div>
+                    <div className="text-[10px] text-gray-400 font-medium">anno: {formatCurrency(row.recurringYear2 * 12)}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.recurringYear3)}</div>
+                    <div className="text-[10px] text-gray-400 font-medium">anno: {formatCurrency(row.recurringYear3 * 12)}</div>
+                  </td>
                 </tr>
               ))}
+
+              {/* RIGA DEDICATA AL PARK / BENEFICI PERSONALI */}
+              {(planResult.monthlyPanelYield > 0 || (isAnnual && hasCashback)) && (
+                <tr className="bg-amber-50/50 dark:bg-amber-900/10 hover:bg-amber-100/60 dark:hover:bg-amber-900/20 transition-colors italic">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-amber-600 dark:text-amber-400">Cashback & Park</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400 font-mono">-</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400">-</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
+                    <div className="text-[10px] text-gray-400">anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
+                    <div className="text-[10px] text-gray-400">anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
+                    <div className="text-[10px] text-gray-400">anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
+                  </td>
+                </tr>
+              )}
             </tbody>
             <tfoot className="bg-gray-50 dark:bg-white/5 backdrop-blur-sm border-t border-gray-200 dark:border-white/10">
               <tr>
@@ -333,22 +347,25 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                 <td className="px-6 py-4 text-left text-sm font-black text-gray-900 dark:text-white font-mono">{totalUsers.toLocaleString('it-IT')}</td>
                 <td className="px-6 py-4 text-left text-lg font-black text-emerald-600 dark:text-emerald-400">{formatCurrency(totalOneTimeBonus)}</td>
                 <td className="px-6 py-4 text-left">
-                  <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec1 / 12 * projectionYears)}</div>
-                  <div className="text-[10px] font-bold text-gray-400 mt-1">
-                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-500 dark:text-gray-400">{formatCurrency(showYearlyRec1 * projectionYears)}{parkSuffix}</span>
+                  <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec1 * projectionYears)}</div>
+                  <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
+                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-900 dark:text-gray-100">{formatCurrency(displayMonthlyRec1 * 12 * projectionYears)}</span>
                   </div>
+                  <div className="text-[9px] text-gray-400 font-medium">singolo mese: {formatCurrency(displayMonthlyRec1)}</div>
                 </td>
                 <td className="px-6 py-4 text-left">
-                  <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec2 / 12 * projectionYears)}</div>
-                  <div className="text-[10px] font-bold text-gray-400 mt-1">
-                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-500 dark:text-gray-400">{formatCurrency(showYearlyRec2 * projectionYears)}{parkSuffix}</span>
+                  <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec2 * projectionYears)}</div>
+                  <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
+                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-900 dark:text-gray-100">{formatCurrency(displayMonthlyRec2 * 12 * projectionYears)}</span>
                   </div>
+                  <div className="text-[9px] text-gray-400 font-medium">singolo mese: {formatCurrency(displayMonthlyRec2)}</div>
                 </td>
                 <td className="px-6 py-4 text-left">
-                  <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(showYearlyRec3 / 12 * projectionYears)}</div>
-                  <div className="text-[10px] font-bold text-gray-400 mt-1">
-                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-500 dark:text-gray-400">{formatCurrency(showYearlyRec3 * projectionYears)}{parkSuffix}</span>
+                  <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec3 * projectionYears)}</div>
+                  <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
+                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-900 dark:text-gray-100">{formatCurrency(displayMonthlyRec3 * 12 * projectionYears)}</span>
                   </div>
+                  <div className="text-[9px] text-gray-400 font-medium">singolo mese: {formatCurrency(displayMonthlyRec3)}</div>
                 </td>
               </tr>
             </tfoot>
@@ -397,7 +414,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
             </div>
 
             <div id="customer-benefit">
-              <CustomerBenefitCard totalRecurringYear1={totalRecurringYear1 / multiplier} monthlyCashback={monthlyCashback} />
+              <CustomerBenefitCard totalRecurringYear1={totalRecurringYear1} monthlyCashback={monthlyCashback} />
             </div>
 
             <div id="dream-visualizer">

@@ -7,7 +7,10 @@ import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
+
+console.debug("AI Service v2.1 (Multi-Provider) initialized");
 
 export interface ExtractedBillData {
     type: 'electricity' | 'gas' | 'both' | 'unknown';
@@ -17,6 +20,7 @@ export interface ExtractedBillData {
         pun?: number;
         spread?: number;
         totalAmount?: number;
+        energyQuota?: number;
     };
     gas?: {
         consumption?: number; // Smc
@@ -24,7 +28,71 @@ export interface ExtractedBillData {
         psv?: number;
         spread?: number;
         totalAmount?: number;
+        energyQuota?: number;
     };
+}
+
+/**
+ * Fallback to Groq Llama 3.2 Vision if Gemini fails
+ */
+async function analyzeWithGroq(base64Data: string, mimeType: string, prompt: string): Promise<ExtractedBillData | null> {
+    if (!GROQ_API_KEY || GROQ_API_KEY.length < 10) {
+        console.warn("Groq API Key missing or too short. Skipping fallback.");
+        throw new Error("Hai raggiunto il limite di richieste inviate a Google Gemini. Attendi circa 1 minuto o configura Groq API Key.");
+    }
+
+    try {
+        console.log("Attempting analysis with Groq (Llama-4-Scout-17b)...");
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${GROQ_API_KEY}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                model: "meta-llama/llama-4-scout-17b-16e-instruct",
+                messages: [
+                    {
+                        role: "user",
+                        content: [
+                            { type: "text", text: prompt },
+                            {
+                                type: "image_url",
+                                image_url: { url: `data:${mimeType};base64,${base64Data}` }
+                            }
+                        ]
+                    }
+                ],
+                response_format: { type: "json_object" },
+                temperature: 0
+            })
+        });
+
+        if (!response.ok) {
+            const errBody = await response.json().catch(() => ({}));
+            throw new Error(`Groq API Error (${response.status}): ${errBody.error?.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        const content = data.choices[0]?.message?.content;
+
+        if (content) {
+            console.log("Success with Groq!");
+            try {
+                return JSON.parse(content) as ExtractedBillData;
+            } catch (pErr) {
+                console.error("Groq JSON Parse error:", content);
+                throw new Error("Il fornitore di backup (Groq) ha restituito dati leggibili ma non validi.");
+            }
+        }
+        return null;
+    } catch (err: any) {
+        console.error("Groq Analysis Error:", err);
+        if (err.name === 'TypeError') {
+            throw new Error("Errore di connessione al fornitore di backup (CORS/Network).");
+        }
+        throw err;
+    }
 }
 
 /**
@@ -43,9 +111,8 @@ async function convertPdfToImage(base64Pdf: string): Promise<string> {
         const loadingTask = pdfjsLib.getDocument({ data: bytes });
         const pdf = await loadingTask.promise;
 
-        // Determine how many pages to render (max 3)
         const pagesToRender = Math.min(pdf.numPages, 3);
-        const scale = 1.0; // Standard scale is sufficient for text
+        const scale = 1.2; // Slightly higher scale for better readability
         const pageCanvases: HTMLCanvasElement[] = [];
         let totalHeight = 0;
         let maxWidth = 0;
@@ -68,7 +135,6 @@ async function convertPdfToImage(base64Pdf: string): Promise<string> {
             maxWidth = Math.max(maxWidth, viewport.width);
         }
 
-        // Stitch them together
         const finalCanvas = document.createElement('canvas');
         finalCanvas.width = maxWidth;
         finalCanvas.height = totalHeight;
@@ -81,7 +147,7 @@ async function convertPdfToImage(base64Pdf: string): Promise<string> {
             currentY += canvas.height;
         }
 
-        return finalCanvas.toDataURL('image/jpeg', 0.80); // Compressed for speed
+        return finalCanvas.toDataURL('image/jpeg', 0.85);
     } catch (error) {
         console.error("PDF Conversion Error:", error);
         throw new Error("Impossibile convertire il PDF in immagine. Riprova o usa un'immagine JPG/PNG.");
@@ -90,17 +156,16 @@ async function convertPdfToImage(base64Pdf: string): Promise<string> {
 
 export const analyzeBillImage = async (inputBase64: string, priorityType: 'electricity' | 'gas' | 'any' = 'any'): Promise<ExtractedBillData | null> => {
     if (!genAI) {
-        console.error("Gemini API Key missing. Please add VITE_GEMINI_API_KEY to .env.local");
-        return null;
+        throw new Error("Configurazione AI mancante (Gemini API Key).");
     }
 
-    try {
-        let imageToSend = inputBase64;
-        let mimeType = "image/jpeg";
+    let imageToSend = inputBase64;
+    let mimeType = "image/jpeg";
+    let base64Data = "";
 
-        // Handle PDF Detection and Conversion
+    try {
         if (inputBase64.includes("application/pdf") || inputBase64.startsWith("JVBERi0")) {
-            console.log("Detected PDF. Converting first 3 pages to stitched image...");
+            console.log("Detected PDF. Converting...");
             imageToSend = await convertPdfToImage(inputBase64);
             mimeType = "image/jpeg";
         } else {
@@ -110,58 +175,59 @@ export const analyzeBillImage = async (inputBase64: string, priorityType: 'elect
             }
         }
 
-        const base64Data = imageToSend.includes("base64,") ? imageToSend.split(",")[1] : imageToSend;
-        const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash-lite-001", "gemini-2.0-flash"];
+        base64Data = imageToSend.includes("base64,") ? imageToSend.split(",")[1] : imageToSend;
+
+        const modelsToTry = ["gemini-2.0-flash-lite", "gemini-2.0-flash", "gemini-2.0-flash-exp", "gemini-2.5-flash"];
         let errors: string[] = [];
-        let responseText = null;
 
         let focusInstruction = "";
         if (priorityType === 'electricity') {
-            focusInstruction = "CONCENTRATI ESCLUSIVAMENTE SUI DATI DELL'ENERGIA ELETTRICA (LUCE). Se trovi anche Gas, ignoralo o estrailo solo se evidente.";
+            focusInstruction = "CONCENTRATI ESCLUSIVAMENTE SUI DATI DELL'ENERGIA ELETTRICA (LUCE).";
         } else if (priorityType === 'gas') {
-            focusInstruction = "CONCENTRATI ESCLUSIVAMENTE SUI DATI DEL GAS METANO. Se trovi anche Luce, ignorala o estraila solo se evidente.";
+            focusInstruction = "CONCENTRATI ESCLUSIVAMENTE SUI DATI DEL GAS METANO.";
         }
+
+        const prompt = `
+          Analizza questa immagine di bolletta e estrai i dati tecnici per il confronto.
+          ${focusInstruction}
+          
+          ISTRUZIONI CRITICHE:
+          1. SPREAD: Cerca "margine", "fee", "spread", "parametro b" o "contributo al consumo". È un valore aggiunto al prezzo PUN/PSV (es. 0.02 €/kWh o 0.15 €/Smc).
+          2. COSTI FISSI / PCV / QVD: Cerca "PCV", "QVD", "commercializzazione", "vendita" o "quota fissa". 
+             - IMPORTANTE: Verifica se la bolletta copre 1 mese o 2 mesi (bimestrale). Restituisci SEMPRE il valore MENSILE.
+             - ESEMPIO: Se la quota fissa è 30€ per 2 mesi, scrivi 15.00. In Union Energia è spesso 11.50 €/mese.
+          3. SINTESI: Non scrivere operazioni matematiche. Solo numeri finali (usa . come separatore decimale).
+          4. LINGUA: La bolletta è in Italiano.
+
+          OUTPUT JSON ATTESO:
+          {
+            "type": "electricity" | "gas" | "both" | "unknown",
+            "electricity": { 
+                "consumption": number|null (kWh totali), 
+                "totalAmount": number|null (€ totale bolletta), 
+                "energyQuota": number|null (€ spesa materia energia), 
+                "fixedCosts": number|null (€ mensili commercializzazione/PCV, es: 11.50), 
+                "pun": number|null (prezzo base PUN), 
+                "spread": number|null (margine spread es: 0.021) 
+            },
+            "gas": { 
+                "consumption": number|null (Smc totali), 
+                "totalAmount": number|null (€ totale bolletta), 
+                "energyQuota": number|null (€ spesa materia gas), 
+                "fixedCosts": number|null (€ mensili commercializzazione/QVD, es: 11.50), 
+                "psv": number|null (prezzo base PSV), 
+                "spread": number|null (margine spread es: 0.12) 
+            }
+          }
+        `;
 
         for (const modelName of modelsToTry) {
             try {
                 console.log(`Attempting analysis with model: ${modelName}`);
                 const model = genAI.getGenerativeModel({ model: modelName });
 
-                const prompt = `
-              Analizza questa immagine (contenente le prime 3 pagine della bolletta).
-              Il tuo obiettivo è estrarre i dati tecnici specifici per una simulazione precisa.
-              ${focusInstruction}
-              
-              IMPORTANTE SU CALCOLI E FORMATO JSON:
-              - NON SCRIVERE OPERAZIONI MATEMATICHE (es. "24.90 + 1.90"). È VIETATO!
-              - FAI I CALCOLI MENTALMENTE e scrivi SOLO IL RISULTATO FINALE (es. "26.80").
-              - Usa il PUNTO per i decimali (es. 0.05). Usa null se assente.
-
-              ESTRAI I SEGUENTI DATI CON PRECISIONE:
-
-              1. ENERGIA ELETTRICA (Luce):
-                 - "consumption": CONSUMO MENS (kWh).
-                 - "fixedCosts": COSTO FISSO MENS (€). Cerca e SOMMA: PCV, Quota fisse, "Spesa trasporto e gestione contatore", "Oneri di sistema". TUTTO ciò che non è consumo energia.
-                 - "pun": Prezzo €/kWh (solo quota energia, escluso spread).
-                 - "spread": SPREAD / MARGINE (€/kWh).
-                 - "totalAmount": Totale bolletta.
-
-              2. GAS NATURALE:
-                 - "consumption": CONSUMO MENS (Smc).
-                 - "fixedCosts": COSTO FISSO MENS (€). Cerca e SOMMA: QVD, Quota fisse, "Spesa trasporto", "Oneri di sistema". TUTTO ciò che non è consumo materia prima.
-                 - "psv": Prezzo €/Smc.
-                 - "spread": SPREAD / MARGINE (€/Smc). Cerca: "Spread", "Fee", "Corrispettivo variabile", "Quota vendita". Se esplicito.
-
-              Rispondi SOLO JSON:
-              {
-                "type": "electricity" | "gas" | "both" | "unknown",
-                "electricity": { "consumption": number|null, "fixedCosts": number|null, "pun": number|null, "spread": number|null, "totalAmount": number|null },
-                "gas": { "consumption": number|null, "fixedCosts": number|null, "psv": number|null, "spread": number|null, "totalAmount": number|null }
-              }
-            `;
-
                 const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error(`Timeout model ${modelName}`)), 45000)
+                    setTimeout(() => reject(new Error(`Timeout model ${modelName}`)), 60000)
                 );
 
                 const result = await Promise.race([
@@ -178,54 +244,40 @@ export const analyzeBillImage = async (inputBase64: string, priorityType: 'elect
                 ]) as any;
 
                 const response = await result.response;
-                responseText = response.text();
+                const responseText = response.text();
 
                 if (responseText && responseText.trim().length > 0) {
-                    console.log(`Success with model: ${modelName}`);
-                    break; // Success!
+                    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                        return JSON.parse(jsonMatch[0]) as ExtractedBillData;
+                    }
                 }
-
             } catch (err: any) {
                 console.warn(`Failed with model ${modelName}:`, err.message);
+
+                // Fallback Groq immediato se Gemini ha scadenze di quota
+                if (err.message && (err.message.includes("429") || err.message.includes("Quota exceeded"))) {
+                    console.warn("Gemini Quota exceeded. Attempting Groq fallback...");
+                    try {
+                        const groqData = await analyzeWithGroq(base64Data, mimeType, prompt);
+                        if (groqData) return groqData;
+                        throw new Error("Il fornitore di backup (Groq) non ha restituito dati validi.");
+                    } catch (groqErr: any) {
+                        // Re-throw the original friendly error if it's the one we threw in analyzeWithGroq
+                        if (groqErr.message.includes("Hai raggiunto il limite")) {
+                            throw groqErr;
+                        }
+                        throw new Error(`Limiti raggiunti su Gemini. Backup fallito: ${groqErr.message}`);
+                    }
+                }
                 errors.push(`${modelName}: ${err.message}`);
-                // Continue to next model
             }
         }
 
-        if (!responseText || responseText.trim().length === 0) {
-            const errorMsg = errors.length > 0 ? errors.join(" | ") : "Tutti i modelli hanno fallito senza errori specifici.";
-            throw new Error(`Analisi fallita. Dettagli errori: ${errorMsg}`);
-        }
-
-        console.log("--- GEMINI RESPONSE START ---");
-        console.log(responseText);
-        console.log("--- GEMINI RESPONSE END ---");
-
-        // Extract JSON from response (sometimes AI wraps in ```json)
-        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-            try {
-                const parsed = JSON.parse(jsonMatch[0]);
-                console.log("Successfully parsed JSON:", parsed);
-                return parsed as ExtractedBillData;
-            } catch (pErr) {
-                console.error("JSON Parse Error:", pErr, "Original text:", jsonMatch[0]);
-                throw new Error("Errore nel parsing della risposta dell'IA.");
-            }
-        }
-
-        console.warn("No JSON pattern found in AI response.");
-        throw new Error("L'IA non ha restituito un formato valido.");
+        throw new Error(`Analisi fallita dopo vari tentativi. Dettagli: ${errors.join(" | ")}`);
 
     } catch (error: any) {
-        console.error("CRITICAL ERROR in analyzeBillImage:", error);
-
-        // Propagate specific errors
-        if (error.message?.includes("convertire il PDF")) {
-            throw error; // Re-throw PDF errors as is
-        }
-
-        // Throw the raw error to see the details in the UI
+        console.error("ANALYSIS ERROR:", error);
         throw error;
     }
 };

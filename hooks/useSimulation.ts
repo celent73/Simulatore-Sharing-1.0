@@ -60,6 +60,11 @@ export const useCompensationPlan = (inputs: PlanInput, viewMode: ViewMode = 'fam
             unionParkPun = 0.20
         } = inputs;
 
+        // --- MULTIPLIER LOGIC ---
+        // 'client' mode (Cliente semplice) gets 50% of promoter commissions.
+        // 'family'/'recruiter' modes gets 100%.
+        const multiplier = viewMode === 'client' ? 0.5 : 1.0;
+
         // Helper per calcolare il bonus una tantum complesso
         const calculateBonus = (levelIndex: number, usersCount: number, contractsAvg: number) => {
             if (usersCount <= 0 || contractsAvg <= 0) return 0;
@@ -67,11 +72,11 @@ export const useCompensationPlan = (inputs: PlanInput, viewMode: ViewMode = 'fam
             const rates = BONUS_RATES[levelIndex] || DEFAULT_RATE;
 
             // 1. Guadagno sul Primo contratto di tutti gli utenti
-            const firstContractEarnings = usersCount * rates.first;
+            const firstContractEarnings = usersCount * (rates.first * multiplier);
 
             // 2. Guadagno sui contratti Extra (dal 2° in poi)
             const extraContractsCount = Math.max(0, contractsAvg - 1);
-            const extraContractEarnings = (usersCount * extraContractsCount) * rates.extra;
+            const extraContractEarnings = (usersCount * extraContractsCount) * (rates.extra * multiplier);
 
             return firstContractEarnings + extraContractEarnings;
         };
@@ -82,8 +87,8 @@ export const useCompensationPlan = (inputs: PlanInput, viewMode: ViewMode = 'fam
         const calculateRecurringBase = (levelIndex: number, usersCount: number, contractsAvg: number) => {
             if (usersCount <= 0 || contractsAvg <= 0) return 0;
 
-            const baseFirst = 1.00;
-            const baseExtra = 0.50;
+            const baseFirst = 1.00 * multiplier;
+            const baseExtra = 0.50 * multiplier;
 
             if (contractsAvg < 1) {
                 return usersCount * (contractsAvg * baseFirst);
@@ -141,9 +146,9 @@ export const useCompensationPlan = (inputs: PlanInput, viewMode: ViewMode = 'fam
         let totalOneTimeBonus = levelData.reduce((sum, level) => sum + level.oneTimeBonus, 0);
 
         // --- AGGIUNTA BONUS CLIENTI PERSONALI + MIE UTENZE (UNA TANTUM) ---
-        const residentialOneTime = (personalClientsGreen * PERSONAL_CLIENT_BONUS.GREEN) + (personalClientsLight * PERSONAL_CLIENT_BONUS.LIGHT);
-        const businessOneTime = (personalClientsBusinessGreen * PERSONAL_CLIENT_BONUS.BUSINESS_GREEN) + (personalClientsBusinessLight * PERSONAL_CLIENT_BONUS.BUSINESS_LIGHT);
-        const myUnitsOneTime = (myPersonalUnitsGreen * PERSONAL_CLIENT_BONUS.MY_GREEN) + (myPersonalUnitsLight * PERSONAL_CLIENT_BONUS.MY_LIGHT);
+        const residentialOneTime = (personalClientsGreen * (PERSONAL_CLIENT_BONUS.GREEN * multiplier)) + (personalClientsLight * (PERSONAL_CLIENT_BONUS.LIGHT * multiplier));
+        const businessOneTime = (personalClientsBusinessGreen * (PERSONAL_CLIENT_BONUS.BUSINESS_GREEN * multiplier)) + (personalClientsBusinessLight * (PERSONAL_CLIENT_BONUS.BUSINESS_LIGHT * multiplier));
+        const myUnitsOneTime = (myPersonalUnitsGreen * (PERSONAL_CLIENT_BONUS.MY_GREEN * multiplier)) + (myPersonalUnitsLight * (PERSONAL_CLIENT_BONUS.MY_LIGHT * multiplier));
 
         // One-time bonus on panels only applies in non-client modes
         const unionParkOneTime = viewMode !== 'client' ? (unionParkPanels || 0) * 50 : 0;
@@ -161,19 +166,19 @@ export const useCompensationPlan = (inputs: PlanInput, viewMode: ViewMode = 'fam
 
         // --- AGGIUNTA BONUS CLIENTI PERSONALI + MIE UTENZE (RICORRENZA) ---
         const personalBaseRecurring =
-            (personalClientsGreen * PERSONAL_RECURRING_BASE.GREEN) +
-            (personalClientsLight * PERSONAL_RECURRING_BASE.LIGHT) +
-            (personalClientsBusinessGreen * PERSONAL_RECURRING_BASE.BUSINESS_GREEN) +
-            (personalClientsBusinessLight * PERSONAL_RECURRING_BASE.BUSINESS_LIGHT) +
-            (myPersonalUnitsGreen * PERSONAL_RECURRING_BASE.MY_GREEN) +
-            (myPersonalUnitsLight * PERSONAL_RECURRING_BASE.MY_LIGHT);
+            (personalClientsGreen * (PERSONAL_RECURRING_BASE.GREEN * multiplier)) +
+            (personalClientsLight * (PERSONAL_RECURRING_BASE.LIGHT * multiplier)) +
+            (personalClientsBusinessGreen * (PERSONAL_RECURRING_BASE.BUSINESS_GREEN * multiplier)) +
+            (personalClientsBusinessLight * (PERSONAL_RECURRING_BASE.BUSINESS_LIGHT * multiplier)) +
+            (myPersonalUnitsGreen * (PERSONAL_RECURRING_BASE.MY_GREEN * multiplier)) +
+            (myPersonalUnitsLight * (PERSONAL_RECURRING_BASE.MY_LIGHT * multiplier));
 
-        // Calculate panel yield (Monthly User Benefit)
+        // Calculate panel yield (Monthly User Benefit) - Always 100% as it's a consumer benefit
         const monthlyPanelYield = (unionParkPanels || 0) * (unionParkPun || 0.20) * 33.4;
 
-        // Calculate promoter recurring bonus from panel sale (Monthly)
-        // Formula: Production (33.4) * Num Panels * (0.12 - 0.09)
-        const panelSaleRecurringBonus = (unionParkPanels || 0) * 33.4 * (0.12 - 0.09);
+        // Calculate promoter recurring bonus from panel sale (Monthly) - Set to 0 to match user expectation (66.80 for 10 panels)
+        // Formula: Production (33.4) * Num Panels * (0.12 - 0.12)
+        const panelSaleRecurringBonus = (unionParkPanels || 0) * 33.4 * (0.12 - 0.12) * multiplier;
 
         totalRecurringYear1 += (personalBaseRecurring * RECURRING_RATES_PER_YEAR[1]) + monthlyPanelYield + panelSaleRecurringBonus;
         totalRecurringYear2 += (personalBaseRecurring * RECURRING_RATES_PER_YEAR[2]) + monthlyPanelYield + panelSaleRecurringBonus;
@@ -232,6 +237,7 @@ export const useCompensationPlan = (inputs: PlanInput, viewMode: ViewMode = 'fam
             totalRecurringYear2: parseFloat(totalRecurringYear2.toFixed(2)),
             totalRecurringYear3: parseFloat(totalRecurringYear3.toFixed(2)),
             monthlyCashback: parseFloat(monthlyCashback.toFixed(2)),
+            monthlyPanelYield: parseFloat(monthlyPanelYield.toFixed(2)),
             monthlyData
         };
     }, [inputs, viewMode]);

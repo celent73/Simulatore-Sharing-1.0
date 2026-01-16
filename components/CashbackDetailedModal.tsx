@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Calculator, RefreshCw, ShoppingBag, Car, ShoppingCart, Gift, Plane, Home, BookOpen, Coffee, Check, Trash2, PlusCircle, RotateCcw, Camera, Loader2 } from 'lucide-react';
+import { X, Calculator, RefreshCw, ShoppingBag, Car, ShoppingCart, Gift, Plane, Home, BookOpen, Coffee, Check, Trash2, PlusCircle, RotateCcw, RotateCw } from 'lucide-react';
 
 import { CashbackCategory } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
-import { analyzeBillImage, ExtractedBillData } from '../utils/aiService';
-import AIScannerModal from './AIScannerModal';
+
 
 interface CashbackDetailedModalProps {
     isOpen: boolean;
@@ -280,30 +279,40 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
     const lang = (language === 'de') ? 'de' : 'it';
     const txt = uiTexts[lang];
     const modalRef = useRef<HTMLDivElement>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [isScannerModalOpen, setIsScannerModalOpen] = useState(false);
+
 
 
     const defaultCategories: CashbackCategory[] = [
-        { id: 'alim', name: txt.cat.alim, amount: 0, brand: '', percentage: 0, icon: 'ShoppingBag' },
-        { id: 'igiene', name: txt.cat.igiene, amount: 0, brand: '', percentage: 0, icon: 'ShoppingCart' },
-        { id: 'carb', name: txt.cat.carb, amount: 0, brand: '', percentage: 0, icon: 'Car' },
-        { id: 'tech', name: txt.cat.tech, amount: 0, brand: '', percentage: 0, icon: 'Calculator' },
-        { id: 'treni', name: txt.cat.treni, amount: 0, brand: '', percentage: 0, icon: 'Plane' },
-        { id: 'school', name: txt.cat.school, amount: 0, brand: '', percentage: 0, icon: 'BookOpen' },
-        { id: 'abb', name: txt.cat.abb, amount: 0, brand: '', percentage: 0, icon: 'Gift' },
-        { id: 'casa', name: txt.cat.casa, amount: 0, brand: '', percentage: 0, icon: 'Home' },
-        { id: 'regali', name: txt.cat.regali, amount: 0, brand: '', percentage: 0, icon: 'Gift' },
-        { id: 'aff_int', name: txt.cat.aff_int, amount: 0, brand: '', percentage: 0, icon: 'ShoppingBag' },
+        { id: 'alim_1', name: txt.cat.alim, amount: 0, brand: '', percentage: 0, icon: 'ShoppingBag' },
+        { id: 'alim_2', name: txt.cat.alim, amount: 0, brand: '', percentage: 0, icon: 'ShoppingBag' },
+        { id: 'igiene_1', name: txt.cat.igiene, amount: 0, brand: '', percentage: 0, icon: 'ShoppingCart' },
+        { id: 'igiene_2', name: txt.cat.igiene, amount: 0, brand: '', percentage: 0, icon: 'ShoppingCart' },
+        { id: 'carb_1', name: txt.cat.carb, amount: 0, brand: '', percentage: 0, icon: 'Car' },
+        { id: 'carb_2', name: txt.cat.carb, amount: 0, brand: '', percentage: 0, icon: 'Car' },
+        { id: 'tech_1', name: txt.cat.tech, amount: 0, brand: '', percentage: 0, icon: 'Calculator' },
+        { id: 'tech_2', name: txt.cat.tech, amount: 0, brand: '', percentage: 0, icon: 'Calculator' },
+        { id: 'treni_1', name: txt.cat.treni, amount: 0, brand: '', percentage: 0, icon: 'Plane' },
+        { id: 'treni_2', name: txt.cat.treni, amount: 0, brand: '', percentage: 0, icon: 'Plane' },
+        { id: 'school_1', name: txt.cat.school, amount: 0, brand: '', percentage: 0, icon: 'BookOpen' },
+        { id: 'school_2', name: txt.cat.school, amount: 0, brand: '', percentage: 0, icon: 'BookOpen' },
+        { id: 'abb_1', name: txt.cat.abb, amount: 0, brand: '', percentage: 0, icon: 'Gift' },
+        { id: 'abb_2', name: txt.cat.abb, amount: 0, brand: '', percentage: 0, icon: 'Gift' },
+        { id: 'casa_1', name: txt.cat.casa, amount: 0, brand: '', percentage: 0, icon: 'Home' },
+        { id: 'casa_2', name: txt.cat.casa, amount: 0, brand: '', percentage: 0, icon: 'Home' },
+        { id: 'regali_1', name: txt.cat.regali, amount: 0, brand: '', percentage: 0, icon: 'Gift' },
+        { id: 'regali_2', name: txt.cat.regali, amount: 0, brand: '', percentage: 0, icon: 'Gift' },
+        { id: 'aff_int_1', name: txt.cat.aff_int, amount: 0, brand: '', percentage: 0, icon: 'ShoppingBag' },
+        { id: 'aff_int_2', name: txt.cat.aff_int, amount: 0, brand: '', percentage: 0, icon: 'ShoppingBag' },
     ];
 
     const [categories, setCategories] = useState<CashbackCategory[]>(defaultCategories);
-    const [targetBill, setTargetBill] = useState<number>(80);
+    const [targetBill, setTargetBill] = useState<number>(0);
 
     // Update categories when language changes
     useEffect(() => {
         setCategories(prev => prev.map(cat => {
-            const defKey = Object.keys(txt.cat).find(k => k === cat.id) as keyof typeof txt.cat | undefined;
+            const baseId = cat.id.replace(/_\d+$/, '');
+            const defKey = Object.keys(txt.cat).find(k => k === baseId) as keyof typeof txt.cat | undefined;
             if (defKey) {
                 return { ...cat, name: txt.cat[defKey] };
             }
@@ -312,8 +321,14 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
     }, [lang]);
 
     useEffect(() => {
-        if (initialDetails && initialDetails.length > 0) {
-            // Map existing saved details
+        if (isOpen) {
+            handleReset();
+        }
+    }, [isOpen]);
+
+    useEffect(() => {
+        if (initialDetails && initialDetails.length > 0 && !isOpen) {
+            // Map existing saved details only if modal is NOT being opened fresh
             const initialMap = new Map(initialDetails.map(d => [d.id, d]));
 
             // Iterate over ALL default fixed categories
@@ -355,77 +370,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
         }));
     };
 
-    const handleScanClick = () => {
-        fileInputRef.current?.click();
-    };
 
-    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (!file) return;
-
-        setIsScanning(true);
-        try {
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                const base64 = e.target?.result as string;
-                if (base64) {
-                    const extracted = await analyzeBillImage(base64);
-                    if (extracted) {
-                        const electricityTotal = extracted.electricity?.totalAmount || 0;
-                        const gasTotal = extracted.gas?.totalAmount || 0;
-                        let total = 0;
-
-                        if (electricityTotal > 0 || gasTotal > 0) {
-                            setTargetBill(Math.round(electricityTotal + gasTotal));
-                        } else if (extracted.electricity?.consumption && (extracted.electricity?.pun || extracted.electricity?.spread)) {
-                            total += ((extracted.electricity.pun || 0) + (extracted.electricity.spread || 0)) * extracted.electricity.consumption + (extracted.electricity.fixedCosts || 0);
-                        } else if (extracted.gas?.consumption && (extracted.gas?.psv || extracted.gas?.spread)) {
-                            total += ((extracted.gas.psv || 0) + (extracted.gas.spread || 0)) * extracted.gas.consumption + (extracted.gas.fixedCosts || 0);
-                        }
-
-                        // If technical extraction failed to compute a total, we could rely on a "totalAmount" field
-                        // but for now let's just use what we have or inform the user.
-                        if (total > 0) {
-                            setTargetBill(Math.round(total));
-                        } else {
-                            // Fallback: search for a generic total in the image if technical fields aren't enough
-                            // I should probably update aiService to also return a generic totalAmount.
-                            alert("Dati estratti, ma non è stato possibile calcolare il totale esatto. Inseriscilo manualmente.");
-                        }
-                    } else {
-                        alert("Non è stato possibile estrarre i dati. \n\nPossibili motivi:\n1. API Key mancante o non caricata (serve riavvio npm run dev)\n2. Il file è un PDF protetto da password o illeggibile.");
-                    }
-                }
-                setIsScanning(false);
-            };
-            reader.readAsDataURL(file);
-        } catch (error) {
-            console.error("Scan error:", error);
-            setIsScanning(false);
-        }
-    };
-
-
-
-    const handleScanResult = (extracted: ExtractedBillData) => {
-        const electricityTotal = extracted.electricity?.totalAmount || 0;
-        const gasTotal = extracted.gas?.totalAmount || 0;
-        let total = 0;
-
-        if (electricityTotal > 0 || gasTotal > 0) {
-            setTargetBill(Math.round(electricityTotal + gasTotal));
-        } else if (extracted.electricity?.consumption && (extracted.electricity?.pun || extracted.electricity?.spread)) {
-            total += ((extracted.electricity.pun || 0) + (extracted.electricity.spread || 0)) * extracted.electricity.consumption + (extracted.electricity.fixedCosts || 0);
-        } else if (extracted.gas?.consumption && (extracted.gas?.psv || extracted.gas?.spread)) {
-            total += ((extracted.gas.psv || 0) + (extracted.gas.spread || 0)) * extracted.gas.consumption + (extracted.gas.fixedCosts || 0);
-        }
-
-        if (total > 0) {
-            setTargetBill(Math.round(total));
-        } else if (!(electricityTotal > 0 || gasTotal > 0)) {
-            alert("Dati estratti, ma non è stato possibile calcolare il totale. Inseriscilo manualmente.");
-        }
-    };
 
     const handleReset = () => {
         setCategories(categories.map(cat => ({ ...cat, amount: 0, brand: '', percentage: 0, fixedAmount: undefined })));
@@ -455,7 +400,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
 
     return (
         <div ref={modalRef} className="fixed inset-0 z-[60] flex items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
-            <div className="share-modal-content bg-white dark:bg-gray-900 w-full h-full sm:h-auto sm:max-w-2xl sm:rounded-[2rem] shadow-2xl flex flex-col max-h-[100vh] sm:max-h-[95vh] overflow-hidden border border-purple-500/20">
+            <div className="share-modal-content bg-white dark:bg-gray-900 w-full h-full sm:h-auto sm:max-w-7xl sm:rounded-[2rem] shadow-2xl flex flex-col max-h-[100vh] sm:max-h-[95vh] overflow-hidden border border-purple-500/20">
 
                 {/* Header */}
                 <div className="p-3 sm:p-4 bg-gradient-to-br from-purple-700 via-purple-600 to-blue-700 text-white shrink-0 relative overflow-hidden">
@@ -465,10 +410,10 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
 
                     <div className="flex justify-between items-center mb-2 sm:mb-3 relative z-10">
                         <div className="flex items-center gap-2">
-                            <div className="p-1 sm:p-1.5 bg-white/20 rounded-xl backdrop-blur-md">
-                                <ShoppingBag size={18} className="text-purple-100 sm:w-4 sm:h-4" />
+                            <div className="p-1 sm:p-2 bg-white/20 rounded-xl backdrop-blur-md">
+                                <ShoppingBag size={18} className="text-purple-100 sm:w-6 sm:h-6" />
                             </div>
-                            <h2 className="text-lg sm:text-xl font-black tracking-tight uppercase">
+                            <h2 className="text-lg sm:text-3xl font-black tracking-tight uppercase">
                                 {txt.title}
                             </h2>
                         </div>
@@ -478,16 +423,16 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 sm:gap-3 mt-1 sm:mt-2 relative z-10">
-                        <div className="bg-white/10 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2 sm:p-3 flex-1 border border-white/20 shadow-lg">
-                            <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-purple-200/70 mb-0.5">{txt.totalSpend}</p>
+                        <div className="bg-white/10 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2 sm:p-5 flex-1 border border-white/20 shadow-lg">
+                            <p className="text-[8px] sm:text-xs font-bold uppercase tracking-widest text-purple-200/70 mb-0.5">{txt.totalSpend}</p>
                             <div className="flex items-end justify-between">
-                                <p className="text-lg sm:text-xl font-black tracking-tighter">€ {totalSpend.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE')}</p>
+                                <p className="text-lg sm:text-4xl font-black tracking-tighter">€ {totalSpend.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 2 })}</p>
                             </div>
                         </div>
-                        <div className="bg-white text-gray-900 rounded-xl sm:rounded-2xl p-2 sm:p-3 flex-1 shadow-2xl shadow-purple-900/40 border border-white/50">
-                            <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-purple-600 mb-0.5">{txt.monthlyReturn}</p>
+                        <div className="bg-white text-gray-900 rounded-xl sm:rounded-2xl p-2 sm:p-5 flex-1 shadow-2xl shadow-purple-900/40 border border-white/50">
+                            <p className="text-[8px] sm:text-xs font-bold uppercase tracking-widest text-purple-600 mb-0.5">{txt.monthlyReturn}</p>
                             <div className="flex items-end justify-between">
-                                <p className="text-lg sm:text-xl font-black tracking-tighter text-purple-900">€ {totalCashback.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                <p className="text-lg sm:text-4xl font-black tracking-tighter text-purple-900">€ {totalCashback.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                             </div>
                         </div>
                     </div>
@@ -497,19 +442,19 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                         <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:mb-3">
                             <div className="flex-1 w-full sm:w-auto">
                                 <div className="flex items-center justify-between sm:block">
-                                    <p className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.1em] text-purple-200">{txt.estimatedBill}</p>
-                                    <div className="flex items-center gap-2 sm:mt-1 bg-white/10 hover:bg-white/20 focus-within:bg-white/20 focus-within:ring-2 focus-within:ring-white/30 px-3 py-1.5 rounded-xl border border-white/20 transition-all cursor-text group/input" onClick={(e) => {
+                                    <p className="text-[8px] sm:text-xs font-black uppercase tracking-[0.1em] text-purple-200">{txt.estimatedBill}</p>
+                                    <div className="flex items-center gap-2 sm:mt-2 bg-white/10 hover:bg-white/20 focus-within:bg-white/20 focus-within:ring-2 focus-within:ring-white/30 px-3 py-1.5 sm:py-3 rounded-xl border border-white/20 transition-all cursor-text group/input" onClick={(e) => {
                                         const input = e.currentTarget.querySelector('input');
                                         if (input) input.focus();
                                     }}>
-                                        <span className="text-white font-black text-xs sm:text-xl">€</span>
+                                        <span className="text-white font-black text-xs sm:text-2xl">€</span>
                                         <input
                                             type="number"
                                             value={targetBill || ''}
                                             onChange={(e) => setTargetBill(Math.max(0, parseFloat(e.target.value) || 0))}
                                             onFocus={(e) => e.target.select()}
                                             placeholder="0"
-                                            className="w-16 sm:w-28 font-black text-sm sm:text-3xl text-white bg-transparent outline-none p-0 placeholder:text-white/20 transition-all"
+                                            className="w-16 sm:w-40 font-black text-sm sm:text-4xl text-white bg-transparent outline-none p-0 placeholder:text-white/20 transition-all"
                                         />
                                         <div className="p-1 rounded-lg bg-white/10 text-white/40 group-hover/input:text-white/70 transition-colors">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4">
@@ -517,22 +462,15 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                             </svg>
                                         </div>
                                     </div>
-                                    <button
-                                        onClick={() => setIsScannerModalOpen(true)}
-                                        className="mt-2 flex items-center justify-center gap-2 w-full py-2 rounded-xl border border-white/20 transition-all font-bold text-[10px] uppercase bg-white/10 hover:bg-white/20"
-                                    >
-                                        <Camera size={12} />
-                                        Scansiona Bolletta
-                                    </button>
                                 </div>
                             </div>
                             <div className="text-right flex-1 w-full sm:w-auto">
                                 <div className="bg-white/10 rounded-xl p-2 border border-white/10 backdrop-blur-md">
                                     <div className="flex justify-between sm:justify-end items-center sm:items-baseline gap-2">
-                                        <p className="text-[8px] sm:text-[9px] font-bold text-purple-200 uppercase">{txt.payOnly}</p>
-                                        <p className="font-black text-sm sm:text-xl text-white">€{remainingToPay.toFixed(0)}</p>
+                                        <p className="text-[8px] sm:text-xs font-bold text-purple-200 uppercase">{txt.payOnly}</p>
+                                        <p className="font-black text-sm sm:text-4xl text-white">€{remainingToPay.toFixed(0)}</p>
                                     </div>
-                                    <p className="text-[7px] sm:text-[8px] font-bold text-purple-200 text-right opacity-80">
+                                    <p className="text-[7px] sm:text-xs font-bold text-purple-200 text-right opacity-80">
                                         Risparmi <span className="text-white">€{totalCashback.toFixed(0)}</span>
                                     </p>
                                 </div>
@@ -561,8 +499,8 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                             {React.cloneElement(getIcon(cat.icon), { size: 20, className: "sm:w-6 sm:h-6" })}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h3 className="font-black text-sm sm:text-base text-gray-900 dark:text-white truncate uppercase sm:normal-case tracking-tight">{cat.name}</h3>
-                                            <p className="hidden sm:block text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{cat.isExtra ? 'Promozione' : 'Budget Famiglia'}</p>
+                                            <h3 className="font-black text-sm sm:text-xl text-gray-900 dark:text-white truncate uppercase sm:normal-case tracking-tight">{cat.name}</h3>
+                                            <p className="hidden sm:block text-[9px] sm:text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{cat.isExtra ? 'Promozione' : 'Budget Famiglia'}</p>
                                         </div>
                                     </div>
 
@@ -579,27 +517,30 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
 
                                     {/* Amount Input */}
                                     <div className="col-span-4 sm:flex-1 relative">
-                                        <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[10px] sm:text-xs">€</div>
+                                        <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[10px] sm:text-base">€</div>
                                         <input
                                             type="number"
                                             value={cat.amount || ''}
                                             onChange={(e) => handleUpdate(cat.id, 'amount', parseFloat(e.target.value) || 0)}
                                             onFocus={(e) => e.target.select()}
                                             placeholder="0"
-                                            className="w-full pl-5 pr-1 py-2 sm:py-2.5 bg-gray-50 dark:bg-gray-800/80 rounded-lg text-right font-black text-xs sm:text-sm text-gray-900 dark:text-white border border-gray-100 dark:border-white/10 outline-none transition-all shadow-inner"
+                                            className="w-full pl-5 pr-1 py-2 sm:py-4 bg-gray-50 dark:bg-gray-800/80 rounded-lg text-right font-black text-xs sm:text-xl text-gray-900 dark:text-white border border-gray-100 dark:border-white/10 outline-none transition-all shadow-inner"
                                         />
                                     </div>
 
                                     {/* Brand Dropdown */}
-                                    <div className="col-span-4 sm:flex-[1.5] relative">
+                                    <div className="col-span-4 sm:flex-[1.8] relative">
                                         <select
                                             value={cat.brand}
                                             onChange={(e) => handleUpdate(cat.id, 'brand', e.target.value)}
-                                            className="w-full py-2 sm:py-2.5 px-1 sm:px-2 appearance-none bg-gray-50 dark:bg-gray-800/80 rounded-lg text-[8px] sm:text-[10px] font-black text-gray-600 dark:text-gray-200 tracking-wide uppercase border border-gray-100 dark:border-white/10 outline-none cursor-pointer text-center truncate shadow-inner"
+                                            className="w-full py-2 sm:py-4 px-1 sm:px-4 appearance-none bg-gray-50 dark:bg-gray-800/80 rounded-lg text-[8px] sm:text-sm font-black text-gray-600 dark:text-gray-200 tracking-wide uppercase border border-gray-100 dark:border-white/10 outline-none cursor-pointer text-center truncate shadow-inner"
                                         >
                                             <option value="">{txt.selectBrand}</option>
                                             {BRANDS_DATA
-                                                .filter(brand => brand.categories && brand.categories.includes(cat.id))
+                                                .filter(brand => {
+                                                    const baseId = cat.id.replace(/_\d+$/, '');
+                                                    return brand.categories && brand.categories.includes(baseId);
+                                                })
                                                 .map(brand => (
                                                     <option key={brand.name} value={brand.name}>{brand.name}</option>
                                                 ))
@@ -608,9 +549,9 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                     </div>
 
                                     {/* Percentage Input */}
-                                    <div className="col-span-4 sm:flex-[0.8] relative">
+                                    <div className="col-span-4 sm:flex-[1] relative">
                                         {cat.fixedAmount !== undefined ? (
-                                            <div className="w-full py-2 text-right font-black text-xs sm:text-sm text-purple-600 dark:text-purple-400">
+                                            <div className="w-full py-2 sm:py-4 text-right font-black text-xs sm:text-xl text-purple-600 dark:text-purple-400">
                                                 €{cat.fixedAmount.toFixed(0)}
                                             </div>
                                         ) : (
@@ -621,17 +562,17 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                                     onChange={(e) => handleUpdate(cat.id, 'percentage', parseFloat(e.target.value) || 0)}
                                                     onFocus={(e) => e.target.select()}
                                                     placeholder="0"
-                                                    className="w-full pr-4 sm:pr-5 py-2 sm:py-2.5 bg-transparent text-right font-black text-xs sm:text-sm text-purple-600 dark:text-purple-400 border-b border-purple-100 dark:border-purple-900/50 outline-none"
+                                                    className="w-full pr-4 sm:pr-8 py-2 sm:py-4 bg-transparent text-right font-black text-xs sm:text-xl text-purple-600 dark:text-purple-400 border-b border-purple-100 dark:border-purple-900/50 outline-none"
                                                     step="0.1"
                                                 />
-                                                <span className="absolute right-0 top-1/2 -translate-y-1/2 text-[10px] sm:text-xs text-purple-400 font-bold pointer-events-none">%</span>
+                                                <span className="absolute right-0 top-1/2 -translate-y-1/2 text-[10px] sm:text-base text-purple-400 font-bold pointer-events-none">%</span>
                                             </div>
                                         )}
                                     </div>
 
                                     {/* Desktop Result (Visible sm only) */}
-                                    <div className="hidden sm:block sm:w-20 text-right shrink-0">
-                                        <p className="font-black text-lg text-gray-900 dark:text-white truncate">
+                                    <div className="hidden sm:block sm:w-32 text-right shrink-0">
+                                        <p className="font-black text-lg sm:text-2xl text-gray-900 dark:text-white truncate">
                                             € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 0 })}
                                         </p>
                                     </div>
@@ -653,19 +594,14 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
 
                     <button
                         onClick={() => onConfirm(totalSpend, totalCashback, categories)}
-                        className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-black py-4 rounded-xl sm:rounded-2xl shadow-xl hover:shadow-purple-500/40 active:scale-[0.98] transition-all text-xs sm:text-sm uppercase tracking-widest flex items-center justify-center gap-2"
+                        className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-black py-4 sm:py-6 rounded-xl sm:rounded-2xl shadow-xl hover:shadow-purple-500/40 active:scale-[0.98] transition-all text-xs sm:text-xl uppercase tracking-widest flex items-center justify-center gap-2"
                     >
                         {txt.confirm}
-                        <Check size={18} />
+                        <Check size={18} className="sm:w-6 sm:h-6" />
                     </button>
                 </div>
             </div >
 
-            <AIScannerModal
-                isOpen={isScannerModalOpen}
-                onClose={() => setIsScannerModalOpen(false)}
-                onConfirm={handleScanResult}
-            />
         </div >
     );
 };
