@@ -449,29 +449,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
 
           <div className="flex-grow overflow-y-auto pr-1 custom-scrollbar space-y-4">
 
-            {/* BUTTON ANALISI UTENZE (SOLO CLIENT MODE) */}
-            {viewMode === 'client' && (
-              <button onClick={() => setModalOpen('analisi')} className="w-full flex items-center justify-between p-5 rounded-[2rem] bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-800 text-white shadow-xl shadow-indigo-500/30 border border-white/20 hover:scale-[1.02] active:scale-95 transition-all group shrink-0 relative overflow-hidden mb-2">
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
 
-                <div className="flex items-center gap-5 relative z-10">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md text-white shadow-inner border border-white/20 group-hover:rotate-12 transition-transform duration-500">
-                    <Calculator size={26} strokeWidth={2.5} />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-200 mb-0.5">{t('analysis_btn.premium')}</p>
-                    <p className="text-xl font-black text-white leading-tight drop-shadow-sm">{t('analysis_btn.title')}</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <span className="text-xs font-bold text-white/90 bg-white/20 px-2 py-0.5 rounded-md backdrop-blur-sm">{t('analysis_btn.subtitle')}</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/20 group-hover:bg-white group-hover:text-indigo-600 transition-colors shadow-lg relative z-10">
-                  <ChevronRight size={20} strokeWidth={3} />
-                </div>
-              </button>
-            )}
 
 
             {/* BUTTON ANALISI UTENZE (SOLO CLIENT MODE) */}
