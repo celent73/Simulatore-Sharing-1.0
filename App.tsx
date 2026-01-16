@@ -364,18 +364,10 @@ const AppContent = () => {
                 </h1>
                 {isCreatorMode && <span className="hidden sm:inline-flex bg-white/20 backdrop-blur-md text-white border border-white/40 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm uppercase tracking-wider">Creator Mode</span>}
                 {viewMode === 'client' && (
-                  <span className="inline-flex items-center gap-1.5 bg-purple-100/90 text-purple-700 border border-purple-200 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-purple-500/20 uppercase tracking-wider ml-1 sm:ml-2 animate-in fade-in zoom-in duration-300">
-                    <Gem size={14} className="text-purple-600" />
-                    <span className="hidden sm:inline">{t('app.client_priv')}</span>
-                    <span className="sm:hidden">{t('app.client_priv_short')}</span>
-                  </span>
+                  <img src="/logo_header.png" alt="Logo Cliente" className="h-14 w-auto ml-2 object-contain animate-in fade-in zoom-in duration-300" />
                 )}
                 {viewMode === 'condo' && (
-                  <span className="inline-flex items-center gap-1.5 bg-emerald-100/90 text-emerald-700 border border-emerald-200 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-emerald-500/20 uppercase tracking-wider ml-1 sm:ml-2 animate-in fade-in zoom-in duration-300">
-                    <Building2 size={14} className="text-emerald-600" />
-                    <span className="hidden sm:inline">{t('app.admin_condo')}</span>
-                    <span className="sm:hidden">{t('app.admin_condo_short')}</span>
-                  </span>
+                  <img src="/logo_condominio.png" alt="Logo Amministratore" className="h-14 w-auto ml-2 object-contain animate-in fade-in zoom-in duration-300" />
                 )}
               </div>
             </div>
