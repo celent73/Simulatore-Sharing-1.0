@@ -12,7 +12,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     const { t } = useLanguage();
     if (active && payload && payload.length) {
         const data = payload[0].payload;
-        const formatCurrency = (value: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
+        const formatCurrency = (value: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
 
         return (
             <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md p-4 rounded-xl shadow-xl border border-white/30 dark:border-gray-600">

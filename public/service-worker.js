@@ -1,4 +1,4 @@
-const CACHE_NAME = 'union-sim-final-v1.1.0-visual-fix';
+const CACHE_NAME = 'union-sim-final-v1.1.1-ai-fallback-fix';
 const urlsToCache = [
   '/',
   '/index.html',

@@ -77,6 +77,7 @@ export interface CompensationPlanResult {
   totalRecurringYear3: number;
   monthlyData: MonthlyGrowthData[];
   monthlyCashback: number;
+  monthlyPanelYield: number;
 }
 
 export interface CondoSimulationResult {
