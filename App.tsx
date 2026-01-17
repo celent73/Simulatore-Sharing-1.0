@@ -364,7 +364,7 @@ const AppContent = () => {
                 </h1>
                 {isCreatorMode && <span className="hidden sm:inline-flex bg-white/20 backdrop-blur-md text-white border border-white/40 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm uppercase tracking-wider">Creator Mode</span>}
                 {viewMode !== 'family' && (
-                  <img src="/logo_sharing.png" alt="Sharing Logo" className="h-16 w-16 sm:h-24 sm:w-24 object-contain ml-2 drop-shadow-lg animate-in fade-in zoom-in duration-300" />
+                  <img src="/logo_sharing.png" alt="Sharing Logo" className="h-20 w-20 sm:h-32 sm:w-32 object-contain ml-2 drop-shadow-lg animate-in fade-in zoom-in duration-300" />
                 )}
               </div>
             </div>
