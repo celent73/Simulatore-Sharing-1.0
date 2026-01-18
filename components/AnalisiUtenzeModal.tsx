@@ -297,10 +297,10 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
-            <div ref={modalRef} className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl w-full max-w-2xl overflow-hidden relative animate-in zoom-in-95 duration-300 border border-white/20 dark:border-gray-700 flex flex-col max-h-[90vh]">
+            <div ref={modalRef} className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl w-full md:max-w-4xl max-w-2xl overflow-hidden relative animate-in zoom-in-95 duration-300 border border-white/20 dark:border-gray-700 flex flex-col max-h-[90vh]">
 
                 {/* Header WOW */}
-                <div className="relative overflow-hidden p-3 pb-3 md:p-8 md:pb-10 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 text-white shrink-0">
+                <div className="relative overflow-hidden p-3 pb-3 md:p-6 md:pb-6 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 text-white shrink-0">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                     <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/30 rounded-full blur-2xl translate-y-1/3 -translate-x-1/3"></div>
 
