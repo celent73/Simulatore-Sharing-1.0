@@ -29,6 +29,23 @@ export interface PlanInput {
   unionParkPanels?: number; // New field for Union Park panels
   unionParkPun?: number; // New field for Union Park PUN
   unionParkDuration?: number; // New field for Union Park duration
+  // Analisi Utenze Fields
+  electricityPrice?: number;
+  punValue?: number;
+  electricityConsumption?: number;
+  electricityFixed?: number;
+  gasPrice?: number;
+  psvValue?: number;
+  gasConsumption?: number;
+  gasFixed?: number;
+  includeSpread?: boolean;
+  isComparisonMode?: boolean;
+  otherElecSpread?: number;
+  otherGasSpread?: number;
+  otherElecFixed?: number;
+  otherGasFixed?: number;
+  otherSupplierName?: string;
+  includeEarningsInAnalysis?: boolean;
 }
 
 export interface CondoInput {

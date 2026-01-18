@@ -449,6 +449,7 @@ const AppContent = () => {
                 canRedo={canRedo}
                 cashbackPeriod={cashbackPeriod}
                 setCashbackPeriod={setCashbackPeriod}
+                planResult={planResult}
               />
             )}
           </div>

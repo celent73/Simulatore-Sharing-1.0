@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PlanInput, ViewMode } from '../types';
+import { PlanInput, ViewMode, CompensationPlanResult } from '../types';
 import {
   ShoppingBag,
   Briefcase,
@@ -46,6 +46,7 @@ interface InputPanelProps {
   canRedo: boolean;
   cashbackPeriod: 'monthly' | 'annual';
   setCashbackPeriod: React.Dispatch<React.SetStateAction<'monthly' | 'annual'>>;
+  planResult: CompensationPlanResult;
 }
 
 const uiTexts = {
@@ -360,7 +361,8 @@ const InputPanel: React.FC<InputPanelProps> = ({
   canUndo,
   canRedo,
   cashbackPeriod,
-  setCashbackPeriod
+  setCashbackPeriod,
+  planResult
 }) => {
   const { t, language } = useLanguage();
   const [modalOpen, setModalOpen] = useState<'none' | 'cashback' | 'cashback-detailed' | 'personal' | 'visualizer' | 'analisi'>('none');
@@ -606,6 +608,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
         inputs={inputs}
         period={cashbackPeriod}
         onInputChange={onInputChange}
+        planResult={planResult}
       />
     </>
   );
