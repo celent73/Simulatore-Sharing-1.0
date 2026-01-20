@@ -119,32 +119,48 @@ const AppContent = () => {
 
   // --- FUNZIONE DI VERIFICA REALE (CONTEGGIO DISPOSITIVI) ---
   const verifyLicenseStatus = async (inputCode: string, shouldIncrement: boolean = false) => {
-    // Rimuove TUTTI gli spazi, caratteri invisibili e lo rende maiuscolo
+    // Rimuove spazi e caratteri invisibili
     let cleanCode = inputCode.replace(/\s+/g, '').replace(/[\u200B-\u200D\uFEFF]/g, '').toUpperCase();
 
     try {
-      // 1. TENTA RICERCA (ilike ignora maiuscole/minuscole nel DB)
+      // 1. TENTA RICERCA NORMALE
       let { data: licenses, error } = await supabase
         .from('licenses')
         .select('*')
         .ilike('code', cleanCode);
 
-      // 2. SE FALLISCE E MANCANO I TRATTINI, PROVA A FORMATTARE (es. AAAABBBBCCCC -> AAAA-BBBB-CCCC)
-      if ((!licenses || licenses.length === 0) && !cleanCode.includes('-') && cleanCode.length === 12) {
-        const formatted = `${cleanCode.slice(0, 4)}-${cleanCode.slice(4, 8)}-${cleanCode.slice(8, 12)}`;
+      // 2. SE FALLISCE, PROVA A RIMUOVERE I TRATTINI (es. AAAA-BBBB -> AAAABBBB)
+      if ((!licenses || licenses.length === 0) && cleanCode.includes('-')) {
+        const noDashes = cleanCode.replace(/-/g, '');
         const { data: retryData } = await supabase
           .from('licenses')
           .select('*')
-          .ilike('code', formatted);
+          .ilike('code', noDashes);
         if (retryData && retryData.length > 0) {
           licenses = retryData;
+          cleanCode = noDashes;
+        }
+      }
+
+      // 3. SE FALLISCE E MANCANO I TRATTINI (LUNGHEZZA 12), PROVA A FORMATTARE (es. AAAABBBBCCCC -> AAAA-BBBB-CCCC)
+      if ((!licenses || licenses.length === 0) && !cleanCode.includes('-') && cleanCode.length === 12) {
+        const formatted = `${cleanCode.slice(0, 4)}-${cleanCode.slice(4, 8)}-${cleanCode.slice(8, 12)}`;
+        const { data: retryData2 } = await supabase
+          .from('licenses')
+          .select('*')
+          .ilike('code', formatted);
+        if (retryData2 && retryData2.length > 0) {
+          licenses = retryData2;
           cleanCode = formatted;
         }
       }
 
-      if (error || !licenses || licenses.length === 0) {
-        console.error("Licenza non trovata per:", cleanCode, error);
-        return { valid: false, error: 'Codice non valido o scaduto.' };
+      if (error) {
+        return { valid: false, error: `Errore Database: ${error.message}` };
+      }
+
+      if (!licenses || licenses.length === 0) {
+        return { valid: false, error: `Il codice "${cleanCode}" non esiste a sistema.` };
       }
 
       const data = licenses[0];
