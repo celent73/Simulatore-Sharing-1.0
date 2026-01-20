@@ -43,9 +43,26 @@ import DisclaimerModal from './components/DisclaimerModal';
 import PaymentSuccessModal from './components/PaymentSuccessModal';
 
 const initialInputs: PlanInput = {
-  directRecruits: 0, contractsPerUser: 0, indirectRecruits: 0, networkDepth: 1, realizationTimeMonths: 12,
-  personalClientsGreen: 0, personalClientsLight: 0, personalClientsBusinessGreen: 0, personalClientsBusinessLight: 0,
-  myPersonalUnitsGreen: 0, myPersonalUnitsLight: 0, cashbackSpending: 0, cashbackPercentage: 0
+  directRecruits: 0,
+  contractsPerUser: 0,
+  indirectRecruits: 0,
+  networkDepth: 1,
+  realizationTimeMonths: 12,
+  personalClientsGreen: 0,
+  personalClientsLight: 0,
+  personalClientsBusinessGreen: 0,
+  personalClientsBusinessLight: 0,
+  myPersonalUnitsGreen: 0,
+  myPersonalUnitsLight: 0,
+  cashbackSpending: 0,
+  cashbackPercentage: 0,
+  unionParkPanels: 0,
+  electricityPrice: 0,
+  electricityConsumption: 0,
+  electricityFixed: 0,
+  gasPrice: 0,
+  gasConsumption: 0,
+  gasFixed: 0
 };
 const initialCondoInputs: CondoInput = {
   greenUnits: 0,
@@ -68,7 +85,6 @@ const AppContent = () => {
   const [canInstall, setCanInstall] = useState(false); // New state to track if install is possible
   const [isTrialExpired, setIsTrialExpired] = useState(false);
   const [secretClickCount, setSecretClickCount] = useState(0);
-  const [isPremiumUnlocked, setIsPremiumUnlocked] = useState(false);
 
   const [showLegalModal, setShowLegalModal] = useState(false);
   const [legalDocType, setLegalDocType] = useState<'privacy' | 'terms' | 'cookie' | 'none'>('none');
@@ -124,7 +140,7 @@ const AppContent = () => {
 
     try {
       // 1. TENTA RICERCA NORMALE
-      let { data: licenses, error } = await supabase
+      let { data: licenses, error: dbError } = await supabase
         .from('licenses')
         .select('*')
         .ilike('code', cleanCode);
@@ -132,35 +148,47 @@ const AppContent = () => {
       // 2. SE FALLISCE, PROVA A RIMUOVERE I TRATTINI (es. AAAA-BBBB -> AAAABBBB)
       if ((!licenses || licenses.length === 0) && cleanCode.includes('-')) {
         const noDashes = cleanCode.replace(/-/g, '');
-        const { data: retryData } = await supabase
+        const { data: retryData, error: retryError } = await supabase
           .from('licenses')
           .select('*')
           .ilike('code', noDashes);
+
         if (retryData && retryData.length > 0) {
           licenses = retryData;
           cleanCode = noDashes;
+          dbError = null; // Reset error since retry succeeded
+        } else if (retryError) {
+          dbError = retryError;
         }
       }
 
       // 3. SE FALLISCE E MANCANO I TRATTINI (LUNGHEZZA 12), PROVA A FORMATTARE (es. AAAABBBBCCCC -> AAAA-BBBB-CCCC)
       if ((!licenses || licenses.length === 0) && !cleanCode.includes('-') && cleanCode.length === 12) {
         const formatted = `${cleanCode.slice(0, 4)}-${cleanCode.slice(4, 8)}-${cleanCode.slice(8, 12)}`;
-        const { data: retryData2 } = await supabase
+        const { data: retryData2, error: retryError2 } = await supabase
           .from('licenses')
           .select('*')
           .ilike('code', formatted);
+
         if (retryData2 && retryData2.length > 0) {
           licenses = retryData2;
           cleanCode = formatted;
+          dbError = null; // Reset error since retry succeeded
+        } else if (retryError2) {
+          dbError = retryError2;
         }
       }
 
-      if (error) {
-        return { valid: false, error: `Errore Database: ${error.message}` };
+      if (dbError) {
+        // Se è un errore di rete/connessione (non trovato o timeout)
+        const isConnectionError = dbError.message?.toLowerCase().includes('fetch') ||
+          dbError.message?.toLowerCase().includes('network') ||
+          dbError.code === 'PGRST301'; // Ad esempio
+        return { valid: false, error: `Errore Database: ${dbError.message}`, isNetworkError: isConnectionError };
       }
 
       if (!licenses || licenses.length === 0) {
-        return { valid: false, error: `Il codice "${cleanCode}" non esiste a sistema.` };
+        return { valid: false, error: `Il codice "${cleanCode}" non esiste a sistema.`, isNetworkError: false };
       }
 
       const data = licenses[0];
@@ -168,11 +196,11 @@ const AppContent = () => {
       const maxUses = data.max_uses || 3;
 
       if (shouldIncrement && currentUses >= maxUses) {
-        return { valid: false, error: `Hai raggiunto il limite massimo di ${maxUses} dispositivi per questa licenza.` };
+        return { valid: false, error: `Hai raggiunto il limite massimo di ${maxUses} dispositivi per questa licenza.`, isNetworkError: false };
       }
 
       if (!shouldIncrement && currentUses > maxUses) {
-        return { valid: false, error: 'Limite dispositivi superato.' };
+        return { valid: false, error: 'Limite dispositivi superato.', isNetworkError: false };
       }
 
       if (shouldIncrement) {
@@ -185,9 +213,9 @@ const AppContent = () => {
       }
 
       return { valid: true, data, finalCode: cleanCode };
-    } catch (err) {
+    } catch (err: any) {
       console.error("Errore critico verifica:", err);
-      return { valid: false, error: 'Errore di connessione. Riprova.' };
+      return { valid: false, error: 'Errore di connessione. Riprova.', isNetworkError: true };
     }
   };
 
@@ -228,8 +256,9 @@ const AppContent = () => {
         if (result.valid) {
           setIsPremium(true);
           localStorage.setItem('is_premium', 'true');
-        } else if (savedPremiumStatus === 'true') {
-          // Se la verifica fallisce (es. codice revocato), rimuoviamo i privilegi
+        } else if (savedPremiumStatus === 'true' && !result.isNetworkError) {
+          // Se la verifica fallisce ESPLICITAMENTE (es. codice revocato), rimuoviamo i privilegi.
+          // In caso di errore di rete, manteniamo lo stato premium locale per permettere l'uso offline.
           setIsPremium(false);
           localStorage.removeItem('is_premium');
         }
@@ -316,7 +345,7 @@ const AppContent = () => {
     };
   }, []);
 
-  useEffect(() => { setIsPremiumUnlocked(true); setIsTrialExpired(false); }, []);
+  useEffect(() => { setIsTrialExpired(false); }, []);
   useEffect(() => { if (isInitialMount.current) { isInitialMount.current = false; return; } if (inputs.contractsPerUser === 2) { setIsContractInfoModalOpen(true); } }, [inputs.contractsPerUser]);
 
   const handleTitleClick = () => {
@@ -348,21 +377,7 @@ const AppContent = () => {
 
   const handleResetToZero = () => {
     if (!isPremium) { setShowPremiumModal(true); return; }
-    setInputs({
-      directRecruits: 0,
-      contractsPerUser: 0,
-      indirectRecruits: 0,
-      networkDepth: 1,
-      realizationTimeMonths: 12,
-      personalClientsGreen: 0,
-      personalClientsLight: 0,
-      personalClientsBusinessGreen: 0,
-      personalClientsBusinessLight: 0,
-      myPersonalUnitsGreen: 0,
-      myPersonalUnitsLight: 0,
-      cashbackSpending: 0,
-      cashbackPercentage: 0
-    });
+    setInputs(initialInputs);
   };
 
   const handleResetPersonalClients = () => { setInputs({ ...inputs, personalClientsGreen: 0, personalClientsLight: 0, personalClientsBusinessGreen: 0, personalClientsBusinessLight: 0, myPersonalUnitsGreen: 0, myPersonalUnitsLight: 0, unionParkPanels: 0 }); };
