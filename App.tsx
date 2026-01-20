@@ -119,15 +119,15 @@ const AppContent = () => {
 
   // --- FUNZIONE DI VERIFICA REALE (CONTEGGIO DISPOSITIVI) ---
   const verifyLicenseStatus = async (inputCode: string, shouldIncrement: boolean = false) => {
-    // Pulisce il codice da spazi, caratteri invisibili e lo rende maiuscolo
-    let cleanCode = inputCode.replace(/[\u200B-\u200D\uFEFF]/g, '').trim().toUpperCase();
+    // Rimuove TUTTI gli spazi, caratteri invisibili e lo rende maiuscolo
+    let cleanCode = inputCode.replace(/\s+/g, '').replace(/[\u200B-\u200D\uFEFF]/g, '').toUpperCase();
 
     try {
-      // 1. TENTA RICERCA ESATTA
+      // 1. TENTA RICERCA (ilike ignora maiuscole/minuscole nel DB)
       let { data: licenses, error } = await supabase
         .from('licenses')
         .select('*')
-        .eq('code', cleanCode);
+        .ilike('code', cleanCode);
 
       // 2. SE FALLISCE E MANCANO I TRATTINI, PROVA A FORMATTARE (es. AAAABBBBCCCC -> AAAA-BBBB-CCCC)
       if ((!licenses || licenses.length === 0) && !cleanCode.includes('-') && cleanCode.length === 12) {
@@ -135,10 +135,10 @@ const AppContent = () => {
         const { data: retryData } = await supabase
           .from('licenses')
           .select('*')
-          .eq('code', formatted);
+          .ilike('code', formatted);
         if (retryData && retryData.length > 0) {
           licenses = retryData;
-          cleanCode = formatted; // Aggiorna per il salvataggio correttto
+          cleanCode = formatted;
         }
       }
 
