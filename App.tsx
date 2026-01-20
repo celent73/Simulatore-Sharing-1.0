@@ -102,14 +102,6 @@ const AppContent = () => {
   const targetButtonText = language === 'it' ? "Calcola Obiettivo" : "Ziel berechnen";
 
   useEffect(() => {
-    // CONTROLLO PREMIUM LOCALSTORAGE
-    const savedPremium = localStorage.getItem('is_premium');
-    if (savedPremium === 'true') {
-      setIsPremium(true);
-    } else {
-      setIsPremium(false);
-    }
-
     const query = new URLSearchParams(window.location.search);
     // GESTIONE RITORNO DAL PAGAMENTO
     if (query.get('payment_success') === 'true') {
@@ -126,61 +118,93 @@ const AppContent = () => {
   }, []);
 
   // --- FUNZIONE DI VERIFICA REALE (CONTEGGIO DISPOSITIVI) ---
-  const handleVerifyCode = async () => {
-    setLoading(true);
-    setError('');
-
+  const verifyLicenseStatus = async (code: string, shouldIncrement: boolean = false) => {
     try {
-      // 1. CERCA IL CODICE (Gestisce duplicati prendendo il primo)
       const { data: licenses, error } = await supabase
         .from('licenses')
         .select('*')
-        .eq('code', licenseCode.trim()); // Rimosso .single() per evitare errori su duplicati
+        .eq('code', code.trim());
 
       if (error || !licenses || licenses.length === 0) {
-        setError('Codice non valido o scaduto.');
-        setLoading(false);
-        return;
+        return { valid: false, error: 'Codice non valido o scaduto.' };
       }
 
-      const data = licenses[0]; // Usiamo il primo record trovato
-
-      // 2. CONTROLLA IL LIMITE (Dinamico da DB o Default 3)
+      const data = licenses[0];
       const currentUses = data.uses || 0;
-      const maxUses = data.max_uses || 3; // Usa il valore dal DB o 3 di default
+      const maxUses = data.max_uses || 3;
 
-      if (currentUses >= maxUses) {
-        setError(`Hai raggiunto il limite massimo di ${maxUses} dispositivi per questa licenza.`);
-        setLoading(false);
-        return;
+      if (shouldIncrement && currentUses >= maxUses) {
+        return { valid: false, error: `Hai raggiunto il limite massimo di ${maxUses} dispositivi per questa licenza.` };
       }
 
-      // 3. AGGIORNA IL CONTATORE (+1)
-      const { error: updateError } = await supabase
-        .from('licenses')
-        .update({ uses: currentUses + 1 })
-        .eq('id', data.id);
-
-      if (updateError) {
-        console.error("Errore aggiornamento contatore (RLS?):", updateError);
-        // Continuiamo lo stesso se l'errore è solo di update ma il codice era valido,
-        // oppure puoi bloccare. Per ora sblocchiamo per non frustrare l'utente se la RLS non va.
+      // Protezione extra: se il limite è stato superato (es. limite abbassato manualmente nel DB), 
+      // blocchiamo l'accesso anche ai dispositivi già autorizzati.
+      if (!shouldIncrement && currentUses > maxUses) {
+        return { valid: false, error: 'Limite dispositivi superato.' };
       }
 
-      // 4. SBLOCCA L'APP
-      setIsPremium(true);
-      localStorage.setItem('is_premium', 'true');
-      localStorage.setItem('licenseCode', licenseCode);
-      setShowPremiumModal(false);
-      alert("Codice valido! App sbloccata su questo dispositivo.");
+      if (shouldIncrement) {
+        const { error: updateError } = await supabase
+          .from('licenses')
+          .update({ uses: currentUses + 1 })
+          .eq('id', data.id);
 
+        if (updateError) console.error("Errore aggiornamento contatore:", updateError);
+      }
+
+      return { valid: true, data };
     } catch (err) {
       console.error(err);
-      setError('Errore di connessione. Riprova.');
-    } finally {
-      setLoading(false);
+      return { valid: false, error: 'Errore di connessione. Riprova.' };
     }
   };
+
+  const handleVerifyCode = async () => {
+    if (!licenseCode.trim()) return;
+    setLoading(true);
+    setError('');
+
+    const result = await verifyLicenseStatus(licenseCode, true);
+
+    if (result.valid) {
+      setIsPremium(true);
+      localStorage.setItem('is_premium', 'true');
+      localStorage.setItem('licenseCode', licenseCode.trim());
+      setShowPremiumModal(false);
+      alert("Codice valido! App sbloccata su questo dispositivo.");
+    } else {
+      setError(result.error || 'Errore durante la verifica.');
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    const initLicense = async () => {
+      const savedCode = localStorage.getItem('licenseCode');
+      const savedPremiumStatus = localStorage.getItem('is_premium');
+
+      // Imposta immediatamente lo stato se salvato localmente per evitare flash della UI
+      if (savedPremiumStatus === 'true') {
+        setIsPremium(true);
+      }
+
+      if (savedCode) {
+        setLicenseCode(savedCode);
+
+        // Verifica silenziosa per confermare che la licenza sia ancora valida nel DB
+        const result = await verifyLicenseStatus(savedCode, false);
+        if (result.valid) {
+          setIsPremium(true);
+          localStorage.setItem('is_premium', 'true');
+        } else if (savedPremiumStatus === 'true') {
+          // Se la verifica fallisce (es. codice revocato), rimuoviamo i privilegi
+          setIsPremium(false);
+          localStorage.removeItem('is_premium');
+        }
+      }
+    };
+    initLicense();
+  }, []);
 
   const handleAcceptLegal = () => {
     localStorage.setItem('legal_accepted', 'true');
