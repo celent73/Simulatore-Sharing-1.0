@@ -118,14 +118,32 @@ const AppContent = () => {
   }, []);
 
   // --- FUNZIONE DI VERIFICA REALE (CONTEGGIO DISPOSITIVI) ---
-  const verifyLicenseStatus = async (code: string, shouldIncrement: boolean = false) => {
+  const verifyLicenseStatus = async (inputCode: string, shouldIncrement: boolean = false) => {
+    // Pulisce il codice da spazi, caratteri invisibili e lo rende maiuscolo
+    let cleanCode = inputCode.replace(/[\u200B-\u200D\uFEFF]/g, '').trim().toUpperCase();
+
     try {
-      const { data: licenses, error } = await supabase
+      // 1. TENTA RICERCA ESATTA
+      let { data: licenses, error } = await supabase
         .from('licenses')
         .select('*')
-        .eq('code', code.trim());
+        .eq('code', cleanCode);
+
+      // 2. SE FALLISCE E MANCANO I TRATTINI, PROVA A FORMATTARE (es. AAAABBBBCCCC -> AAAA-BBBB-CCCC)
+      if ((!licenses || licenses.length === 0) && !cleanCode.includes('-') && cleanCode.length === 12) {
+        const formatted = `${cleanCode.slice(0, 4)}-${cleanCode.slice(4, 8)}-${cleanCode.slice(8, 12)}`;
+        const { data: retryData } = await supabase
+          .from('licenses')
+          .select('*')
+          .eq('code', formatted);
+        if (retryData && retryData.length > 0) {
+          licenses = retryData;
+          cleanCode = formatted; // Aggiorna per il salvataggio correttto
+        }
+      }
 
       if (error || !licenses || licenses.length === 0) {
+        console.error("Licenza non trovata per:", cleanCode, error);
         return { valid: false, error: 'Codice non valido o scaduto.' };
       }
 
@@ -137,8 +155,6 @@ const AppContent = () => {
         return { valid: false, error: `Hai raggiunto il limite massimo di ${maxUses} dispositivi per questa licenza.` };
       }
 
-      // Protezione extra: se il limite è stato superato (es. limite abbassato manualmente nel DB), 
-      // blocchiamo l'accesso anche ai dispositivi già autorizzati.
       if (!shouldIncrement && currentUses > maxUses) {
         return { valid: false, error: 'Limite dispositivi superato.' };
       }
@@ -152,9 +168,9 @@ const AppContent = () => {
         if (updateError) console.error("Errore aggiornamento contatore:", updateError);
       }
 
-      return { valid: true, data };
+      return { valid: true, data, finalCode: cleanCode };
     } catch (err) {
-      console.error(err);
+      console.error("Errore critico verifica:", err);
       return { valid: false, error: 'Errore di connessione. Riprova.' };
     }
   };
@@ -169,7 +185,7 @@ const AppContent = () => {
     if (result.valid) {
       setIsPremium(true);
       localStorage.setItem('is_premium', 'true');
-      localStorage.setItem('licenseCode', licenseCode.trim());
+      localStorage.setItem('licenseCode', result.finalCode || licenseCode.trim().toUpperCase());
       setShowPremiumModal(false);
       alert("Codice valido! App sbloccata su questo dispositivo.");
     } else {
