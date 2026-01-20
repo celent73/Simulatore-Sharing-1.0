@@ -184,7 +184,12 @@ const AppContent = () => {
         const isConnectionError = dbError.message?.toLowerCase().includes('fetch') ||
           dbError.message?.toLowerCase().includes('network') ||
           dbError.code === 'PGRST301'; // Ad esempio
-        return { valid: false, error: `Errore Database: ${dbError.message}`, isNetworkError: isConnectionError };
+
+        const friendlyError = isConnectionError
+          ? "Impossibile contattare il server. Controlla la tua connessione internet."
+          : `Errore Database: ${dbError.message}`;
+
+        return { valid: false, error: friendlyError, isNetworkError: isConnectionError };
       }
 
       if (!licenses || licenses.length === 0) {
