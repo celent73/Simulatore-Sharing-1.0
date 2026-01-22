@@ -7,7 +7,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from './utils/supabaseClient';
+import { supabase, supabaseUrl } from './utils/supabaseClient';
 import { PlanInput, CondoInput, ViewMode } from './types';
 import { useCompensationPlan } from './hooks/useSimulation';
 import { useCondoSimulation } from './hooks/useCondoSimulation';
@@ -135,6 +135,15 @@ const AppContent = () => {
 
   // --- FUNZIONE DI VERIFICA REALE (CONTEGGIO DISPOSITIVI) ---
   const verifyLicenseStatus = async (inputCode: string, shouldIncrement: boolean = false) => {
+    // Check for missing configuration (placeholder URL)
+    if (supabaseUrl.includes('placeholder.supabase.co')) {
+      return {
+        valid: false,
+        error: "Configurazione mancante: Le variabili d'ambiente non sono state caricate. Verifica Netlify.",
+        isNetworkError: false
+      };
+    }
+
     // Rimuove spazi e caratteri invisibili
     let cleanCode = inputCode.replace(/\s+/g, '').replace(/[\u200B-\u200D\uFEFF]/g, '').toUpperCase();
 
