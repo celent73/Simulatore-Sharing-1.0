@@ -297,20 +297,20 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
-            <div ref={modalRef} className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl w-full md:max-w-4xl max-w-2xl overflow-hidden relative animate-in zoom-in-95 duration-300 border border-white/20 dark:border-gray-700 flex flex-col max-h-[90vh]">
+            <div ref={modalRef} className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl w-full md:max-w-3xl max-w-2xl overflow-hidden relative animate-in zoom-in-95 duration-300 border border-white/20 dark:border-gray-700 flex flex-col max-h-[90vh]">
 
                 {/* Header WOW */}
-                <div className="relative overflow-hidden p-3 pb-3 md:p-6 md:pb-6 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 text-white shrink-0">
+                <div className="relative overflow-hidden p-3 pb-3 md:px-6 md:py-1 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 text-white shrink-0">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                     <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/30 rounded-full blur-2xl translate-y-1/3 -translate-x-1/3"></div>
 
                     <div className="relative z-10 flex justify-between items-start">
                         <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-2 shadow-lg">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1 shadow-lg md:hidden">
                                 <span>✨</span> {txt.premiumAnalysis}
                             </div>
-                            <h2 className="text-xl md:text-3xl lg:text-4xl font-black tracking-tight mb-1 drop-shadow-md leading-tight">{txt.title}</h2>
-                            <p className="text-indigo-100 font-medium text-xs md:text-lg opacity-90 hidden sm:block">{txt.subtitle}</p>
+                            <h2 className="text-xl md:text-2xl lg:text-2xl font-black tracking-tight mb-0.5 drop-shadow-md leading-tight">{txt.title}</h2>
+                            <p className="text-indigo-100 font-medium text-xs md:text-lg opacity-90 hidden">{txt.subtitle}</p>
                         </div>
                         <div className="flex items-center gap-2">
                             <button
@@ -406,25 +406,25 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
 
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto custom-scrollbar px-4 pt-8 pb-4 md:p-6 space-y-6 md:space-y-8 bg-gray-50/50 dark:bg-gray-900/50">
+                <div className="flex-1 overflow-y-auto custom-scrollbar px-4 pt-4 pb-4 md:p-5 space-y-4 md:space-y-5 bg-gray-50/50 dark:bg-gray-900/50">
 
                     {/* Electricity Section */}
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group">
+                    <div className="bg-white dark:bg-gray-800 p-4 md:p-5 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-yellow-400/10 rounded-bl-full transition-all group-hover:scale-110"></div>
-                        <div className="flex items-center justify-between mb-6 relative z-10">
+                        <div className="flex items-center justify-between mb-4 relative z-10">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-2xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 dark:text-yellow-400 shadow-sm">
-                                    <Calculator size={24} fill="currentColor" />
+                                <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 dark:text-yellow-400 shadow-sm">
+                                    <Calculator size={22} fill="currentColor" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">{txt.electricity}</h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{txt.enterData}</p>
+                                    <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">{txt.electricity}</h3>
+                                    <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-medium">{txt.enterData}</p>
                                 </div>
                             </div>
 
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-gray-400 uppercase tracking-wide ml-1">{txt.priceKw}</label>
                                 <div className="relative">
@@ -488,22 +488,22 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                     </div>
 
                     {/* Gas Section */}
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group">
+                    <div className="bg-white dark:bg-gray-800 p-4 md:p-5 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-20 h-20 bg-orange-400/10 rounded-bl-full transition-all group-hover:scale-110"></div>
-                        <div className="flex items-center justify-between mb-6 relative z-10">
+                        <div className="flex items-center justify-between mb-4 relative z-10">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-2xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 shadow-sm">
-                                    <Calculator size={24} fill="currentColor" />
+                                <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 shadow-sm">
+                                    <Calculator size={22} fill="currentColor" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">{txt.gas}</h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{txt.enterData}</p>
+                                    <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white">{txt.gas}</h3>
+                                    <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-medium">{txt.enterData}</p>
                                 </div>
                             </div>
 
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <label className="text-xs font-bold text-gray-400 uppercase tracking-wide ml-1">{txt.priceSmc}</label>
                                 <div className="relative">

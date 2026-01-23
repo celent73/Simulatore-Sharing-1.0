@@ -147,6 +147,22 @@ const BonusProgress: React.FC<BonusProgressProps> = ({ totalContracts, onBonusCh
     { target: 5000, amount: "+3000€/mese", icon: <CrownIcon />, levelNum: 5000, managerTitle: "National Manager", monthlyBonus: 3000 },
   ];
 
+  // Effect to recalculate bonus when totalContracts changes (e.g. on Reset)
+  React.useEffect(() => {
+    let highestBonus = 0;
+    milestones.forEach(milestone => {
+      if (activeBonuses[milestone.levelNum] && totalContracts >= milestone.target) {
+        if (milestone.monthlyBonus > highestBonus) {
+          highestBonus = milestone.monthlyBonus;
+        }
+      }
+    });
+
+    if (onBonusChange) {
+      onBonusChange(highestBonus);
+    }
+  }, [totalContracts, activeBonuses, onBonusChange]);
+
   const handleToggle = (levelNum: number) => {
     setActiveBonuses(prev => {
       const newState = { ...prev, [levelNum]: !prev[levelNum] };

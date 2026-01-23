@@ -26,7 +26,11 @@ interface ResultsDisplayProps {
   viewMode?: ViewMode;
   inputs: PlanInput;
   cashbackPeriod?: 'monthly' | 'annual';
+  onInputChange?: (field: keyof PlanInput, value: number) => void;
 }
+
+import { User, FileText, Heart, PenSquare, RotateCcw } from 'lucide-react';
+import { CustomSlider } from './CustomSlider';
 
 interface SummaryCardProps {
   title: string;
@@ -100,7 +104,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, suffix, variant
   );
 };
 
-const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 'family', inputs, cashbackPeriod = 'monthly' }) => {
+const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 'family', inputs, cashbackPeriod = 'monthly', onInputChange }) => {
   const exportRef = useRef<HTMLDivElement>(null);
   const tableRef = useRef<HTMLTableElement>(null);
   const [isExporting, setIsExporting] = useState(false);
@@ -108,6 +112,33 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   const [managerBonus, setManagerBonus] = useState(0);
   const [projectionYears, setProjectionYears] = useState(1);
   const [isProjectionModalOpen, setIsProjectionModalOpen] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const toggleFullScreen = async () => {
+    if (!document.fullscreenElement) {
+      try {
+        await document.documentElement.requestFullscreen();
+        setIsFullScreen(true);
+      } catch (e) {
+        console.error("Fullscreen error:", e);
+        setIsFullScreen(true);
+      }
+    } else {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      }
+      setIsFullScreen(false);
+    }
+  };
+
+  const handleReset = () => {
+    if (onInputChange) {
+      onInputChange('directRecruits', 0);
+      onInputChange('contractsPerUser', 0);
+      onInputChange('indirectRecruits', 0);
+      onInputChange('networkDepth', 1);
+    }
+  };
   const { t } = useLanguage();
 
   const monthlyCashback = planResult.monthlyCashback;
@@ -208,6 +239,10 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         totalOneTime={oneTimeBonusWithoutCashback + (isAnnual ? 0 : monthlyCashback)}
       />
 
+      {isFullScreen && (
+        <div className="fixed inset-0 z-[9998] bg-gray-100/90 backdrop-blur-sm animate-in fade-in duration-300" />
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
         <SummaryCard
           title={t('results.total_users')}
@@ -240,137 +275,210 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         />
       </div>
 
-      <div className="bg-white dark:bg-black/40 backdrop-blur-xl p-4 sm:p-8 rounded-[2.5rem] shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-3">
-            <span className="p-2 rounded-xl bg-gradient-to-br from-union-blue-600 to-union-blue-800 text-white shadow-lg">📊</span>
-            {t('results.table_title')}
-          </h2>
-          <button
-            onClick={handleExportPDF}
-            disabled={isExporting}
-            className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-lg shadow-red-500/20 text-xs font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <FileDown size={16} />
-            {isExporting ? '...' : 'PDF'}
-          </button>
-        </div>
-
-        <div className="mt-4 overflow-x-auto rounded-3xl border border-gray-200 dark:border-white/10 shadow-inner bg-gray-50/50 dark:bg-black/20 p-2 max-w-full">
-          <table ref={tableRef} className="min-w-full divide-y divide-gray-200 dark:divide-white/5 bg-white dark:bg-black/20 rounded-2xl">
-            <thead className="bg-gray-50 dark:bg-white/5 backdrop-blur-sm">
-              <tr>
-                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t('results.col_level')}</th>
-                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t('results.col_users')}</th>
-                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t('results.col_token')}</th>
-                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t('results.col_rec_1')}</th>
-                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t('results.col_rec_2')}</th>
-                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t('results.col_rec_3')}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-white/5">
-              {planResult.levelData.map((row) => (
-                <tr key={row.level} className="hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">{getLevelLabel(row.level)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 font-mono">{row.users.toLocaleString('it-IT')}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.oneTimeBonus)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.recurringYear1)}</div>
-                    <div className="text-[10px] text-gray-400 font-medium">anno: {formatCurrency(row.recurringYear1 * 12)}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.recurringYear2)}</div>
-                    <div className="text-[10px] text-gray-400 font-medium">anno: {formatCurrency(row.recurringYear2 * 12)}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.recurringYear3)}</div>
-                    <div className="text-[10px] text-gray-400 font-medium">anno: {formatCurrency(row.recurringYear3 * 12)}</div>
-                  </td>
-                </tr>
-              ))}
-
-              {/* RIGA DEDICATA AL PARK / BENEFICI PERSONALI */}
-              {(planResult.monthlyPanelYield > 0 || (isAnnual && hasCashback)) && (
-                <tr className="bg-amber-50/50 dark:bg-amber-900/10 hover:bg-amber-100/60 dark:hover:bg-amber-900/20 transition-colors italic">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-amber-600 dark:text-amber-400">Cashback & Park</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400 font-mono">-</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400">-</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
-                    <div className="text-[10px] text-gray-400">anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
-                    <div className="text-[10px] text-gray-400">anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
-                    <div className="text-[10px] text-gray-400">anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
-                  </td>
-                </tr>
+      <div className={`
+        ${isFullScreen
+          ? 'fixed inset-0 z-[10000] p-2 sm:p-4 flex flex-col gap-2 overflow-hidden bg-white/20'
+          : 'relative transition-all duration-500 ease-in-out'
+        }
+      `}>
+        <div className={`
+          bg-white dark:bg-black/40 backdrop-blur-xl border border-gray-100 dark:border-white/10
+          ${isFullScreen
+            ? 'flex-1 rounded-[1.5rem] shadow-xl overflow-hidden flex flex-col p-4'
+            : 'p-4 sm:p-8 rounded-[2.5rem] shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)]'
+          }
+        `}>
+          <div className="flex justify-between items-center mb-2 shrink-0">
+            <h2 className={`font-black text-gray-900 dark:text-white flex items-center gap-3 ${isFullScreen ? 'text-3xl' : 'text-xl'}`}>
+              <span className="p-2 rounded-xl bg-gradient-to-br from-union-blue-600 to-union-blue-800 text-white shadow-lg">📊</span>
+              {t('results.table_title')}
+              {isFullScreen && (
+                <div className="flex items-center gap-2 ml-4">
+                  <span className="text-union-orange-500 text-sm bg-union-orange-50 px-3 py-1 rounded-full uppercase tracking-wider border border-union-orange-200">Focus</span>
+                  {isClientMode ? (
+                    <span className="text-emerald-600 text-sm bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-200 flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                      Cliente
+                    </span>
+                  ) : (
+                    <span className="text-union-blue-600 text-sm bg-union-blue-50 px-3 py-1 rounded-full uppercase tracking-wider border border-union-blue-200 flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-union-blue-500"></span>
+                      Partner Sharing
+                    </span>
+                  )}
+                </div>
               )}
-            </tbody>
-            <tfoot className="bg-gray-50 dark:bg-white/5 backdrop-blur-sm border-t border-gray-200 dark:border-white/10">
-              <tr>
-                <td className="px-6 py-4 text-left text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider">
-                  <div className="flex flex-col gap-2">
-                    <span>{t('results.total')}</span>
-                    <div className="flex items-center gap-2">
-                      <label className="text-[10px] uppercase font-bold text-gray-400">{t('projection.label')}</label>
+            </h2>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={toggleFullScreen}
+                className={`hidden sm:flex items-center gap-2 px-4 py-2 ${isFullScreen ? 'bg-union-blue-50 text-union-blue-600' : 'bg-union-blue-50 text-union-blue-600'} hover:bg-union-blue-100 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95 border border-transparent hover:border-union-blue-200`}
+                title={isFullScreen ? "Esci da Focus Mode" : "Attiva Focus Mode"}
+              >
+                {isFullScreen ? (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5M15 15l5.25 5.25" /></svg>
+                    ESCI
+                  </>
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>
+                    FOCUS
+                  </>
+                )}
+              </button>
 
-                      {/* WOW PROJECTION TRIGGER */}
-                      <button
-                        onClick={() => setIsProjectionModalOpen(true)}
-                        className="p-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-md hover:scale-110 transition-transform"
-                        title="Visualizza Proiezione Dettagliata"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                          <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                          <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />
-                        </svg>
-                      </button>
+              <button
+                onClick={handleExportPDF}
+                disabled={isExporting}
+                className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-lg shadow-red-500/20 text-xs font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <FileDown size={16} />
+                {isExporting ? '...' : 'PDF'}
+              </button>
+            </div>
+          </div>
 
-                      <select
-                        value={projectionYears}
-                        onChange={(e) => setProjectionYears(Number(e.target.value))}
-                        className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs font-bold rounded-lg px-2 py-1 focus:ring-2 focus:ring-union-blue-500 outline-none cursor-pointer"
-                      >
-                        <option value={1}>1 {t('projection.year_1')}</option>
-                        <option value={2}>2 {t('projection.years')}</option>
-                        <option value={3}>3 {t('projection.years')}</option>
-                        <option value={5}>5 {t('projection.years')}</option>
-                        <option value={10}>10 {t('projection.years')}</option>
-                      </select>
+          <div className={`mt-4 rounded-3xl border border-gray-200 dark:border-white/10 shadow-inner bg-gray-50/50 dark:bg-black/20 p-2 max-w-full ${isFullScreen ? 'flex-1 min-h-0 overflow-auto' : 'overflow-x-auto'}`}>
+            <table ref={tableRef} className="min-w-full divide-y divide-gray-200 dark:divide-white/5 bg-white dark:bg-black/20 rounded-2xl">
+              <thead className="bg-gray-50 dark:bg-white/5 backdrop-blur-sm">
+                <tr>
+                  <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t('results.col_level')}</th>
+                  <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t('results.col_users')}</th>
+                  <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t('results.col_token')}</th>
+                  <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t('results.col_rec_1')}</th>
+                  <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t('results.col_rec_2')}</th>
+                  <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{t('results.col_rec_3')}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-white/5">
+                {planResult.levelData.map((row) => (
+                  <tr key={row.level} className="hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">{getLevelLabel(row.level)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 font-mono">{row.users.toLocaleString('it-IT')}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.oneTimeBonus)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.recurringYear1)}</div>
+                      <div className="text-[10px] text-gray-400 font-medium">anno: {formatCurrency(row.recurringYear1 * 12)}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.recurringYear2)}</div>
+                      <div className="text-[10px] text-gray-400 font-medium">anno: {formatCurrency(row.recurringYear2 * 12)}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.recurringYear3)}</div>
+                      <div className="text-[10px] text-gray-400 font-medium">anno: {formatCurrency(row.recurringYear3 * 12)}</div>
+                    </td>
+                  </tr>
+                ))}
+
+                {/* RIGA DEDICATA AL PARK / BENEFICI PERSONALI */}
+                {(planResult.monthlyPanelYield > 0 || (isAnnual && hasCashback)) && (
+                  <tr className="bg-amber-50/50 dark:bg-amber-900/10 hover:bg-amber-100/60 dark:hover:bg-amber-900/20 transition-colors italic">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-amber-600 dark:text-amber-400">Cashback & Park</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400 font-mono">-</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400">-</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
+                      <div className="text-[10px] text-gray-400">anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
+                      <div className="text-[10px] text-gray-400">anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
+                      <div className="text-[10px] text-gray-400">anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+              <tfoot className="bg-gray-50 dark:bg-white/5 backdrop-blur-sm border-t border-gray-200 dark:border-white/10">
+                <tr>
+                  <td className="px-6 py-4 text-left text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider">
+                    <div className="flex flex-col gap-2">
+                      <span>{t('results.total')}</span>
+                      <div className="flex items-center gap-2">
+                        <label className="text-[10px] uppercase font-bold text-gray-400">{t('projection.label')}</label>
+
+                        {/* WOW PROJECTION TRIGGER */}
+                        <button
+                          onClick={() => setIsProjectionModalOpen(true)}
+                          className="p-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-md hover:scale-110 transition-transform"
+                          title="Visualizza Proiezione Dettagliata"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                            <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+
+                        <select
+                          value={projectionYears}
+                          onChange={(e) => setProjectionYears(Number(e.target.value))}
+                          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs font-bold rounded-lg px-2 py-1 focus:ring-2 focus:ring-union-blue-500 outline-none cursor-pointer"
+                        >
+                          <option value={1}>1 {t('projection.year_1')}</option>
+                          <option value={2}>2 {t('projection.years')}</option>
+                          <option value={3}>3 {t('projection.years')}</option>
+                          <option value={5}>5 {t('projection.years')}</option>
+                          <option value={10}>10 {t('projection.years')}</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-left text-sm font-black text-gray-900 dark:text-white font-mono">{totalUsers.toLocaleString('it-IT')}</td>
-                <td className="px-6 py-4 text-left text-lg font-black text-emerald-600 dark:text-emerald-400">{formatCurrency(totalOneTimeBonus)}</td>
-                <td className="px-6 py-4 text-left">
-                  <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec1 * projectionYears)}</div>
-                  <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
-                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-900 dark:text-gray-100">{formatCurrency(displayMonthlyRec1 * 12 * projectionYears)}</span>
-                  </div>
-                  <div className="text-[9px] text-gray-400 font-medium">singolo mese: {formatCurrency(displayMonthlyRec1)}</div>
-                </td>
-                <td className="px-6 py-4 text-left">
-                  <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec2 * projectionYears)}</div>
-                  <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
-                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-900 dark:text-gray-100">{formatCurrency(displayMonthlyRec2 * 12 * projectionYears)}</span>
-                  </div>
-                  <div className="text-[9px] text-gray-400 font-medium">singolo mese: {formatCurrency(displayMonthlyRec2)}</div>
-                </td>
-                <td className="px-6 py-4 text-left">
-                  <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec3 * projectionYears)}</div>
-                  <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
-                    {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-900 dark:text-gray-100">{formatCurrency(displayMonthlyRec3 * 12 * projectionYears)}</span>
-                  </div>
-                  <div className="text-[9px] text-gray-400 font-medium">singolo mese: {formatCurrency(displayMonthlyRec3)}</div>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+                  </td>
+                  <td className="px-6 py-4 text-left text-sm font-black text-gray-900 dark:text-white font-mono">{totalUsers.toLocaleString('it-IT')}</td>
+                  <td className="px-6 py-4 text-left text-lg font-black text-emerald-600 dark:text-emerald-400">{formatCurrency(totalOneTimeBonus)}</td>
+                  <td className="px-6 py-4 text-left">
+                    <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec1 * projectionYears)}</div>
+                    <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
+                      {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-900 dark:text-gray-100">{formatCurrency(displayMonthlyRec1 * 12 * projectionYears)}</span>
+                    </div>
+
+                  </td>
+                  <td className="px-6 py-4 text-left">
+                    <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec2 * projectionYears)}</div>
+                    <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
+                      {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-900 dark:text-gray-100">{formatCurrency(displayMonthlyRec2 * 12 * projectionYears)}</span>
+                    </div>
+
+                  </td>
+                  <td className="px-6 py-4 text-left">
+                    <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec3 * projectionYears)}</div>
+                    <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
+                      {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-900 dark:text-gray-100">{formatCurrency(displayMonthlyRec3 * 12 * projectionYears)}</span>
+                    </div>
+
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
         </div>
+
+        {/* CONTROLS SECTION - REDESIGNED */}
+        {/* CONTROLS CARD (Fullscreen Only) */}
+        {isFullScreen && onInputChange && (
+          <div className="bg-white dark:bg-white/5 rounded-[2rem] shadow-xl border border-gray-100 dark:border-white/10 p-5 shrink-0">
+            <div className="flex gap-4 items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 flex-1">
+                <div className="transform origin-center"><CustomSlider label={t('input.direct_recruits')} value={inputs.directRecruits} onChange={(v: number) => onInputChange('directRecruits', v)} min={0} max={20} icon={User} colorBase="orange" showButtons={true} /></div>
+                <div className="transform origin-center"><CustomSlider label={t('input.contracts_per_user') || "Contratti/Utente"} value={inputs.contractsPerUser} onChange={(v: number) => onInputChange('contractsPerUser', v)} min={0} max={2} icon={FileText} colorBase="cyan" showButtons={true} /></div>
+                <div className="transform origin-center"><CustomSlider label={t('input.indirect_recruits')} value={inputs.indirectRecruits} onChange={(v: number) => onInputChange('indirectRecruits', v)} min={0} max={10} icon={PenSquare} colorBase="blue" showButtons={true} /></div>
+                <div className="transform origin-center"><CustomSlider label={t('input.depth') || "Livelli Profondità"} value={inputs.networkDepth} onChange={(v: number) => onInputChange('networkDepth', v)} min={1} max={5} icon={Heart} colorBase="green" showButtons={true} /></div>
+              </div>
+              <button
+                onClick={handleReset}
+                className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-600 hover:scale-105 transition-all shadow-sm border border-red-100 shrink-0"
+                title="Azzera tutto"
+              >
+                <RotateCcw className="w-6 h-6 mb-1" />
+                <span className="text-[9px] font-bold uppercase tracking-wider">Reset</span>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {!isClientMode && (

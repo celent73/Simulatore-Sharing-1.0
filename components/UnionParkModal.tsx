@@ -109,18 +109,18 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
 
     return (
         <div className="fixed inset-0 z-[400] flex items-center justify-center p-0 sm:p-4 bg-black/90 backdrop-blur-xl animate-in fade-in duration-300 overflow-y-auto">
-            <div className="bg-white dark:bg-gray-900 w-full h-full sm:h-auto sm:max-w-7xl sm:rounded-[2.5rem] shadow-2xl overflow-hidden relative animate-in zoom-in-95 duration-300 border-none sm:border sm:border-emerald-500/20 flex flex-col max-h-[100vh] sm:max-h-[95vh]">
+            <div className="bg-white dark:bg-gray-900 w-full h-full sm:h-auto sm:max-w-4xl sm:rounded-[2rem] shadow-2xl overflow-hidden relative animate-in zoom-in-95 duration-300 border-none sm:border sm:border-emerald-500/20 flex flex-col max-h-[100vh] sm:max-h-[90vh]">
 
                 {/* Header */}
-                <div className="relative overflow-hidden p-4 sm:p-6 pb-6 sm:pb-8 bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-800 text-white shrink-0">
+                <div className="relative overflow-hidden p-3 sm:px-6 sm:py-2 bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-800 text-white shrink-0">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                     <div className="relative z-10 flex justify-between items-start">
                         <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-2 sm:mb-4 shadow-lg">
-                                <Sun size={14} className="animate-pulse sm:w-5 sm:h-5" /> Sharing Park
+                            <div className="inline-flex items-center gap-2 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] sm:text-[10px] font-bold uppercase tracking-widest mb-1 sm:mb-2 shadow-lg">
+                                <Sun size={12} className="animate-pulse sm:w-4 sm:h-4" /> Sharing Park
                             </div>
-                            <h2 className="text-2xl sm:text-4xl font-black tracking-tight mb-1">{t.title}</h2>
-                            <p className="text-emerald-100 text-sm sm:text-lg font-medium opacity-90">{t.subtitle}</p>
+                            <h2 className="text-xl sm:text-2xl font-black tracking-tight mb-0.5">{t.title}</h2>
+                            <p className="text-emerald-100 text-xs sm:text-sm font-medium opacity-90">{t.subtitle}</p>
                         </div>
                         <button onClick={onClose} className="p-2 sm:p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 shadow-lg hover:rotate-90 duration-300">
                             <X size={20} className="sm:w-6 sm:h-6" />
@@ -131,22 +131,22 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 space-y-6 sm:space-y-10">
 
                     {/* Bill Zeroing Focus Section */}
-                    <div className="bg-emerald-500/5 dark:bg-emerald-500/10 p-6 rounded-[2rem] border border-emerald-500/20">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="p-2 sm:p-3 bg-emerald-600 rounded-lg sm:rounded-xl text-white">
-                                <Wallet size={18} className="sm:w-6 sm:h-6" />
+                    <div className="bg-emerald-500/5 dark:bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/20">
+                        <div className="flex items-center gap-2 mb-2">
+                            <div className="p-1.5 sm:p-2 bg-emerald-600 rounded-lg text-white">
+                                <Wallet size={16} className="sm:w-5 sm:h-5" />
                             </div>
-                            <h3 className="text-lg sm:text-2xl font-black text-gray-900 dark:text-emerald-400 uppercase tracking-tight">{t.zeroBillTitle}</h3>
+                            <h3 className="text-sm sm:text-lg font-black text-gray-900 dark:text-emerald-400 uppercase tracking-tight">{t.zeroBillTitle}</h3>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-center">
-                            <div className="space-y-2">
-                                <label className="text-xs sm:text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t.billLabel}</label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-center">
+                            <div className="space-y-1">
+                                <label className="text-[10px] sm:text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t.billLabel}</label>
                                 <input
                                     type="number"
                                     value={monthlyBill || ''}
                                     onChange={(e) => setMonthlyBill(parseFloat(e.target.value) || 0)}
                                     placeholder="0"
-                                    className="w-full px-5 py-3 sm:py-4 rounded-2xl bg-white dark:bg-gray-800 border border-emerald-100 dark:border-emerald-500/30 text-2xl sm:text-4xl font-black text-emerald-600 focus:ring-2 focus:ring-emerald-500 transition-all outline-none shadow-sm"
+                                    className="w-full px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-emerald-100 dark:border-emerald-500/30 text-xl sm:text-2xl font-black text-emerald-600 focus:ring-2 focus:ring-emerald-500 transition-all outline-none shadow-sm"
                                 />
                             </div>
                             {monthlyBill > 0 && (
@@ -165,28 +165,28 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                     </div>
 
                     {/* Main Settings Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                         {/* Input Controls */}
-                        <div className="space-y-6">
+                        <div className="space-y-4">
                             {/* Panels Selector */}
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center">
                                     <label className="text-sm sm:text-base font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t.panelsLabel}</label>
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-2">
                                         <input
                                             type="number"
                                             value={panels}
                                             onChange={(e) => setPanels(Math.max(1, parseInt(e.target.value) || 0))}
-                                            className="w-16 sm:w-24 bg-transparent text-right text-2xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400 outline-none"
+                                            className="w-12 sm:w-16 bg-transparent text-right text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 outline-none"
                                         />
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setPanels(prev => Math.max(1, prev - 1))}
-                                        className="w-10 h-10 sm:w-16 sm:h-16 flex items-center justify-center rounded-xl sm:rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 border border-emerald-100 dark:border-emerald-500/20 transition-all active:scale-95"
+                                        className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 border border-emerald-100 dark:border-emerald-500/20 transition-all active:scale-95"
                                     >
-                                        <Minus size={20} className="sm:w-8 sm:h-8" strokeWidth={3} />
+                                        <Minus size={16} className="sm:w-5 sm:h-5" strokeWidth={3} />
                                     </button>
                                     <input
                                         type="range"
@@ -194,13 +194,13 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                                         max="100"
                                         value={panels}
                                         onChange={(e) => setPanels(parseInt(e.target.value))}
-                                        className="flex-1 h-2 sm:h-4 bg-emerald-100 dark:bg-emerald-900/30 rounded-full appearance-none cursor-pointer accent-emerald-600"
+                                        className="flex-1 h-1.5 sm:h-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-full appearance-none cursor-pointer accent-emerald-600"
                                     />
                                     <button
                                         onClick={() => setPanels(prev => Math.min(100, prev + 1))}
-                                        className="w-10 h-10 sm:w-16 sm:h-16 flex items-center justify-center rounded-xl sm:rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:hover:bg-emerald-900/40 border border-emerald-100 dark:border-emerald-500/20 transition-all active:scale-95"
+                                        className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:hover:bg-emerald-900/40 border border-emerald-100 dark:border-emerald-500/20 transition-all active:scale-95"
                                     >
-                                        <Plus size={20} className="sm:w-8 sm:h-8" strokeWidth={3} />
+                                        <Plus size={16} className="sm:w-5 sm:h-5" strokeWidth={3} />
                                     </button>
                                 </div>
                                 <div className="flex justify-between text-[10px] sm:text-xs font-bold text-gray-400">
@@ -220,9 +220,9 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                                         step="0.01"
                                         value={pun}
                                         onChange={(e) => setPun(parseFloat(e.target.value) || 0)}
-                                        className="w-full px-5 py-3 sm:py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-2xl sm:text-4xl font-black text-emerald-600 focus:ring-2 focus:ring-emerald-500 transition-all outline-none"
+                                        className="w-full px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xl sm:text-2xl font-black text-emerald-600 focus:ring-2 focus:ring-emerald-500 transition-all outline-none"
                                     />
-                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs sm:text-sm">€/kWh</div>
+                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs sm:text-xs">€/kWh</div>
                                 </div>
 
                                 <div className="flex gap-2">
@@ -230,7 +230,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                                         <button
                                             key={opt}
                                             onClick={() => setPun(opt)}
-                                            className={`flex-1 py-2 sm:py-4 rounded-xl text-xs sm:text-xl font-bold transition-all border ${pun === opt ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-white dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 hover:border-emerald-300'}`}
+                                            className={`flex-1 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-bold transition-all border ${pun === opt ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-white dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 hover:border-emerald-300'}`}
                                         >
                                             {opt.toFixed(2)}
                                         </button>
@@ -240,12 +240,12 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                         </div>
 
                         {/* Additional Stats & Duration */}
-                        <div className="space-y-6">
+                        <div className="space-y-4">
                             {/* Duration Selector */}
-                            <div className="space-y-4">
+                            <div className="space-y-2">
                                 <div className="flex justify-between items-center">
-                                    <label className="text-sm sm:text-base font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t.yearsLabel}</label>
-                                    <span className="text-2xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400">{simulationYears}</span>
+                                    <label className="text-xs sm:text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t.yearsLabel}</label>
+                                    <span className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">{simulationYears}</span>
                                 </div>
                                 <input
                                     type="range"
@@ -253,9 +253,9 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                                     max="30"
                                     value={simulationYears}
                                     onChange={(e) => setSimulationYears(parseInt(e.target.value))}
-                                    className="w-full h-2 sm:h-4 bg-emerald-100 dark:bg-emerald-900/30 rounded-full appearance-none cursor-pointer accent-emerald-600"
+                                    className="w-full h-1.5 sm:h-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-full appearance-none cursor-pointer accent-emerald-600"
                                 />
-                                <div className="flex justify-between text-[10px] sm:text-xs font-bold text-gray-400">
+                                <div className="flex justify-between text-[10px] sm:text-[10px] font-bold text-gray-400">
                                     <span>1 anno</span>
                                     <span>15</span>
                                     <span>30 anni</span>
@@ -263,64 +263,64 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             </div>
 
                             {/* Summary Mini Cards */}
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-700/50">
-                                    <p className="text-[10px] sm:text-sm font-bold text-gray-400 uppercase tracking-widest leading-tight mb-1">{t.purchaseCost}</p>
-                                    <p className="text-sm sm:text-3xl font-black text-gray-900 dark:text-white">€ {purchaseCostValue.toLocaleString('it-IT', { maximumFractionDigits: 2 })}</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50">
+                                    <p className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-tight mb-0.5">{t.purchaseCost}</p>
+                                    <p className="text-sm sm:text-lg font-black text-gray-900 dark:text-white">€ {purchaseCostValue.toLocaleString('it-IT', { maximumFractionDigits: 2 })}</p>
                                 </div>
-                                <div className="bg-emerald-50 dark:bg-emerald-900/10 p-4 rounded-2xl border border-emerald-100 dark:border-emerald-900/20">
-                                    <p className="text-[10px] sm:text-sm font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-1">{t.monthlyYield}</p>
-                                    <p className="text-sm sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                <div className="bg-emerald-50 dark:bg-emerald-900/10 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/20">
+                                    <p className="text-[9px] sm:text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-0.5">{t.monthlyYield}</p>
+                                    <p className="text-sm sm:text-lg font-black text-emerald-600 dark:text-emerald-400">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                 </div>
-                                <div className="bg-emerald-50 dark:bg-emerald-900/10 p-4 rounded-2xl border border-emerald-100 dark:border-emerald-900/20">
-                                    <p className="text-[10px] sm:text-sm font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-1">{t.annualYield}</p>
-                                    <p className="text-sm sm:text-3xl font-black text-emerald-600 dark:text-emerald-400">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                <div className="bg-emerald-50 dark:bg-emerald-900/10 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/20">
+                                    <p className="text-[9px] sm:text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-0.5">{t.annualYield}</p>
+                                    <p className="text-sm sm:text-lg font-black text-emerald-600 dark:text-emerald-400">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Main Projections Box */}
-                    <div className="bg-gradient-to-br from-gray-900 to-emerald-900 rounded-[2rem] p-6 sm:p-10 text-white relative overflow-hidden shadow-2xl">
-                        <div className="absolute top-0 right-0 p-8 opacity-10"><Sun size={120} className="sm:w-48 sm:h-48" /></div>
+                    <div className="bg-gradient-to-br from-gray-900 to-emerald-900 rounded-2xl p-4 sm:p-6 text-white relative overflow-hidden shadow-2xl">
+                        <div className="absolute top-0 right-0 p-8 opacity-10"><Sun size={80} className="sm:w-32 sm:h-32" /></div>
 
-                        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <div className="grid grid-cols-2 gap-4 mb-6">
+                                <div className="grid grid-cols-2 gap-4 mb-4">
                                     <div>
-                                        <p className="text-emerald-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1">{t.monthlyYield}</p>
-                                        <p className="text-2xl sm:text-4xl font-black text-white">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                        <p className="text-emerald-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">{t.monthlyYield}</p>
+                                        <p className="text-xl sm:text-2xl font-black text-white">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                     </div>
                                     <div>
-                                        <p className="text-emerald-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1">{t.annualYield}</p>
-                                        <p className="text-2xl sm:text-4xl font-black text-white">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                        <p className="text-emerald-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">{t.annualYield}</p>
+                                        <p className="text-xl sm:text-2xl font-black text-white">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                     </div>
                                 </div>
 
-                                <div className="space-y-4">
+                                <div className="space-y-3">
                                     <div>
-                                        <p className="text-emerald-400/70 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1">{t.totalYield}</p>
-                                        <p className="text-2xl sm:text-4xl font-black text-white">€ {totalYieldLongTerm.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                        <p className="text-emerald-400/70 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">{t.totalYield}</p>
+                                        <p className="text-xl sm:text-2xl font-black text-white">€ {totalYieldLongTerm.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                     </div>
                                     <div className="h-px bg-white/10 w-full"></div>
                                     <div className="flex items-baseline gap-2">
-                                        <p className="text-emerald-400/70 text-[10px] sm:text-xs font-bold uppercase tracking-widest">{t.roi}</p>
-                                        <p className="text-3xl sm:text-6xl font-black text-emerald-400">{roiTotal.toFixed(0)}%</p>
+                                        <p className="text-emerald-400/70 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">{t.roi}</p>
+                                        <p className="text-2xl sm:text-4xl font-black text-emerald-400">{roiTotal.toFixed(0)}%</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div className="flex flex-col justify-center items-center md:items-end text-center md:text-right">
-                                <div className="p-6 sm:p-8 bg-white/10 backdrop-blur-md rounded-3xl border border-white/10 shadow-xl">
-                                    <p className="text-emerald-200 text-xs sm:text-sm font-bold uppercase tracking-widest mb-2">{t.payback}</p>
-                                    <p className="text-3xl sm:text-6xl font-black text-white leading-none">
-                                        {paybackYears} <span className="text-sm sm:text-xl font-medium opacity-70">anni</span>
-                                        {remainingMonths > 0 && <><br /><span className="text-xl sm:text-3xl">{remainingMonths}</span> <span className="text-sm sm:text-xl font-medium opacity-70">mesi</span></>}
+                                <div className="p-4 sm:p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl">
+                                    <p className="text-emerald-200 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-1">{t.payback}</p>
+                                    <p className="text-2xl sm:text-4xl font-black text-white leading-none">
+                                        {paybackYears} <span className="text-xs sm:text-lg font-medium opacity-70">anni</span>
+                                        {remainingMonths > 0 && <><br /><span className="text-lg sm:text-2xl">{remainingMonths}</span> <span className="text-xs sm:text-lg font-medium opacity-70">mesi</span></>}
                                     </p>
                                 </div>
-                                <div className="mt-6 flex items-start gap-2 max-w-[200px] sm:max-w-xs">
-                                    <Info size={16} className="text-emerald-400 shrink-0 mt-0.5 sm:w-5 sm:h-5" />
-                                    <p className="text-[10px] sm:text-xs text-emerald-100/60 leading-relaxed">{t.note}</p>
+                                <div className="mt-4 flex items-start gap-2 max-w-[200px] sm:max-w-xs">
+                                    <Info size={14} className="text-emerald-400 shrink-0 mt-0.5 sm:w-4 sm:h-4" />
+                                    <p className="text-[8px] sm:text-[10px] text-emerald-100/60 leading-relaxed">{t.note}</p>
                                 </div>
                             </div>
                         </div>

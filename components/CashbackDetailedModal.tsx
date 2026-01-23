@@ -400,20 +400,20 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
 
     return (
         <div ref={modalRef} className="fixed inset-0 z-[60] flex items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
-            <div className="share-modal-content bg-white dark:bg-gray-900 w-full h-full sm:h-auto sm:max-w-7xl sm:rounded-[2rem] shadow-2xl flex flex-col max-h-[100vh] sm:max-h-[95vh] overflow-hidden border border-purple-500/20">
+            <div className="share-modal-content bg-white dark:bg-gray-900 w-full h-full sm:h-auto sm:max-w-4xl sm:rounded-[2rem] shadow-2xl flex flex-col max-h-[100vh] sm:max-h-[90vh] overflow-hidden border border-purple-500/20">
 
                 {/* Header */}
-                <div className="p-3 sm:p-4 bg-gradient-to-br from-purple-700 via-purple-600 to-blue-700 text-white shrink-0 relative overflow-hidden">
+                <div className="p-1 sm:px-4 sm:py-0.5 bg-gradient-to-br from-purple-700 via-purple-600 to-blue-700 text-white shrink-0 relative overflow-hidden">
                     {/* Background patterns */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
                     <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-2xl -ml-10 -mb-10"></div>
 
-                    <div className="flex justify-between items-center mb-2 sm:mb-3 relative z-10">
+                    <div className="flex justify-between items-center mb-1 sm:mb-1 relative z-10">
                         <div className="flex items-center gap-2">
                             <div className="p-1 sm:p-2 bg-white/20 rounded-xl backdrop-blur-md">
                                 <ShoppingBag size={18} className="text-purple-100 sm:w-6 sm:h-6" />
                             </div>
-                            <h2 className="text-lg sm:text-3xl font-black tracking-tight uppercase">
+                            <h2 className="text-lg sm:text-lg font-black tracking-tight uppercase">
                                 {txt.title}
                             </h2>
                         </div>
@@ -422,39 +422,39 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 sm:gap-3 mt-1 sm:mt-2 relative z-10">
-                        <div className="bg-white/10 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2 sm:p-5 flex-1 border border-white/20 shadow-lg">
-                            <p className="text-[8px] sm:text-xs font-bold uppercase tracking-widest text-purple-200/70 mb-0.5">{txt.totalSpend}</p>
+                    <div className="grid grid-cols-2 gap-2 sm:gap-1 mt-0.5 sm:mt-0.5 relative z-10">
+                        <div className="bg-white/10 backdrop-blur-xl rounded-xl sm:rounded-lg p-1 sm:p-1.5 flex-1 border border-white/20 shadow-lg">
+                            <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-purple-200/70 mb-0">{txt.totalSpend}</p>
                             <div className="flex items-end justify-between">
-                                <p className="text-lg sm:text-4xl font-black tracking-tighter">€ {totalSpend.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 2 })}</p>
+                                <p className="text-lg sm:text-lg font-black tracking-tighter sm:leading-none">€ {totalSpend.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 2 })}</p>
                             </div>
                         </div>
-                        <div className="bg-white text-gray-900 rounded-xl sm:rounded-2xl p-2 sm:p-5 flex-1 shadow-2xl shadow-purple-900/40 border border-white/50">
-                            <p className="text-[8px] sm:text-xs font-bold uppercase tracking-widest text-purple-600 mb-0.5">{txt.monthlyReturn}</p>
+                        <div className="bg-white text-gray-900 rounded-xl sm:rounded-lg p-1 sm:p-1.5 flex-1 shadow-2xl shadow-purple-900/40 border border-white/50">
+                            <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-purple-600 mb-0">{txt.monthlyReturn}</p>
                             <div className="flex items-end justify-between">
-                                <p className="text-lg sm:text-4xl font-black tracking-tighter text-purple-900">€ {totalCashback.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                <p className="text-lg sm:text-lg font-black tracking-tighter text-purple-900 sm:leading-none">€ {totalCashback.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                             </div>
                         </div>
                     </div>
 
                     {/* BILL ERASER SECTION */}
-                    <div className="bg-white/10 backdrop-blur-xl mt-2 sm:mt-3 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 border border-white/20 relative z-10">
+                    <div className="bg-white/10 backdrop-blur-xl mt-0.5 sm:mt-0.5 rounded-xl sm:rounded-lg p-1.5 sm:p-1.5 border border-white/20 relative z-10">
                         <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:mb-3">
                             <div className="flex-1 w-full sm:w-auto">
                                 <div className="flex items-center justify-between sm:block">
-                                    <p className="text-[8px] sm:text-xs font-black uppercase tracking-[0.1em] text-purple-200">{txt.estimatedBill}</p>
-                                    <div className="flex items-center gap-2 sm:mt-2 bg-white/10 hover:bg-white/20 focus-within:bg-white/20 focus-within:ring-2 focus-within:ring-white/30 px-3 py-1.5 sm:py-3 rounded-xl border border-white/20 transition-all cursor-text group/input" onClick={(e) => {
+                                    <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.1em] text-purple-200">{txt.estimatedBill}</p>
+                                    <div className="flex items-center gap-2 sm:mt-0.5 bg-white/10 hover:bg-white/20 focus-within:bg-white/20 focus-within:ring-2 focus-within:ring-white/30 px-3 py-1 sm:py-1 rounded-xl border border-white/20 transition-all cursor-text group/input" onClick={(e) => {
                                         const input = e.currentTarget.querySelector('input');
                                         if (input) input.focus();
                                     }}>
-                                        <span className="text-white font-black text-xs sm:text-2xl">€</span>
+                                        <span className="text-white font-black text-xs sm:text-xl">€</span>
                                         <input
                                             type="number"
                                             value={targetBill || ''}
                                             onChange={(e) => setTargetBill(Math.max(0, parseFloat(e.target.value) || 0))}
                                             onFocus={(e) => e.target.select()}
                                             placeholder="0"
-                                            className="w-16 sm:w-40 font-black text-sm sm:text-4xl text-white bg-transparent outline-none p-0 placeholder:text-white/20 transition-all"
+                                            className="w-16 sm:w-40 font-black text-sm sm:text-2xl text-white bg-transparent outline-none p-0 placeholder:text-white/20 transition-all"
                                         />
                                         <div className="p-1 rounded-lg bg-white/10 text-white/40 group-hover/input:text-white/70 transition-colors">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4">
@@ -489,7 +489,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                 {/* Content - Scrollable List */}
                 <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3 bg-gray-50/50 dark:bg-gray-950 custom-scrollbar">
                     {categories.map((cat) => (
-                        <div key={cat.id} className="bg-white dark:bg-gray-900 p-4 rounded-2xl sm:rounded-[2rem] shadow-sm border border-gray-100 dark:border-white/5 transition-all group hover:border-purple-200">
+                        <div key={cat.id} className="bg-white dark:bg-gray-900 p-2 rounded-2xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-white/5 transition-all group hover:border-purple-200">
                             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
 
                                 {/* LEFT SECTION: Icon + Name (Desktop) / TOP ROW (Mobile) */}
@@ -499,7 +499,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                             {React.cloneElement(getIcon(cat.icon), { size: 20, className: "sm:w-6 sm:h-6" })}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h3 className="font-black text-sm sm:text-xl text-gray-900 dark:text-white truncate uppercase sm:normal-case tracking-tight">{cat.name}</h3>
+                                            <h3 className="font-black text-sm sm:text-base text-gray-900 dark:text-white truncate uppercase sm:normal-case tracking-tight">{cat.name}</h3>
                                             <p className="hidden sm:block text-[9px] sm:text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{cat.isExtra ? 'Promozione' : 'Budget Famiglia'}</p>
                                         </div>
                                     </div>
@@ -517,14 +517,14 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
 
                                     {/* Amount Input */}
                                     <div className="col-span-4 sm:flex-1 relative">
-                                        <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[10px] sm:text-base">€</div>
+                                        <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[10px] sm:text-xs">€</div>
                                         <input
                                             type="number"
                                             value={cat.amount || ''}
                                             onChange={(e) => handleUpdate(cat.id, 'amount', parseFloat(e.target.value) || 0)}
                                             onFocus={(e) => e.target.select()}
                                             placeholder="0"
-                                            className="w-full pl-5 pr-1 py-2 sm:py-4 bg-gray-50 dark:bg-gray-800/80 rounded-lg text-right font-black text-xs sm:text-xl text-gray-900 dark:text-white border border-gray-100 dark:border-white/10 outline-none transition-all shadow-inner"
+                                            className="w-full pl-5 pr-1 py-1 sm:py-1.5 bg-gray-50 dark:bg-gray-800/80 rounded-lg text-right font-black text-xs sm:text-sm text-gray-900 dark:text-white border border-gray-100 dark:border-white/10 outline-none transition-all shadow-inner"
                                         />
                                     </div>
 
@@ -533,7 +533,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                         <select
                                             value={cat.brand}
                                             onChange={(e) => handleUpdate(cat.id, 'brand', e.target.value)}
-                                            className="w-full py-2 sm:py-4 px-1 sm:px-4 appearance-none bg-gray-50 dark:bg-gray-800/80 rounded-lg text-[8px] sm:text-sm font-black text-gray-600 dark:text-gray-200 tracking-wide uppercase border border-gray-100 dark:border-white/10 outline-none cursor-pointer text-center truncate shadow-inner"
+                                            className="w-full py-1 sm:py-1.5 px-1 sm:px-2 appearance-none bg-gray-50 dark:bg-gray-800/80 rounded-lg text-[8px] sm:text-xs font-black text-gray-600 dark:text-gray-200 tracking-wide uppercase border border-gray-100 dark:border-white/10 outline-none cursor-pointer text-center truncate shadow-inner"
                                         >
                                             <option value="">{txt.selectBrand}</option>
                                             {BRANDS_DATA
@@ -551,7 +551,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                     {/* Percentage Input */}
                                     <div className="col-span-4 sm:flex-[1] relative">
                                         {cat.fixedAmount !== undefined ? (
-                                            <div className="w-full py-2 sm:py-4 text-right font-black text-xs sm:text-xl text-purple-600 dark:text-purple-400">
+                                            <div className="w-full py-1 sm:py-1.5 text-right font-black text-xs sm:text-sm text-purple-600 dark:text-purple-400">
                                                 €{cat.fixedAmount.toFixed(0)}
                                             </div>
                                         ) : (
@@ -562,10 +562,10 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                                     onChange={(e) => handleUpdate(cat.id, 'percentage', parseFloat(e.target.value) || 0)}
                                                     onFocus={(e) => e.target.select()}
                                                     placeholder="0"
-                                                    className="w-full pr-4 sm:pr-8 py-2 sm:py-4 bg-transparent text-right font-black text-xs sm:text-xl text-purple-600 dark:text-purple-400 border-b border-purple-100 dark:border-purple-900/50 outline-none"
+                                                    className="w-full pr-4 sm:pr-6 py-1 sm:py-1.5 bg-transparent text-right font-black text-xs sm:text-sm text-purple-600 dark:text-purple-400 border-b border-purple-100 dark:border-purple-900/50 outline-none"
                                                     step="0.1"
                                                 />
-                                                <span className="absolute right-0 top-1/2 -translate-y-1/2 text-[10px] sm:text-base text-purple-400 font-bold pointer-events-none">%</span>
+                                                <span className="absolute right-0 top-1/2 -translate-y-1/2 text-[10px] sm:text-xs text-purple-400 font-bold pointer-events-none">%</span>
                                             </div>
                                         )}
                                     </div>
