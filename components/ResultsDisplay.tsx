@@ -240,7 +240,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
       />
 
       {isFullScreen && (
-        <div className="fixed inset-0 z-[9998] bg-gray-100/90 backdrop-blur-sm animate-in fade-in duration-300" />
+        <div className="fixed inset-0 z-[9998] bg-gray-100/90 dark:bg-slate-900/95 backdrop-blur-sm animate-in fade-in duration-300" />
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
@@ -277,7 +277,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
       <div className={`
         ${isFullScreen
-          ? 'fixed inset-0 z-[10000] p-2 sm:p-4 flex flex-col gap-2 overflow-hidden bg-white/20'
+          ? 'fixed inset-0 z-[10000] p-2 sm:p-4 flex flex-col gap-2 overflow-hidden bg-white/20 dark:bg-transparent'
           : 'relative transition-all duration-500 ease-in-out'
         }
       `}>
