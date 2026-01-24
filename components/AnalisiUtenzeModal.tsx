@@ -4,6 +4,7 @@ import { PlanInput, CompensationPlanResult } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 import { analyzeBillImage, ExtractedBillData } from '../utils/aiService';
 import AIScannerModal from './AIScannerModal';
+import SharyTrigger from './SharyTrigger';
 
 interface AnalisiUtenzeModalProps {
     isOpen: boolean;
@@ -309,7 +310,13 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1 shadow-lg md:hidden">
                                 <span>✨</span> {txt.premiumAnalysis}
                             </div>
-                            <h2 className="text-xl md:text-2xl lg:text-2xl font-black tracking-tight mb-0.5 drop-shadow-md leading-tight">{txt.title}</h2>
+                            <div className="flex items-center gap-2">
+                                <h2 className="text-xl md:text-2xl lg:text-2xl font-black tracking-tight mb-0.5 drop-shadow-md leading-tight">{txt.title}</h2>
+                                <SharyTrigger
+                                    message="Ciao! Qui puoi analizzare il risparmio. Immetti 0.02 come lo spread di Union (se non ricordi, usa quello). Poi il PUN di mercato a circa 0.11 e le spese fisse Union a 11.50. Per il gas: Spread Union 0.12, PSV circa 0.33, Spese fisse 11.50. Ora se vuoi fare un confronto con un altro gestore clicca su confronta con altro e immetti i dati dell'altro gestore, in basso troverai il resoconto!"
+                                    messageDe="Hallo! Hier kannst du die Ersparnis analysieren. Gib 0,02 als Union-Spread ein (wenn du dich nicht erinnerst, nimm diesen). Dann den Markt-PUN mit ca. 0,11 und die Union-Fixkosten mit 11,50. Für Gas: Union-Spread 0,12, PSV ca. 0,33, Fixkosten 11,50. Wenn du einen Vergleich mit einem anderen Anbieter machen möchtest, klicke auf 'Mit anderem vergleichen' und gib die Daten des anderen Anbieters ein. Unten findest du die Zusammenfassung!"
+                                />
+                            </div>
                             <p className="text-indigo-100 font-medium text-xs md:text-lg opacity-90 hidden">{txt.subtitle}</p>
                         </div>
                         <div className="flex items-center gap-2">

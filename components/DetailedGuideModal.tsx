@@ -2,6 +2,7 @@ import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useShary } from '../contexts/SharyContext';
 
 interface DetailedGuideModalProps {
     isOpen: boolean;
@@ -9,7 +10,8 @@ interface DetailedGuideModalProps {
 }
 
 const DetailedGuideModal: React.FC<DetailedGuideModalProps> = ({ isOpen, onClose }) => {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
+    const { isActive: isSharyActive, toggleShary } = useShary();
     const [currentStep, setCurrentStep] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
     const [confetti, setConfetti] = useState(false);
@@ -192,6 +194,26 @@ const DetailedGuideModal: React.FC<DetailedGuideModalProps> = ({ isOpen, onClose
                                         <div className="w-14 h-14 rounded-2xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">📈</div>
                                         <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Grafici Live</h4>
                                         <p className="text-gray-500 dark:text-gray-400">Visualizza la crescita nel tempo con proiezioni a 3 anni.</p>
+                                    </div>
+                                </div>
+
+
+
+                                {/* Shary Toggle Section */}
+                                <div className="mt-8 p-6 bg-cyan-50 dark:bg-cyan-900/10 rounded-3xl border border-cyan-100 dark:border-cyan-500/20 flex flex-col md:flex-row items-center cursor-pointer hover:bg-cyan-100 dark:hover:bg-cyan-900/20 transition-all" onClick={toggleShary}>
+                                    <div className="flex-1 mb-4 md:mb-0">
+                                        <h4 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                                            <span>🤖</span>
+                                            {language === 'de' ? 'Aktiviere Shary, deinen KI-Assistenten' : 'Attiva Shary, il tuo Assistente AI'}
+                                        </h4>
+                                        <p className="text-gray-600 dark:text-gray-300 mt-1">
+                                            {language === 'de'
+                                                ? 'Shary hilft dir bei jedem Schritt mit Sprachanweisungen. Klicke hier, um ihn zu aktivieren!'
+                                                : 'Shary ti aiuterà passo dopo passo con suggerimenti vocali. Clicca qui per attivarlo!'}
+                                        </p>
+                                    </div>
+                                    <div className={`w-16 h-9 rounded-full relative transition-colors duration-300 ${isSharyActive ? 'bg-cyan-500' : 'bg-gray-300 dark:bg-gray-600'}`}>
+                                        <div className={`absolute top-1 left-1 w-7 h-7 bg-white rounded-full shadow-md transition-transform duration-300 transform ${isSharyActive ? 'translate-x-7' : 'translate-x-0'}`}></div>
                                     </div>
                                 </div>
                             </div>
@@ -407,7 +429,7 @@ const DetailedGuideModal: React.FC<DetailedGuideModalProps> = ({ isOpen, onClose
                         {currentStep === tabs.length - 1 ? 'Inizia Ora 🚀' : 'Avanti →'}
                     </button>
                 </div>
-            </div>
+            </div >
 
             <style>{`
             @keyframes confetti {
@@ -425,7 +447,7 @@ const DetailedGuideModal: React.FC<DetailedGuideModalProps> = ({ isOpen, onClose
                 scrollbar-width: none;
             }
         `}</style>
-        </div>
+        </div >
     );
 };
 

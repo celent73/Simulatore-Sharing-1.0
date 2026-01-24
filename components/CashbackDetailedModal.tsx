@@ -3,6 +3,9 @@ import { X, Calculator, RefreshCw, ShoppingBag, Car, ShoppingCart, Gift, Plane, 
 
 import { CashbackCategory } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
+import SharyTrigger from './SharyTrigger';
+
+
 
 
 interface CashbackDetailedModalProps {
@@ -416,6 +419,10 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                             <h2 className="text-lg sm:text-lg font-black tracking-tight uppercase">
                                 {txt.title}
                             </h2>
+                            <SharyTrigger
+                                message="Inserisci per ogni categoria l'importo di spesa e poi seleziona il brand che vuoi. Nota immediatamente la percentuale di cashback! E se vuoi, imposta in alto un importo di bolletta e osserva come diminuisce con il cashback, buon divertimento!"
+                                messageDe="Gib für jede Kategorie den Ausgabenbetrag ein und wähle dann die gewünschte Marke. Beachte sofort den Cashback-Prozentsatz! Und wenn du willst, gib oben einen Rechnungsbetrag ein und beobachte, wie er durch das Cashback sinkt. Viel Spaß!"
+                            />
                         </div>
                         <button onClick={onClose} className="p-1 sm:p-1.5 hover:bg-white/10 rounded-full transition-colors">
                             <X size={20} className="sm:w-5 sm:h-5" />

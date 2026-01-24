@@ -172,47 +172,56 @@ const DreamVisualizer: React.FC<DreamVisualizerProps> = ({ monthlyData }) => {
       {/* Result Main Card */}
       <div className={`
             relative rounded-3xl p-6 sm:p-10 text-white overflow-hidden shadow-2xl transition-all duration-500 group
+            min-h-[300px] flex flex-col justify-center
             bg-gradient-to-br ${selectedDream.gradient}
        `}>
 
-        {/* Abstract Background Shapes */}
-        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none mix-blend-overlay"></div>
-        <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-black/10 rounded-full blur-3xl pointer-events-none mix-blend-overlay"></div>
+        {/* Real Image Background (Simulated AI) */}
+        {selectedDream.id === 'maldive' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1473116763249-56381a3ec4a1?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-40 transition-opacity duration-1000"></div>}
+        {selectedDream.id === 'iphone' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1592750475338-74b7b2191b79?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-40 transition-opacity duration-1000"></div>}
+        {selectedDream.id === 'rolex' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-40 transition-opacity duration-1000"></div>}
+        {selectedDream.id === 'car' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-40 transition-opacity duration-1000"></div>}
+        {selectedDream.id === 'house' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-40 transition-opacity duration-1000"></div>}
+        {selectedDream.id === 'freedom' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-40 transition-opacity duration-1000"></div>}
+
+        {/* Abstract Background Shapes as fallback or overlay */}
+        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none mix-blend-soft-light"></div>
+        <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-black/30 rounded-full blur-3xl pointer-events-none mix-blend-multiply"></div>
 
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
 
           {/* Left: Target Info */}
           <div className="text-center md:text-left w-full">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-xs font-bold uppercase tracking-wider shadow-sm">
-                <span>🎯</span> {t('dreams.target_label')}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-xs font-bold uppercase tracking-wider shadow-sm animate-pulse">
+                <span>🤖</span> AI Vision
               </div>
             </div>
 
-            <h3 className="text-3xl sm:text-4xl font-extrabold flex items-center justify-center md:justify-start gap-3 mb-2 drop-shadow-md">
-              {selectedDream.icon} {selectedDream.title}
+            <h3 className="text-3xl sm:text-5xl font-black flex items-center justify-center md:justify-start gap-3 mb-2 drop-shadow-lg tracking-tight">
+              {selectedDream.title}
             </h3>
-            <p className="text-white/80 font-medium text-lg">
-              {t('dreams.value_label')}: <span className="font-bold text-white">€{selectedDream.cost.toLocaleString('it-IT')}</span>
+            <p className="text-white/90 font-medium text-xl drop-shadow-md">
+              {t('dreams.value_label')}: <span className="font-bold text-white text-2xl">€{selectedDream.cost.toLocaleString('it-IT')}</span>
             </p>
           </div>
 
           {/* Right: Prediction Result */}
-          <div className="text-center md:text-right bg-black/10 p-4 rounded-2xl backdrop-blur-sm border border-white/10 min-w-[200px]">
+          <div className="text-center md:text-right bg-black/30 p-6 rounded-3xl backdrop-blur-md border border-white/20 min-w-[220px] shadow-xl transform transition-transform hover:scale-105">
             {prediction?.reached ? (
               <>
-                <p className="text-white/70 text-xs font-bold uppercase tracking-wider mb-1">{t('dreams.will_be_yours')}</p>
-                <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white drop-shadow-xl">
+                <p className="text-white/80 text-xs font-bold uppercase tracking-wider mb-2">{t('dreams.will_be_yours')}</p>
+                <div className="text-3xl sm:text-4xl font-black tracking-tight text-white drop-shadow-xl mb-2">
                   {prediction.dateString}
                 </div>
-                <div className="mt-2 inline-flex items-center gap-1 text-sm font-bold bg-white text-gray-900 px-3 py-1 rounded-lg shadow-lg">
+                <div className="inline-flex items-center gap-1 text-sm font-bold bg-white text-gray-900 px-4 py-1.5 rounded-full shadow-lg">
                   <span>⏳</span> {t('dreams.in_months').replace('months', `${prediction.month}`)}
                 </div>
               </>
             ) : (
               <>
                 <p className="text-white/90 font-bold text-lg mb-1">{t('dreams.wip')}</p>
-                <p className="text-sm opacity-70 leading-tight">
+                <p className="text-sm opacity-70 leading-tight block max-w-[180px] mx-auto">
                   {t('dreams.wip_desc')}
                 </p>
               </>
@@ -221,22 +230,22 @@ const DreamVisualizer: React.FC<DreamVisualizerProps> = ({ monthlyData }) => {
         </div>
 
         {/* Progress Bar Area */}
-        <div className="mt-8 md:mt-10 relative z-10">
+        <div className="mt-10 relative z-10">
           <div className="flex justify-between text-xs font-bold uppercase tracking-wider opacity-90 mb-2">
             <span>{t('dreams.progress')}</span>
             <span>{prediction?.progress.toFixed(0)}%</span>
           </div>
-          <div className="h-4 bg-black/20 rounded-full overflow-hidden backdrop-blur-md shadow-inner border border-white/10">
+          <div className="h-6 bg-black/30 rounded-full overflow-hidden backdrop-blur-md shadow-inner border border-white/20">
             <div
-              className="h-full bg-white shadow-[0_0_20px_rgba(255,255,255,0.6)] transition-all duration-1000 ease-out relative"
+              className={`h-full ${prediction?.reached ? 'bg-emerald-400' : 'bg-white'} shadow-[0_0_20px_rgba(255,255,255,0.6)] transition-all duration-1000 ease-out relative`}
               style={{ width: `${prediction?.progress}%` }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent w-full h-full animate-shimmer" style={{ backgroundSize: '200% 100%' }}></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent w-full h-full animate-shimmer" style={{ backgroundSize: '200% 100%' }}></div>
             </div>
           </div>
           {!prediction?.reached && (
-            <p className="text-center text-xs mt-2 text-white/60 font-medium">
-              {t('dreams.accumulated')} €{monthlyData[monthlyData.length - 1]?.cumulativeEarnings.toLocaleString('it-IT') || 0}
+            <p className="text-center text-xs mt-3 text-white/80 font-bold bg-black/20 py-1 px-3 rounded-full inline-block mx-auto backdrop-blur-sm">
+              Accumulato finora: €{monthlyData[monthlyData.length - 1]?.cumulativeEarnings.toLocaleString('it-IT') || 0}
             </p>
           )}
         </div>

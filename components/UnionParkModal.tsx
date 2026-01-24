@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Sun, Info, TrendingUp, Wallet, Check, RotateCcw, Minus, Plus } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import SharyTrigger from './SharyTrigger';
 
 interface UnionParkModalProps {
     isOpen: boolean;
@@ -119,7 +120,13 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             <div className="inline-flex items-center gap-2 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] sm:text-[10px] font-bold uppercase tracking-widest mb-1 sm:mb-2 shadow-lg">
                                 <Sun size={12} className="animate-pulse sm:w-4 sm:h-4" /> Sharing Park
                             </div>
-                            <h2 className="text-xl sm:text-2xl font-black tracking-tight mb-0.5">{t.title}</h2>
+                            <div className="flex items-center gap-2">
+                                <h2 className="text-xl sm:text-2xl font-black tracking-tight mb-0.5">{t.title}</h2>
+                                <SharyTrigger
+                                    message="Benvenuto nello Sharing Park! Seleziona quanti pannelli vuoi (da 1 a 20). Ogni pannello ti garantisce un rendimento mensile passivo basato sul PUN. Usa il bottone 'Obiettivo Azzera Bolletta' per calcolare quanti te ne servono per coprire le tue spese!"
+                                    messageDe="Willkommen im Sharing Park! Wähle, wie viele Paneele du möchtest (von 1 bis 20). Jedes Paneel garantiert dir ein passives monatliches Einkommen basierend auf dem PUN. Nutze den Button 'Ziel: Rechnung Null', um zu berechnen, wie viele du brauchst, um deine Ausgaben zu decken!"
+                                />
+                            </div>
                             <p className="text-emerald-100 text-xs sm:text-sm font-medium opacity-90">{t.subtitle}</p>
                         </div>
                         <button onClick={onClose} className="p-2 sm:p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 shadow-lg hover:rotate-90 duration-300">

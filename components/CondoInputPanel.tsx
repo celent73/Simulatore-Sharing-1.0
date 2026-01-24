@@ -4,6 +4,7 @@ import { CondoInput } from '../types';
 import InputGroup from './InputGroup';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Users, Info, TrendingUp } from 'lucide-react';
+import SharyTrigger from './SharyTrigger';
 
 interface CondoInputPanelProps {
     inputs: CondoInput;
@@ -32,8 +33,12 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                     <h2 className="text-xl font-black text-gray-900 dark:text-white leading-[1.1]">
                         {t('input.admin_params')}
                     </h2>
+                    <SharyTrigger
+                        message="Osserviamo l'opportunità per gli amministratori, inannzi tutto seleziona il numero di contratti per condomini e osserva immediatamente quanto guadagnerai di Una Tantum e di RICORRENZE MENSILI per i prossimi 3 anni!! E se qualche condomino volesse diventare un utente? Seleziona la media di Famiglie per Condominio e la percentuali di chi passera le utente. Vedrai il totale dei guadagni sommarsi a quelli già calcolati"
+                        messageDe="Schauen wir uns die Möglichkeiten für Verwalter an. Wähle zuerst die Anzahl der Verträge pro Wohnanlage und sieh sofort, wie viel Einmalzahlung und MONATLICHE RÜCKVERGÜTUNGEN du in den nächsten 3 Jahren verdienst!! Und wenn ein Bewohner Nutzer werden möchte? Wähle den Durchschnitt der Familien pro Wohnanlage und den Prozentsatz derer, die wechseln. Du wirst sehen, wie sich die Gesamteinnahmen zu den bereits berechneten addieren."
+                    />
                 </div>
-                <button onClick={onReset} className="p-2.5 bg-gray-50 dark:bg-white/5 hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-400 hover:text-red-500 dark:text-white/50 dark:hover:text-red-400 rounded-xl transition-all border border-gray-100 dark:border-white/10">
+                <button onClick={onReset} className="p-2.5 bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/30 rounded-xl transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 11.667 0 8.25 8.25 0 0 0 0-11.667l-3.182-3.182m0 0-3.182 3.183m3.182-3.182-4.992 4.992" />
                     </svg>
@@ -104,7 +109,7 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                             label={t('input.green_units_init')}
                             value={inputs.greenUnits}
                             onChange={(val) => onInputChange('greenUnits', val)}
-                            max={1000}
+                            max={10000}
                             step={10}
                         />
                         <InputGroup
@@ -127,7 +132,7 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                             label={t('input.light_units_init')}
                             value={inputs.lightUnits}
                             onChange={(val) => onInputChange('lightUnits', val)}
-                            max={1000}
+                            max={10000}
                             step={10}
                         />
                         <InputGroup

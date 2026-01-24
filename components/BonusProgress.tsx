@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import SharyTrigger from './SharyTrigger';
 
 interface BonusProgressProps {
   totalContracts: number;
@@ -222,6 +223,10 @@ const BonusProgress: React.FC<BonusProgressProps> = ({ totalContracts, onBonusCh
         <div className="flex items-center gap-2 mb-6">
           <span className="text-2xl text-red-500">🎯</span>
           <h2 className="text-xl font-bold text-slate-800 dark:text-white">{t('bonus.title')}</h2>
+          <SharyTrigger
+            message="ENTRA NELLA SECONDA FASE DI CARRIERA! Con 600 utenze di rete (rispettando il 60% della gamba più forte) ottieni i bonus extra che si aggiungono ai guadagni di rete"
+            messageDe="ERÖFFNE DIE ZWEITE KARRIEREPHASE! Mit 600 Netzwerk-Usern (unter Einhaltung der 60%-Regel des stärksten Beins) erhältst du Extra-Boni, die zu deinen Netzwerkgewinnen hinzugefügt werden!"
+          />
         </div>
 
         <div className="space-y-4">

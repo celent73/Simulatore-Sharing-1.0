@@ -42,6 +42,11 @@ import BackgroundMesh from './components/BackgroundMesh';
 import DisclaimerModal from './components/DisclaimerModal';
 import PaymentSuccessModal from './components/PaymentSuccessModal';
 
+// --- SHARY ASSISTANT IMPORTS ---
+import { SharyProvider, useShary } from './contexts/SharyContext';
+import SharyAssistant from './components/SharyAssistant';
+import SharyTrigger from './components/SharyTrigger';
+
 const initialInputs: PlanInput = {
   directRecruits: 0,
   contractsPerUser: 0,
@@ -114,6 +119,9 @@ const AppContent = () => {
 
   const planResult = useCompensationPlan(inputs, viewMode);
   const condoResult = useCondoSimulation(condoInputs, planResult);
+
+  // --- SHARY HOOK ---
+  const { isActive, toggleShary } = useShary();
 
   const targetButtonText = language === 'it' ? "Calcola Obiettivo" : "Ziel berechnen";
 
@@ -418,9 +426,12 @@ const AppContent = () => {
     <div className={`min-h-screen bg-transparent text-gray-800 dark:text-gray-200 transition-colors duration-300 relative flex flex-col overflow-x-hidden`}>
       <BackgroundMesh />
 
+      {/* SHARY UI */}
+      <SharyAssistant />
+
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.1.13
+        v1.1.14
       </div>
 
 
@@ -471,6 +482,16 @@ const AppContent = () => {
               </button>
 
               <div className="w-px h-8 bg-white/30 mx-1 hidden sm:block"></div>
+
+              {/* SHARY TOGGLE BUTTON */}
+              <button
+                onClick={toggleShary}
+                className={`flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 rounded-xl shadow-lg transition-all border-0 font-bold text-sm hover:scale-[1.02] ${isActive ? 'bg-cyan-500 text-white shadow-cyan-500/30' : 'bg-white text-gray-400 hover:bg-gray-100'}`}
+                title={isActive ? "Disattiva Shary" : "Attiva Shary"}
+              >
+                <span className="text-xl mr-0 sm:mr-2">🤖</span>
+                <span className="hidden sm:inline">{isActive ? 'Shary ON' : 'Attiva Shary'}</span>
+              </button>
 
               <button onClick={() => setIsHelpOpen(true)} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-white text-union-blue-600 rounded-xl shadow-lg hover:bg-gray-100 transition-all border-0 font-bold text-sm hover:scale-[1.02]">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 sm:mr-2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" /></svg>
@@ -578,6 +599,6 @@ const AppContent = () => {
   );
 };
 
-const App = () => { return <LanguageProvider><AppContent /></LanguageProvider>; }
+const App = () => { return <LanguageProvider><SharyProvider><AppContent /></SharyProvider></LanguageProvider>; }
 
 export default App;

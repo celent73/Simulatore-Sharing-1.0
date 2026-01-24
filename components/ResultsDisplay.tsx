@@ -9,7 +9,6 @@ import AssetComparator from './AssetComparator';
 import TimeMultiplier from './TimeMultiplier';
 import InactionCost from './InactionCost';
 import ZeroCostGoal from './ZeroCostGoal';
-import CustomerBenefitCard from './CustomerBenefitCard';
 import GoldenNoCard from './GoldenNoCard';
 
 import ScenarioComparator from './ScenarioComparator';
@@ -20,6 +19,9 @@ import { jsPDF } from 'jspdf';
 import { useLanguage } from '../contexts/LanguageContext';
 import { FileDown } from 'lucide-react';
 import ProjectionModal from './ProjectionModal';
+import LiveBattleMode from './LiveBattleMode';
+import AICoach from './AICoach';
+import SharyTrigger from './SharyTrigger';
 
 interface ResultsDisplayProps {
   planResult: CompensationPlanResult;
@@ -292,6 +294,10 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
             <h2 className={`font-black text-gray-900 dark:text-white flex items-center gap-3 ${isFullScreen ? 'text-3xl' : 'text-xl'}`}>
               <span className="p-2 rounded-xl bg-gradient-to-br from-union-blue-600 to-union-blue-800 text-white shadow-lg">📊</span>
               {t('results.table_title')}
+              <SharyTrigger
+                message="Sei pronto a far ESPLODERE il tuo Network? scegli quanti diretti vuoi ad esempio 3, scegli quanti contratti si faranno per ogni utente e scegli quanti indiretti faranno la stessa cosa. Dopodichè seleziona i livelli di profondità e SBAMM, osserva il POTENZIALE DEL TUO BUSINESS!!"
+                messageDe="Bist du bereit, dein Netzwerk EXPLODIEREN zu lassen? Wähle, wie viele direkte Partner du möchtest, z.B. 3, wähle, wie viele Verträge jeder Benutzer abschließt, und wähle, wie viele indirekte Partner dasselbe tun. Dann wähle die Tiefenebenen und BÄÄM, sieh dir das POTENZIAL DEINES BUSINESS an!!"
+              />
               {isFullScreen && (
                 <div className="flex items-center gap-2 ml-4">
                   <span className="text-union-orange-500 text-sm bg-union-orange-50 px-3 py-1 rounded-full uppercase tracking-wider border border-union-orange-200">Focus</span>
@@ -509,6 +515,10 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           </div>
 
           <div className="space-y-8 p-6 rounded-[2.5rem] bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 backdrop-blur-sm">
+            <div id="live-battle">
+              <LiveBattleMode planResult={planResult} />
+            </div>
+
             <div id="quick-pitch">
               <QuickPitchMode planResult={planResult} realizationMonths={inputs.realizationTimeMonths} />
             </div>
@@ -519,10 +529,6 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
             <div id="zero-cost">
               <ZeroCostGoal recurringIncome={totalRecurringYear1} averageEarningsPerUser={avgEarningsPerUser} monthlyCashback={monthlyCashback} />
-            </div>
-
-            <div id="customer-benefit">
-              <CustomerBenefitCard totalRecurringYear1={totalRecurringYear1} monthlyCashback={monthlyCashback} />
             </div>
 
             <div id="dream-visualizer">
@@ -554,7 +560,10 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
             </div>
           </div>
 
+          <AICoach planResult={planResult} inputs={inputs} />
+
           <QuickNavigation sections={[
+            { id: 'live-battle', name: 'Battle Mode', icon: '⚔️' },
             { id: 'quick-pitch', name: 'Pitch Veloce', icon: '⚡' },
             { id: 'scenario-comparator', name: 'Confronto Scenari', icon: '🎯' },
             { id: 'dream-visualizer', name: 'Visualizzatore Sogni', icon: '💭' },

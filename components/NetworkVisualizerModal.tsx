@@ -5,6 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useCompensationPlan } from '../hooks/useSimulation';
 import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
+import SharyTrigger from './SharyTrigger';
 
 interface NetworkVisualizerModalProps {
   isOpen: boolean;
@@ -508,7 +509,7 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
 
         {/* --- HEADER UI --- */}
         <div className="absolute top-0 left-0 right-0 p-4 md:p-8 flex justify-between items-start z-50 pointer-events-none">
-          <div>
+          <div className="pointer-events-auto">
             <div className="flex items-center gap-2 mb-1">
               <span className="px-2 py-0.5 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-300 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">Interactive 3D</span>
             </div>
@@ -518,6 +519,10 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
             <p className="text-blue-200/80 text-xs md:text-lg font-medium max-w-md mt-2 shadow-black drop-shadow-md">
               {txt.subtitle}
             </p>
+            <SharyTrigger
+              message="Ti Piace questa schermata WOW? Benvenuto nell'universo del Networker! Prima di iniziare, azzera tutto con l'apposito pulsante di reset in alto a destra. In basso troverai i comandi, ti conviene impostare in profondità 5 livelli, dopodichè divertiti inserendo 3 diretti e vedrai le prime 3 palline. Clicca su 3 indiretti ed ecco la magia. Se vuoi diventare Family pro in 2 mesi allora dovrai scegliere come numero di mesi sulla destra 1 o 2 e vedrai la targa Family pro se clicchi su un pallino nelle 3 gambe distinte facendolo diventare un F.P. vedrai la targhetta Family 3S e se aggiungerai altri 2 diretti e accenderai altri 2 FP diventerai Family 5S"
+              messageDe="Gefällt dir dieser WOW-Screen? Willkommen im Networker-Universum! Bevor du beginnst, setze alles mit dem Reset-Button oben rechts zurück. Unten findest du die Steuerungen. Am besten stellst du die Tiefe auf 5 Ebenen ein, dann habe Spaß daran, 3 direkte Partner einzufügen, und du wirst die ersten 3 Kugeln sehen. Klicke auf 3 indirekte und erlebe die Magie. Wenn du in 2 Monaten Family Pro werden willst, wähle rechts 1 oder 2 Monate, und du siehst das Family Pro-Abzeichen. Wenn du auf eine Kugel in den 3 verschiedenen Beinen klickst und sie zum F.P. machst, siehst du das Family 3S-Abzeichen. Fügst du 2 weitere Direkte hinzu und aktivierst 2 weitere FPs, wirst du Family 5S."
+            />
           </div>
 
           <div className="flex gap-3 pointer-events-auto">
