@@ -8,10 +8,16 @@ interface InputGroupProps {
   max: number;
   step: number;
   min?: number;
+  id?: string;
   icon?: React.ReactNode;
 }
 
-const InputGroup: React.FC<InputGroupProps> = ({ label, value, onChange, max, step, min = 0, icon }) => {
+import { useShary } from '../contexts/SharyContext';
+
+const InputGroup: React.FC<InputGroupProps> = ({ label, value, onChange, max, step, min = 0, icon, id }) => {
+  const { highlightedId } = useShary();
+  const isHighlighted = id && highlightedId === id;
+
   const handleIncrement = () => {
     onChange(Math.min(max, value + step));
   };
@@ -21,7 +27,7 @@ const InputGroup: React.FC<InputGroupProps> = ({ label, value, onChange, max, st
 
   const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let numValue = parseInt(e.target.value, 10);
-    
+
     if (isNaN(numValue)) return; // Or handle as you wish, maybe don't update
 
     // Clamp value immediately
@@ -32,19 +38,19 @@ const InputGroup: React.FC<InputGroupProps> = ({ label, value, onChange, max, st
   };
 
   const handleRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChange(Number(e.target.value));
+    onChange(Number(e.target.value));
   };
 
   // Calcolo percentuale per gradiente slider background se volessimo farlo custom, 
   // ma useremo accent-color che è più pulito e nativo.
 
   return (
-    <div className="flex flex-col space-y-3">
-      <div className="flex items-center gap-2">
+    <div className={`flex flex-col space-y-3 transition-all duration-300 ${isHighlighted ? 'scale-105' : ''}`}>
+      <div className={`flex items-center gap-2 p-1 rounded-lg transition-all ${isHighlighted ? 'bg-cyan-100 dark:bg-cyan-900/30 ring-2 ring-cyan-400 animate-pulse' : ''}`}>
         {icon && <div className="opacity-90">{icon}</div>}
         <label className="text-sm font-bold text-union-blue-600 dark:text-union-blue-300 tracking-wide uppercase text-[11px] sm:text-xs">{label}</label>
       </div>
-      
+
       <div className="flex items-center space-x-4">
         {/* Decrement Button */}
         <button
@@ -55,17 +61,17 @@ const InputGroup: React.FC<InputGroupProps> = ({ label, value, onChange, max, st
         >
           -
         </button>
-        
+
         {/* Number Input Area */}
         <div className="relative flex-grow">
-             <input
-              type="number"
-              min={min}
-              max={max}
-              value={value}
-              onChange={handleNumberChange}
-              className="w-full py-2 text-center text-2xl font-extrabold text-gray-800 dark:text-white bg-transparent border-b-2 border-gray-200 dark:border-gray-700 focus:border-union-blue-500 outline-none transition-colors"
-            />
+          <input
+            type="number"
+            min={min}
+            max={max}
+            value={value}
+            onChange={handleNumberChange}
+            className="w-full py-2 text-center text-2xl font-extrabold text-gray-800 dark:text-white bg-transparent border-b-2 border-gray-200 dark:border-gray-700 focus:border-union-blue-500 outline-none transition-colors"
+          />
         </div>
 
         {/* Increment Button */}
@@ -82,13 +88,13 @@ const InputGroup: React.FC<InputGroupProps> = ({ label, value, onChange, max, st
       {/* SLIDER (Range Input) */}
       <div className="px-1 pt-1">
         <input
-            type="range"
-            min={min}
-            max={max}
-            step={step}
-            value={value}
-            onChange={handleRangeChange}
-            className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-union-blue-500 hover:accent-union-blue-400 transition-all touch-pan-x"
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={handleRangeChange}
+          className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-union-blue-500 hover:accent-union-blue-400 transition-all touch-pan-x"
         />
       </div>
     </div>

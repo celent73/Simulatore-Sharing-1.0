@@ -25,6 +25,7 @@ import {
   Sun
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import SharyTrigger from './SharyTrigger';
 
 // Importazione del visualizzatore
 // FIX: Removing extra imports done manually in previous step if they exist or ensuring clean block
@@ -457,10 +458,18 @@ const InputPanel: React.FC<InputPanelProps> = ({
 
             {/* SLIDERS NETWORK */}
             <div className="space-y-2">
-              <CustomSlider label={t('input.direct_recruits')} value={inputs.directRecruits} onChange={(v: number) => onInputChange('directRecruits', v)} min={0} max={20} icon={User} colorBase="orange" />
-              <CustomSlider label={txt.contractsLabel} value={inputs.contractsPerUser} onChange={(v: number) => onInputChange('contractsPerUser', v)} min={0} max={2} icon={FileText} colorBase="cyan" />
-              <CustomSlider label={t('input.indirect_recruits')} value={inputs.indirectRecruits} onChange={(v: number) => onInputChange('indirectRecruits', v)} min={0} max={10} icon={PenSquare} colorBase="blue" />
-              <CustomSlider label={txt.depthLabel} value={inputs.networkDepth} onChange={(v: number) => onInputChange('networkDepth', v)} min={1} max={5} icon={Heart} colorBase="green" />
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest pl-1">Network</h3>
+                <SharyTrigger
+                  message="Qui definisci la tua struttura. Seleziona quanti collaboratori diretti porti, quanti ne porteranno loro (Indiretti) e fino a che livello di profondità vuoi calcolare. Ricorda: più è profonda la rete, più guadagni dalle royalty!"
+                  messageDe="Hier definierst du deine Struktur. Wähle aus, wie viele direkte Mitarbeiter du mitbringst, wie viele sie mitbringen (indirekt) und bis zu welcher Tiefe du berechnen möchtest. Denke daran: Je tiefer das Netzwerk, desto mehr verdienst du an Lizenzgebühren!"
+                  highlightId="slider_direct"
+                />
+              </div>
+              <CustomSlider label={t('input.direct_recruits')} value={inputs.directRecruits} onChange={(v: number) => onInputChange('directRecruits', v)} min={0} max={20} icon={User} colorBase="orange" id="slider_direct" />
+              <CustomSlider label={txt.contractsLabel} value={inputs.contractsPerUser} onChange={(v: number) => onInputChange('contractsPerUser', v)} min={0} max={2} icon={FileText} colorBase="cyan" id="slider_contracts" />
+              <CustomSlider label={t('input.indirect_recruits')} value={inputs.indirectRecruits} onChange={(v: number) => onInputChange('indirectRecruits', v)} min={0} max={10} icon={PenSquare} colorBase="blue" id="slider_indirect" />
+              <CustomSlider label={txt.depthLabel} value={inputs.networkDepth} onChange={(v: number) => onInputChange('networkDepth', v)} min={1} max={5} icon={Heart} colorBase="green" id="slider_depth" />
             </div>
           </div>
 
@@ -478,7 +487,15 @@ const InputPanel: React.FC<InputPanelProps> = ({
                 icon={Clock}
                 colorBase="red"
                 showButtons={false}
+                id="slider_time"
               />
+              <div className="absolute top-2 right-2">
+                <SharyTrigger
+                  message="Il fattore tempo è cruciale. Sposta questo cursore per vedere come cresce la tua rendita nel corso dei mesi. Solitamente una rete solida si costruisce in 12-24 mesi."
+                  messageDe="Der Zeitfaktor ist entscheidend. Verschiebe diesen Schieberegler, um zu sehen, wie dein Einkommen im Laufe der Monate wächst. Ein solides Netzwerk wird normalerweise in 12-24 Monaten aufgebaut."
+                  highlightId="slider_time"
+                />
+              </div>
             </div>
           </div>
         </div>

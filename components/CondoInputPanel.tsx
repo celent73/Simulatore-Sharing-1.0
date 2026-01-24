@@ -36,6 +36,7 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                     <SharyTrigger
                         message="Osserviamo l'opportunità per gli amministratori, inannzi tutto seleziona il numero di contratti per condomini e osserva immediatamente quanto guadagnerai di Una Tantum e di RICORRENZE MENSILI per i prossimi 3 anni!! E se qualche condomino volesse diventare un utente? Seleziona la media di Famiglie per Condominio e la percentuali di chi passera le utente. Vedrai il totale dei guadagni sommarsi a quelli già calcolati"
                         messageDe="Schauen wir uns die Möglichkeiten für Verwalter an. Wähle zuerst die Anzahl der Verträge pro Wohnanlage und sieh sofort, wie viel Einmalzahlung und MONATLICHE RÜCKVERGÜTUNGEN du in den nächsten 3 Jahren verdienst!! Und wenn ein Bewohner Nutzer werden möchte? Wähle den Durchschnitt der Familien pro Wohnanlage und den Prozentsatz derer, die wechseln. Du wirst sehen, wie sich die Gesamteinnahmen zu den bereits berechneten addieren."
+                        highlightId="condo_green_units"
                     />
                 </div>
                 <button onClick={onReset} className="p-2.5 bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/30 rounded-xl transition-all">
@@ -111,6 +112,7 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                             onChange={(val) => onInputChange('greenUnits', val)}
                             max={10000}
                             step={10}
+                            id="condo_green_units"
                         />
                         <InputGroup
                             label={t('input.green_units_new')}
@@ -134,6 +136,7 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                             onChange={(val) => onInputChange('lightUnits', val)}
                             max={10000}
                             step={10}
+                            id="condo_light_units"
                         />
                         <InputGroup
                             label={t('input.light_units_new')}
@@ -155,6 +158,7 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                             onChange={(val) => onInputChange('familiesPerCondo', val)}
                             max={100}
                             step={5}
+                            id="condo_families"
                         />
 
                         {/* MATH FEEDBACK 1 - CARD WOW */}

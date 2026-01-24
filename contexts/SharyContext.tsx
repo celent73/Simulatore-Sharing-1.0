@@ -4,8 +4,10 @@ interface SharyContextType {
     isActive: boolean;
     toggleShary: () => void;
     currentMessage: string | null;
-    speak: (message: string) => void;
+    speak: (message: string, highlightId?: string) => void;
     silence: () => void;
+    highlightedId: string | null;
+    setHighlight: (id: string | null) => void;
 }
 
 const SharyContext = createContext<SharyContextType | undefined>(undefined);
@@ -13,6 +15,7 @@ const SharyContext = createContext<SharyContextType | undefined>(undefined);
 export const SharyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isActive, setIsActive] = useState(false);
     const [currentMessage, setCurrentMessage] = useState<string | null>(null);
+    const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
     const toggleShary = () => {
         setIsActive(prev => {
@@ -26,17 +29,27 @@ export const SharyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         });
     };
 
-    const speak = (message: string) => {
-        if (!isActive) return; // Don't speak if disabled, unless we force enable? For now strict.
+    const speak = (message: string, highlightId?: string) => {
+        if (!isActive) return;
         setCurrentMessage(message);
+        if (highlightId) {
+            setHighlightedId(highlightId);
+        } else {
+            setHighlightedId(null);
+        }
     };
 
     const silence = () => {
         setCurrentMessage(null);
+        setHighlightedId(null);
     };
 
+    const setHighlight = (id: string | null) => {
+        setHighlightedId(id);
+    }
+
     return (
-        <SharyContext.Provider value={{ isActive, toggleShary, currentMessage, speak, silence }}>
+        <SharyContext.Provider value={{ isActive, toggleShary, currentMessage, speak, silence, highlightedId, setHighlight }}>
             {children}
         </SharyContext.Provider>
     );

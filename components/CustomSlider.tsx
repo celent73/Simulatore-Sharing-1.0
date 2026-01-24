@@ -1,7 +1,12 @@
 import React from 'react';
 import { Minus, Plus } from 'lucide-react';
 
-export const CustomSlider = ({ label, value, onChange, min, max, step = 1, icon: Icon, colorBase, suffix = "", showSliderBar = true, showButtons = true }: any) => {
+import { useShary } from '../contexts/SharyContext';
+
+export const CustomSlider = ({ label, value, onChange, min, max, step = 1, icon: Icon, colorBase, suffix = "", showSliderBar = true, showButtons = true, id }: any) => {
+
+    const { highlightedId } = useShary();
+    const isHighlighted = id && highlightedId === id;
 
     const theme: Record<string, any> = {
         orange: { icon: "text-orange-500", bg: "bg-orange-500/20", range: "accent-orange-500", shadow: "shadow-orange-900/20", border: "border-orange-500/20" },
@@ -17,7 +22,7 @@ export const CustomSlider = ({ label, value, onChange, min, max, step = 1, icon:
     const t = theme[colorBase] || theme.blue;
 
     return (
-        <div className={`mb-5 p-1 rounded-2xl transition-all duration-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:shadow-lg ${t.shadow}`}>
+        <div className={`mb-5 p-1 rounded-2xl transition-all duration-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:shadow-lg ${t.shadow} ${isHighlighted ? 'scale-105 ring-2 ring-cyan-400 animate-pulse bg-cyan-50 dark:bg-cyan-900/20' : ''}`}>
             <div className="flex justify-between items-center mb-3 pl-1">
                 <div className="flex items-center gap-3">
                     {Icon && (
