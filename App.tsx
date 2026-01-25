@@ -23,6 +23,9 @@ import ContractInfoModal from './components/ContractInfoModal';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { InstallModal } from './components/InstallModal';
 import FutureTicketModal from './components/FutureTicketModal';
+import { BusinessPresentationModal } from './components/BusinessPresentationModal'; // NEW IMPORT
+import { CashbackDetailedModal } from './components/CashbackDetailedModal'; // NEW IMPORT
+import { Presentation } from 'lucide-react'; // NEW ICON Import
 
 // --- IMPORTAZIONI LEGALI E UI ---
 import { LegalFooter } from './components/LegalFooter';
@@ -100,6 +103,8 @@ const AppContent = () => {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isFutureTicketOpen, setIsFutureTicketOpen] = useState(false);
+  const [isPresentationOpen, setIsPresentationOpen] = useState(false); // NEW STATE FOR PRESENTATION
+  const [isCashbackDetailedOpen, setIsCashbackDetailedOpen] = useState(false); // NEW STATE FOR CASHBACK
 
   // --- NUOVI STATI PER LA VERIFICA SUPABASE ---
   const [licenseCode, setLicenseCode] = useState('');
@@ -413,6 +418,25 @@ const AppContent = () => {
     setViewMode(mode);
   };
 
+  const handleCashbackDetailedConfirm = (spend: number, cashback: number, details: any[]) => {
+    // Calculate the effective percentage to ensure derived calculations are correct
+    // If spend is 0 but we have fixed cashback, we set spend = cashback and percentage = 100
+    let finalSpend = spend;
+    let finalPercentage = spend > 0 ? (cashback / spend) * 100 : 0;
+
+    if (spend === 0 && cashback > 0) {
+      finalSpend = cashback;
+      finalPercentage = 100;
+    }
+
+    handleInputChange('cashbackSpending', finalSpend);
+    handleInputChange('cashbackPercentage', finalPercentage);
+    // Use type assertion if needed as cashbackDetails might not be in PlanInput definition yet strictly
+    // but based on usage it seems it is.
+    handleInputChange('cashbackDetails' as any, details);
+    setIsCashbackDetailedOpen(false);
+  };
+
   const handleTargetClick = () => {
     if (!isPremium) { setShowPremiumModal(true); return; }
     setIsTargetCalcOpen(true);
@@ -431,7 +455,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.1.14
+        v1.1.15
       </div>
 
 
@@ -498,6 +522,16 @@ const AppContent = () => {
                 <span className="hidden sm:inline">{t('app.guide')}</span>
               </button>
 
+              {/* PULSANTE PRESENTAZIONE BUSINESS */}
+              <button
+                onClick={() => setIsPresentationOpen(true)}
+                className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all border-0 font-bold text-sm hover:scale-[1.05]"
+                title="Presentazione Business"
+              >
+                <Presentation className="w-5 h-5 sm:mr-2" />
+                <span className="hidden sm:inline">Business</span>
+              </button>
+
               {!isPremium && <button onClick={() => setShowPremiumModal(true)} className="flex items-center justify-center w-auto px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-xl shadow-lg hover:scale-105 transition-all font-bold text-sm border border-yellow-300">Sblocca PRO</button>}
 
               {!isStandalone && (canInstall || /iphone|ipad|ipod|android/i.test(window.navigator.userAgent.toLowerCase())) && (
@@ -561,6 +595,7 @@ const AppContent = () => {
                 cashbackPeriod={cashbackPeriod}
                 setCashbackPeriod={setCashbackPeriod}
                 planResult={planResult}
+                onOpenCashbackDetailed={() => setIsCashbackDetailedOpen(true)}
               />
             )}
           </div>
@@ -584,6 +619,11 @@ const AppContent = () => {
       <div className="mt-12"><LegalFooter onOpenLegal={handleOpenLegalDoc} /></div>
       <DisclaimerModal isOpen={isDisclaimerOpen} onClose={() => setIsDisclaimerOpen(false)} />
       <DetailedGuideModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
+      <BusinessPresentationModal
+        isOpen={isPresentationOpen}
+        onClose={() => setIsPresentationOpen(false)}
+        onOpenCashback={() => setIsCashbackDetailedOpen(true)}
+      />
       <TargetCalculatorModal isOpen={isTargetCalcOpen} onClose={() => setIsTargetCalcOpen(false)} currentInputs={inputs} onApply={handleApplyTarget} />
       <NetworkVisualizerModal isOpen={isNetworkModalOpen} onClose={() => setIsNetworkModalOpen(false)} inputs={inputs} onInputChange={handleInputChange} onReset={handleResetToZero} />
       <ContractInfoModal isOpen={isContractInfoModalOpen} onClose={() => setIsContractInfoModalOpen(false)} />
@@ -594,10 +634,18 @@ const AppContent = () => {
         estimatedMonths={inputs.realizationTimeMonths}
         userName={isPremium ? "Partner Pro" : "Guest"}
       />
+
+      <CashbackDetailedModal
+        isOpen={isCashbackDetailedOpen}
+        onClose={() => setIsCashbackDetailedOpen(false)}
+        initialDetails={(inputs as any).cashbackDetails}
+        onConfirm={handleCashbackDetailedConfirm}
+      />
       <InstallModal isOpen={showInstallModal} onClose={() => setShowInstallModal(false)} installPrompt={installPrompt} />
     </div>
   );
 };
+
 
 const App = () => { return <LanguageProvider><SharyProvider><AppContent /></SharyProvider></LanguageProvider>; }
 

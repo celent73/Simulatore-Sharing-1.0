@@ -48,6 +48,7 @@ interface InputPanelProps {
   cashbackPeriod: 'monthly' | 'annual';
   setCashbackPeriod: React.Dispatch<React.SetStateAction<'monthly' | 'annual'>>;
   planResult: CompensationPlanResult;
+  onOpenCashbackDetailed: () => void; // NEW PROP
 }
 
 const uiTexts = {
@@ -292,7 +293,8 @@ const InputPanel: React.FC<InputPanelProps> = ({
   canRedo,
   cashbackPeriod,
   setCashbackPeriod,
-  planResult
+  planResult,
+  onOpenCashbackDetailed // NEW PROP DESTRUCTURED
 }) => {
   const { t, language } = useLanguage();
   const [modalOpen, setModalOpen] = useState<'none' | 'cashback' | 'cashback-detailed' | 'personal' | 'visualizer' | 'analisi'>('none');
@@ -513,29 +515,10 @@ const InputPanel: React.FC<InputPanelProps> = ({
         }}
         txt={txt}
         period={cashbackPeriod}
-        OpenDetailed={() => setModalOpen('cashback-detailed')}
+        OpenDetailed={onOpenCashbackDetailed}
       />
-      <CashbackDetailedModal
-        isOpen={modalOpen === 'cashback-detailed'}
-        onClose={() => setModalOpen('none')}
-        initialDetails={inputs.cashbackDetails}
-        onConfirm={(spend, cashback, details) => {
-          // Calculate the effective percentage to ensure derived calculations are correct
-          // If spend is 0 but we have fixed cashback, we set spend = cashback and percentage = 100
-          let finalSpend = spend;
-          let finalPercentage = spend > 0 ? (cashback / spend) * 100 : 0;
+      {/* CashbackDetailedModal RIMOSSO DA QUI e SPOSTATO IN APP.TSX */}
 
-          if (spend === 0 && cashback > 0) {
-            finalSpend = cashback;
-            finalPercentage = 100;
-          }
-
-          onInputChange('cashbackSpending', finalSpend);
-          onInputChange('cashbackPercentage', finalPercentage);
-          (onInputChange as any)('cashbackDetails', details);
-          setModalOpen('none'); // Close all modals immediately
-        }}
-      />
       <PersonalClientsModal isOpen={modalOpen === 'personal'} onClose={() => setModalOpen('none')} inputs={inputs} onInputChange={onInputChange} onReset={onResetPersonalClients} viewMode={viewMode} txt={txt} />
 
       {/* MODAL VISUALIZER */}

@@ -9,5 +9,11 @@ export default defineConfig({
         'import.meta.env.VITE_GROQ_API_KEY': JSON.stringify(process.env.VITE_GROQ_API_KEY || ""),
         'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(process.env.VITE_SUPABASE_URL || ""),
         'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(process.env.VITE_SUPABASE_ANON_KEY || "")
+    },
+    build: {
+        target: 'esnext'
+    },
+    optimizeDeps: {
+        include: ['pdfjs-dist']
     }
 })
