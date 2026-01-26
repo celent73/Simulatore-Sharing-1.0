@@ -29,6 +29,8 @@ interface ResultsDisplayProps {
   inputs: PlanInput;
   cashbackPeriod?: 'monthly' | 'annual';
   onInputChange?: (field: keyof PlanInput, value: number) => void;
+  isFullScreen?: boolean; // NEW PROP
+  onToggleFullScreen?: () => void; // NEW PROP
 }
 
 import { User, FileText, Heart, PenSquare, RotateCcw } from 'lucide-react';
@@ -106,7 +108,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, suffix, variant
   );
 };
 
-const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 'family', inputs, cashbackPeriod = 'monthly', onInputChange }) => {
+const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 'family', inputs, cashbackPeriod = 'monthly', onInputChange, isFullScreen = false, onToggleFullScreen }) => {
   const exportRef = useRef<HTMLDivElement>(null);
   const tableRef = useRef<HTMLTableElement>(null);
   const [isExporting, setIsExporting] = useState(false);
@@ -114,24 +116,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   const [managerBonus, setManagerBonus] = useState(0);
   const [projectionYears, setProjectionYears] = useState(1);
   const [isProjectionModalOpen, setIsProjectionModalOpen] = useState(false);
-  const [isFullScreen, setIsFullScreen] = useState(false);
 
-  const toggleFullScreen = async () => {
-    if (!document.fullscreenElement) {
-      try {
-        await document.documentElement.requestFullscreen();
-        setIsFullScreen(true);
-      } catch (e) {
-        console.error("Fullscreen error:", e);
-        setIsFullScreen(true);
-      }
-    } else {
-      if (document.exitFullscreen) {
-        await document.exitFullscreen();
-      }
-      setIsFullScreen(false);
-    }
-  };
 
   const handleReset = () => {
     if (onInputChange) {
@@ -317,7 +302,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
             </h2>
             <div className="flex items-center gap-2">
               <button
-                onClick={toggleFullScreen}
+                onClick={onToggleFullScreen}
                 className={`hidden sm:flex items-center gap-2 px-4 py-2 ${isFullScreen ? 'bg-union-blue-50 text-union-blue-600' : 'bg-union-blue-50 text-union-blue-600'} hover:bg-union-blue-100 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95 border border-transparent hover:border-union-blue-200`}
                 title={isFullScreen ? "Esci da Focus Mode" : "Attiva Focus Mode"}
               >
@@ -436,21 +421,21 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                   <td className="px-6 py-4 text-left text-sm font-black text-gray-900 dark:text-white font-mono">{totalUsers.toLocaleString('it-IT')}</td>
                   <td className="px-6 py-4 text-left text-lg font-black text-emerald-600 dark:text-emerald-400">{formatCurrency(totalOneTimeBonus)}</td>
                   <td className="px-6 py-4 text-left">
-                    <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec1 * projectionYears)}</div>
+                    <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec1)}</div>
                     <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
                       {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-900 dark:text-gray-100">{formatCurrency(displayMonthlyRec1 * 12 * projectionYears)}</span>
                     </div>
 
                   </td>
                   <td className="px-6 py-4 text-left">
-                    <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec2 * projectionYears)}</div>
+                    <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec2)}</div>
                     <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
                       {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-900 dark:text-gray-100">{formatCurrency(displayMonthlyRec2 * 12 * projectionYears)}</span>
                     </div>
 
                   </td>
                   <td className="px-6 py-4 text-left">
-                    <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec3 * projectionYears)}</div>
+                    <div className="text-xl font-black text-union-orange-500 dark:text-union-orange-400">{formatCurrency(displayMonthlyRec3)}</div>
                     <div className="text-[10px] font-bold text-gray-400 mt-1 uppercase">
                       {projectionYears} {projectionYears > 1 ? 'anni' : 'anno'}: <span className="text-gray-900 dark:text-gray-100">{formatCurrency(displayMonthlyRec3 * 12 * projectionYears)}</span>
                     </div>

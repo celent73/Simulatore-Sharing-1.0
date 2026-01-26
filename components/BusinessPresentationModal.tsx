@@ -8,11 +8,13 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLi
 interface BusinessPresentationModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onOpenCashback: () => void; // NEW PROP
+    onOpenCashback: () => void;
+    onOpenFocus: (page: number) => void;
+    initialPage?: number; // NEW PROP
 }
 
-export const BusinessPresentationModal: React.FC<BusinessPresentationModalProps> = ({ isOpen, onClose, onOpenCashback }) => {
-    const [page, setPage] = useState(1);
+export const BusinessPresentationModal: React.FC<BusinessPresentationModalProps> = ({ isOpen, onClose, onOpenCashback, onOpenFocus, initialPage = 1 }) => {
+    const [page, setPage] = useState(initialPage);
     const [totalPages, setTotalPages] = useState(0);
     const [pdfDoc, setPdfDoc] = useState<pdfjsLib.PDFDocumentProxy | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -25,10 +27,13 @@ export const BusinessPresentationModal: React.FC<BusinessPresentationModalProps>
     useEffect(() => {
         if (!isOpen) {
             setPdfDoc(null);
-            setPage(1);
-            setTotalPages(0);
+            // Non resettiamo più a 1 qui, ma gestiamo nel prossimo useEffect se necessario o lasciamo che il parent smonti/rimonti
+            // Tuttavia, per sicurezza se initialPage cambia mentre è chiuso:
             return;
         }
+
+        // Se si riapre, usa initialPage (se passato, altrimenti quello che c'è o 1)
+        setPage(initialPage);
 
         const loadPdf = async () => {
             setIsLoading(true);
@@ -47,7 +52,7 @@ export const BusinessPresentationModal: React.FC<BusinessPresentationModalProps>
         };
 
         loadPdf();
-    }, [isOpen]);
+    }, [isOpen, initialPage]);
 
     // Renderizza la pagina quando cambia 'page', 'pdfDoc' o le dimensioni della finestra
     useEffect(() => {
@@ -154,6 +159,16 @@ export const BusinessPresentationModal: React.FC<BusinessPresentationModalProps>
                                 className="mr-2 px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-lg animate-pulse"
                             >
                                 💰 Calcola Cashback
+                            </button>
+                        )}
+
+                        {/* PULSANTE FOCUS SU PAGINA 16 */}
+                        {page === 16 && (
+                            <button
+                                onClick={() => onOpenFocus(page)}
+                                className="mr-2 px-3 py-1 bg-gradient-to-r from-union-orange-500 to-red-500 hover:from-union-orange-600 hover:to-red-600 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-lg animate-pulse flex items-center gap-2"
+                            >
+                                <span className="text-lg">🎯</span> Guarda il potenziale dello Sharing
                             </button>
                         )}
 

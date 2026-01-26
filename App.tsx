@@ -442,6 +442,53 @@ const AppContent = () => {
     setIsTargetCalcOpen(true);
   };
 
+  const [isResultsFullScreen, setIsResultsFullScreen] = useState(false);
+  const [returnToPresentationPage, setReturnToPresentationPage] = useState<number | null>(null); // CHANGED STATE
+
+  // --- FUNZIONE PER GESTIRE IL FULL SCREEN DEI RISULTATI ---
+  const handleToggleFullScreen = async () => {
+    if (!document.fullscreenElement) {
+      try {
+        await document.documentElement.requestFullscreen();
+        setIsResultsFullScreen(true);
+      } catch (e) {
+        console.error("Fullscreen error:", e);
+        setIsResultsFullScreen(true);
+      }
+    } else {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      }
+      setIsResultsFullScreen(false);
+
+      // SE ERAVAMO ARRIVATI DALLA PRESENTAZIONE, LA RIAPRIAMO
+      if (returnToPresentationPage !== null) {
+        setIsPresentationOpen(true);
+        // NON resettiamo subito a null qui perché serve passarlo come prop
+        // Lo faremo quando la modale si chiude o quando si riapre (managed by props update)
+        // Ma per il flusso attuale, resettiamo SOLO se la modale è gestita per "dimenticare" dopo l'apertura
+        // In questo caso, `initialPage` userà il valore corrente.
+        // Possiamo resettare dopo un tick o lasciarlo persistente finché non si chiude la modale?
+        // Meglio resettare quando la modale viene chiusa esplicitamente dall'utente, ma App non lo sa facilmente.
+        // Resettiamo a null qui? NO, altrimenti initialPage torna default.
+        // Possiamo resettarlo quando si apre focus di nuovo?
+        // Facciamo così: lo lasciamo settato, tanto viene usato solo se isPresentationOpen diventa true.
+      }
+    }
+  };
+
+  // --- FUNZIONE PER APRIRE FOCUS DALLA PRESENTAZIONE ---
+  const handleOpenFocusFromPresentation = (page: number) => {
+    setReturnToPresentationPage(page); // SALVIAMO LA PAGINA
+    setIsPresentationOpen(false);
+    // Attiva fullscreen se non è già attivo
+    if (!document.fullscreenElement) {
+      handleToggleFullScreen();
+    } else {
+      setIsResultsFullScreen(true);
+    }
+  };
+
   const headerShadow = language === 'it'
     ? '-30px 0 80px -5px rgba(0, 146, 70, 0.9), 30px 0 80px -5px rgba(206, 43, 55, 0.9), 0 0 50px -10px rgba(255, 255, 255, 0.8)'
     : '-30px 0 80px -5px rgba(0, 0, 0, 0.95), 30px 0 80px -5px rgba(255, 204, 0, 0.9), 0 0 50px -10px rgba(221, 0, 0, 0.8)';
@@ -455,7 +502,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.1.15
+        v1.1.16
       </div>
 
 
@@ -610,7 +657,15 @@ const AppContent = () => {
             {viewMode === 'condo' ? (
               <CondoResultsDisplay results={condoResult} />
             ) : (
-              <ResultsDisplay planResult={planResult} viewMode={viewMode} inputs={inputs} cashbackPeriod={cashbackPeriod} onInputChange={handleInputChange} />
+              <ResultsDisplay
+                planResult={planResult}
+                viewMode={viewMode}
+                inputs={inputs}
+                cashbackPeriod={cashbackPeriod}
+                onInputChange={handleInputChange}
+                isFullScreen={isResultsFullScreen}
+                onToggleFullScreen={handleToggleFullScreen}
+              />
             )}
           </div>
         </main>
@@ -621,10 +676,14 @@ const AppContent = () => {
       <DetailedGuideModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
       <BusinessPresentationModal
         isOpen={isPresentationOpen}
-        onClose={() => setIsPresentationOpen(false)}
+        onClose={() => {
+          setIsPresentationOpen(false);
+          setReturnToPresentationPage(null); // Reset quando chiude manualmente la modale
+        }}
         onOpenCashback={() => setIsCashbackDetailedOpen(true)}
-      />
-      <TargetCalculatorModal isOpen={isTargetCalcOpen} onClose={() => setIsTargetCalcOpen(false)} currentInputs={inputs} onApply={handleApplyTarget} />
+        onOpenFocus={handleOpenFocusFromPresentation}
+        initialPage={returnToPresentationPage || 1}
+      /><TargetCalculatorModal isOpen={isTargetCalcOpen} onClose={() => setIsTargetCalcOpen(false)} currentInputs={inputs} onApply={handleApplyTarget} />
       <NetworkVisualizerModal isOpen={isNetworkModalOpen} onClose={() => setIsNetworkModalOpen(false)} inputs={inputs} onInputChange={handleInputChange} onReset={handleResetToZero} />
       <ContractInfoModal isOpen={isContractInfoModalOpen} onClose={() => setIsContractInfoModalOpen(false)} />
       <FutureTicketModal
