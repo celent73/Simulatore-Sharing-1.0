@@ -1,9 +1,12 @@
 
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { CondoSimulationResult } from '../types';
 import AssetEquivalentCard from './AssetEquivalentCard';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Users, TrendingUp, Wallet, ShieldCheck, Info, Gem } from 'lucide-react';
+import { Users, TrendingUp, Wallet, ShieldCheck, Info, Gem, Download, Loader2 } from 'lucide-react';
+import { toPng } from 'html-to-image';
+import jsPDF from 'jspdf';
+import { CondoPDFTemplate } from './CondoPDFTemplate';
 
 interface CondoResultsDisplayProps {
     results: CondoSimulationResult;
@@ -178,8 +181,49 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
     const displayY2 = isRecruiterView ? results.familyUtilityEarnings!.year2.total : results.year2.totalAnnual;
     const displayY3 = isRecruiterView ? results.familyUtilityEarnings!.year3.total : results.year3.totalAnnual;
 
+    const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+    const pdfTemplateRef = useRef<HTMLDivElement>(null);
+
+    const handleExportPDF = async () => {
+        if (!pdfTemplateRef.current) return;
+        setIsGeneratingPdf(true);
+        try {
+            // Wait for render
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            const dataUrl = await toPng(pdfTemplateRef.current, {
+                quality: 1.0,
+                pixelRatio: 2, // High resolution
+            });
+
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4',
+            });
+
+            const imgProps = pdf.getImageProperties(dataUrl);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`Business_Plan_Condominio_${new Date().toISOString().slice(0, 10)}.pdf`);
+        } catch (err) {
+            console.error('PDF Export failed:', err);
+            alert('Errore durante la generazione del PDF. Riprova.');
+        } finally {
+            setIsGeneratingPdf(false);
+        }
+    };
+
     return (
-        <div className="space-y-8">
+        <div className="space-y-8 relative">
+            {/* HIDDEN TEMPLATE FOR PDF GENERATION */}
+            <div style={{ position: 'absolute', top: '-10000px', left: '-10000px', pointerEvents: 'none' }}>
+                <div ref={pdfTemplateRef}>
+                    <CondoPDFTemplate results={results} />
+                </div>
+            </div>
 
             {/* MAIN HEADER */}
             <div className={`rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden border transition-colors duration-500 ${isRecruiterView
@@ -189,9 +233,25 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
 
                 <div className="relative z-10 text-center">
-                    <p className="font-bold text-xs uppercase tracking-[0.2em] mb-3 opacity-70">
-                        {isRecruiterView ? "Tuo Guadagno Potenziale (Recruiter)" : t('condo_results.total_business_plan')}
-                    </p>
+                    <div className="flex justify-between items-start mb-3">
+                        <div className="flex-1"></div>
+                        <p className="font-bold text-xs uppercase tracking-[0.2em] opacity-70 text-center flex-1">
+                            {isRecruiterView ? "Tuo Guadagno Potenziale (Recruiter)" : t('condo_results.total_business_plan')}
+                        </p>
+                        <div className="flex-1 flex justify-end">
+                            <button
+                                onClick={handleExportPDF}
+                                disabled={isGeneratingPdf}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all ${isRecruiterView
+                                        ? 'bg-white/10 hover:bg-white/20 text-white'
+                                        : 'bg-white/10 hover:bg-white/20 text-white dark:bg-white/5 dark:hover:bg-white/10'
+                                    }`}
+                            >
+                                {isGeneratingPdf ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
+                                {isGeneratingPdf ? 'Generazione...' : 'Scarica PDF'}
+                            </button>
+                        </div>
+                    </div>
                     <h2 className={`text-5xl sm:text-7xl font-black mb-6 drop-shadow-sm text-transparent bg-clip-text bg-gradient-to-r ${isRecruiterView
                         ? 'from-white via-blue-100 to-white'
                         : 'from-union-orange-400 via-yellow-200 to-union-orange-400'}`}>

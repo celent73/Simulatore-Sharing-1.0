@@ -25,6 +25,7 @@ import { InstallModal } from './components/InstallModal';
 import FutureTicketModal from './components/FutureTicketModal';
 import { BusinessPresentationModal } from './components/BusinessPresentationModal'; // NEW IMPORT
 import { CashbackDetailedModal } from './components/CashbackDetailedModal'; // NEW IMPORT
+import { FocusModeModal } from './components/FocusModeModal'; // NEW IMPORT
 import { Presentation } from 'lucide-react'; // NEW ICON Import
 
 // --- IMPORTAZIONI LEGALI E UI ---
@@ -105,6 +106,7 @@ const AppContent = () => {
   const [isFutureTicketOpen, setIsFutureTicketOpen] = useState(false);
   const [isPresentationOpen, setIsPresentationOpen] = useState(false); // NEW STATE FOR PRESENTATION
   const [isCashbackDetailedOpen, setIsCashbackDetailedOpen] = useState(false); // NEW STATE FOR CASHBACK
+  const [isFocusModeOpen, setIsFocusModeOpen] = useState(false); // NEW STATE FOR FOCUS MODE
 
   // --- NUOVI STATI PER LA VERIFICA SUPABASE ---
   const [licenseCode, setLicenseCode] = useState('');
@@ -481,12 +483,7 @@ const AppContent = () => {
   const handleOpenFocusFromPresentation = (page: number) => {
     setReturnToPresentationPage(page); // SALVIAMO LA PAGINA
     setIsPresentationOpen(false);
-    // Attiva fullscreen se non è già attivo
-    if (!document.fullscreenElement) {
-      handleToggleFullScreen();
-    } else {
-      setIsResultsFullScreen(true);
-    }
+    setIsFocusModeOpen(true); // APRIAMO IL FOCUS MODE
   };
 
   const headerShadow = language === 'it'
@@ -502,7 +499,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.1.16
+        v1.1.17
       </div>
 
 
@@ -567,6 +564,16 @@ const AppContent = () => {
               <button onClick={() => setIsHelpOpen(true)} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-white text-union-blue-600 rounded-xl shadow-lg hover:bg-gray-100 transition-all border-0 font-bold text-sm hover:scale-[1.02]">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 sm:mr-2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" /></svg>
                 <span className="hidden sm:inline">{t('app.guide')}</span>
+              </button>
+
+              {/* PULSANTE FOCUS MODE */}
+              <button
+                onClick={() => setIsFocusModeOpen(true)}
+                className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gray-900 text-yellow-400 rounded-xl shadow-lg hover:shadow-yellow-400/20 transition-all border border-yellow-400/30 font-bold text-sm hover:scale-[1.05]"
+                title="Focus Mode"
+              >
+                <span className="text-xl sm:mr-2">⚡</span>
+                <span className="hidden sm:inline">Focus</span>
               </button>
 
               {/* PULSANTE PRESENTAZIONE BUSINESS */}
@@ -700,6 +707,7 @@ const AppContent = () => {
         initialDetails={(inputs as any).cashbackDetails}
         onConfirm={handleCashbackDetailedConfirm}
       />
+      <FocusModeModal isOpen={isFocusModeOpen} onClose={() => setIsFocusModeOpen(false)} />
       <InstallModal isOpen={showInstallModal} onClose={() => setShowInstallModal(false)} installPrompt={installPrompt} />
     </div>
   );
