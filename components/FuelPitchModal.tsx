@@ -21,8 +21,8 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
     // 1. Costo del Pieno Standard
     const costPerTankStandard = pricePerLiter * tankCapacity;
 
-    // 2. Risparmio Diretto Carburante (1.68% fisso)
-    const fuelCashbackRate = 1.68;
+    // 2. Risparmio Diretto Carburante (1.88% fisso)
+    const fuelCashbackRate = 1.88;
     const directFuelSavings = costPerTankStandard * (fuelCashbackRate / 100);
 
     // 3. Risparmio da Altre Spese (Cross-Subsidization)
@@ -220,7 +220,7 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
 
                         <div className="space-y-1">
                             <div className="flex justify-between items-center text-xs opacity-70">
-                                <span className="text-gray-400 flex items-center gap-1"><Fuel size={10} /> Cashback Benzina (1.68%)</span>
+                                <span className="text-gray-400 flex items-center gap-1"><Fuel size={10} /> Cashback Benzina (1.88%)</span>
                                 <span className="text-emerald-400 font-mono">- {formatCurrency(directFuelSavings)}</span>
                             </div>
                             <div className="flex justify-between items-center text-xs opacity-70">
