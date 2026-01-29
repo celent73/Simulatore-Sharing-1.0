@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import { CondoSimulationResult } from '../types';
 import AssetEquivalentCard from './AssetEquivalentCard';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Users, TrendingUp, Wallet, ShieldCheck, Info, Gem, Download, Loader2 } from 'lucide-react';
+import { Users, TrendingUp, Wallet, ShieldCheck, Info, Gem, Download, Loader2, Edit3, X, Save } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';
 import { CondoPDFTemplate } from './CondoPDFTemplate';
@@ -184,6 +184,12 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
     const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
     const pdfTemplateRef = useRef<HTMLDivElement>(null);
 
+    // Consultant Details State
+    const [consultantName, setConsultantName] = useState('');
+    const [consultantSurname, setConsultantSurname] = useState('');
+    const [consultantPhone, setConsultantPhone] = useState('');
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
     const handleExportPDF = async () => {
         if (!pdfTemplateRef.current) return;
         setIsGeneratingPdf(true);
@@ -221,7 +227,12 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
             {/* HIDDEN TEMPLATE FOR PDF GENERATION */}
             <div style={{ position: 'absolute', top: '-10000px', left: '-10000px', pointerEvents: 'none' }}>
                 <div ref={pdfTemplateRef}>
-                    <CondoPDFTemplate results={results} />
+                    <CondoPDFTemplate
+                        results={results}
+                        consultantName={consultantName}
+                        consultantSurname={consultantSurname}
+                        consultantPhone={consultantPhone}
+                    />
                 </div>
             </div>
 
@@ -238,13 +249,23 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                         <p className="font-bold text-xs uppercase tracking-[0.2em] opacity-70 text-center flex-1">
                             {isRecruiterView ? "Tuo Guadagno Potenziale (Recruiter)" : t('condo_results.total_business_plan')}
                         </p>
-                        <div className="flex-1 flex justify-end">
+                        <div className="flex-1 flex justify-end gap-2">
+                            <button
+                                onClick={() => setIsEditModalOpen(true)}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all border border-transparent hover:border-white/20 ${isRecruiterView
+                                    ? 'bg-white/10 hover:bg-white/20 text-white'
+                                    : 'bg-white/10 hover:bg-white/20 text-white dark:bg-white/5 dark:hover:bg-white/10'
+                                    }`}
+                            >
+                                <Edit3 size={14} />
+                                Personalizza
+                            </button>
                             <button
                                 onClick={handleExportPDF}
                                 disabled={isGeneratingPdf}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all ${isRecruiterView
-                                        ? 'bg-white/10 hover:bg-white/20 text-white'
-                                        : 'bg-white/10 hover:bg-white/20 text-white dark:bg-white/5 dark:hover:bg-white/10'
+                                    ? 'bg-white/10 hover:bg-white/20 text-white'
+                                    : 'bg-white/10 hover:bg-white/20 text-white dark:bg-white/5 dark:hover:bg-white/10'
                                     }`}
                             >
                                 {isGeneratingPdf ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
@@ -478,6 +499,65 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                 </p>
             </div>
 
+            {/* EDIT DETAILS MODAL */}
+            {isEditModalOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-6 shadow-2xl border border-gray-100 dark:border-white/10 animate-in zoom-in-95 duration-200">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Personalizza PDF</h3>
+                            <button
+                                onClick={() => setIsEditModalOpen(false)}
+                                className="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full text-gray-500 dark:text-gray-400"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Nome</label>
+                                <input
+                                    type="text"
+                                    value={consultantName}
+                                    onChange={(e) => setConsultantName(e.target.value)}
+                                    placeholder="Es. Mario"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Cognome</label>
+                                <input
+                                    type="text"
+                                    value={consultantSurname}
+                                    onChange={(e) => setConsultantSurname(e.target.value)}
+                                    placeholder="Es. Rossi"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Telefono</label>
+                                <input
+                                    type="tel"
+                                    value={consultantPhone}
+                                    onChange={(e) => setConsultantPhone(e.target.value)}
+                                    placeholder="Es. 333 1234567"
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mt-8 flex gap-3">
+                            <button
+                                onClick={() => setIsEditModalOpen(false)}
+                                className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+                            >
+                                <Save size={18} />
+                                Salva e Chiudi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div >
     );
 };

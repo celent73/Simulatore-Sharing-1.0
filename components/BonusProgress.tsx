@@ -201,22 +201,7 @@ const BonusProgress: React.FC<BonusProgressProps> = ({ totalContracts, onBonusCh
   return (
     <div className="space-y-4">
 
-      {/* Top Card: Next Goal / Status */}
-      <div className="bg-union-blue-50/60 dark:bg-slate-800/60 border border-blue-100 dark:border-slate-700 p-5 rounded-2xl shadow-md backdrop-blur-sm flex items-center gap-4">
-        <ChartIcon />
-        <div>
-          {isAllCompleted ? (
-            <h3 className="text-lg font-bold text-union-blue-800 dark:text-union-blue-300">
-              {t('bonus.completed')}
-            </h3>
-          ) : (
-            <h3 className="text-lg font-bold text-union-blue-900 dark:text-white">
-              <span className="text-union-blue-600 dark:text-union-blue-400 font-extrabold text-xl mr-2">{remainingToNext.toLocaleString('it-IT')}</span>
-              {t('bonus.next_goal')}
-            </h3>
-          )}
-        </div>
-      </div>
+
 
       {/* Container for Goals */}
       <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl p-6 rounded-3xl shadow-lg border border-white/40 dark:border-gray-700/50 relative">

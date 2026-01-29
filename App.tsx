@@ -26,7 +26,8 @@ import FutureTicketModal from './components/FutureTicketModal';
 import { BusinessPresentationModal } from './components/BusinessPresentationModal'; // NEW IMPORT
 import { CashbackDetailedModal } from './components/CashbackDetailedModal'; // NEW IMPORT
 import { FocusModeModal } from './components/FocusModeModal'; // NEW IMPORT
-import { Presentation } from 'lucide-react'; // NEW ICON Import
+import FuelPitchModal from './components/FuelPitchModal'; // NEW IMPORT
+import { Presentation, Fuel } from 'lucide-react'; // NEW ICON Import
 
 // --- IMPORTAZIONI LEGALI E UI ---
 import { LegalFooter } from './components/LegalFooter';
@@ -107,6 +108,7 @@ const AppContent = () => {
   const [isPresentationOpen, setIsPresentationOpen] = useState(false); // NEW STATE FOR PRESENTATION
   const [isCashbackDetailedOpen, setIsCashbackDetailedOpen] = useState(false); // NEW STATE FOR CASHBACK
   const [isFocusModeOpen, setIsFocusModeOpen] = useState(false); // NEW STATE FOR FOCUS MODE
+  const [isFuelPitchOpen, setIsFuelPitchOpen] = useState(false); // NEW STATE FOR FUEL PITCH
 
   // --- NUOVI STATI PER LA VERIFICA SUPABASE ---
   const [licenseCode, setLicenseCode] = useState('');
@@ -586,6 +588,16 @@ const AppContent = () => {
                 <span className="hidden sm:inline">Business</span>
               </button>
 
+              {/* PULSANTE FUEL PITCH */}
+              <button
+                onClick={() => setIsFuelPitchOpen(true)}
+                className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl shadow-lg hover:shadow-red-500/30 transition-all border-0 font-bold text-sm hover:scale-[1.05]"
+                title="Fuel Saver"
+              >
+                <Fuel className="w-5 h-5 sm:mr-2" />
+                <span className="hidden sm:inline">Fuel</span>
+              </button>
+
               {!isPremium && <button onClick={() => setShowPremiumModal(true)} className="flex items-center justify-center w-auto px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-xl shadow-lg hover:scale-105 transition-all font-bold text-sm border border-yellow-300">Sblocca PRO</button>}
 
               {!isStandalone && (canInstall || /iphone|ipad|ipod|android/i.test(window.navigator.userAgent.toLowerCase())) && (
@@ -690,7 +702,12 @@ const AppContent = () => {
         onOpenCashback={() => setIsCashbackDetailedOpen(true)}
         onOpenFocus={handleOpenFocusFromPresentation}
         initialPage={returnToPresentationPage || 1}
-      /><TargetCalculatorModal isOpen={isTargetCalcOpen} onClose={() => setIsTargetCalcOpen(false)} currentInputs={inputs} onApply={handleApplyTarget} />
+      />
+      <FuelPitchModal
+        isOpen={isFuelPitchOpen}
+        onClose={() => setIsFuelPitchOpen(false)}
+      />
+      <TargetCalculatorModal isOpen={isTargetCalcOpen} onClose={() => setIsTargetCalcOpen(false)} currentInputs={inputs} onApply={handleApplyTarget} />
       <NetworkVisualizerModal isOpen={isNetworkModalOpen} onClose={() => setIsNetworkModalOpen(false)} inputs={inputs} onInputChange={handleInputChange} onReset={handleResetToZero} />
       <ContractInfoModal isOpen={isContractInfoModalOpen} onClose={() => setIsContractInfoModalOpen(false)} />
       <FutureTicketModal

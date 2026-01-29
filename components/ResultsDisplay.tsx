@@ -17,7 +17,8 @@ import QuickNavigation from './QuickNavigation';
 import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import { useLanguage } from '../contexts/LanguageContext';
-import { FileDown } from 'lucide-react';
+import { FileDown, Edit3, X, Save, Loader2, Download, User } from 'lucide-react';
+import { NetworkPDFTemplate } from './NetworkPDFTemplate';
 import ProjectionModal from './ProjectionModal';
 import LiveBattleMode from './LiveBattleMode';
 import AICoach from './AICoach';
@@ -33,7 +34,7 @@ interface ResultsDisplayProps {
   onToggleFullScreen?: () => void; // NEW PROP
 }
 
-import { User, FileText, Heart, PenSquare, RotateCcw } from 'lucide-react';
+import { FileText, Heart, PenSquare, RotateCcw } from 'lucide-react';
 import { CustomSlider } from './CustomSlider';
 
 interface SummaryCardProps {
@@ -117,6 +118,12 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   const [projectionYears, setProjectionYears] = useState(1);
   const [isProjectionModalOpen, setIsProjectionModalOpen] = useState(false);
 
+  // Consultant Details State
+  const [consultantName, setConsultantName] = useState('');
+  const [consultantSurname, setConsultantSurname] = useState('');
+  const [consultantPhone, setConsultantPhone] = useState('');
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
 
   const handleReset = () => {
     if (onInputChange) {
@@ -193,24 +200,32 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
     }).catch(() => { setIsExporting(false); });
   }, [exportRef]);
 
-  const handleExportPDF = useCallback(() => {
-    if (tableRef.current === null) return;
+  const handleExportPDF = useCallback(async () => {
+    if (exportRef.current === null) return;
     setIsExporting(true);
-    toPng(tableRef.current, { cacheBust: true, backgroundColor: '#ffffff' })
-      .then((dataUrl) => {
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgProps = pdf.getImageProperties(dataUrl);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`proiezione-guadagni-${new Date().toISOString().slice(0, 10)}.pdf`);
-        setIsExporting(false);
-      })
-      .catch((err) => {
-        console.error('PDF Export failed', err);
-        setIsExporting(false);
-      });
-  }, [tableRef]);
+
+    try {
+      // 1. Generate Image from the Template
+      // Scale up for better quality
+      const dataUrl = await toPng(exportRef.current, { cacheBust: true, pixelRatio: 2 });
+
+      // 2. Create PDF
+      // A4 Size: 210mm x 297mm
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(dataUrl);
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`proiezione-guadagni-${new Date().toISOString().slice(0, 10)}.pdf`);
+
+    } catch (err) {
+      console.error("PDF Export failed", err);
+    } finally {
+      setIsExporting(false);
+    }
+  }, [exportRef]);
 
   const hasPark = (inputs.unionParkPanels || 0) > 0;
   const parkSuffix = hasPark ? " (+ Park)" : "";
@@ -230,14 +245,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         <div className="fixed inset-0 z-[9998] bg-gray-100/90 dark:bg-slate-900/95 backdrop-blur-sm animate-in fade-in duration-300" />
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-        <SummaryCard
-          title={t('results.total_users')}
-          value={`${totalUsers.toLocaleString('it-IT')}`}
-          suffix={<span className="text-xs opacity-70 font-normal block mt-1">/ {totalContracts.toLocaleString('it-IT')} Contratti</span>}
-          variant="glass"
-          icon={<UsersIcon />}
-        />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <SummaryCard title={cashbackPeriod === 'annual' ? "Bonus Una Tantum" : t('results.one_time')} value={formatValueWithSuffix(totalOneTimeBonus).value} variant="gradient-blue" icon={<WalletIcon />} />
         <SummaryCard
           title={t('results.rec_y1') + recTitleSuffix}
@@ -389,7 +397,31 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                   <td className="px-6 py-4 text-left text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider">
                     <div className="flex flex-col gap-2">
                       <span>{t('results.total')}</span>
-                      <div className="flex items-center gap-2">
+
+                      <div className="flex gap-2 mt-2">
+                        {/* PERSONALIZZA BUTTON */}
+                        <button
+                          onClick={() => setIsEditModalOpen(true)}
+                          className="bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20 text-slate-600 dark:text-slate-300 p-2 rounded-xl transition-colors flex items-center gap-2"
+                          title="Personalizza PDF"
+                        >
+                          <Edit3 size={16} />
+                          <span className="text-xs font-bold uppercase hidden md:inline">Personalizza</span>
+                        </button>
+
+                        {/* DOWNLOAD BUTTON */}
+                        <button
+                          onClick={handleExportPDF}
+                          disabled={isExporting}
+                          className="bg-union-blue-600 hover:bg-union-blue-700 text-white p-2 rounded-xl transition-colors flex items-center gap-2"
+                          title="Scarica PDF"
+                        >
+                          {isExporting ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
+                          <span className="text-xs font-bold uppercase hidden md:inline">PDF</span>
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-2 mt-2">
                         <label className="text-[10px] uppercase font-bold text-gray-400">{t('projection.label')}</label>
 
                         {/* WOW PROJECTION TRIGGER */}
@@ -473,10 +505,42 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
       </div>
 
       {!isClientMode && (
-        <BonusProgress
-          totalContracts={totalContracts}
-          onBonusChange={setManagerBonus}
-        />
+        <>
+          <div className="w-full max-w-sm lg:hidden mb-8">
+            <SummaryCard
+              title={t('results.total_users')}
+              value={`${totalUsers.toLocaleString('it-IT')}`}
+              suffix={
+                <div className="flex flex-col mt-1">
+                  <span className="text-xs opacity-70 font-normal">
+                    / {totalContracts.toLocaleString('it-IT')} Contratti
+                  </span>
+                  {!isClientMode && (
+                    (() => {
+                      const milestones = [600, 1500, 5000];
+                      const nextMilestone = milestones.find(m => m > totalContracts);
+                      const remainingToNext = nextMilestone ? nextMilestone - totalContracts : 0;
+
+                      if (remainingToNext <= 0) return null;
+
+                      return (
+                        <span className="text-[10px] text-red-500 font-bold mt-2 block uppercase tracking-tight">
+                          {remainingToNext} {t('bonus.next_goal')}
+                        </span>
+                      );
+                    })()
+                  )}
+                </div>
+              }
+              variant="glass"
+              icon={<UsersIcon />}
+            />
+          </div>
+          <BonusProgress
+            totalContracts={totalContracts}
+            onBonusChange={setManagerBonus}
+          />
+        </>
       )}
 
       <div className="bg-white dark:bg-black/40 backdrop-blur-xl rounded-[2.5rem] shadow-lg border border-gray-100 dark:border-white/10 overflow-hidden mt-8 p-1">
@@ -565,32 +629,80 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         </div>
       )}
 
-      <div style={{ position: 'absolute', top: 0, left: '-9999px' }}>
-        <div ref={exportRef} className="w-[600px] h-[900px] bg-slate-900 text-white p-10 flex flex-col justify-between font-sans overflow-hidden relative" style={{ backgroundColor: '#0f172a' }}>
-          <div className="relative z-10 flex flex-col h-full">
-            <div className="flex justify-between items-center mb-12">
+      <div style={{ position: 'absolute', top: '-10000px', left: '-10000px' }}>
+        <div ref={exportRef}>
+          <NetworkPDFTemplate
+            planResult={planResult}
+            inputs={inputs}
+            totalUsers={totalUsers}
+            totalOneTimeBonus={totalOneTimeBonus}
+            totalRecurringYear3={totalRecurringYear3}
+            consultantName={consultantName}
+            consultantSurname={consultantSurname}
+            consultantPhone={consultantPhone}
+          />
+        </div>
+      </div>
+
+      {/* EDIT DETAILS MODAL */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-6 shadow-2xl border border-gray-100 dark:border-white/10 animate-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Personalizza PDF</h3>
+              <button
+                onClick={() => setIsEditModalOpen(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full text-gray-500 dark:text-gray-400"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="space-y-4">
               <div>
-                <h1 className="text-4xl font-bold tracking-tight text-white">Union <span className="text-union-orange-500">Energia</span></h1>
-                <p className="text-lg opacity-70 font-medium mt-1">Proiezione Guadagni {isClientMode ? '(Cliente)' : ''}</p>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Nome</label>
+                <input
+                  type="text"
+                  value={consultantName}
+                  onChange={(e) => setConsultantName(e.target.value)}
+                  placeholder="Es. Mario"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Cognome</label>
+                <input
+                  type="text"
+                  value={consultantSurname}
+                  onChange={(e) => setConsultantSurname(e.target.value)}
+                  placeholder="Es. Rossi"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Telefono</label>
+                <input
+                  type="tel"
+                  value={consultantPhone}
+                  onChange={(e) => setConsultantPhone(e.target.value)}
+                  placeholder="Es. 333 1234567"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
+                />
               </div>
             </div>
-            <div className="space-y-6 flex-grow">
-              <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-xl">
-                <p className="text-6xl font-bold text-white">{totalUsers.toLocaleString('it-IT')}</p>
-                <p className="text-sm opacity-60 mt-2 font-medium">Utenti collaboratori attivi</p>
-              </div>
-              <div className="bg-gradient-to-br from-union-blue-600/90 to-union-blue-500/80 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl relative overflow-hidden">
-                <p className="text-5xl font-bold text-white">{formatValueWithSuffix(totalOneTimeBonus).value}</p>
-                <p className="text-sm text-white/70 mt-2 font-medium">Guadagno immediato stimato</p>
-              </div>
-              <div className="bg-gradient-to-br from-union-orange-600/90 to-union-orange-500/80 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl relative overflow-hidden">
-                <p className="text-5xl font-bold text-white">{formatValueWithSuffix(totalRecurringYear3).value}</p>
-                <p className="text-sm text-white/70 mt-2 font-medium">Guadagno ricorrente mensile</p>
-              </div>
+
+            <div className="mt-8 flex gap-3">
+              <button
+                onClick={() => setIsEditModalOpen(false)}
+                className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+              >
+                <Save size={18} />
+                Salva e Chiudi
+              </button>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

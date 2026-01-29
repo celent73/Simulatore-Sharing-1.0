@@ -4,6 +4,7 @@ import {
   ShoppingBag,
   Briefcase,
   User,
+  Users,
   FileText,
   PenSquare,
   Heart,
@@ -500,6 +501,49 @@ const InputPanel: React.FC<InputPanelProps> = ({
               </div>
             </div>
           </div>
+
+          {/* TOTAL USERS CARD */}
+          {viewMode !== 'client' && (
+            <div className="hidden lg:flex mt-4 pt-4 border-t border-dashed border-gray-200 dark:border-white/10 shrink-0 justify-start w-full">
+              <div className="bg-white dark:bg-black/40 backdrop-blur-md border border-gray-100 dark:border-white/10 rounded-3xl p-5 shadow-lg w-full max-w-[320px] lg:max-w-none flex flex-col items-start relative overflow-hidden group hover:bg-gray-50 dark:hover:bg-black/50 transition-colors">
+                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                  <Users size={80} />
+                </div>
+
+                <div className="flex items-center gap-3 mb-2 relative z-10">
+                  <div className="p-2 rounded-xl backdrop-blur-sm bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5 text-gray-600 dark:text-gray-200">
+                    <Users size={20} />
+                  </div>
+                  <span className="text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px] font-bold">
+                    {t('results.total_users')}
+                  </span>
+                </div>
+
+                <div className="text-3xl font-black text-gray-900 dark:text-white relative z-10">
+                  {planResult.totalUsers.toLocaleString('it-IT')}
+                </div>
+
+                <div className="flex flex-col mt-1 relative z-10">
+                  <span className="text-xs opacity-70 font-normal dark:text-gray-300">
+                    / {planResult.totalContracts.toLocaleString('it-IT')} Contratti
+                  </span>
+                  {(() => {
+                    const milestones = [600, 1500, 5000];
+                    const nextMilestone = milestones.find(m => m > planResult.totalContracts);
+                    const remainingToNext = nextMilestone ? nextMilestone - planResult.totalContracts : 0;
+
+                    if (remainingToNext <= 0) return null;
+
+                    return (
+                      <span className="text-[10px] text-red-500 font-bold mt-2 block uppercase tracking-tight">
+                        {remainingToNext} {t('bonus.next_goal')}
+                      </span>
+                    );
+                  })()}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
