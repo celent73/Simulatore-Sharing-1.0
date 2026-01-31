@@ -1,6 +1,6 @@
 {
-  "short_name": "Simulatore Sharing",
-  "name": "Simulatore Sharing",
+  "short_name": "Sharing Simulator",
+  "name": "Sharing Simulator",
   "id": "union-sim-offline-ready-v2",
   "start_url": ".",
   "scope": "/",

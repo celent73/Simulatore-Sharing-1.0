@@ -14,8 +14,8 @@ const TermsPage: React.FC = () => {
         <div className="prose prose-slate dark:prose-invert max-w-none">
           <h2>1. Premessa</h2>
           <p>
-            I presenti Termini e Condizioni regolano l'accesso e l'utilizzo dell'applicazione web 
-            "Simulatore Sharing", di proprietà di <strong>Luca Celentano</strong>.
+            I presenti Termini e Condizioni regolano l'accesso e l'utilizzo dell'applicazione web
+            "Sharing Simulator", di proprietà di <strong>Luca Celentano</strong>.
           </p>
 
           <h2>2. Licenza d'Uso</h2>
@@ -42,19 +42,19 @@ const TermsPage: React.FC = () => {
 
           <h2>4. Proprietà Intellettuale</h2>
           <p>
-            Tutti i diritti di proprietà intellettuale sono di <strong>proprietà esclusiva di Luca Celentano</strong> 
+            Tutti i diritti di proprietà intellettuale sono di <strong>proprietà esclusiva di Luca Celentano</strong>
             e sono protetti dalle leggi italiane ed internazionali.
           </p>
 
           <h2>5. Pagamenti e Rimborsi</h2>
           <p>
-            <strong>Garanzia 14 giorni:</strong> Rimborso completo entro 14 giorni dall'acquisto 
+            <strong>Garanzia 14 giorni:</strong> Rimborso completo entro 14 giorni dall'acquisto
             (Diritto di recesso D.Lgs. 206/2005).
           </p>
 
           <h2>6. Limitazione di Responsabilità</h2>
           <p>
-            L'App è fornita "COSÌ COM'È". Il Titolare non è responsabile per danni diretti, 
+            L'App è fornita "COSÌ COM'È". Il Titolare non è responsabile per danni diretti,
             indiretti o consequenziali. Massima responsabilità limitata all'importo pagato.
           </p>
 

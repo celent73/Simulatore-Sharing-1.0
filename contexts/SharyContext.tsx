@@ -21,7 +21,7 @@ export const SharyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setIsActive(prev => {
             const newState = !prev;
             if (newState) {
-                speak("Ciao! Sono Shary, il tuo assistente personale per il Simulatore Sharing. Clicca sulle mie piccole icone per ricevere aiuto passo-passo!");
+                speak("Ciao! Sono Shary, il tuo assistente personale per lo Sharing Simulator. Clicca sulle mie piccole icone per ricevere aiuto passo-passo!");
             } else {
                 silence();
             }

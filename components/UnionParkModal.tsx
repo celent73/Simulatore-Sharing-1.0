@@ -65,7 +65,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
 
     const texts = {
         it: {
-            title: "Simulatore Sharing Park",
+            title: "Sharing Park Simulator",
             subtitle: "Configura i tuoi pannelli fotovoltaici condivisi",
             panelsLabel: "Numero di Pannelli desiderati",
             punLabel: "Prezzo Zonale (PUN) stimato",

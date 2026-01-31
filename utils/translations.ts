@@ -3,11 +3,11 @@ export type Language = 'it' | 'de';
 export const translations = {
   it: {
     app: {
-      title: "Simulatore",
+      title: "Sharing Simulator",
       subtitle: "Calcola il potenziale del tuo piano compensi meritocratico.",
       link_site: "Vai al Sito",
       calc_target: "Calcola Obiettivo",
-      guide: "Simulatore Tutorial",
+      guide: "Sharing Simulator Tutorial",
       client_priv: "Cliente Semplice",
       client_priv_short: "Semplice",
       admin_condo: "Amministratore Condominio",
@@ -94,7 +94,7 @@ export const translations = {
       step4_title_short: "Step 4"
     },
     guide_wow: {
-      title: "Simulatore",
+      title: "Sharing Simulator",
       highlight: "Tutorial",
       subtitle: "La tua Mini-Academy per padroneggiare il piano compensi.",
       close: "Ho capito, inizia a simulare!",
@@ -448,7 +448,7 @@ export const translations = {
   },
   de: {
     app: {
-      title: "Simulator",
+      title: "Sharing Simulator",
       subtitle: "Berechne das Potenzial deines leistungsbezogenen Vergütungsplans.",
       link_site: "Zur Website",
       calc_target: "Ziel berechnen",
@@ -539,7 +539,7 @@ export const translations = {
       step4_title_short: "Schritt 4"
     },
     guide_wow: {
-      title: "Simulator",
+      title: "Sharing Simulator",
       highlight: "Tutorial",
       subtitle: "Deine Mini-Academy, um den Vergütungsplan zu meistern.",
       close: "Verstanden, los geht's!",

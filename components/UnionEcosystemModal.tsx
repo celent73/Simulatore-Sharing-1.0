@@ -109,21 +109,13 @@ export const UnionEcosystemModal: React.FC<UnionEcosystemModalProps> = ({ isOpen
                                 <span className="text-sm uppercase tracking-wider font-bold">Back</span>
                             </button>
 
-                            {step < steps.length - 1 ? (
+                            {step < steps.length - 1 && (
                                 <button
                                     onClick={nextStep}
                                     className="group flex items-center gap-3 bg-gradient-to-r from-union-blue-600 to-cyan-500 text-white px-8 py-3 rounded-full font-bold shadow-[0_0_20px_rgba(0,119,200,0.5)] hover:shadow-[0_0_30px_rgba(0,119,200,0.8)] hover:scale-105 transition-all"
                                 >
                                     <span className="uppercase tracking-wider text-sm">{language === 'it' ? 'Scopri' : 'Entdecken'}</span>
                                     <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={onClose}
-                                    className="group flex items-center gap-3 bg-gradient-to-r from-union-orange-500 to-red-500 text-white px-8 py-3 rounded-full font-bold shadow-[0_0_20px_rgba(255,100,0,0.5)] hover:shadow-[0_0_30px_rgba(255,100,0,0.8)] hover:scale-105 transition-all"
-                                >
-                                    <span className="uppercase tracking-wider text-sm">{language === 'it' ? 'Inizia Ora' : 'Starten'}</span>
-                                    <Zap className="fill-white" />
                                 </button>
                             )}
                         </div>
@@ -595,7 +587,7 @@ const SatelliteNodeFixed = ({ angle, label, icon, color }: { angle: number, labe
     );
 };
 
-// Replacing the complex SatelliteNode with the working SatelliteNodeFixed and updating the Step4 component use
+// Replacing with "Fusion Reactor" enhanced version
 const Step4SummaryCircleFinal = ({ language, onClose }: { language: 'it' | 'de', onClose: () => void }) => {
     return (
         <motion.div
@@ -604,35 +596,134 @@ const Step4SummaryCircleFinal = ({ language, onClose }: { language: 'it' | 'de',
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
         >
-            <div className="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px] flex items-center justify-center my-8">
-                {/* Orbital Rings */}
+            <div className="relative w-[320px] h-[320px] md:w-[500px] md:h-[500px] flex items-center justify-center my-4 md:my-8">
+
+                {/* Background Reactor Glows */}
                 <motion.div
-                    className="absolute inset-0 border border-dashed border-union-blue-500/30 rounded-full"
+                    className="absolute inset-0 bg-union-blue-500/5 rounded-full blur-3xl z-0"
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                />
+
+                {/* Orbital Rings - Dynamic Tech feel */}
+                <motion.div
+                    className="absolute inset-0 border border-dashed border-union-blue-500/30 rounded-full z-0"
                     animate={{ rotate: 360 }}
+                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                />
+                <motion.div
+                    className="absolute inset-8 md:inset-12 border border-dotted border-union-orange-500/20 rounded-full z-0"
+                    animate={{ rotate: -360 }}
                     transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                 />
-                <motion.div
-                    className="absolute inset-[15%] border border-union-orange-500/20 rounded-full"
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                />
 
-                {/* Central Core */}
-                <div className="absolute z-20 w-24 h-24 md:w-36 md:h-36 bg-white rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.2)] border-4 border-white/10">
-                    <img src="/logo_sharing.png" alt="Union" className="w-16 md:w-24 object-contain" />
+                {/* Energy Beams (Arrows) - Converging to center */}
+                <div className="absolute inset-0 z-0 pointer-events-none">
+                    {/* We use SVG to draw animated arrows pointing to center */}
+                    <svg className="w-full h-full visible overflow-visible" viewBox="0 0 100 100">
+                        <defs>
+                            <linearGradient id="beamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stopColor="transparent" />
+                                <stop offset="50%" stopColor="#00c2ff" />
+                                <stop offset="100%" stopColor="#ffffff" />
+                            </linearGradient>
+                            <marker id="arrowhead" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto">
+                                <polygon points="0 0, 4 2, 0 4" fill="#00c2ff" />
+                            </marker>
+                            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur" />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+
+                        {/* Top Beam */}
+                        <BeamPath d="M50,10 L50,35" delay={0} />
+                        {/* Right Beam */}
+                        <BeamPath d="M90,50 L65,50" delay={0.5} />
+                        {/* Bottom Beam */}
+                        <BeamPath d="M50,90 L50,65" delay={1} />
+                        {/* Left Beam */}
+                        <BeamPath d="M10,50 L35,50" delay={1.5} />
+                    </svg>
                 </div>
 
-                {/* Satellite Nodes */}
-                <SatelliteNodeFixed angle={-90} label="Luce & Gas" icon={<Zap className="w-5 h-5 md:w-6 md:h-6 text-yellow-400" />} color="border-yellow-500/50 shadow-yellow-500/20" />
-                <SatelliteNodeFixed angle={0} label="Sharing" icon={<Share2 className="w-5 h-5 md:w-6 md:h-6 text-union-blue-400" />} color="border-union-blue-500/50 shadow-union-blue-500/20" />
-                <SatelliteNodeFixed angle={90} label="Rendita" icon={<TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-union-green-400" />} color="border-union-green-500/50 shadow-union-green-500/20" />
-                <SatelliteNodeFixed angle={180} label="Community" icon={<Users className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />} color="border-purple-500/50 shadow-purple-500/20" />
+                {/* Central Core - The Fusion Heart */}
+                <motion.div
+                    className="absolute z-20 w-28 h-28 md:w-40 md:h-40 bg-white rounded-full flex items-center justify-center shadow-[0_0_60px_rgba(0,194,255,0.4)] border-4 border-white/20 relative"
+                    animate={{
+                        boxShadow: [
+                            "0 0 20px rgba(0,194,255,0.2)",
+                            "0 0 60px rgba(0,194,255,0.6)",
+                            "0 0 20px rgba(0,194,255,0.2)"
+                        ],
+                        scale: [1, 1.05, 1]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                >
+                    <div className="absolute inset-0 rounded-full border border-union-blue-400/30 animate-ping opacity-20"></div>
+                    <img src="/logo_sharing.png" alt="Union" className="w-20 md:w-28 object-contain relative z-10" />
+                </motion.div>
+
+                {/* Satellite Nodes - Fixed positions but floating */}
+                <SatelliteNodeFixed angle={-90} label="Luce & Gas" icon={<Zap className="w-5 h-5 md:w-7 md:h-7 text-yellow-400" />} color="border-yellow-500/50 shadow-yellow-500/20 bg-yellow-500/10" />
+                <SatelliteNodeFixed angle={0} label="Sharing" icon={<Share2 className="w-5 h-5 md:w-7 md:h-7 text-union-blue-400" />} color="border-union-blue-500/50 shadow-union-blue-500/20 bg-union-blue-500/10" />
+                <SatelliteNodeFixed angle={90} label="Rendita" icon={<TrendingUp className="w-5 h-5 md:w-7 md:h-7 text-union-green-400" />} color="border-union-green-500/50 shadow-union-green-500/20 bg-union-green-500/10" />
+                <SatelliteNodeFixed angle={180} label="Community" icon={<Users className="w-5 h-5 md:w-7 md:h-7 text-purple-400" />} color="border-purple-500/50 shadow-purple-500/20 bg-purple-500/10" />
+
             </div>
 
+            <motion.div
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="mt-4 md:mt-8 text-center z-30"
+            >
+                <button
+                    onClick={onClose}
+                    className="group relative flex items-center gap-3 bg-gradient-to-r from-union-orange-500 to-red-600 text-white px-10 md:px-14 py-4 md:py-5 rounded-full font-black text-xl md:text-2xl shadow-[0_0_30px_rgba(255,100,0,0.6)] hover:shadow-[0_0_50px_rgba(255,100,0,0.9)] hover:scale-105 transition-all overflow-hidden"
+                >
+                    <span className="relative z-10 uppercase tracking-widest">{language === 'it' ? 'Inizia Ora' : 'Starten'}</span>
+                    <Zap className="relative z-10 fill-white w-6 h-6 md:w-8 md:h-8 animate-pulse" />
 
+                    {/* Button internal shine effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-12" />
+                </button>
+                <p className="text-gray-400 mt-6 text-sm md:text-base font-medium tracking-wide">
+                    {language === 'it' ? 'Unisciti alla rivoluzione energetica' : 'Schließen Sie sich der Energierevolution an'}
+                </p>
+            </motion.div>
         </motion.div>
     );
 };
+
+// Helper component for animated beams
+const BeamPath = ({ d, delay }: { d: string, delay: number }) => (
+    <>
+        {/* Glow path */}
+        <path d={d} stroke="url(#beamGrad)" strokeWidth="1" fill="none" opacity="0.3" filter="url(#glow)" />
+        {/* Animated Dash */}
+        <motion.path
+            d={d}
+            stroke="#00c2ff"
+            strokeWidth="2"
+            fill="none"
+            strokeLinecap="round"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1, strokeDashoffset: 0 }}
+            transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                repeatDelay: 0.5,
+                delay: delay
+            }}
+        />
+        {/* Arrow Head moving along path - simplified by just animating the line for now as markers on motion paths are tricky in simple SVG without motionPath plugin */}
+    </>
+);
 
 const FeatureCard = ({ icon, title, desc, delay, isCenter = false }: { icon: any, title: string, desc: string, delay: number, isCenter?: boolean }) => (
     <motion.div
