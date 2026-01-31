@@ -629,21 +629,7 @@ const Step4SummaryCircleFinal = ({ language, onClose }: { language: 'it' | 'de',
                 <SatelliteNodeFixed angle={180} label="Community" icon={<Users className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />} color="border-purple-500/50 shadow-purple-500/20" />
             </div>
 
-            <motion.div
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="text-center z-30"
-            >
-                <button
-                    onClick={onClose}
-                    className="group relative flex items-center gap-2 md:gap-3 bg-gradient-to-r from-union-orange-500 to-red-600 text-white px-8 md:px-12 py-3 md:py-4 rounded-full font-black text-lg md:text-xl shadow-[0_0_20px_rgba(255,100,0,0.5)] hover:shadow-[0_0_40px_rgba(255,100,0,0.8)] hover:scale-110 transition-all overflow-hidden"
-                >
-                    <span className="relative z-10 uppercase tracking-widest">{language === 'it' ? 'Inizia Ora' : 'Starten'}</span>
-                    <Zap className="relative z-10 fill-white w-5 h-5 md:w-6 md:h-6 animate-pulse" />
-                    <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                </button>
-            </motion.div>
+
         </motion.div>
     );
 };
