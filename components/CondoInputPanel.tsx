@@ -1,15 +1,16 @@
 
 import React from 'react';
-import { CondoInput } from '../types';
+import { CondoInput, CondoSimulationResult } from '../types';
 import InputGroup from './InputGroup';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Users, Info, TrendingUp } from 'lucide-react';
+import { Users, Info, TrendingUp, Calculator, PiggyBank, CalendarRange } from 'lucide-react';
 import SharyTrigger from './SharyTrigger';
 
 interface CondoInputPanelProps {
     inputs: CondoInput;
     onInputChange: (field: keyof CondoInput, value: number) => void;
     onReset: () => void;
+    results?: CondoSimulationResult;
 }
 
 const BuildingIcon = () => (
@@ -18,10 +19,21 @@ const BuildingIcon = () => (
     </svg>
 );
 
-const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange, onReset }) => {
+const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange, onReset, results }) => {
     const { t } = useLanguage();
 
     const effectiveCondos = (inputs.greenUnits || 0) + (inputs.lightUnits || 0);
+
+    // Helper for formatting
+    const fmt = (n: number) => n.toLocaleString('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+
+    const netEarnings = results?.familyUtilityEarnings?.year1?.networkPart;
+    // Calculate Monthly Recurring (Year 1 Recurring / 12)
+    const monthlyRecurring = netEarnings ? (netEarnings.recurring / 12) : 0;
+    // Calculate 3-Year Total (Year 1 Recurring * 3, since it's flat)
+    const threeYearRecurring = netEarnings ? (netEarnings.recurring * 3) : 0;
+    const totalEarnings = netEarnings ? (netEarnings.oneTime + threeYearRecurring) : 0;
+
 
     return (
         <div className="bg-white dark:bg-black/40 backdrop-blur-xl dark:backdrop-blur-xl p-6 rounded-[2.5rem] shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 h-full transition-all duration-300">
@@ -191,22 +203,40 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                                     {inputs.networkConversionRate || 0}%
                                 </div>
                             </div>
-                            <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                step="1"
-                                value={inputs.networkConversionRate || 0}
-                                onChange={(e) => onInputChange('networkConversionRate', parseInt(e.target.value))}
-                                className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-purple-600 hover:accent-purple-500 transition-all"
-                            />
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={() => onInputChange('networkConversionRate', Math.max(0, (inputs.networkConversionRate || 0) - 1))}
+                                    className="p-2 rounded-lg bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-600 dark:text-gray-300 transition-colors"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />
+                                    </svg>
+                                </button>
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    step="1"
+                                    value={inputs.networkConversionRate || 0}
+                                    onChange={(e) => onInputChange('networkConversionRate', parseInt(e.target.value))}
+                                    className="flex-1 h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-purple-600 hover:accent-purple-500 transition-all"
+                                />
+                                <button
+                                    onClick={() => onInputChange('networkConversionRate', Math.min(100, (inputs.networkConversionRate || 0) + 1))}
+                                    className="p-2 rounded-lg bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-600 dark:text-gray-300 transition-colors"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                </button>
+                            </div>
 
-                            {/* MATH FEEDBACK 2 - CARD WOW */}
+                            {/* MATH FEEDBACK 2 - CARD WOW (UPDATED with FINANCIALS) */}
                             <div className="mt-4 bg-gradient-to-r from-purple-600 to-indigo-600 p-4 rounded-xl shadow-lg text-white transform transition-all hover:scale-[1.02]">
                                 <div className="text-[10px] text-purple-100 uppercase tracking-wider font-bold mb-1">
                                     {t('input.network_est_result')}
                                 </div>
-                                <div className="flex items-baseline gap-2">
+                                <div className="flex items-baseline gap-2 mb-3">
                                     <span className="text-3xl font-black text-white drop-shadow-md">
                                         {Math.floor(((effectiveCondos) * (inputs.familiesPerCondo || 0)) * ((inputs.networkConversionRate || 0) / 100))}
                                     </span>
@@ -214,6 +244,41 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                                         {t('input.network_new_clients')}
                                     </span>
                                 </div>
+
+                                {inputs.showFamilyUtilityView && netEarnings && (
+                                    <div className="space-y-2 border-t border-purple-500/50 pt-3 mt-3">
+                                        {/* UNA TANTUM */}
+                                        <div className="flex justify-between items-center text-xs">
+                                            <span className="opacity-90 flex items-center gap-1"><PiggyBank size={12} /> Una Tantum (30€)</span>
+                                            <span className="font-bold font-mono">{fmt(netEarnings.oneTime)}</span>
+                                        </div>
+
+                                        {/* MONTHLY RECURRING */}
+                                        <div className="flex justify-between items-center text-sm font-bold text-green-200">
+                                            <span className="flex items-center gap-1"><Calculator size={14} /> Ricorrenza Mensile (2€ &#8594; 4€)</span>
+                                            <span className="font-mono bg-green-500/20 px-1 rounded">{fmt(monthlyRecurring)}/mo</span>
+                                        </div>
+
+                                        {/* ANNUAL RECURRING */}
+                                        <div className="flex justify-between items-center text-xs opacity-80">
+                                            <span>Ricorrenza Annuale</span>
+                                            <span className="font-mono">{fmt(netEarnings.recurring)}</span>
+                                        </div>
+
+                                        {/* 3 YEAR RECURRING */}
+                                        <div className="flex justify-between items-center text-xs opacity-80">
+                                            <span>Totale Ricorrente 3 Anni</span>
+                                            <span className="font-mono">{fmt(threeYearRecurring)}</span>
+                                        </div>
+
+                                        {/* TOTAL ESTIMATED */}
+                                        <div className="pt-2 border-t border-purple-500/30 flex justify-between items-center">
+                                            <span className="uppercase text-[10px] font-bold tracking-wider">Totale Stimato (3 Anni)</span>
+                                            <span className="text-xl font-black text-yellow-300 drop-shadow-sm">{fmt(totalEarnings)}</span>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className="mt-2 text-xs text-purple-200/80 font-mono bg-black/20 inline-block px-2 py-1 rounded">
                                     {(effectiveCondos) * (inputs.familiesPerCondo || 0)} (Fam) x {inputs.networkConversionRate || 0}%
                                 </div>

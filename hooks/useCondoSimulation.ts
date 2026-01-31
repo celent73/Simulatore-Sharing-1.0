@@ -39,8 +39,8 @@ export const useCondoSimulation = (inputs: CondoInput, mainNetworkResults?: Comp
             LIGHT_REC: { Y1: 1.5, Y2: 2, Y3: 3 }, // Ipotizzato metà
 
             // Network conversion uses standard Level 1 rates (from useSimulation)
-            LEVEL_1_OT_PER_USER: 15 + 2.5, // 1 Green + 1 Light = 17.50€
-            LEVEL_1_REC_PER_USER: 1.0 + 0.5 // 1 Green + 1 Light = 1.50€ (Base Anno 1)
+            LEVEL_1_OT_PER_USER: 30, // 30€ UNA TANTUM
+            LEVEL_1_REC_PER_USER: 2 // 2€ MESE (Base)
         };
 
         // --- NETWORK OPPORTUNITY CALCULATION ---
@@ -115,7 +115,7 @@ export const useCondoSimulation = (inputs: CondoInput, mainNetworkResults?: Comp
         let recruiter_y2_Rec_Annual_Condo = ((recruiter_y2_New_Rec_Condo + recruiter_y2_Old_Rec_Condo) * 12);
 
         let recruiter_y2_OT_Network = 0; // Assuming no new conversions in Y2 for condo families simplified model
-        let recruiter_y2_Rec_Annual_Network = (recruiter_net_Rec_Base * 1.5 * 12);
+        let recruiter_y2_Rec_Annual_Network = (recruiter_net_Rec_Base * 1.5 * 12); // YEAR 2: 3€/mo (2€ * 1.5)
 
         // --- YEAR 3 ---
         const y3_NewGreen = yearlyNewUnitsGreen;
@@ -136,7 +136,7 @@ export const useCondoSimulation = (inputs: CondoInput, mainNetworkResults?: Comp
         let recruiter_y3_Rec_Annual_Condo = ((recruiter_y3_New_Rec_Condo + recruiter_y3_Mid_Rec_Condo + recruiter_y3_Old_Rec_Condo) * 12);
 
         let recruiter_y3_OT_Network = 0;
-        let recruiter_y3_Rec_Annual_Network = (recruiter_net_Rec_Base * 2.0 * 12);
+        let recruiter_y3_Rec_Annual_Network = (recruiter_net_Rec_Base * 2.0 * 12); // YEAR 3: 4€/mo (2€ * 2.0)
 
         // --- OPTIONAL: ADD MAIN NETWORK EARNINGS ---
         if (includeMainNetworkEarnings && mainNetworkResults) {

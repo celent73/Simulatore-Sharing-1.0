@@ -1,6 +1,6 @@
 # Session Log: Fuel Pitch Implementation & Deployment
 **Date:** 2026-01-29
-**Version:** v1.1.18
+**Version:** v1.1.19
 
 ## Summary
 Successfully implemented the **Fuel Pitch (Fuel Saver)** feature and deployed the updated application.
@@ -11,7 +11,7 @@ Successfully implemented the **Fuel Pitch (Fuel Saver)** feature and deployed th
 -   **Access:** Added "Fuel" button to the main header in `App.tsx`.
 -   **Logic:**
     -   **Fuel Cost**: Calculated based on user inputs (Price €/L * Tank Capacity).
-    -   **Direct Savings**: Fixed 1.68% cashback on fuel.
+    -   **Direct Savings**: Fixed **1.88%** cashback on fuel.
     -   **Cross-Spending**: Additional savings generated from "Other Monthly Spending" (Input € * Cashback %).
     -   **Net Price**: `(Tank Cost - Total Savings) / Capacity` = New effective price per liter.
 -   **UI/UX**:
@@ -21,7 +21,7 @@ Successfully implemented the **Fuel Pitch (Fuel Saver)** feature and deployed th
     -   Optimized `max-w-4xl` layout for desktop visibility.
 
 ### 2. Deployment
--   **Version Bump**: Updated to `1.1.18` in `package.json` and `LegalFooter.tsx`.
+-   **Version Bump**: Updated to `1.1.19` in `package.json` and `LegalFooter.tsx`.
 -   **Build**: Successfully compiled with `npm run build`.
 -   **Git**: Pushed changes to `release-v10-auth-fix` to trigger auto-deployment.
 

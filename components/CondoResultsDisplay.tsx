@@ -76,10 +76,22 @@ const RecruiterCard = ({ fullResults }: { fullResults: CondoSimulationResult }) 
                             </div>
                             {(earnings.year1.networkPart?.oneTime! > 0 || earnings.year1.networkPart?.recurring! > 0) && (
                                 <div className="mt-1 pt-1 border-t border-white/5 flex flex-col gap-1 text-purple-200">
-                                    <span className="text-[8px] font-black uppercase tracking-widest">Guadagni Network</span>
-                                    <div className="flex justify-between text-[10px]">
-                                        <span>Rilasci/Extra:</span>
-                                        <span className="font-black">{formatCurrency(earnings.year1.networkPart.oneTime + earnings.year1.networkPart.recurring)}</span>
+                                    <span className="text-[8px] font-black uppercase tracking-widest">Guadagni Network (Famiglie)</span>
+                                    {earnings.year1.networkPart?.oneTime! > 0 && (
+                                        <div className="flex justify-between text-[9px] opacity-80">
+                                            <span>Una Tantum:</span>
+                                            <span>{formatCurrency(earnings.year1.networkPart.oneTime)}</span>
+                                        </div>
+                                    )}
+                                    {earnings.year1.networkPart?.recurring! > 0 && (
+                                        <div className="flex justify-between text-[9px] opacity-80">
+                                            <span>Rendita:</span>
+                                            <span>{formatCurrency(earnings.year1.networkPart.recurring)}</span>
+                                        </div>
+                                    )}
+                                    <div className="flex justify-between text-[10px] border-t border-white/5 pt-0.5 mt-0.5">
+                                        <span>Totale:</span>
+                                        <span className="font-black">{formatCurrency((earnings.year1.networkPart?.oneTime || 0) + (earnings.year1.networkPart?.recurring || 0))}</span>
                                     </div>
                                 </div>
                             )}
@@ -101,12 +113,24 @@ const RecruiterCard = ({ fullResults }: { fullResults: CondoSimulationResult }) 
                                 <span className="text-blue-200 uppercase text-[9px] font-black tracking-wider">Rendite (Fino a 4€/M)</span>
                                 <span className="text-white text-sm">{formatCurrency(earnings.year2.recurring - (earnings.year2.networkPart?.recurring || 0))}</span>
                             </div>
-                            {earnings.year2.networkPart?.recurring! > 0 && (
+                            {(earnings.year2.networkPart?.recurring! > 0 || earnings.year2.networkPart?.oneTime! > 0) && (
                                 <div className="mt-1 pt-1 border-t border-white/5 flex flex-col gap-1 text-purple-200">
-                                    <span className="text-[8px] font-black uppercase tracking-widest">Guadagni Network</span>
-                                    <div className="flex justify-between text-[10px]">
-                                        <span>Rilasci/Extra:</span>
-                                        <span className="font-black">{formatCurrency(earnings.year2.networkPart.oneTime + earnings.year2.networkPart.recurring)}</span>
+                                    <span className="text-[8px] font-black uppercase tracking-widest">Guadagni Network (Famiglie)</span>
+                                    {earnings.year2.networkPart?.oneTime! > 0 && (
+                                        <div className="flex justify-between text-[9px] opacity-80">
+                                            <span>Una Tantum:</span>
+                                            <span>{formatCurrency(earnings.year2.networkPart.oneTime)}</span>
+                                        </div>
+                                    )}
+                                    {earnings.year2.networkPart?.recurring! > 0 && (
+                                        <div className="flex justify-between text-[9px] opacity-80">
+                                            <span>Rendita:</span>
+                                            <span>{formatCurrency(earnings.year2.networkPart.recurring)}</span>
+                                        </div>
+                                    )}
+                                    <div className="flex justify-between text-[10px] border-t border-white/5 pt-0.5 mt-0.5">
+                                        <span>Totale:</span>
+                                        <span className="font-black">{formatCurrency((earnings.year2.networkPart?.oneTime || 0) + (earnings.year2.networkPart?.recurring || 0))}</span>
                                     </div>
                                 </div>
                             )}
@@ -128,12 +152,24 @@ const RecruiterCard = ({ fullResults }: { fullResults: CondoSimulationResult }) 
                                 <span className="text-blue-200 uppercase text-[9px] font-black tracking-wider">Rendite (Fino a 6€/M)</span>
                                 <span className="text-white text-sm">{formatCurrency(earnings.year3.recurring - (earnings.year3.networkPart?.recurring || 0))}</span>
                             </div>
-                            {earnings.year3.networkPart?.recurring! > 0 && (
+                            {(earnings.year3.networkPart?.recurring! > 0 || earnings.year3.networkPart?.oneTime! > 0) && (
                                 <div className="mt-2 pt-2 border-t border-white/10 flex flex-col gap-1 bg-black/20 p-2 rounded-xl">
-                                    <span className="text-[8px] font-black uppercase tracking-widest text-yellow-300">Guadagni Network</span>
-                                    <div className="flex justify-between text-[10px] text-yellow-100">
-                                        <span>Rilasci/Extra:</span>
-                                        <span className="font-black text-white">{formatCurrency(earnings.year3.networkPart.oneTime + earnings.year3.networkPart.recurring)}</span>
+                                    <span className="text-[8px] font-black uppercase tracking-widest text-yellow-300">Guadagni Network (Famiglie)</span>
+                                    {earnings.year3.networkPart?.oneTime! > 0 && (
+                                        <div className="flex justify-between text-[9px] text-yellow-100/80">
+                                            <span>Una Tantum:</span>
+                                            <span>{formatCurrency(earnings.year3.networkPart.oneTime)}</span>
+                                        </div>
+                                    )}
+                                    {earnings.year3.networkPart?.recurring! > 0 && (
+                                        <div className="flex justify-between text-[9px] text-yellow-100/80">
+                                            <span>Rendita:</span>
+                                            <span>{formatCurrency(earnings.year3.networkPart.recurring)}</span>
+                                        </div>
+                                    )}
+                                    <div className="flex justify-between text-[10px] text-yellow-100 border-t border-white/10 pt-1 mt-1">
+                                        <span>Totale:</span>
+                                        <span className="font-black text-white">{formatCurrency((earnings.year3.networkPart?.oneTime || 0) + (earnings.year3.networkPart?.recurring || 0))}</span>
                                     </div>
                                 </div>
                             )}
@@ -331,11 +367,29 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                 </div>
                             </div>
                             {((results.familyUtilityEarnings!.year1.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0)) > 0 && (
-                                <div className="mt-1 pt-1 border-t border-purple-100 dark:border-purple-500/30 flex flex-col gap-1 text-purple-600 dark:text-purple-400">
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Guadagni Network</span>
-                                    <div className="flex justify-between text-base">
+                                <div className="mt-2 pt-2 border-t border-purple-200 dark:border-purple-500/30 flex flex-col gap-1 bg-purple-50 dark:bg-purple-900/10 p-2 rounded-lg">
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-purple-800 dark:text-purple-300">Guadagni Network</span>
+
+                                    {(results.familyUtilityEarnings!.year1.networkPart?.oneTime || 0) > 0 && (
+                                        <div className="flex justify-between text-xs text-purple-600 dark:text-purple-400 opacity-80">
+                                            <span>Una Tantum:</span>
+                                            <span>{formatCurrency(results.familyUtilityEarnings!.year1.networkPart?.oneTime)}</span>
+                                        </div>
+                                    )}
+
+                                    {(results.familyUtilityEarnings!.year1.networkPart?.recurring || 0) > 0 && (
+                                        <div className="flex justify-between items-center text-purple-700 dark:text-purple-200 my-0.5">
+                                            <span className="text-xs font-bold uppercase">Rendita:</span>
+                                            <div className="flex items-baseline gap-1">
+                                                <span className="text-lg font-black">{formatCurrency(results.familyUtilityEarnings!.year1.networkPart?.recurring)}</span>
+                                                <span className="text-[10px] opacity-70">({formatCurrency((results.familyUtilityEarnings!.year1.networkPart?.recurring || 0) / 12)}/mo)</span>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="flex justify-between text-[10px] text-purple-600 dark:text-purple-400 border-t border-purple-200 dark:border-purple-500/20 pt-1 mt-1">
                                         <span>Totale extra:</span>
-                                        <span className="font-black">{formatCurrency((results.familyUtilityEarnings!.year1.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0))}</span>
+                                        <span className="font-bold">{formatCurrency((results.familyUtilityEarnings!.year1.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0))}</span>
                                     </div>
                                 </div>
                             )}
@@ -367,12 +421,30 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                     </div>
                                 </div>
                             </div>
-                            {(results.familyUtilityEarnings!.year2.networkPart?.recurring || 0) > 0 && (
-                                <div className="mt-1 pt-1 border-t border-purple-100 dark:border-purple-500/30 flex flex-col gap-1 text-purple-600 dark:text-purple-400">
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Guadagni Network</span>
-                                    <div className="flex justify-between text-base">
+                            {((results.familyUtilityEarnings!.year2.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0)) > 0 && (
+                                <div className="mt-2 pt-2 border-t border-purple-200 dark:border-purple-500/30 flex flex-col gap-1 bg-purple-50 dark:bg-purple-900/10 p-2 rounded-lg">
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-purple-800 dark:text-purple-300">Guadagni Network</span>
+
+                                    {(results.familyUtilityEarnings!.year2.networkPart?.oneTime || 0) > 0 && (
+                                        <div className="flex justify-between text-xs text-purple-600 dark:text-purple-400 opacity-80">
+                                            <span>Una Tantum:</span>
+                                            <span>{formatCurrency(results.familyUtilityEarnings!.year2.networkPart?.oneTime)}</span>
+                                        </div>
+                                    )}
+
+                                    {(results.familyUtilityEarnings!.year2.networkPart?.recurring || 0) > 0 && (
+                                        <div className="flex justify-between items-center text-purple-700 dark:text-purple-200 my-0.5">
+                                            <span className="text-xs font-bold uppercase">Rendita:</span>
+                                            <div className="flex items-baseline gap-1">
+                                                <span className="text-lg font-black">{formatCurrency(results.familyUtilityEarnings!.year2.networkPart?.recurring)}</span>
+                                                <span className="text-[10px] opacity-70">({formatCurrency((results.familyUtilityEarnings!.year2.networkPart?.recurring || 0) / 12)}/mo)</span>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="flex justify-between text-[10px] text-purple-600 dark:text-purple-400 border-t border-purple-200 dark:border-purple-500/20 pt-1 mt-1">
                                         <span>Totale extra:</span>
-                                        <span className="font-black">{formatCurrency((results.familyUtilityEarnings!.year2.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0))}</span>
+                                        <span className="font-bold">{formatCurrency((results.familyUtilityEarnings!.year2.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0))}</span>
                                     </div>
                                 </div>
                             )}
@@ -404,12 +476,30 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                     </div>
                                 </div>
                             </div>
-                            {(results.familyUtilityEarnings!.year3.networkPart?.recurring || 0) > 0 && (
-                                <div className="mt-2 pt-2 border-t border-white/10 flex flex-col gap-1 bg-black/20 p-3 rounded-xl shadow-inner-sm">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-yellow-300">Guadagni Network</span>
-                                    <div className="flex justify-between text-lg text-yellow-100">
+                            {((results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)) > 0 && (
+                                <div className="mt-2 pt-2 border-t border-white/10 flex flex-col gap-1 bg-slate-900 p-2 rounded-lg shadow-sm border border-white/5">
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-purple-300">Guadagni Network</span>
+
+                                    {(results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0) > 0 && (
+                                        <div className="flex justify-between text-xs text-purple-200 opacity-90">
+                                            <span>Una Tantum:</span>
+                                            <span>{formatCurrency(results.familyUtilityEarnings!.year3.networkPart?.oneTime)}</span>
+                                        </div>
+                                    )}
+
+                                    {(results.familyUtilityEarnings!.year3.networkPart?.recurring || 0) > 0 && (
+                                        <div className="flex justify-between items-center text-white my-0.5">
+                                            <span className="text-xs font-bold uppercase text-purple-300">Rendita:</span>
+                                            <div className="flex items-baseline gap-1">
+                                                <span className="text-lg font-black text-white">{formatCurrency(results.familyUtilityEarnings!.year3.networkPart?.recurring)}</span>
+                                                <span className="text-[10px] opacity-80 text-purple-200">({formatCurrency((results.familyUtilityEarnings!.year3.networkPart?.recurring || 0) / 12)}/mo)</span>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="flex justify-between text-[10px] text-purple-200 border-t border-white/10 pt-1 mt-1">
                                         <span>Totale extra:</span>
-                                        <span className="font-black text-white">{formatCurrency((results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0))}</span>
+                                        <span className="font-bold">{formatCurrency((results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0))}</span>
                                     </div>
                                 </div>
                             )}

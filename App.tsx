@@ -27,7 +27,8 @@ import { BusinessPresentationModal } from './components/BusinessPresentationModa
 import { CashbackDetailedModal } from './components/CashbackDetailedModal'; // NEW IMPORT
 import { FocusModeModal } from './components/FocusModeModal'; // NEW IMPORT
 import FuelPitchModal from './components/FuelPitchModal'; // NEW IMPORT
-import { Presentation, Fuel } from 'lucide-react'; // NEW ICON Import
+import { UnionEcosystemModal } from './components/UnionEcosystemModal'; // NEW IMPORT
+import { Presentation, Fuel, Share2 } from 'lucide-react'; // NEW ICON Import
 
 // --- IMPORTAZIONI LEGALI E UI ---
 import { LegalFooter } from './components/LegalFooter';
@@ -109,6 +110,7 @@ const AppContent = () => {
   const [isCashbackDetailedOpen, setIsCashbackDetailedOpen] = useState(false); // NEW STATE FOR CASHBACK
   const [isFocusModeOpen, setIsFocusModeOpen] = useState(false); // NEW STATE FOR FOCUS MODE
   const [isFuelPitchOpen, setIsFuelPitchOpen] = useState(false); // NEW STATE FOR FUEL PITCH
+  const [isUnionEcosystemOpen, setIsUnionEcosystemOpen] = useState(false); // NEW STATE FOR UNION ECOSYSTEM
 
   // --- NUOVI STATI PER LA VERIFICA SUPABASE ---
   const [licenseCode, setLicenseCode] = useState('');
@@ -501,7 +503,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.1.17
+        v1.1.21
       </div>
 
 
@@ -578,6 +580,16 @@ const AppContent = () => {
                 <span className="hidden sm:inline">Focus</span>
               </button>
 
+              {/* PULSANTE UNION ECOSYSTEM (REVOLUTION) */}
+              <button
+                onClick={() => setIsUnionEcosystemOpen(true)}
+                className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl shadow-lg hover:shadow-cyan-500/30 transition-all border-0 font-bold text-sm hover:scale-[1.05]"
+                title="Union Ecosystem"
+              >
+                <Share2 className="w-5 h-5 sm:mr-2" />
+                <span className="hidden sm:inline">Revolution</span>
+              </button>
+
               {/* PULSANTE PRESENTAZIONE BUSINESS */}
               <button
                 onClick={() => setIsPresentationOpen(true)}
@@ -646,7 +658,7 @@ const AppContent = () => {
         <main key={viewMode} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
           <div className="md:col-span-1 lg:col-span-1 min-w-0">
             {viewMode === 'condo' ? (
-              <CondoInputPanel inputs={condoInputs} onInputChange={handleCondoInputChange} onReset={handleCondoReset} />
+              <CondoInputPanel inputs={condoInputs} onInputChange={handleCondoInputChange} onReset={handleCondoReset} results={condoResult} />
             ) : (
               <InputPanel
                 inputs={inputs}
@@ -724,6 +736,7 @@ const AppContent = () => {
         initialDetails={(inputs as any).cashbackDetails}
         onConfirm={handleCashbackDetailedConfirm}
       />
+      <UnionEcosystemModal isOpen={isUnionEcosystemOpen} onClose={() => setIsUnionEcosystemOpen(false)} />
       <FocusModeModal isOpen={isFocusModeOpen} onClose={() => setIsFocusModeOpen(false)} />
       <InstallModal isOpen={showInstallModal} onClose={() => setShowInstallModal(false)} installPrompt={installPrompt} />
     </div>
