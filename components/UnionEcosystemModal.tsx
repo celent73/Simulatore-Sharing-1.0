@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, Zap, Users, Share2, TrendingUp, Building, Tv, Wallet, ShieldCheck, ChevronRight, ChevronLeft } from 'lucide-react';
+import { X, ArrowRight, Zap, Users, Share2, TrendingUp, Building, Tv, Wallet, ShieldCheck, ChevronRight, ChevronLeft, Apple, Play } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface UnionEcosystemModalProps {
@@ -682,7 +682,10 @@ const Step4SummaryCircleFinal = ({ language, onClose }: { language: 'it' | 'de',
                 className="mt-4 md:mt-8 text-center z-30"
             >
                 <button
-                    onClick={onClose}
+                    onClick={() => {
+                        window.open('https://my.unionenergia.it', '_blank');
+                        onClose();
+                    }}
                     className="group relative flex items-center gap-3 bg-gradient-to-r from-union-orange-500 to-red-600 text-white px-10 md:px-14 py-4 md:py-5 rounded-full font-black text-xl md:text-2xl shadow-[0_0_30px_rgba(255,100,0,0.6)] hover:shadow-[0_0_50px_rgba(255,100,0,0.9)] hover:scale-105 transition-all overflow-hidden"
                 >
                     <span className="relative z-10 uppercase tracking-widest">{language === 'it' ? 'Inizia Ora' : 'Starten'}</span>
@@ -691,9 +694,36 @@ const Step4SummaryCircleFinal = ({ language, onClose }: { language: 'it' | 'de',
                     {/* Button internal shine effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-12" />
                 </button>
-                <p className="text-gray-400 mt-6 text-sm md:text-base font-medium tracking-wide">
+                <p className="text-gray-400 mt-6 text-sm md:text-base font-medium tracking-wide mb-6">
                     {language === 'it' ? 'Unisciti alla rivoluzione energetica' : 'Schließen Sie sich der Energierevolution an'}
                 </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 z-30">
+                    <a
+                        href="https://play.google.com/store/apps/details?id=com.unionapplication&pcampaignid=web_share"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 bg-black/40 hover:bg-black/60 border border-white/20 hover:border-white/50 px-5 py-2.5 rounded-xl transition-all hover:scale-105"
+                    >
+                        <Play className="fill-white text-white w-6 h-6" />
+                        <div className="text-left">
+                            <div className="text-[10px] uppercase text-gray-400 font-bold leading-none mb-0.5">DISPONIBILE SU</div>
+                            <div className="text-lg font-bold text-white leading-none font-sans">Google Play</div>
+                        </div>
+                    </a>
+                    <a
+                        href="https://apps.apple.com/it/app/myunion/id6738283735"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 bg-black/40 hover:bg-black/60 border border-white/20 hover:border-white/50 px-5 py-2.5 rounded-xl transition-all hover:scale-105"
+                    >
+                        <Apple className="fill-white text-white w-7 h-7" />
+                        <div className="text-left">
+                            <div className="text-[10px] uppercase text-gray-400 font-bold leading-none mb-0.5">SCARICA SU</div>
+                            <div className="text-lg font-bold text-white leading-none font-sans">App Store</div>
+                        </div>
+                    </a>
+                </div>
             </motion.div>
         </motion.div>
     );
