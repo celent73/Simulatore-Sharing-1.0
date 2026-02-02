@@ -293,7 +293,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
               />
               {isFullScreen && (
                 <div className="flex items-center gap-2 ml-4">
-                  <span className="text-union-orange-500 text-sm bg-union-orange-50 px-3 py-1 rounded-full uppercase tracking-wider border border-union-orange-200">Focus</span>
+                  <span className="text-union-orange-500 text-sm bg-union-orange-50 px-3 py-1 rounded-full uppercase tracking-wider border border-union-orange-200">Network Focus</span>
                   {isClientMode ? (
                     <span className="text-emerald-600 text-sm bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-200 flex items-center gap-1">
                       <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
@@ -312,7 +312,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
               <button
                 onClick={onToggleFullScreen}
                 className={`hidden sm:flex items-center gap-2 px-4 py-2 ${isFullScreen ? 'bg-union-blue-50 text-union-blue-600' : 'bg-union-blue-50 text-union-blue-600'} hover:bg-union-blue-100 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95 border border-transparent hover:border-union-blue-200`}
-                title={isFullScreen ? "Esci da Focus Mode" : "Attiva Focus Mode"}
+                title={isFullScreen ? "Esci da Network Focus" : "Attiva Network Focus"}
               >
                 {isFullScreen ? (
                   <>
@@ -322,7 +322,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                 ) : (
                   <>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>
-                    FOCUS
+                    NETWORK FOCUS
                   </>
                 )}
               </button>

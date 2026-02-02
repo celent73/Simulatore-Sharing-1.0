@@ -483,11 +483,10 @@ const AppContent = () => {
     }
   };
 
-  // --- FUNZIONE PER APRIRE FOCUS DALLA PRESENTAZIONE ---
   const handleOpenFocusFromPresentation = (page: number) => {
     setReturnToPresentationPage(page); // SALVIAMO LA PAGINA
     setIsPresentationOpen(false);
-    setIsFocusModeOpen(true); // APRIAMO IL FOCUS MODE
+    handleToggleFullScreen(); // APRIAMO IL NETWORK FOCUS (FULL SCREEN)
   };
 
   const headerShadow = language === 'it'
@@ -503,7 +502,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.1.21
+        v1.1.22
       </div>
 
 
@@ -532,7 +531,7 @@ const AppContent = () => {
               <div className="flex items-center gap-3">
                 <h1 onClick={handleTitleClick} className="text-2xl sm:text-4xl font-extrabold text-white drop-shadow-sm select-none cursor-pointer active:scale-95 transition-transform flex items-center gap-3 flex-wrap justify-center md:justify-start">
                   {language === 'it' ? <ItalyFlag /> : <GermanyFlag />}
-                  <span className="text-white">Sharing</span> <span className="text-union-orange-400">Simulator</span>
+                  <span className="text-union-blue-600">Sharing</span> <span className="text-union-orange-400">Simulator</span>
                   {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-union-orange-400" /></span>}
                 </h1>
                 {isCreatorMode && <span className="hidden sm:inline-flex bg-white/20 backdrop-blur-md text-white border border-white/40 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm uppercase tracking-wider">Creator Mode</span>}
