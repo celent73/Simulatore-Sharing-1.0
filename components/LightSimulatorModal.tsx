@@ -57,7 +57,7 @@ const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClo
     const handleReset = () => {
         setNetworkSize([0, 0, 0, 0, 0, 0]);
         setPersonalUnits(0);
-        setDuplicationFactor(3);
+        setDuplicationFactor(1);
         setMonthRange('1');
         setUtilityType('DOMESTIC');
     };
