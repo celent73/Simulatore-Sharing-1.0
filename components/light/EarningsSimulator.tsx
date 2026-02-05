@@ -1,6 +1,5 @@
-import React from 'react';
 import { LEVEL_COMMISSIONS, UNLOCK_CONDITIONS } from './constants';
-import { Calculator, Info, RotateCcw, Plus, Minus, Layers, Zap, User } from 'lucide-react';
+import { Calculator, Info, RotateCcw, Plus, Minus, Layers, Zap, User, Lock, CheckCircle2 } from 'lucide-react';
 interface EarningsSimulatorProps {
     networkSize: number[];
     onLevelChange: (index: number, value: number) => void;
@@ -213,48 +212,71 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                     ))}
                 </div>
 
-                <div className="space-y-6">
-                    {networkSize.map((count, i) => (
-                        <div key={i} className={`space-y-3 transition-opacity duration-300 ${expansionMode === 'auto' && i > 0 ? 'opacity-60' : 'opacity-100'}`}>
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm font-bold text-union-black whitespace-nowrap">Livello {i}</span>
+                <div className="space-y-4">
+                    {networkSize.map((count, i) => {
+                        const isUnlocked = i === 0 || (
+                            i === 1 ? personalUnits >= UNLOCK_CONDITIONS.LEVEL_1 :
+                                i === 2 ? personalUnits >= UNLOCK_CONDITIONS.LEVEL_2 :
+                                    i === 3 ? personalUnits >= UNLOCK_CONDITIONS.LEVEL_3 :
+                                        i === 4 ? personalUnits >= UNLOCK_CONDITIONS.LEVEL_4 :
+                                            i === 5 ? personalUnits >= UNLOCK_CONDITIONS.LEVEL_5 : true
+                        );
 
-                                <div className="flex items-center gap-3">
-                                    {(expansionMode === 'manual' || i === 0) && (
-                                        <button
-                                            onClick={() => onLevelChange(i, Math.max(0, count - 1))}
-                                            className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 transition-all shadow-sm active:scale-90"
-                                        >
-                                            <Minus size={16} />
-                                        </button>
-                                    )}
-                                    <div className="min-w-[100px] text-center">
-                                        <span className="text-base font-black text-union-green-500">{count}</span>
-                                        <span className="text-xs opacity-40 font-bold ml-1 uppercase">utenze</span>
+                        return (
+                            <div key={i} className={`p-4 rounded-3xl transition-all duration-500 border-2 ${isUnlocked
+                                    ? 'bg-union-green-500/5 border-union-green-500/20 shadow-sm'
+                                    : 'bg-gray-50/50 border-gray-100 opacity-40 grayscale-[0.5]'
+                                }`}>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`p-2 rounded-xl ${isUnlocked ? 'bg-union-green-500 text-white shadow-lg shadow-union-green-500/20' : 'bg-gray-200 text-gray-400'}`}>
+                                            {isUnlocked ? <CheckCircle2 size={16} /> : <Lock size={16} />}
+                                        </div>
+                                        <span className={`text-sm font-black uppercase tracking-tight ${isUnlocked ? 'text-union-black' : 'text-gray-400'}`}>
+                                            Livello <span className={isUnlocked ? 'text-union-green-600' : ''}>{i}</span>
+                                        </span>
                                     </div>
-                                    {(expansionMode === 'manual' || i === 0) && (
-                                        <button
-                                            onClick={() => onLevelChange(i, count + 1)}
-                                            className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-union-green-500 hover:border-union-green-200 transition-all shadow-sm active:scale-90"
-                                        >
-                                            <Plus size={16} />
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
 
-                            {(expansionMode === 'manual' || i === 0) && (
-                                <input
-                                    type="range"
-                                    min="0"
-                                    max={i === 0 ? 50 : 1000}
-                                    value={count}
-                                    onChange={(e) => onLevelChange(i, parseInt(e.target.value))}
-                                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-union-green-500"
-                                />
-                            )}
-                        </div>
-                    ))}
+                                    <div className="flex items-center gap-4">
+                                        {(expansionMode === 'manual' || i === 0) && (
+                                            <button
+                                                onClick={() => onLevelChange(i, Math.max(0, count - 1))}
+                                                className={`w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-200 transition-all shadow-sm active:scale-90 ${isUnlocked ? 'text-gray-400 hover:text-red-500 hover:border-red-200' : 'cursor-not-allowed opacity-50'}`}
+                                            >
+                                                <Minus size={16} />
+                                            </button>
+                                        )}
+                                        <div className="min-w-[100px] text-center">
+                                            <span className={`text-xl font-black ${isUnlocked ? 'text-union-green-600' : 'text-gray-400'}`}>{count}</span>
+                                            <span className="text-[10px] opacity-40 font-bold ml-1.5 uppercase">utenze</span>
+                                        </div>
+                                        {(expansionMode === 'manual' || i === 0) && (
+                                            <button
+                                                onClick={() => onLevelChange(i, count + 1)}
+                                                className={`w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-200 transition-all shadow-sm active:scale-90 ${isUnlocked ? 'text-gray-400 hover:text-union-green-500 hover:border-union-green-200' : 'cursor-not-allowed opacity-50'}`}
+                                            >
+                                                <Plus size={16} />
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {(expansionMode === 'manual' || i === 0) && (
+                                    <div className="mt-4 px-2">
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max={i === 0 ? 50 : 1000}
+                                            value={count}
+                                            onChange={(e) => onLevelChange(i, parseInt(e.target.value))}
+                                            className={`w-full h-2 rounded-lg appearance-none cursor-pointer transition-all ${isUnlocked ? 'accent-union-green-500 bg-union-green-500/10' : 'accent-gray-300 bg-gray-200 cursor-not-allowed'}`}
+                                            disabled={!isUnlocked}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
 
