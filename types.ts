@@ -46,6 +46,7 @@ export interface PlanInput {
   otherGasFixed?: number;
   otherSupplierName?: string;
   includeEarningsInAnalysis?: boolean;
+  bonus3x3Active?: boolean;
 }
 
 export interface CondoInput {

@@ -159,6 +159,11 @@ export const useCompensationPlan = (inputs: PlanInput, viewMode: ViewMode = 'fam
         const monthlyCashback = cashbackSpending * (cashbackPercentage / 100);
         totalOneTimeBonus += monthlyCashback;
 
+        // --- AGGIUNTA BONUS 3x3 "IN 60 GIORNI" ---
+        if (inputs.bonus3x3Active) {
+            totalOneTimeBonus += 150;
+        }
+
         // --- CALCOLO TOTALI RICORRENZA RETE ---
         let totalRecurringYear1 = levelData.reduce((sum, level) => sum + level.recurringYear1, 0);
         let totalRecurringYear2 = levelData.reduce((sum, level) => sum + level.recurringYear2, 0);

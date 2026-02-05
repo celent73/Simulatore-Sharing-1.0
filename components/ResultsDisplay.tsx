@@ -43,6 +43,7 @@ interface SummaryCardProps {
   suffix?: React.ReactNode;
   variant?: 'glass' | 'gradient-blue' | 'gradient-orange';
   icon?: React.ReactNode;
+  showBadge?: boolean;
 }
 
 const UsersIcon = ({ className = "w-6 h-6" }: { className?: string }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}><path fillRule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clipRule="evenodd" /><path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" /></svg>);
@@ -51,7 +52,7 @@ const FireIcon = ({ className = "w-6 h-6" }: { className?: string }) => (<svg xm
 const BoltIcon = ({ className = "w-6 h-6" }: { className?: string }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}><path fillRule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z" clipRule="evenodd" /></svg>);
 const StarIcon = ({ className = "w-6 h-6" }: { className?: string }) => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}><path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006Z" clipRule="evenodd" /></svg>);
 
-const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, suffix, variant = 'glass', icon }) => {
+const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, suffix, variant = 'glass', icon, showBadge }) => {
   let styles = {
     container: '',
     title: '',
@@ -92,7 +93,19 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, suffix, variant
   }
 
   return (
-    <div className={`p-5 rounded-3xl transition-all duration-300 ease-in-out flex flex-col items-start justify-between h-full hover:-translate-y-1 ${styles.container}`}>
+    <div className={`p-5 rounded-3xl transition-all duration-300 ease-in-out flex flex-col items-start justify-between h-full hover:-translate-y-1 relative overflow-hidden ${styles.container}`}>
+      {showBadge && (
+        <div className="absolute -top-1 -right-1 z-20">
+          <div className="bg-yellow-400 text-white p-2 rounded-bl-2xl shadow-lg border-b-2 border-l-2 border-white animate-pulse">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
+              <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006Z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <div className="absolute top-2 right-10 whitespace-nowrap bg-white text-yellow-600 text-[8px] font-black px-2 py-0.5 rounded-full shadow-sm border border-yellow-100 uppercase tracking-tighter animate-bounce">
+            Bonus 3x3!
+          </div>
+        </div>
+      )}
       <div className="flex items-center gap-3 mb-3">
         {icon && (
           <div className={`p-2 rounded-xl backdrop-blur-sm ${styles.iconBg} ${styles.iconColor}`}>
@@ -245,8 +258,14 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         <div className="fixed inset-0 z-[9998] bg-gray-100/90 dark:bg-slate-900/95 backdrop-blur-sm animate-in fade-in duration-300" />
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <SummaryCard title={cashbackPeriod === 'annual' ? "Bonus Una Tantum" : t('results.one_time')} value={formatValueWithSuffix(totalOneTimeBonus).value} variant="gradient-blue" icon={<WalletIcon />} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+        <SummaryCard
+          title={cashbackPeriod === 'annual' ? "Bonus Una Tantum" : t('results.one_time')}
+          value={formatValueWithSuffix(totalOneTimeBonus).value}
+          variant="gradient-blue"
+          icon={<WalletIcon />}
+          showBadge={inputs.bonus3x3Active}
+        />
         <SummaryCard
           title={t('results.rec_y1') + recTitleSuffix}
           value={formatValueWithSuffix(displayMonthlyRec1).value}
@@ -267,6 +286,30 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           suffix={<div className="flex flex-col -mb-1"><span className="text-[10px]">/ mese</span><span className="text-[8px] opacity-60 font-bold">anno: {formatCurrency(displayMonthlyRec3 * 12)}{parkSuffix}</span></div>}
           variant="gradient-orange"
           icon={<StarIcon />}
+        />
+        <SummaryCard
+          title={t('results.total_users')}
+          value={totalUsers.toLocaleString('it-IT')}
+          suffix={
+            <div className="flex flex-col mt-1">
+              <span className="text-[10px] opacity-70 font-normal">
+                / {totalContracts.toLocaleString('it-IT')} Contratti
+              </span>
+              {(() => {
+                const milestones = [600, 1500, 5000];
+                const nextMilestone = milestones.find(m => m > totalContracts);
+                const remainingToNext = nextMilestone ? nextMilestone - totalContracts : 0;
+                if (remainingToNext <= 0) return null;
+                return (
+                  <span className="text-[8px] text-red-500 font-bold mt-1 block uppercase tracking-tight">
+                    {remainingToNext} {t('bonus.next_goal')}
+                  </span>
+                );
+              })()}
+            </div>
+          }
+          variant="glass"
+          icon={<UsersIcon />}
         />
       </div>
 
@@ -504,43 +547,13 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         )}
       </div>
 
+
+
       {!isClientMode && (
-        <>
-          <div className="w-full max-w-sm lg:hidden mb-8">
-            <SummaryCard
-              title={t('results.total_users')}
-              value={`${totalUsers.toLocaleString('it-IT')}`}
-              suffix={
-                <div className="flex flex-col mt-1">
-                  <span className="text-xs opacity-70 font-normal">
-                    / {totalContracts.toLocaleString('it-IT')} Contratti
-                  </span>
-                  {!isClientMode && (
-                    (() => {
-                      const milestones = [600, 1500, 5000];
-                      const nextMilestone = milestones.find(m => m > totalContracts);
-                      const remainingToNext = nextMilestone ? nextMilestone - totalContracts : 0;
-
-                      if (remainingToNext <= 0) return null;
-
-                      return (
-                        <span className="text-[10px] text-red-500 font-bold mt-2 block uppercase tracking-tight">
-                          {remainingToNext} {t('bonus.next_goal')}
-                        </span>
-                      );
-                    })()
-                  )}
-                </div>
-              }
-              variant="glass"
-              icon={<UsersIcon />}
-            />
-          </div>
-          <BonusProgress
-            totalContracts={totalContracts}
-            onBonusChange={setManagerBonus}
-          />
-        </>
+        <BonusProgress
+          totalContracts={totalContracts}
+          onBonusChange={setManagerBonus}
+        />
       )}
 
       <div className="bg-white dark:bg-black/40 backdrop-blur-xl rounded-[2.5rem] shadow-lg border border-gray-100 dark:border-white/10 overflow-hidden mt-8 p-1">

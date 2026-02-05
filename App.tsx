@@ -28,7 +28,8 @@ import { CashbackDetailedModal } from './components/CashbackDetailedModal'; // N
 import { FocusModeModal } from './components/FocusModeModal'; // NEW IMPORT
 import FuelPitchModal from './components/FuelPitchModal'; // NEW IMPORT
 import { UnionEcosystemModal } from './components/UnionEcosystemModal'; // NEW IMPORT
-import { Presentation, Fuel, Share2 } from 'lucide-react'; // NEW ICON Import
+import LightSimulatorModal from './components/LightSimulatorModal'; // NEW IMPORT
+import { Presentation, Fuel, Share2, Compass, Sparkles } from 'lucide-react'; // NEW ICON Import
 
 // --- IMPORTAZIONI LEGALI E UI ---
 import { LegalFooter } from './components/LegalFooter';
@@ -73,7 +74,8 @@ const initialInputs: PlanInput = {
   electricityFixed: 0,
   gasPrice: 0,
   gasConsumption: 0,
-  gasFixed: 0
+  gasFixed: 0,
+  bonus3x3Active: false
 };
 const initialCondoInputs: CondoInput = {
   greenUnits: 0,
@@ -107,7 +109,31 @@ const AppContent = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isFutureTicketOpen, setIsFutureTicketOpen] = useState(false);
   const [isPresentationOpen, setIsPresentationOpen] = useState(false); // NEW STATE FOR PRESENTATION
-  const [isCashbackDetailedOpen, setIsCashbackDetailedOpen] = useState(false); // NEW STATE FOR CASHBACK
+  const [isCashbackDetailedOpen, setIsCashbackDetailedOpen] = useState(false);
+  const [isLightSimulatorOpen, setIsLightSimulatorOpen] = useState(false);
+
+  // Custom Styles for Light Simulator
+  const lightStyles = `
+    .glass-card-light {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+    }
+    .dark .glass-card-light {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    @keyframes bounce-subtle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+    .animate-bounce-subtle {
+      animation: bounce-subtle 2s infinite ease-in-out;
+    }
+  `; // NEW STATE FOR CASHBACK
   const [isFocusModeOpen, setIsFocusModeOpen] = useState(false); // NEW STATE FOR FOCUS MODE
   const [isFuelPitchOpen, setIsFuelPitchOpen] = useState(false); // NEW STATE FOR FUEL PITCH
   const [isUnionEcosystemOpen, setIsUnionEcosystemOpen] = useState(false); // NEW STATE FOR UNION ECOSYSTEM
@@ -525,6 +551,9 @@ const AppContent = () => {
 
       <div className={`container mx-auto p-4 sm:p-6 lg:p-8 relative z-10 flex-grow ${isTrialExpired ? 'blur-sm pointer-events-none select-none h-screen overflow-hidden' : ''}`}>
 
+        {/* Custom Styles Injection */}
+        <style>{lightStyles}</style>
+
         <header className="flex flex-col gap-4 mb-8 rounded-3xl p-6 border-0 shadow-xl backdrop-blur-xl transition-all duration-500 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0077c8 0%, #005596 100%)', boxShadow: headerShadow }}>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
             <div className="w-full md:w-auto flex justify-center md:justify-start">
@@ -642,6 +671,18 @@ const AppContent = () => {
         </header>
 
         {/* ... RESTO DEL COMPONENTE ... */}
+        {/* NEW: Sharing Simulator Light Button */}
+        <div className="flex justify-center mb-6">
+          <button
+            onClick={() => setIsLightSimulatorOpen(true)}
+            className="flex items-center justify-center gap-3 px-10 py-3 bg-gradient-to-r from-union-green-500 to-union-green-600 text-white rounded-2xl shadow-xl hover:shadow-union-green-500/40 transition-all duration-300 font-black text-sm sm:text-lg uppercase tracking-wider group active:scale-95 border-b-4 border-union-green-700"
+          >
+            <Compass className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+            <span>Sharing Simulator light</span>
+            <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse" />
+          </button>
+        </div>
+
         <div className="flex justify-center mb-8 relative z-20">
           <div className="relative p-1.5 rounded-2xl flex w-full sm:w-auto sm:min-w-[340px] border-2 border-white/20 shadow-[0_0_30px_rgba(0,119,200,0.6)] bg-gradient-to-r from-union-blue-600 to-union-blue-500">
             <div className={`absolute top-1.5 bottom-1.5 w-[calc(33.333%-6px)] rounded-xl shadow-lg bg-white transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) ${viewMode === 'client' ? 'left-1.5 translate-x-0' : viewMode === 'family' ? 'left-1.5 translate-x-[100%]' : 'left-1.5 translate-x-[200%]'}`} />
@@ -738,6 +779,11 @@ const AppContent = () => {
       <UnionEcosystemModal isOpen={isUnionEcosystemOpen} onClose={() => setIsUnionEcosystemOpen(false)} />
       <FocusModeModal isOpen={isFocusModeOpen} onClose={() => setIsFocusModeOpen(false)} />
       <InstallModal isOpen={showInstallModal} onClose={() => setShowInstallModal(false)} installPrompt={installPrompt} />
+
+      <LightSimulatorModal
+        isOpen={isLightSimulatorOpen}
+        onClose={() => setIsLightSimulatorOpen(false)}
+      />
     </div>
   );
 };

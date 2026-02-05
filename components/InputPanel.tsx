@@ -39,7 +39,7 @@ import { CashbackCategory } from '../types';
 interface InputPanelProps {
   inputs: PlanInput;
   viewMode: ViewMode;
-  onInputChange: (field: keyof PlanInput, value: number) => void;
+  onInputChange: (field: keyof PlanInput, value: number | boolean) => void;
   onReset: () => void;
   onResetPersonalClients: () => void;
   onUndo: () => void;
@@ -336,6 +336,14 @@ const InputPanel: React.FC<InputPanelProps> = ({
           .pallina-status:active::after {
             opacity: 1;
           }
+          @keyframes pulse-bonus {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 94, 0, 0.4); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(255, 94, 0, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 94, 0, 0); }
+          }
+          .animate-pulse-bonus {
+            animation: pulse-bonus 2s infinite;
+          }
         `}</style>
 
       <div className="flex flex-col gap-4 h-full lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)]">
@@ -469,7 +477,21 @@ const InputPanel: React.FC<InputPanelProps> = ({
                   highlightId="slider_direct"
                 />
               </div>
-              <CustomSlider label={t('input.direct_recruits')} value={inputs.directRecruits} onChange={(v: number) => onInputChange('directRecruits', v)} min={0} max={20} icon={User} colorBase="orange" id="slider_direct" />
+              <div className="relative">
+                <CustomSlider label={t('input.direct_recruits')} value={inputs.directRecruits} onChange={(v: number) => onInputChange('directRecruits', v)} min={0} max={20} icon={User} colorBase="orange" id="slider_direct" />
+
+                {inputs.directRecruits >= 3 && inputs.contractsPerUser >= 1 && inputs.indirectRecruits >= 3 && (
+                  <button
+                    onClick={() => onInputChange('bonus3x3Active', !inputs.bonus3x3Active)}
+                    className={`absolute -top-1 right-8 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter transition-all z-20 shadow-lg border-2 ${inputs.bonus3x3Active
+                      ? 'bg-orange-600 text-white border-white scale-105'
+                      : 'bg-white text-orange-600 border-orange-200 animate-pulse-bonus'
+                      }`}
+                  >
+                    {inputs.bonus3x3Active ? '✅ 3x3 Attivo' : '🔥 In 60 Giorni?'}
+                  </button>
+                )}
+              </div>
               <CustomSlider label={txt.contractsLabel} value={inputs.contractsPerUser} onChange={(v: number) => onInputChange('contractsPerUser', v)} min={0} max={2} icon={FileText} colorBase="cyan" id="slider_contracts" />
               <CustomSlider label={t('input.indirect_recruits')} value={inputs.indirectRecruits} onChange={(v: number) => onInputChange('indirectRecruits', v)} min={0} max={10} icon={PenSquare} colorBase="blue" id="slider_indirect" />
               <CustomSlider label={txt.depthLabel} value={inputs.networkDepth} onChange={(v: number) => onInputChange('networkDepth', v)} min={1} max={5} icon={Heart} colorBase="green" id="slider_depth" />
@@ -502,48 +524,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
             </div>
           </div>
 
-          {/* TOTAL USERS CARD */}
-          {viewMode !== 'client' && (
-            <div className="hidden lg:flex mt-4 pt-4 border-t border-dashed border-gray-200 dark:border-white/10 shrink-0 justify-start w-full">
-              <div className="bg-white dark:bg-black/40 backdrop-blur-md border border-gray-100 dark:border-white/10 rounded-3xl p-5 shadow-lg w-full max-w-[320px] lg:max-w-none flex flex-col items-start relative overflow-hidden group hover:bg-gray-50 dark:hover:bg-black/50 transition-colors">
-                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                  <Users size={80} />
-                </div>
 
-                <div className="flex items-center gap-3 mb-2 relative z-10">
-                  <div className="p-2 rounded-xl backdrop-blur-sm bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5 text-gray-600 dark:text-gray-200">
-                    <Users size={20} />
-                  </div>
-                  <span className="text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px] font-bold">
-                    {t('results.total_users')}
-                  </span>
-                </div>
-
-                <div className="text-3xl font-black text-gray-900 dark:text-white relative z-10">
-                  {planResult.totalUsers.toLocaleString('it-IT')}
-                </div>
-
-                <div className="flex flex-col mt-1 relative z-10">
-                  <span className="text-xs opacity-70 font-normal dark:text-gray-300">
-                    / {planResult.totalContracts.toLocaleString('it-IT')} Contratti
-                  </span>
-                  {(() => {
-                    const milestones = [600, 1500, 5000];
-                    const nextMilestone = milestones.find(m => m > planResult.totalContracts);
-                    const remainingToNext = nextMilestone ? nextMilestone - planResult.totalContracts : 0;
-
-                    if (remainingToNext <= 0) return null;
-
-                    return (
-                      <span className="text-[10px] text-red-500 font-bold mt-2 block uppercase tracking-tight">
-                        {remainingToNext} {t('bonus.next_goal')}
-                      </span>
-                    );
-                  })()}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
