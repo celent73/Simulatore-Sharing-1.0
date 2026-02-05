@@ -69,10 +69,10 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
 
     return (
         <div className="space-y-6 pb-20 sm:pb-0">
-            <div className="glass-card-light p-6 border-l-4 border-union-green-500">
-                <div className="flex justify-between items-start mb-1">
-                    <h2 className="text-xl font-bold flex items-center gap-2 text-union-black">
-                        <Calculator className="text-union-green-500 w-5 h-5" />
+            <div className="glass-card-light p-6 pt-4 border-l-4 border-union-green-500">
+                <div className="flex justify-between items-start mb-2">
+                    <h2 className="text-2xl font-black flex items-center gap-2 text-union-black">
+                        <Calculator className="text-union-green-500 w-6 h-6" />
                         Simulatore Rendita
                     </h2>
                     <button
@@ -83,17 +83,17 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                         Azzera
                     </button>
                 </div>
-                <p className="text-xs opacity-60 mb-6 text-union-black">Simula il tuo rendimento mensile basato sui 6 livelli della community.</p>
+                <p className="text-sm opacity-60 mb-5 text-union-black">Simula il tuo rendimento mensile basato sui 6 livelli della community.</p>
 
                 {/* Personal Units Slider (Independent) */}
-                <div className="mb-8 p-6 bg-union-green-500/10 rounded-[2.5rem] border-2 border-union-green-500/20 shadow-sm relative overflow-hidden group">
+                <div className="mb-5 p-4 px-6 bg-union-green-500/10 rounded-[2.5rem] border-2 border-union-green-500/20 shadow-sm relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                         <User size={60} className="text-union-green-600" />
                     </div>
-                    <div className="flex justify-between items-center mb-4 relative z-10">
+                    <div className="flex justify-between items-center mb-3 relative z-10">
                         <div>
-                            <h4 className="text-sm font-black text-union-black uppercase tracking-tight">Le Tue Utenze Personali</h4>
-                            <p className="text-[10px] text-union-green-600 font-bold">Servono per sbloccare i livelli community</p>
+                            <h4 className="text-base font-black text-union-black uppercase tracking-tight">Le Tue Utenze Personali</h4>
+                            <p className="text-xs text-union-green-600 font-bold">Servono per sbloccare i livelli community</p>
                         </div>
 
                         <div className="flex items-center gap-3">
@@ -103,8 +103,8 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                             >
                                 <Minus size={14} />
                             </button>
-                            <div className="bg-white px-4 py-2 rounded-2xl shadow-sm border border-union-green-100 min-w-[50px] text-center">
-                                <span className="text-xl font-black text-union-green-500">{personalUnits}</span>
+                            <div className="bg-white px-4 py-2 rounded-2xl shadow-sm border border-union-green-100 min-w-[60px] text-center">
+                                <span className="text-2xl font-black text-union-green-500">{personalUnits}</span>
                             </div>
                             <button
                                 onClick={() => setPersonalUnits(Math.min(20, personalUnits + 1))}
@@ -129,19 +129,19 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                 </div>
 
                 {/* System Toggle: Manual vs Auto */}
-                <div className="flex bg-gray-100 p-1 rounded-2xl mb-6">
+                <div className="flex bg-gray-100 p-1.5 rounded-2xl mb-5">
                     <button
                         onClick={() => setExpansionMode('auto')}
-                        className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-black rounded-xl transition-all ${expansionMode === 'auto' ? 'bg-white shadow-md text-union-green-600' : 'text-gray-400'}`}
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-black rounded-xl transition-all ${expansionMode === 'auto' ? 'bg-white shadow-md text-union-green-600' : 'text-gray-400'}`}
                     >
-                        <Zap size={14} />
+                        <Zap size={16} />
                         SISTEMA AUTOMATICO
                     </button>
                     <button
                         onClick={() => setExpansionMode('manual')}
-                        className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-black rounded-xl transition-all ${expansionMode === 'manual' ? 'bg-white shadow-md text-union-green-600' : 'text-gray-400'}`}
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-black rounded-xl transition-all ${expansionMode === 'manual' ? 'bg-white shadow-md text-union-green-600' : 'text-gray-400'}`}
                     >
-                        <Layers size={14} />
+                        <Layers size={16} />
                         SISTEMA MANUALE
                     </button>
                 </div>
@@ -149,22 +149,22 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                 {/* Multiplier Slider (Only in Auto Mode) */}
                 {expansionMode === 'auto' && (
                     <div className="mb-8 p-4 bg-union-green-500/5 rounded-2xl border border-union-green-500/10">
-                        <div className="flex justify-between items-center mb-4">
-                            <span className="text-[10px] uppercase font-black text-union-green-600">Fattore di Duplicazione</span>
+                        <div className="flex justify-between items-center mb-3">
+                            <span className="text-xs uppercase font-black text-union-green-600">Fattore di Duplicazione</span>
 
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={() => onFactorChange(Math.max(1, duplicationFactor - 1))}
-                                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 transition-all shadow-sm active:scale-90"
+                                    className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 transition-all shadow-sm active:scale-90"
                                 >
-                                    <Minus size={14} />
+                                    <Minus size={16} />
                                 </button>
-                                <span className="text-xl font-black text-union-green-600 w-8 text-center">x{duplicationFactor}</span>
+                                <span className="text-2xl font-black text-union-green-600 w-10 text-center">x{duplicationFactor}</span>
                                 <button
                                     onClick={() => onFactorChange(Math.min(10, duplicationFactor + 1))}
-                                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-union-green-500 hover:border-union-green-200 transition-all shadow-sm active:scale-90"
+                                    className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-union-green-500 hover:border-union-green-200 transition-all shadow-sm active:scale-90"
                                 >
-                                    <Plus size={14} />
+                                    <Plus size={16} />
                                 </button>
                             </div>
                         </div>
@@ -196,17 +196,17 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                     </button>
                 </div>
 
-                <div className="text-center py-8 mb-6 bg-union-light/50 rounded-2xl border border-union-green-500/10">
-                    <p className="text-[10px] uppercase font-bold opacity-40 mb-1 text-union-black">Mensile Stimato</p>
-                    <h3 className="text-4xl font-black text-union-black">{calculateEarnings()}</h3>
+                <div className="text-center py-6 mb-5 bg-union-light/50 rounded-2xl border border-union-green-500/10">
+                    <p className="text-xs uppercase font-bold opacity-40 mb-1 text-union-black">Mensile Stimato</p>
+                    <h3 className="text-5xl font-black text-union-green-600">{calculateEarnings()}</h3>
                 </div>
 
-                <div className="flex bg-union-light p-1 rounded-xl mb-8">
+                <div className="flex bg-union-light p-1 rounded-xl mb-6">
                     {['1', '13', '25'].map((m) => (
                         <button
                             key={m}
                             onClick={() => setMonthRange(m)}
-                            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${monthRange === m ? 'bg-white shadow-sm text-union-green-500' : 'opacity-40 text-union-black'}`}
+                            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${monthRange === m ? 'bg-white shadow-sm text-union-green-500' : 'opacity-40 text-union-black'}`}
                         >
                             {m === '1' ? 'Mesi 1-12' : m === '13' ? 'Mesi 13-24' : 'Mesi 25+'}
                         </button>
@@ -217,27 +217,27 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                     {networkSize.map((count, i) => (
                         <div key={i} className={`space-y-3 transition-opacity duration-300 ${expansionMode === 'auto' && i > 0 ? 'opacity-60' : 'opacity-100'}`}>
                             <div className="flex items-center justify-between">
-                                <span className="text-xs font-bold text-union-black whitespace-nowrap">Livello {i}</span>
+                                <span className="text-sm font-bold text-union-black whitespace-nowrap">Livello {i}</span>
 
                                 <div className="flex items-center gap-3">
                                     {(expansionMode === 'manual' || i === 0) && (
                                         <button
                                             onClick={() => onLevelChange(i, Math.max(0, count - 1))}
-                                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 transition-all shadow-sm active:scale-90"
+                                            className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 transition-all shadow-sm active:scale-90"
                                         >
-                                            <Minus size={14} />
+                                            <Minus size={16} />
                                         </button>
                                     )}
-                                    <div className="min-w-[80px] text-center">
-                                        <span className="text-sm font-black text-union-green-500">{count}</span>
-                                        <span className="text-[10px] opacity-40 font-bold ml-1 uppercase">utenze</span>
+                                    <div className="min-w-[100px] text-center">
+                                        <span className="text-base font-black text-union-green-500">{count}</span>
+                                        <span className="text-xs opacity-40 font-bold ml-1 uppercase">utenze</span>
                                     </div>
                                     {(expansionMode === 'manual' || i === 0) && (
                                         <button
                                             onClick={() => onLevelChange(i, count + 1)}
-                                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-union-green-500 hover:border-union-green-200 transition-all shadow-sm active:scale-90"
+                                            className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-union-green-500 hover:border-union-green-200 transition-all shadow-sm active:scale-90"
                                         >
-                                            <Plus size={14} />
+                                            <Plus size={16} />
                                         </button>
                                     )}
                                 </div>
@@ -258,12 +258,12 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                 </div>
             </div>
 
-            <div className="glass-card-light p-4 bg-yellow-50/50 border-yellow-200">
-                <div className="flex gap-3">
-                    <Info className="text-yellow-600 w-5 h-5 shrink-0" />
+            <div className="glass-card-light p-5 bg-yellow-50/50 border-yellow-200">
+                <div className="flex gap-4">
+                    <Info className="text-yellow-600 w-6 h-6 shrink-0" />
                     <div>
-                        <p className="text-xs font-bold text-yellow-800">Lo sapevi?</p>
-                        <p className="text-[10px] text-yellow-700 opacity-80 leading-relaxed font-medium">
+                        <p className="text-sm font-bold text-yellow-800">Lo sapevi?</p>
+                        <p className="text-xs text-yellow-700 opacity-80 leading-relaxed font-medium">
                             Dal 13° mese la tua rendita aumenta del 50%! E dal 25° mese raddoppia (es. da 1€ a 2€ per utenza domestica).
                         </p>
                     </div>
