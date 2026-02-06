@@ -1,6 +1,9 @@
 import { LEVEL_COMMISSIONS, UNLOCK_CONDITIONS } from './constants';
-import { Calculator, Info, RotateCcw, Plus, Minus, Layers, Zap, User, Lock, CheckCircle2 } from 'lucide-react';
+import { Calculator, Info, RotateCcw, Plus, Minus, Layers, Zap, User, Lock, CheckCircle2, X } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useShary } from '../../contexts/SharyContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 
 interface EarningsSimulatorProps {
     networkSize: number[];
@@ -34,6 +37,8 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
     onReset
 }) => {
     const { t } = useLanguage();
+    const { isActive: isSharyActive } = useShary();
+    const [isSharyTipOpen, setIsSharyTipOpen] = useState(false);
 
     const calculateEarnings = () => {
         let total = 0;
@@ -85,7 +90,79 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                         <RotateCcw size={12} />
                         {t('light_simulator.reset')}
                     </button>
+                    {isSharyActive && (
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setIsSharyTipOpen(true)}
+                            className="flex items-center gap-2 bg-cyan-50 text-cyan-700 px-3 py-1.5 rounded-xl border border-cyan-200 shadow-sm hover:shadow-cyan-100 transition-all ml-2"
+                        >
+                            <span className="text-lg">🤖</span>
+                            <span className="text-[10px] font-bold uppercase tracking-wider">Help</span>
+                        </motion.button>
+                    )}
                 </div>
+
+                <AnimatePresence>
+                    {isSharyTipOpen && (
+                        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+                            <motion.div
+                                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                                onClick={() => setIsSharyTipOpen(false)}
+                                className="absolute inset-0 bg-union-black/40 backdrop-blur-sm"
+                            />
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                                className="relative bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl overflow-hidden border-2 border-cyan-100"
+                            >
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-12 h-12 rounded-full bg-cyan-100 flex items-center justify-center text-3xl">🤖</div>
+                                    <div>
+                                        <h3 className="font-bold text-lg text-cyan-900 leading-tight">Sblocca il Potenziale!</h3>
+                                        <p className="text-[10px] text-cyan-600 font-medium uppercase tracking-wide">Come funzionano i livelli?</p>
+                                    </div>
+                                    <button onClick={() => setIsSharyTipOpen(false)} className="ml-auto p-2 bg-gray-100 rounded-full text-gray-400 hover:text-black hover:bg-gray-200"><X size={18} /></button>
+                                </div>
+
+                                <div className="space-y-4 text-cyan-900/80 text-xs font-medium leading-relaxed">
+                                    <p>
+                                        I guadagni indiretti si sbloccano aumentando le tue <b>Utenze Personali</b>. Più contratti fai tu direttamente, più guadagni dalla tua rete!
+                                    </p>
+
+                                    <div className="bg-cyan-50/50 p-3 rounded-xl space-y-2">
+                                        <div className="flex justify-between items-center border-b border-cyan-100 pb-1">
+                                            <span>Livello 0</span>
+                                            <b className="text-cyan-700">1 Utenza</b>
+                                        </div>
+                                        <div className="flex justify-between items-center border-b border-cyan-100 pb-1">
+                                            <span>Livello 1</span>
+                                            <b className="text-cyan-700">3 Utenze</b>
+                                        </div>
+                                        <div className="flex justify-between items-center border-b border-cyan-100 pb-1">
+                                            <span>Livello 2</span>
+                                            <b className="text-cyan-700">5 Utenze</b>
+                                        </div>
+                                        <div className="flex justify-between items-center border-b border-cyan-100 pb-1">
+                                            <span>Livello 3</span>
+                                            <b className="text-cyan-700">7 Utenze</b>
+                                        </div>
+                                        <div className="flex justify-between items-center">
+                                            <span>Livello 4-5</span>
+                                            <b className="text-cyan-700">10 Utenze</b>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-2 text-union-green-600 bg-union-green-50 p-2 rounded-lg border border-union-green-100">
+                                        <Zap size={16} />
+                                        <span className="font-bold text-[10px]">Muovi lo slider "Utenze Personali" per vedere l'effetto!</span>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </div>
+                    )}
+                </AnimatePresence>
                 <p className="text-sm opacity-60 mb-5 text-union-black">{t('light_simulator.earn_desc')}</p>
 
                 {/* Personal Units Slider (Independent) */}
@@ -239,6 +316,11 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                                         <span className={`text-sm font-black uppercase tracking-tight ${isUnlocked ? 'text-union-black' : 'text-gray-400'}`}>
                                             {t('light_simulator.level')} <span className={isUnlocked ? 'text-union-green-600' : ''}>{i}</span>
                                         </span>
+                                        {!isUnlocked && (
+                                            <span className="ml-3 text-[9px] font-black text-white bg-union-black/20 px-2 py-0.5 rounded uppercase tracking-wider">
+                                                Serve {i === 1 ? UNLOCK_CONDITIONS.LEVEL_1 : i === 2 ? UNLOCK_CONDITIONS.LEVEL_2 : i === 3 ? UNLOCK_CONDITIONS.LEVEL_3 : i === 4 ? UNLOCK_CONDITIONS.LEVEL_4 : UNLOCK_CONDITIONS.LEVEL_5} utenze
+                                            </span>
+                                        )}
                                     </div>
 
                                     <div className="flex items-center gap-4">

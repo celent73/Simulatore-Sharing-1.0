@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Users, Lock, Unlock, ChevronRight, Info, Share2, List, Network, Settings, Palette, Eye, EyeOff, Save, Instagram, Send, Phone, User, CheckCircle2 } from 'lucide-react';
+import { Users, Lock, Unlock, ChevronRight, Info, Share2, List, Network, Settings, Palette, Eye, EyeOff, Save, Instagram, Send, Phone, User, CheckCircle2, X } from 'lucide-react';
+
+
 import { UNLOCK_CONDITIONS } from './constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import CommunityTree from './CommunityTree';
@@ -8,16 +10,20 @@ import { useProfileStore } from './store/useProfileStore';
 import BrandingOverlay from './BrandingOverlay';
 import { useLanguage } from '../../contexts/LanguageContext';
 
+import { useShary } from '../../contexts/SharyContext';
+
 interface CommunityProps {
     personalUnits: number;
 }
 
 const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
     const { t } = useLanguage();
+    const { isActive: isSharyActive } = useShary(); // USIAMO SHARY HOOK
     const [view, setView] = useState<'list' | 'tree'>('list');
     const [theme, setTheme] = useState<'glass' | 'dark' | 'minimal'>('glass');
     const [isProjection, setIsProjection] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [isSharyTipOpen, setIsSharyTipOpen] = useState(false); // NEW STATE
     const profile = useProfileStore();
 
     const levels = [
@@ -55,6 +61,93 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                             <p className="text-xs opacity-60 text-union-black">Sblocca i livelli di profondità della tua rete in base alle tue utenze personali attive.</p>
                         </div>
                     </div>
+
+                    {isSharyActive && (
+                        <>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => setIsSharyTipOpen(true)}
+                                className="flex items-center gap-2 bg-cyan-50 text-cyan-700 px-3 py-2 rounded-xl border border-cyan-200 shadow-sm hover:shadow-cyan-100 transition-all"
+                            >
+                                <span className="text-xl">🤖</span>
+                                <span className="text-xs font-bold">Consiglio</span>
+                            </motion.button>
+
+                            <AnimatePresence>
+                                {isSharyTipOpen && (
+                                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+                                        <motion.div
+                                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                                            onClick={() => setIsSharyTipOpen(false)}
+                                            className="absolute inset-0 bg-union-black/40 backdrop-blur-sm"
+                                        />
+                                        <motion.div
+                                            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                                            exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                                            className="relative bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl overflow-hidden border-2 border-cyan-100"
+                                        >
+                                            <div className="flex items-center gap-3 mb-4">
+                                                <div className="w-12 h-12 rounded-full bg-cyan-100 flex items-center justify-center text-3xl">🤖</div>
+                                                <div>
+                                                    <h3 className="font-bold text-lg text-cyan-900 leading-tight">Come funziona il Simulator?</h3>
+                                                    <p className="text-[10px] text-cyan-600 font-medium uppercase tracking-wide">Guida Rapida Shary</p>
+                                                </div>
+                                                <button onClick={() => setIsSharyTipOpen(false)} className="ml-auto p-2 bg-gray-100 rounded-full text-gray-400 hover:text-black hover:bg-gray-200"><X size={18} /></button>
+                                            </div>
+
+                                            <div className="space-y-3 text-cyan-900/80 text-xs font-medium leading-relaxed">
+                                                <p>
+                                                    <strong className="text-cyan-700 block mb-1">1. Calcolatore Guadagni</strong>
+                                                    Imposta la tua struttura ideale e scopri le rendite potenziali basate sul piano compensi ufficiale.
+                                                </p>
+                                                <p>
+                                                    <strong className="text-cyan-700 block mb-1">2. Community Sync</strong>
+                                                    Visualizza la tua rete ad albero! Aumenta le tue <b>Utenze Personali</b> per sbloccare i livelli di profondità (Livelli 1-4).
+                                                </p>
+                                                <div className="space-y-3 bg-cyan-50/50 p-4 rounded-xl">
+                                                    <div className="flex justify-between items-center border-b border-cyan-100 pb-2">
+                                                        <span className="text-xs font-bold text-gray-500">LIVELLO 0</span>
+                                                        <span className="text-sm font-black text-cyan-700">1 Utenza</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center border-b border-cyan-100 pb-2">
+                                                        <span className="text-xs font-bold text-gray-500">LIVELLO 1</span>
+                                                        <span className="text-sm font-black text-cyan-700">3 Utenze</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center border-b border-cyan-100 pb-2">
+                                                        <span className="text-xs font-bold text-gray-500">LIVELLO 2</span>
+                                                        <span className="text-sm font-black text-cyan-700">5 Utenze</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center border-b border-cyan-100 pb-2">
+                                                        <span className="text-xs font-bold text-gray-500">LIVELLO 3</span>
+                                                        <span className="text-sm font-black text-cyan-700">7 Utenze</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-xs font-bold text-gray-500">LIVELLO 4-5</span>
+                                                        <span className="text-sm font-black text-cyan-700">10 Utenze</span>
+                                                    </div>
+                                                </div>
+                                                <p>
+                                                    <strong className="text-cyan-700 block mb-1">3. Road to Zero</strong>
+                                                    Scopri l'obiettivo finale: azzerare le bollette grazie alla tua rete.
+                                                </p>
+                                            </div>
+
+                                            <div className="mt-4 pt-4 border-t border-cyan-100 flex justify-center">
+                                                <button
+                                                    onClick={() => setIsSharyTipOpen(false)}
+                                                    className="px-6 py-2 bg-cyan-600 text-white rounded-xl font-bold text-xs hover:bg-cyan-700 transition-colors"
+                                                >
+                                                    HO CAPITO!
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    </div>
+                                )}
+                            </AnimatePresence>
+                        </>
+                    )}
 
                     <div className="flex flex-wrap items-center gap-2">
                         {view === 'tree' && (
@@ -152,8 +245,8 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                                                 SBLOCCATO
                                             </div>
                                         ) : (
-                                            <div className="text-[10px] font-black text-gray-400 uppercase">
-                                                RICHIEDE {lvl.condition} UTENZE
+                                            <div className="text-[10px] font-black text-white bg-union-black/20 px-2 py-1 rounded-md uppercase">
+                                                SERVE {lvl.condition} UTENZE
                                             </div>
                                         )}
                                     </motion.div>

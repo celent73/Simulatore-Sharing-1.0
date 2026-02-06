@@ -15,8 +15,9 @@ export const LEVEL_COMMISSIONS = {
 
 export const UNLOCK_CONDITIONS = {
     LEVEL_1: 1,  // 1 utenza per sbloccare liv 1
-    LEVEL_2: 3,  // 3 utenze per liv 2
-    LEVEL_3: 5,
-    LEVEL_4: 7,
-    LEVEL_5: 10
+    LEVEL_1: 3,
+    LEVEL_2: 5,
+    LEVEL_3: 7,
+    LEVEL_4: 10,
+    LEVEL_5: 10,
 };

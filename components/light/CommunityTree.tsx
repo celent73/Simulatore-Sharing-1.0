@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Users, ChevronDown, Check, X, ZoomIn, ZoomOut, Maximize } from 'lucide-react';
+import { User, Users, ChevronDown, Check, X, ZoomIn, ZoomOut, Maximize, Trash2 } from 'lucide-react';
 
 interface NodeData {
     id: string;
@@ -296,6 +296,24 @@ const CommunityTree = ({ theme = 'glass', isProjectionMode = false }: TreeProps)
                 </button>
                 <button onClick={handleResetZoom} className="p-2 rounded-xl bg-white shadow-sm hover:translate-y-[-2px] transition-all text-union-green-600" title="Adatta allo schermo">
                     <Maximize size={18} />
+                </button>
+                <div className="h-px bg-gray-200 my-1 mx-2"></div>
+                <button
+                    onClick={() => {
+                        if (confirm('Sei sicuro di voler resettare l\'albero? Rimarrai solo tu!')) {
+                            setTreeData({
+                                id: 'me',
+                                label: 'Tu',
+                                role: 'Family Pro',
+                                level: 0,
+                                children: []
+                            });
+                        }
+                    }}
+                    className="p-2 rounded-xl bg-white shadow-sm hover:translate-y-[-2px] hover:bg-red-50 hover:text-red-500 transition-all text-gray-400"
+                    title="Resetta Albero"
+                >
+                    <Trash2 size={18} />
                 </button>
             </div>
 
