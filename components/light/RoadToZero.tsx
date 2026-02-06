@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Lightbulb, ShoppingBag, Users, CheckCircle2, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { LEVEL_COMMISSIONS, UNLOCK_CONDITIONS } from './constants';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface RoadToZeroProps {
     networkSize: number[];
@@ -11,6 +12,7 @@ interface RoadToZeroProps {
 }
 
 const RoadToZero: React.FC<RoadToZeroProps> = ({ networkSize, utilityType, monthRange, personalUnits }) => {
+    const { t } = useLanguage();
     const [billAmount, setBillAmount] = useState(80);
     const [monthlySpending, setMonthlySpending] = useState(400);
 
@@ -57,12 +59,12 @@ const RoadToZero: React.FC<RoadToZeroProps> = ({ networkSize, utilityType, month
             >
                 <h2 className="text-xl font-bold flex items-center gap-2 mb-6 text-union-black">
                     <Lightbulb className="text-yellow-500 w-5 h-5" />
-                    Road to Zero
+                    {t('light_simulator.rtz_title')}
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                     <div className="space-y-2">
-                        <label className="text-[10px] uppercase font-bold opacity-40 text-union-black">Tua Bolletta Media (€)</label>
+                        <label className="text-[10px] uppercase font-bold opacity-40 text-union-black">{t('light_simulator.rtz_bill')}</label>
                         <div className="relative">
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold">€</span>
                             <input
@@ -76,7 +78,7 @@ const RoadToZero: React.FC<RoadToZeroProps> = ({ networkSize, utilityType, month
                         </div>
                     </div>
                     <div className="space-y-2">
-                        <label className="text-[10px] uppercase font-bold opacity-40 text-union-black">Spesa Alimentari/Benzina Mensile (€)</label>
+                        <label className="text-[10px] uppercase font-bold opacity-40 text-union-black">{t('light_simulator.rtz_spend')}</label>
                         <div className="relative">
                             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold">€</span>
                             <input
@@ -95,11 +97,11 @@ const RoadToZero: React.FC<RoadToZeroProps> = ({ networkSize, utilityType, month
                 <div className="mb-8 p-6 bg-gray-50 rounded-[2rem] border border-gray-100">
                     <div className="flex justify-between items-end mb-3">
                         <div>
-                            <p className="text-[10px] font-black uppercase text-gray-400">Copertura Bolletta</p>
+                            <p className="text-[10px] font-black uppercase text-gray-400">{t('light_simulator.rtz_coverage')}</p>
                             <h3 className="text-2xl font-black text-union-black">€{totalDiscount.toFixed(2)} <span className="text-xs font-bold text-gray-400">/ €{billAmount}</span></h3>
                         </div>
                         <div className={`px-3 py-1 rounded-full text-[10px] font-black ${isZeroed ? 'bg-union-green-500 text-white' : 'bg-union-green-100 text-union-green-600'}`}>
-                            {isZeroed ? 'AZZERATA!' : `${Math.round(progress)}%`}
+                            {isZeroed ? t('light_simulator.rtz_zeroed') : `${Math.round(progress)}%`}
                         </div>
                     </div>
 
@@ -119,7 +121,7 @@ const RoadToZero: React.FC<RoadToZeroProps> = ({ networkSize, utilityType, month
                 >
                     <div className="relative z-10 space-y-4">
                         <div className="flex items-center justify-between">
-                            <p className="text-xs font-bold opacity-60">Dettaglio Sconto Mensile</p>
+                            <p className="text-xs font-bold opacity-60">{t('light_simulator.rtz_detail')}</p>
                             {isZeroed && <CheckCircle2 className="text-union-green-500 w-5 h-5" />}
                         </div>
 
@@ -127,19 +129,19 @@ const RoadToZero: React.FC<RoadToZeroProps> = ({ networkSize, utilityType, month
                             <div className="bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
                                 <ShoppingBag className="w-5 h-5 mb-2 text-union-green-500" />
                                 <p className="text-lg font-black text-white">€{cashback.toFixed(2)}</p>
-                                <p className="text-[9px] opacity-40 uppercase font-bold">Dalla tua spesa</p>
+                                <p className="text-[9px] opacity-40 uppercase font-bold">{t('light_simulator.rtz_from_spend')}</p>
                             </div>
                             <div className="bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
                                 <TrendingUp className="w-5 h-5 mb-2 text-union-green-500" />
                                 <p className="text-lg font-black text-white">€{networkEarnings.toFixed(2)}</p>
-                                <p className="text-[9px] opacity-40 uppercase font-bold">Dalla Community</p>
+                                <p className="text-[9px] opacity-40 uppercase font-bold">{t('light_simulator.rtz_from_comm')}</p>
                             </div>
                         </div>
 
                         {!isZeroed && (
                             <div className="pt-2 text-center">
                                 <p className="text-[10px] font-medium text-white/60">
-                                    Ti mancano <span className="text-union-green-400 font-black">€{(billAmount - totalDiscount).toFixed(2)}</span> per azzerare completamente la bolletta.
+                                    {t('light_simulator.rtz_missing').replace('{{n}}', (billAmount - totalDiscount).toFixed(2))}
                                 </p>
                             </div>
                         )}
@@ -151,7 +153,7 @@ const RoadToZero: React.FC<RoadToZeroProps> = ({ networkSize, utilityType, month
             <div className="flex items-center gap-3 p-4 bg-union-green-500/5 rounded-2xl border border-union-green-500/10">
                 <CheckCircle2 className="text-union-green-500 w-6 h-6 shrink-0" />
                 <p className="text-[10px] opacity-60 leading-relaxed italic text-union-black font-medium">
-                    "Il calcolo tiene conto dei contratti attualmente inseriti nel simulatore e delle tue abitudini di spesa."
+                    {t('light_simulator.rtz_note')}
                 </p>
             </div>
         </div>

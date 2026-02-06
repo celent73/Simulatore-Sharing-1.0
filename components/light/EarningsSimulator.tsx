@@ -1,5 +1,7 @@
 import { LEVEL_COMMISSIONS, UNLOCK_CONDITIONS } from './constants';
 import { Calculator, Info, RotateCcw, Plus, Minus, Layers, Zap, User, Lock, CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
+
 interface EarningsSimulatorProps {
     networkSize: number[];
     onLevelChange: (index: number, value: number) => void;
@@ -31,6 +33,8 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
     setUtilityType,
     onReset
 }) => {
+    const { t } = useLanguage();
+
     const calculateEarnings = () => {
         let total = 0;
         const commissions = utilityType === 'DOMESTIC' ? (
@@ -72,17 +76,17 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                 <div className="flex justify-between items-start mb-2">
                     <h2 className="text-2xl font-black flex items-center gap-2 text-union-black">
                         <Calculator className="text-union-green-500 w-6 h-6" />
-                        Simulatore Rendita
+                        {t('light_simulator.earn_title')}
                     </h2>
                     <button
                         onClick={onReset}
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-all font-bold text-[10px] uppercase tracking-wider border border-red-100"
                     >
                         <RotateCcw size={12} />
-                        Azzera
+                        {t('light_simulator.reset')}
                     </button>
                 </div>
-                <p className="text-sm opacity-60 mb-5 text-union-black">Simula il tuo rendimento mensile basato sui 6 livelli della community.</p>
+                <p className="text-sm opacity-60 mb-5 text-union-black">{t('light_simulator.earn_desc')}</p>
 
                 {/* Personal Units Slider (Independent) */}
                 <div className="mb-5 p-4 px-6 bg-union-green-500/10 rounded-[2.5rem] border-2 border-union-green-500/20 shadow-sm relative overflow-hidden group">
@@ -91,8 +95,8 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                     </div>
                     <div className="flex justify-between items-center mb-3 relative z-10">
                         <div>
-                            <h4 className="text-base font-black text-union-black uppercase tracking-tight">Le Tue Utenze Personali</h4>
-                            <p className="text-xs text-union-green-600 font-bold">Servono per sbloccare i livelli community</p>
+                            <h4 className="text-base font-black text-union-black uppercase tracking-tight">{t('light_simulator.personal_units')}</h4>
+                            <p className="text-xs text-union-green-600 font-bold">{t('light_simulator.personal_units_sub')}</p>
                         </div>
 
                         <div className="flex items-center gap-3">
@@ -134,14 +138,14 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                         className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-black rounded-xl transition-all ${expansionMode === 'auto' ? 'bg-white shadow-md text-union-green-600' : 'text-gray-400'}`}
                     >
                         <Zap size={16} />
-                        SISTEMA AUTOMATICO
+                        {t('light_simulator.system_auto')}
                     </button>
                     <button
                         onClick={() => setExpansionMode('manual')}
                         className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-black rounded-xl transition-all ${expansionMode === 'manual' ? 'bg-white shadow-md text-union-green-600' : 'text-gray-400'}`}
                     >
                         <Layers size={16} />
-                        SISTEMA MANUALE
+                        {t('light_simulator.system_manual')}
                     </button>
                 </div>
 
@@ -149,7 +153,7 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                 {expansionMode === 'auto' && (
                     <div className="mb-8 p-4 bg-union-green-500/5 rounded-2xl border border-union-green-500/10">
                         <div className="flex justify-between items-center mb-3">
-                            <span className="text-xs uppercase font-black text-union-green-600">Fattore di Duplicazione</span>
+                            <span className="text-xs uppercase font-black text-union-green-600">{t('light_simulator.dupl_factor')}</span>
 
                             <div className="flex items-center gap-3">
                                 <button
@@ -176,7 +180,7 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                             onChange={(e) => onFactorChange(parseInt(e.target.value))}
                             className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-union-green-500"
                         />
-                        <p className="text-[9px] mt-2 text-union-green-600/60 font-medium italic text-center">Ogni persona in rete porta {duplicationFactor} utenti.</p>
+                        <p className="text-[9px] mt-2 text-union-green-600/60 font-medium italic text-center">{t('light_simulator.dupl_note').replace('{{n}}', duplicationFactor.toString())}</p>
                     </div>
                 )}
 
@@ -185,18 +189,18 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                         onClick={() => setUtilityType('DOMESTIC')}
                         className={`flex-1 py-2 text-xs font-bold rounded-xl border-2 transition-all ${utilityType === 'DOMESTIC' ? 'border-union-green-500 bg-union-green-500/5 text-union-green-500' : 'border-gray-100 opacity-40'}`}
                     >
-                        Domestico
+                        {t('light_simulator.domestic')}
                     </button>
                     <button
                         onClick={() => setUtilityType('BUSINESS')}
                         className={`flex-1 py-2 text-xs font-bold rounded-xl border-2 transition-all ${utilityType === 'BUSINESS' ? 'border-union-green-500 bg-union-green-500/5 text-union-green-500' : 'border-gray-100 opacity-40'}`}
                     >
-                        Business
+                        {t('light_simulator.business')}
                     </button>
                 </div>
 
                 <div className="text-center py-6 mb-5 bg-union-light/50 rounded-2xl border border-union-green-500/10">
-                    <p className="text-xs uppercase font-bold opacity-40 mb-1 text-union-black">Mensile Stimato</p>
+                    <p className="text-xs uppercase font-bold opacity-40 mb-1 text-union-black">{t('light_simulator.monthly_est')}</p>
                     <h3 className="text-5xl font-black text-union-green-600">{calculateEarnings()}</h3>
                 </div>
 
@@ -207,7 +211,7 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                             onClick={() => setMonthRange(m)}
                             className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${monthRange === m ? 'bg-white shadow-sm text-union-green-500' : 'opacity-40 text-union-black'}`}
                         >
-                            {m === '1' ? 'Mesi 1-12' : m === '13' ? 'Mesi 13-24' : 'Mesi 25+'}
+                            {m === '1' ? t('light_simulator.months_1_12') : m === '13' ? t('light_simulator.months_13_14') : t('light_simulator.months_25_plus')}
                         </button>
                     ))}
                 </div>
@@ -224,8 +228,8 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
 
                         return (
                             <div key={i} className={`p-4 rounded-3xl transition-all duration-500 border-2 ${isUnlocked
-                                    ? 'bg-union-green-500/5 border-union-green-500/20 shadow-sm'
-                                    : 'bg-gray-50/50 border-gray-100 opacity-40 grayscale-[0.5]'
+                                ? 'bg-union-green-500/5 border-union-green-500/20 shadow-sm'
+                                : 'bg-gray-50/50 border-gray-100 opacity-40 grayscale-[0.5]'
                                 }`}>
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
@@ -233,7 +237,7 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                                             {isUnlocked ? <CheckCircle2 size={16} /> : <Lock size={16} />}
                                         </div>
                                         <span className={`text-sm font-black uppercase tracking-tight ${isUnlocked ? 'text-union-black' : 'text-gray-400'}`}>
-                                            Livello <span className={isUnlocked ? 'text-union-green-600' : ''}>{i}</span>
+                                            {t('light_simulator.level')} <span className={isUnlocked ? 'text-union-green-600' : ''}>{i}</span>
                                         </span>
                                     </div>
 
@@ -248,7 +252,7 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                                         )}
                                         <div className="min-w-[100px] text-center">
                                             <span className={`text-xl font-black ${isUnlocked ? 'text-union-green-600' : 'text-gray-400'}`}>{count}</span>
-                                            <span className="text-[10px] opacity-40 font-bold ml-1.5 uppercase">utenze</span>
+                                            <span className="text-[10px] opacity-40 font-bold ml-1.5 uppercase">{t('light_simulator.units')}</span>
                                         </div>
                                         {(expansionMode === 'manual' || i === 0) && (
                                             <button
@@ -284,9 +288,9 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                 <div className="flex gap-4">
                     <Info className="text-yellow-600 w-6 h-6 shrink-0" />
                     <div>
-                        <p className="text-sm font-bold text-yellow-800">Lo sapevi?</p>
+                        <p className="text-sm font-bold text-yellow-800">{t('light_simulator.did_you_know')}</p>
                         <p className="text-xs text-yellow-700 opacity-80 leading-relaxed font-medium">
-                            Dal 13° mese la tua rendita aumenta del 50%! E dal 25° mese raddoppia (es. da 1€ a 2€ per utenza domestica).
+                            {t('light_simulator.did_you_know_text')}
                         </p>
                     </div>
                 </div>

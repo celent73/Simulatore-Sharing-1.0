@@ -278,6 +278,27 @@ const MiniControl = ({ label, value, onChange, min, max, icon: Icon, color }: an
   </div>
 );
 
+// --- NUOVO COMPONENTE TOGGLE ---
+const ToggleControl = ({ label, value, onChange, icon: Icon, color }: any) => (
+  <div className="flex flex-col gap-2 min-w-[100px] md:min-w-[120px] pointer-events-auto group">
+    <div className="flex justify-between text-[11px] md:text-[10px] font-bold uppercase tracking-wider text-gray-400 group-hover:text-gray-300 transition-colors">
+      <span className="flex items-center gap-1.5"><Icon size={14} className={value ? color : 'text-gray-500'} /> {label}</span>
+    </div>
+    <div
+      onClick={() => onChange(!value)}
+      className={`h-[42px] md:h-[34px] flex items-center bg-gray-900/80 md:bg-gray-900/60 backdrop-blur-sm rounded-xl px-1 border border-white/10 ${value ? 'border-yellow-500/50' : 'hover:border-white/20'} transition-all shadow-lg cursor-pointer relative overflow-hidden`}
+    >
+      <div className={`absolute inset-0 opacity-20 transition-opacity ${value ? 'bg-yellow-500' : 'bg-transparent'}`} />
+      <div className={`w-full flex items-center justify-between px-2`}>
+        <span className={`text-[9px] font-bold uppercase transition-colors ${value ? 'text-yellow-400' : 'text-gray-500'}`}>{value ? 'ATTIVO' : 'OFF'}</span>
+        <div className={`w-8 h-4 md:w-6 md:h-3 rounded-full transition-colors relative ${value ? 'bg-yellow-500' : 'bg-gray-700'}`}>
+          <div className={`absolute top-0.5 md:top-[1px] w-3 h-3 md:w-2.5 md:h-2.5 rounded-full bg-white transition-all shadow-sm ${value ? 'left-4 md:left-3' : 'left-0.5 md:left-0.5'}`} />
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const DraggableBox = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -340,7 +361,7 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
   const [proStatusL2, setProStatusL2] = useState<Record<string, boolean>>({});
   const [isExporting, setIsExporting] = useState(false);
 
-  const { totalUsers, totalRecurringYear1, totalRecurringYear2, totalRecurringYear3 } = useCompensationPlan(inputs);
+  const { totalUsers, totalOneTimeBonus, totalRecurringYear1, totalRecurringYear2, totalRecurringYear3 } = useCompensationPlan(inputs);
 
   useEffect(() => {
     if (isOpen) {
@@ -408,6 +429,7 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
   const depth = inputs.networkDepth || 1;
   const contracts = inputs.contractsPerUser || 0;
   const time = inputs.realizationTimeMonths || 12;
+  const isBonus3x3Active = inputs.bonus3x3Active || false;
   const maxTime = 120;
 
   let activeLegs = 0;
@@ -562,6 +584,21 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
 
             <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full"></div>
 
+            {/* --- GETTONE UNA TANTUM --- */}
+            <div className="flex items-center gap-3 relative z-10">
+              <div className="p-2.5 bg-gradient-to-br from-yellow-500/20 to-orange-600/20 rounded-2xl text-yellow-400 border border-yellow-500/30 shadow-inner">
+                <Zap size={20} />
+              </div>
+              <div>
+                <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-0.5">Gettone Una Tantum</p>
+                <div className="flex items-baseline gap-1">
+                  <p className="text-2xl font-black text-yellow-400 leading-none tracking-tight">{formatCurrency(totalOneTimeBonus)}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full"></div>
+
             <div className="flex items-center gap-3 relative z-10">
               <div className="p-2.5 bg-gradient-to-br from-emerald-500/20 to-green-600/20 rounded-2xl text-emerald-400 border border-emerald-500/30 shadow-inner">
                 <Wallet size={20} />
@@ -637,9 +674,21 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
               <MiniControl label={txt.indirects} value={indirectCount} onChange={(v: number) => onInputChange('indirectRecruits', v)} min={0} max={10} icon={Users} color="text-purple-400" />
               <MiniControl label={txt.levels} value={depth} onChange={(v: number) => onInputChange('networkDepth', v)} min={1} max={5} icon={ChevronDown} color="text-green-400" />
               <MiniControl label={txt.contracts} value={contracts} onChange={(v: number) => onInputChange('contractsPerUser', v)} min={0} max={2} icon={Zap} color="text-cyan-400" />
-              <div className="col-span-2 md:col-span-1">
+              <div className="col-span-2 md:col-span-1 border-r border-white/5 md:pr-4">
                 <MiniControl label={txt.time} value={time} onChange={(v: number) => onInputChange('realizationTimeMonths', v)} min={1} max={maxTime} icon={Settings} color="text-red-400" />
               </div>
+              {/* TOGGLE BONUS 3x3 - VISIBILE SOLO SE 3x3 È SODDISFATTO */}
+              {directCount >= 3 && contracts >= 1 && indirectCount >= 3 && (
+                <div className="col-span-2 md:col-span-1 pl-0 md:pl-2 animate-in zoom-in duration-300">
+                  <ToggleControl
+                    label="BONUS 3x3 (60gg)"
+                    value={isBonus3x3Active}
+                    onChange={(v: boolean) => onInputChange('bonus3x3Active', v ? 1 : 0)}
+                    icon={Star}
+                    color="text-yellow-400"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

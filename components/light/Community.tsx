@@ -1,20 +1,22 @@
-import React from 'react';
 import { UNLOCK_CONDITIONS } from './constants';
 import { Lock, Unlock, Users, CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface CommunityProps {
     personalUnits: number;
 }
 
 const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
+    const { t } = useLanguage();
+
     const levels = [
-        { id: 0, label: 'Livello 0', condition: 0, desc: 'Commissioni Dirette (Collaboratori)' },
-        { id: 1, label: 'Livello 1', condition: UNLOCK_CONDITIONS.LEVEL_1, desc: 'Rendita Indiretta 1° Livello' },
-        { id: 2, label: 'Livello 2', condition: UNLOCK_CONDITIONS.LEVEL_2, desc: 'Rendita Indiretta 2° Livello' },
-        { id: 3, label: 'Livello 3', condition: UNLOCK_CONDITIONS.LEVEL_3, desc: 'Rendita Indiretta 3° Livello' },
-        { id: 4, label: 'Livello 4', condition: UNLOCK_CONDITIONS.LEVEL_4, desc: 'Rendita Indiretta 4° Livello' },
-        { id: 5, label: 'Livello 5', condition: UNLOCK_CONDITIONS.LEVEL_5, desc: 'Rendita Indiretta 5° Livello' },
+        { id: 0, label: `${t('light_simulator.level')} 0`, condition: 0, desc: t('light_simulator.comm_l0') },
+        { id: 1, label: `${t('light_simulator.level')} 1`, condition: UNLOCK_CONDITIONS.LEVEL_1, desc: t('light_simulator.comm_ind').replace('{{n}}', '1') },
+        { id: 2, label: `${t('light_simulator.level')} 2`, condition: UNLOCK_CONDITIONS.LEVEL_2, desc: t('light_simulator.comm_ind').replace('{{n}}', '2') },
+        { id: 3, label: `${t('light_simulator.level')} 3`, condition: UNLOCK_CONDITIONS.LEVEL_3, desc: t('light_simulator.comm_ind').replace('{{n}}', '3') },
+        { id: 4, label: `${t('light_simulator.level')} 4`, condition: UNLOCK_CONDITIONS.LEVEL_4, desc: t('light_simulator.comm_ind').replace('{{n}}', '4') },
+        { id: 5, label: `${t('light_simulator.level')} 5`, condition: UNLOCK_CONDITIONS.LEVEL_5, desc: t('light_simulator.comm_ind').replace('{{n}}', '5') },
     ];
 
     return (
@@ -22,9 +24,9 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
             <div className="glass-card-light p-6 border-l-4 border-union-green-500">
                 <h2 className="text-xl font-bold flex items-center gap-2 mb-2 text-union-black">
                     <Users className="text-union-green-500 w-5 h-5" />
-                    Community Sync
+                    {t('light_simulator.comm_title')}
                 </h2>
-                <p className="text-xs opacity-60 mb-6 text-union-black">Sblocca i livelli di profondità della tua rete in base alle tue utenze personali attive.</p>
+                <p className="text-xs opacity-60 mb-6 text-union-black">{t('light_simulator.comm_desc')}</p>
 
                 <div className="space-y-3">
                     {levels.map((level, i) => {
@@ -58,11 +60,11 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                                     {isUnlocked ? (
                                         <div className="flex items-center gap-1 text-union-green-600 font-bold text-[10px] uppercase">
                                             <CheckCircle2 size={12} />
-                                            Sbloccato
+                                            {t('light_simulator.unlocked')}
                                         </div>
                                     ) : (
                                         <div className="text-[10px] font-black text-gray-400 uppercase">
-                                            Richiede {level.condition} utenze
+                                            {t('light_simulator.needs').replace('{{n}}', level.condition.toString())}
                                         </div>
                                     )}
                                 </div>
@@ -74,7 +76,7 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
 
             <div className="glass-card-light p-5 bg-gradient-to-br from-union-green-50 to-white border-union-green-100">
                 <p className="text-[10px] text-union-green-800 font-bold leading-relaxed text-center italic">
-                    "Più utenze personali gestisci, più in profondità viene calcolata la tua rendita passiva sulla rete."
+                    {t('light_simulator.comm_quote')}
                 </p>
             </div>
         </div>

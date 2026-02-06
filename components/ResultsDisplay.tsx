@@ -434,6 +434,22 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                     </td>
                   </tr>
                 )}
+
+                {/* RIGA BONUS 3x3 */}
+                {inputs.bonus3x3Active && (
+                  <tr className="bg-yellow-50/50 dark:bg-yellow-900/10 hover:bg-yellow-100/60 dark:hover:bg-yellow-900/20 transition-colors animate-pulse">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-black text-yellow-600 dark:text-yellow-400 flex items-center gap-2">
+                      <StarIcon className="w-4 h-4" /> Bonus 3x3 (In 60gg)
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400 font-mono">-</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-black text-yellow-600 dark:text-yellow-400">
+                      {formatCurrency(150)}
+                    </td>
+                    <td className="px-6 py-4 text-xs text-gray-400">-</td>
+                    <td className="px-6 py-4 text-xs text-gray-400">-</td>
+                    <td className="px-6 py-4 text-xs text-gray-400">-</td>
+                  </tr>
+                )}
               </tbody>
               <tfoot className="bg-gray-50 dark:bg-white/5 backdrop-blur-sm border-t border-gray-200 dark:border-white/10">
                 <tr>
@@ -534,6 +550,20 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                 <div className="transform origin-center"><CustomSlider label={t('input.indirect_recruits')} value={inputs.indirectRecruits} onChange={(v: number) => onInputChange('indirectRecruits', v)} min={0} max={10} icon={PenSquare} colorBase="blue" showButtons={true} /></div>
                 <div className="transform origin-center"><CustomSlider label={t('input.depth') || "Livelli Profondità"} value={inputs.networkDepth} onChange={(v: number) => onInputChange('networkDepth', v)} min={1} max={5} icon={Heart} colorBase="green" showButtons={true} /></div>
               </div>
+
+              {/* Bonus 3x3 Toggle - VISIBILE SOLO SE 3x3 È SODDISFATTO */}
+              {inputs.directRecruits >= 3 && inputs.contractsPerUser >= 1 && inputs.indirectRecruits >= 3 && (
+                <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700/30 shrink-0 animate-in zoom-in duration-300">
+                  <span className="text-[8px] font-black text-yellow-600 dark:text-yellow-400 uppercase tracking-widest mb-2 whitespace-nowrap">In 60 giorni</span>
+                  <button
+                    onClick={() => onInputChange('bonus3x3Active', inputs.bonus3x3Active ? 0 : 1)}
+                    className={`w-12 h-6 rounded-full transition-all relative ${inputs.bonus3x3Active ? 'bg-yellow-500' : 'bg-gray-300 dark:bg-gray-700'}`}
+                  >
+                    <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${inputs.bonus3x3Active ? 'left-7 shadow-lg' : 'left-1'}`} />
+                  </button>
+                </div>
+              )}
+
               <button
                 onClick={handleReset}
                 className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-600 hover:scale-105 transition-all shadow-sm border border-red-100 shrink-0"
@@ -549,98 +579,102 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
 
 
-      {!isClientMode && (
-        <BonusProgress
-          totalContracts={totalContracts}
-          onBonusChange={setManagerBonus}
-        />
-      )}
+      {
+        !isClientMode && (
+          <BonusProgress
+            totalContracts={totalContracts}
+            onBonusChange={setManagerBonus}
+          />
+        )
+      }
 
       <div className="bg-white dark:bg-black/40 backdrop-blur-xl rounded-[2.5rem] shadow-lg border border-gray-100 dark:border-white/10 overflow-hidden mt-8 p-1">
         <GrowthChart data={monthlyData} />
       </div>
 
-      {!showWowFeatures ? (
-        <div className="py-12 flex flex-col items-center justify-center text-center animate-in fade-in duration-500">
-          <div className="w-full max-w-2xl h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-white/20 to-transparent mb-8"></div>
-          <button onClick={() => setShowWowFeatures(true)} className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white text-gray-900 rounded-full text-lg font-bold shadow-[0_0_30px_rgba(0,119,200,0.15)] dark:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-xl hover:scale-105 transition-all duration-300 animate-bounce cursor-pointer border border-gray-100">
-            <span>✨</span> {t('results.wow_reveal')}
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 group-hover:translate-y-1 transition-transform"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
-          </button>
-          <p className="mt-4 text-sm text-gray-500 dark:text-gray-400 font-medium tracking-wide">{t('results.wow_subtitle')}</p>
-        </div>
-      ) : (
-        <div className="animate-in slide-in-from-bottom-10 duration-700 fade-in fill-mode-forwards">
-          <div className="relative py-8">
-            <div className="absolute inset-0 flex items-center" aria-hidden="true"><div className="w-full border-t border-gray-200 dark:border-white/10"></div></div>
-            <div className="relative flex justify-center"><span className="px-4 bg-transparent text-sm text-gray-500 font-bold uppercase tracking-[0.2em]">{t('results.vision_title')}</span></div>
-          </div>
-
-          <div className="space-y-8 p-6 rounded-[2.5rem] bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 backdrop-blur-sm">
-            <div id="live-battle">
-              <LiveBattleMode planResult={planResult} />
-            </div>
-
-            <div id="quick-pitch">
-              <QuickPitchMode planResult={planResult} realizationMonths={inputs.realizationTimeMonths} />
-            </div>
-
-            <div id="scenario-comparator">
-              <ScenarioComparator baseInputs={inputs} />
-            </div>
-
-            <div id="zero-cost">
-              <ZeroCostGoal recurringIncome={totalRecurringYear1} averageEarningsPerUser={avgEarningsPerUser} monthlyCashback={monthlyCashback} />
-            </div>
-
-            <div id="dream-visualizer">
-              <DreamVisualizer monthlyData={monthlyData} />
-            </div>
-
-            <div id="freedom-calculator">
-              <FreedomCalculator monthlyData={monthlyData} />
-            </div>
-
-            <div id="pension-calculator">
-              <PensionCalculator recurringIncome={totalRecurringYear3} />
-            </div>
-
-            <div id="asset-comparator">
-              <AssetComparator recurringIncome={totalRecurringYear3} />
-            </div>
-
-            <div id="golden-no">
-              <GoldenNoCard totalEarningsYear1={totalEarningsYear1} directRecruits={directRecruits} />
-            </div>
-
-            <div id="time-multiplier">
-              <TimeMultiplier totalUsers={totalUsers} />
-            </div>
-
-            <div id="inaction-cost">
-              <InactionCost monthlyData={monthlyData} />
-            </div>
-          </div>
-
-          <AICoach planResult={planResult} inputs={inputs} />
-
-          <QuickNavigation sections={[
-            { id: 'live-battle', name: 'Battle Mode', icon: '⚔️' },
-            { id: 'quick-pitch', name: 'Pitch Veloce', icon: '⚡' },
-            { id: 'scenario-comparator', name: 'Confronto Scenari', icon: '🎯' },
-            { id: 'dream-visualizer', name: 'Visualizzatore Sogni', icon: '💭' },
-            { id: 'freedom-calculator', name: 'Calcolatore Libertà', icon: '🗽' },
-            { id: 'pension-calculator', name: 'Calcolatore Pensione', icon: '👴' },
-          ]} />
-
-          <div className="text-center mt-12 mb-8 flex justify-center">
-            <button onClick={() => setShowWowFeatures(false)} className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white text-gray-900 rounded-full text-lg font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 border border-gray-100">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
-              {t('results.wow_hide')}
+      {
+        !showWowFeatures ? (
+          <div className="py-12 flex flex-col items-center justify-center text-center animate-in fade-in duration-500">
+            <div className="w-full max-w-2xl h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-white/20 to-transparent mb-8"></div>
+            <button onClick={() => setShowWowFeatures(true)} className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white text-gray-900 rounded-full text-lg font-bold shadow-[0_0_30px_rgba(0,119,200,0.15)] dark:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-xl hover:scale-105 transition-all duration-300 animate-bounce cursor-pointer border border-gray-100">
+              <span>✨</span> {t('results.wow_reveal')}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 group-hover:translate-y-1 transition-transform"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
             </button>
+            <p className="mt-4 text-sm text-gray-500 dark:text-gray-400 font-medium tracking-wide">{t('results.wow_subtitle')}</p>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="animate-in slide-in-from-bottom-10 duration-700 fade-in fill-mode-forwards">
+            <div className="relative py-8">
+              <div className="absolute inset-0 flex items-center" aria-hidden="true"><div className="w-full border-t border-gray-200 dark:border-white/10"></div></div>
+              <div className="relative flex justify-center"><span className="px-4 bg-transparent text-sm text-gray-500 font-bold uppercase tracking-[0.2em]">{t('results.vision_title')}</span></div>
+            </div>
+
+            <div className="space-y-8 p-6 rounded-[2.5rem] bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 backdrop-blur-sm">
+              <div id="live-battle">
+                <LiveBattleMode planResult={planResult} />
+              </div>
+
+              <div id="quick-pitch">
+                <QuickPitchMode planResult={planResult} realizationMonths={inputs.realizationTimeMonths} />
+              </div>
+
+              <div id="scenario-comparator">
+                <ScenarioComparator baseInputs={inputs} />
+              </div>
+
+              <div id="zero-cost">
+                <ZeroCostGoal recurringIncome={totalRecurringYear1} averageEarningsPerUser={avgEarningsPerUser} monthlyCashback={monthlyCashback} />
+              </div>
+
+              <div id="dream-visualizer">
+                <DreamVisualizer monthlyData={monthlyData} />
+              </div>
+
+              <div id="freedom-calculator">
+                <FreedomCalculator monthlyData={monthlyData} />
+              </div>
+
+              <div id="pension-calculator">
+                <PensionCalculator recurringIncome={totalRecurringYear3} />
+              </div>
+
+              <div id="asset-comparator">
+                <AssetComparator recurringIncome={totalRecurringYear3} />
+              </div>
+
+              <div id="golden-no">
+                <GoldenNoCard totalEarningsYear1={totalEarningsYear1} directRecruits={directRecruits} />
+              </div>
+
+              <div id="time-multiplier">
+                <TimeMultiplier totalUsers={totalUsers} />
+              </div>
+
+              <div id="inaction-cost">
+                <InactionCost monthlyData={monthlyData} />
+              </div>
+            </div>
+
+            <AICoach planResult={planResult} inputs={inputs} />
+
+            <QuickNavigation sections={[
+              { id: 'live-battle', name: 'Battle Mode', icon: '⚔️' },
+              { id: 'quick-pitch', name: 'Pitch Veloce', icon: '⚡' },
+              { id: 'scenario-comparator', name: 'Confronto Scenari', icon: '🎯' },
+              { id: 'dream-visualizer', name: 'Visualizzatore Sogni', icon: '💭' },
+              { id: 'freedom-calculator', name: 'Calcolatore Libertà', icon: '🗽' },
+              { id: 'pension-calculator', name: 'Calcolatore Pensione', icon: '👴' },
+            ]} />
+
+            <div className="text-center mt-12 mb-8 flex justify-center">
+              <button onClick={() => setShowWowFeatures(false)} className="group relative inline-flex items-center gap-3 px-8 py-4 bg-white text-gray-900 rounded-full text-lg font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 border border-gray-100">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
+                {t('results.wow_hide')}
+              </button>
+            </div>
+          </div>
+        )
+      }
 
       <div style={{ position: 'absolute', top: '-10000px', left: '-10000px' }}>
         <div ref={exportRef}>
@@ -658,65 +692,68 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
       </div>
 
       {/* EDIT DETAILS MODAL */}
-      {isEditModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-6 shadow-2xl border border-gray-100 dark:border-white/10 animate-in zoom-in-95 duration-200">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white">Personalizza PDF</h3>
-              <button
-                onClick={() => setIsEditModalOpen(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full text-gray-500 dark:text-gray-400"
-              >
-                <X size={20} />
-              </button>
-            </div>
+      {
+        isEditModalOpen && (
+          <div className="fixed inset-0 z-[10001] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-6 shadow-2xl border border-gray-100 dark:border-white/10 animate-in zoom-in-95 duration-200">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">Personalizza PDF</h3>
+                <button
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full text-gray-500 dark:text-gray-400"
+                >
+                  <X size={20} />
+                </button>
+              </div>
 
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Nome</label>
-                <input
-                  type="text"
-                  value={consultantName}
-                  onChange={(e) => setConsultantName(e.target.value)}
-                  placeholder="Es. Mario"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
-                />
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Nome</label>
+                  <input
+                    type="text"
+                    value={consultantName}
+                    autoFocus
+                    onChange={(e) => setConsultantName(e.target.value)}
+                    placeholder="Es. Mario"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Cognome</label>
+                  <input
+                    type="text"
+                    value={consultantSurname}
+                    onChange={(e) => setConsultantSurname(e.target.value)}
+                    placeholder="Es. Rossi"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Telefono</label>
+                  <input
+                    type="tel"
+                    value={consultantPhone}
+                    onChange={(e) => setConsultantPhone(e.target.value)}
+                    placeholder="Es. 333 1234567"
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Cognome</label>
-                <input
-                  type="text"
-                  value={consultantSurname}
-                  onChange={(e) => setConsultantSurname(e.target.value)}
-                  placeholder="Es. Rossi"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Telefono</label>
-                <input
-                  type="tel"
-                  value={consultantPhone}
-                  onChange={(e) => setConsultantPhone(e.target.value)}
-                  placeholder="Es. 333 1234567"
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
-                />
-              </div>
-            </div>
 
-            <div className="mt-8 flex gap-3">
-              <button
-                onClick={() => setIsEditModalOpen(false)}
-                className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
-              >
-                <Save size={18} />
-                Salva e Chiudi
-              </button>
+              <div className="mt-8 flex gap-3">
+                <button
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+                >
+                  <Save size={18} />
+                  Salva e Chiudi
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   );
 };
 

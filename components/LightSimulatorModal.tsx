@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import EarningsSimulator from './light/EarningsSimulator';
 import RoadToZero from './light/RoadToZero';
 import Community from './light/Community';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface LightSimulatorModalProps {
     isOpen: boolean;
@@ -11,6 +12,7 @@ interface LightSimulatorModalProps {
 }
 
 const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClose }) => {
+    const { t } = useLanguage();
     const [activeTab, setActiveTab] = useState('simulator');
 
     // Shared State for all tabs
@@ -63,9 +65,9 @@ const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClo
     };
 
     const tabs = [
-        { id: 'simulator', label: 'Simulatore', icon: Calculator },
-        { id: 'community', label: 'Community', icon: UsersIcon },
-        { id: 'road', label: 'Road to Zero', icon: Lightbulb },
+        { id: 'simulator', label: t('light_simulator.tab_simulator'), icon: Calculator },
+        { id: 'community', label: t('light_simulator.tab_community'), icon: UsersIcon },
+        { id: 'road', label: t('light_simulator.tab_road'), icon: Lightbulb },
     ];
 
     return (
@@ -77,22 +79,22 @@ const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClo
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                        className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
                     />
 
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="relative w-full h-full sm:h-auto sm:max-w-4xl bg-white dark:bg-slate-900 sm:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col sm:max-h-[90vh]"
+                        className="relative w-full h-full sm:h-auto sm:max-w-4xl bg-white dark:bg-slate-950 sm:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col sm:max-h-[90vh]"
                     >
                         {/* Header */}
-                        <div className="p-6 border-b border-gray-100 dark:border-white/10 flex items-center justify-between bg-white dark:bg-slate-900 sticky top-0 z-10">
+                        <div className="p-6 border-b border-gray-100 dark:border-white/10 flex items-center justify-between bg-white dark:bg-slate-950 sticky top-0 z-10">
                             <div>
                                 <h2 className="text-2xl font-black text-union-green-600 dark:text-union-green-400 leading-tight">
-                                    Sharing Simulator <span className="text-union-black dark:text-white opacity-40">light</span>
+                                    {t('light_simulator.title')}
                                 </h2>
-                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Versione accelerata per la tua community</p>
+                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{t('light_simulator.subtitle')}</p>
                             </div>
                             <button
                                 onClick={onClose}
@@ -147,7 +149,7 @@ const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClo
                         </div>
 
                         {/* Tabs Navigation */}
-                        <div className="p-4 bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-white/10">
+                        <div className="p-4 bg-white dark:bg-slate-950 border-t border-gray-100 dark:border-white/10">
                             <div className="flex items-center justify-around gap-1">
                                 {tabs.map((tab) => {
                                     const Icon = tab.icon;
