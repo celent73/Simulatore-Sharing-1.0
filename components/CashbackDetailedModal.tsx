@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Calculator, RefreshCw, ShoppingBag, Car, ShoppingCart, Gift, Plane, Home, BookOpen, Coffee, Check, Trash2, PlusCircle, RotateCcw, RotateCw } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { CashbackCategory } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -403,15 +404,16 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
 
     return (
         <div ref={modalRef} className="fixed inset-0 z-[100000] flex items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
-            <div className="share-modal-content bg-white dark:bg-gray-900 w-full h-full sm:h-auto sm:max-w-4xl sm:rounded-[2rem] shadow-2xl flex flex-col max-h-[100vh] sm:max-h-[90vh] overflow-hidden border border-purple-500/20">
+            <div className="share-modal-content bg-white dark:bg-gray-900 w-full h-full sm:h-auto sm:max-w-[90vw] xl:max-w-7xl sm:rounded-[2rem] shadow-2xl flex flex-col max-h-[100vh] sm:max-h-[90vh] overflow-hidden border border-purple-500/20">
 
                 {/* Header */}
-                <div className="p-1 sm:px-4 sm:py-0.5 bg-gradient-to-br from-purple-700 via-purple-600 to-blue-700 text-white shrink-0 relative overflow-hidden">
-                    {/* Background patterns */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
-                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-2xl -ml-10 -mb-10"></div>
+                {/* Header - MIDNIGHT GLASS STYLE */}
+                <div className="p-1 sm:px-6 sm:py-4 lg:py-1 bg-gradient-to-br from-gray-900 via-gray-900 to-indigo-950 text-white shrink-0 relative overflow-hidden flex flex-col gap-4 lg:gap-1">
+                    {/* Background patterns - Subtle & Deep */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] -mr-20 -mt-20 pointer-events-none"></div>
+                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[80px] -ml-10 -mb-10 pointer-events-none"></div>
 
-                    <div className="flex justify-between items-center mb-1 sm:mb-1 relative z-10">
+                    <div className="flex justify-between items-center mb-1 sm:mb-1 lg:mb-0 relative z-10">
                         <div className="flex items-center gap-2">
                             <div className="p-1 sm:p-2 bg-white/20 rounded-xl backdrop-blur-md">
                                 <ShoppingBag size={18} className="text-purple-100 sm:w-6 sm:h-6" />
@@ -429,182 +431,299 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 sm:gap-1 mt-0.5 sm:mt-0.5 relative z-10">
-                        <div className="bg-white/10 backdrop-blur-xl rounded-xl sm:rounded-lg p-1 sm:p-1.5 flex-1 border border-white/20 shadow-lg">
-                            <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-purple-200/70 mb-0">{txt.totalSpend}</p>
-                            <div className="flex items-end justify-between">
-                                <p className="text-lg sm:text-lg font-black tracking-tighter sm:leading-none">€ {totalSpend.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 2 })}</p>
+                    {/* DESKTOP LAYOUT: Side-by-Side Header */}
+                    <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-2 relative z-10 px-1 sm:px-0">
+
+                        {/* LEFT COLUMN: Total Spend & Monthly Return */}
+                        <div className="grid grid-cols-2 gap-3 flex-1">
+                            {/* Total Spend - Dark Glass */}
+                            <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-3 lg:p-1 flex flex-col justify-center border border-white/10 shadow-lg">
+                                <p className="text-[10px] sm:text-xs lg:text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 lg:mb-0">{txt.totalSpend}</p>
+                                <p className="text-2xl sm:text-3xl lg:text-xl font-black text-white tracking-tight drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                                    € {totalSpend.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 0 })}
+                                </p>
                             </div>
-                        </div>
-                        <div className="bg-white text-gray-900 rounded-xl sm:rounded-lg p-1 sm:p-1.5 flex-1 shadow-2xl shadow-purple-900/40 border border-white/50">
-                            <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-purple-600 mb-0">{txt.monthlyReturn}</p>
-                            <div className="flex items-end justify-between">
-                                <p className="text-lg sm:text-lg font-black tracking-tighter text-purple-900 sm:leading-none">€ {totalCashback.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+
+                            {/* Monthly Return - NEON MIDNIGHT WOW EFFECT */}
+                            <div className="relative group overflow-hidden bg-white/5 backdrop-blur-xl rounded-2xl p-2 sm:p-3 lg:p-1 shadow-[0_0_50px_rgba(168,85,247,0.15)] border border-purple-500/20 transform hover:scale-[1.02] transition-transform duration-300 flex flex-col justify-center">
+                                {/* Beams of light effect - Subtle Cold Scan */}
+                                <div className="absolute top-0 -left-[100%] w-[50%] h-full bg-gradient-to-r from-transparent via-purple-500/10 to-transparent skew-x-12 animate-[shimmer_3s_infinite]" />
+
+                                <div className="flex items-center justify-between mb-0 relative z-10">
+                                    <p className="text-[10px] sm:text-xs lg:text-[10px] font-black uppercase tracking-widest text-purple-400 flex items-center gap-2 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)]">
+                                        {txt.monthlyReturn}
+                                    </p>
+                                    <span className="bg-fuchsia-600 text-white text-[9px] sm:text-[10px] lg:text-[9px] px-2 py-0.5 rounded-full font-black animate-pulse shadow-[0_0_15px_rgba(232,121,249,0.5)] border border-fuchsia-400/50">
+                                        NON PERDERLI!
+                                    </span>
+                                </div>
+
+                                <div className="relative z-10">
+                                    <p className="text-4xl sm:text-6xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 via-purple-400 to-cyan-400 tracking-tighter drop-shadow-[0_0_15px_rgba(168,85,247,0.5)] animate-[pulse_3s_ease-in-out_infinite]">
+                                        € {totalCashback.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* BILL ERASER SECTION */}
-                    <div className="bg-white/10 backdrop-blur-xl mt-0.5 sm:mt-0.5 rounded-xl sm:rounded-lg p-1.5 sm:p-1.5 border border-white/20 relative z-10">
-                        <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:mb-3">
-                            <div className="flex-1 w-full sm:w-auto">
-                                <div className="flex items-center justify-between sm:block">
-                                    <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.1em] text-purple-200">{txt.estimatedBill}</p>
-                                    <div className="flex items-center gap-2 sm:mt-0.5 bg-white/10 hover:bg-white/20 focus-within:bg-white/20 focus-within:ring-2 focus-within:ring-white/30 px-3 py-1 sm:py-1 rounded-xl border border-white/20 transition-all cursor-text group/input" onClick={(e) => {
-                                        const input = e.currentTarget.querySelector('input');
-                                        if (input) input.focus();
-                                    }}>
-                                        <span className="text-white font-black text-xs sm:text-xl">€</span>
+                    {/* BILL ERASER SECTION - Dark Glass */}
+                    {/* RIGHT COLUMN: Bill Eraser (Compact vertical on desktop) */}
+                    <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-3 sm:p-4 lg:p-2 border border-white/10 shadow-xl flex-1 flex flex-col justify-center">
+                        <div className="flex flex-col gap-4 lg:gap-1">
+                            {/* Label header */}
+                            <div className="flex justify-between items-center">
+                                <div className="text-xs sm:text-sm font-bold text-white/90 uppercase tracking-widest flex items-center gap-2">
+                                    <div className="p-1.5 bg-white/20 rounded-lg">
+                                        <Calculator size={14} className="text-white" />
+                                    </div>
+                                    {txt.estimatedBill}
+                                </div>
+
+                                {/* Edit Hint */}
+                                <span className="text-[10px] text-gray-400 bg-white/5 px-2 py-1 rounded-full border border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
+                                    Modifica importo
+                                </span>
+                            </div>
+
+                            {/* Main Interaction Row */}
+                            <div className="flex items-stretch gap-4">
+                                {/* Input Field - VERY VISIBLE NOW */}
+                                <div className="flex-1 relative group bg-white/5 hover:bg-white/10 focus-within:bg-white rounded-2xl border-2 border-white/30 focus-within:border-white focus-within:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300">
+                                    <div className="absolute top-2 left-3 text-[10px] font-bold text-purple-200 group-focus-within:text-purple-600 uppercase tracking-wider transition-colors">
+                                        Inserisci qui
+                                    </div>
+                                    <div className="flex items-center h-full px-3 pt-4 pb-1">
+                                        <span className="text-xl sm:text-2xl font-black text-white group-focus-within:text-purple-700 mr-2 transition-colors">€</span>
                                         <input
                                             type="number"
                                             value={targetBill || ''}
                                             onChange={(e) => setTargetBill(Math.max(0, parseFloat(e.target.value) || 0))}
                                             onFocus={(e) => e.target.select()}
                                             placeholder="0"
-                                            className="w-16 sm:w-40 font-black text-sm sm:text-2xl text-white bg-transparent outline-none p-0 placeholder:text-white/20 transition-all"
+                                            className="w-full bg-transparent text-2xl sm:text-3xl font-black text-white group-focus-within:text-purple-900 outline-none placeholder:text-white/20 group-focus-within:placeholder:text-gray-300 transition-colors"
                                         />
-                                        <div className="p-1 rounded-lg bg-white/10 text-white/40 group-hover/input:text-white/70 transition-colors">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3 sm:w-4 sm:h-4">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                            </svg>
-                                        </div>
+                                    </div>
+                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-white/10 group-focus-within:bg-purple-100 rounded-xl text-white group-focus-within:text-purple-600 transition-colors">
+                                        <RotateCw size={16} />
                                     </div>
                                 </div>
-                            </div>
-                            <div className="text-right flex-1 w-full sm:w-auto">
-                                <div className="bg-white/10 rounded-xl p-2 border border-white/10 backdrop-blur-md">
-                                    <div className="flex justify-between sm:justify-end items-center sm:items-baseline gap-2">
-                                        <p className="text-[8px] sm:text-xs font-bold text-purple-200 uppercase">{txt.payOnly}</p>
-                                        <p className="font-black text-sm sm:text-4xl text-white">€{remainingToPay.toFixed(0)}</p>
-                                    </div>
-                                    <p className="text-[7px] sm:text-xs font-bold text-purple-200 text-right opacity-80">
-                                        Risparmi <span className="text-white">€{totalCashback.toFixed(0)}</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div className="h-1.5 sm:h-2 bg-gray-100/30 rounded-full overflow-hidden relative sm:mt-2">
-                            <div
-                                className="h-full bg-white transition-all duration-700 ease-out shadow-[0_0_10px_rgba(255,255,255,0.5)]"
-                                style={{ width: `${Math.min(100, percentageCovered)}%` }}
-                            ></div>
+                                {/* Result Box */}
+                                <div className="flex-1 bg-gradient-to-br from-gray-900 to-black rounded-2xl p-3 border border-white/10 flex flex-col justify-center items-end shadow-inner relative overflow-hidden group/result">
+                                    <div className="absolute inset-0 bg-purple-500/10 opacity-0 group-hover/result:opacity-100 transition-opacity" />
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest relative z-10">{txt.payOnly}</p>
+                                    <div className="flex items-baseline gap-1 relative z-10">
+                                        <p className={`text-2xl sm:text-4xl font-black tracking-tight ${remainingToPay === 0 ? 'text-green-400' : 'text-white'}`}>
+                                            €{remainingToPay.toFixed(0)}
+                                        </p>
+                                        {/* Savings badge */}
+                                        {totalCashback > 0 && (
+                                            <span className="text-[10px] px-1.5 py-0.5 bg-green-500/20 text-green-400 rounded-md font-bold mb-1">
+                                                -{Math.min(100, percentageCovered).toFixed(0)}%
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Progress Bar */}
+                            <div className="h-2 bg-black/20 rounded-full overflow-hidden">
+                                <div
+                                    className={`h-full transition-all duration-700 ease-out shadow-[0_0_10px_rgba(255,255,255,0.5)] ${percentageCovered >= 100 ? 'bg-green-400' : 'bg-white'}`}
+                                    style={{ width: `${Math.min(100, percentageCovered)}%` }}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Content - Scrollable List */}
-                <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-3 bg-gray-50/50 dark:bg-gray-950 custom-scrollbar">
-                    {categories.map((cat) => (
-                        <div key={cat.id} className="bg-white dark:bg-gray-900 p-2 rounded-2xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-white/5 transition-all group hover:border-purple-200">
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
 
-                                {/* LEFT SECTION: Icon + Name (Desktop) / TOP ROW (Mobile) */}
-                                <div className="flex items-center justify-between sm:justify-start sm:w-[35%] shrink-0">
-                                    <div className="flex items-center gap-3 flex-1">
-                                        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm ${cat.isExtra ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/40' : 'bg-gradient-to-br from-purple-100 to-indigo-100 text-purple-600 dark:from-purple-900/40 dark:to-indigo-900/40'}`}>
-                                            {React.cloneElement(getIcon(cat.icon), { size: 20, className: "sm:w-6 sm:h-6" })}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <h3 className="font-black text-sm sm:text-base text-gray-900 dark:text-white truncate uppercase sm:normal-case tracking-tight">{cat.name}</h3>
-                                            <p className="hidden sm:block text-[9px] sm:text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{cat.isExtra ? 'Promozione' : 'Budget Famiglia'}</p>
-                                        </div>
-                                    </div>
+                {/* Content - Scrollable List (GRID ON DESKTOP) */}
+                <div className="flex-1 overflow-y-auto p-3 sm:p-6 bg-gray-50/50 dark:bg-gray-950 custom-scrollbar">
+                    <div className="space-y-3 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-4">
+                        {categories.map((cat) => (
+                            <div key={cat.id} className="bg-white dark:bg-gray-900 p-2 rounded-2xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-white/5 transition-all group hover:border-purple-200 h-full flex flex-col justify-center">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
 
-                                    {/* Mobile Result (Hidden sm) */}
-                                    <div className="text-right sm:hidden">
-                                        <p className="font-black text-sm text-gray-900 dark:text-white">
-                                            € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 0 })}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* RIGHT SECTION: Inputs Grid (Desktop) / BOTTOM ROW (Mobile) */}
-                                <div className="grid grid-cols-12 sm:flex-1 items-center gap-2">
-
-                                    {/* Amount Input */}
-                                    <div className="col-span-4 sm:flex-1 relative">
-                                        <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-[10px] sm:text-xs">€</div>
-                                        <input
-                                            type="number"
-                                            value={cat.amount || ''}
-                                            onChange={(e) => handleUpdate(cat.id, 'amount', parseFloat(e.target.value) || 0)}
-                                            onFocus={(e) => e.target.select()}
-                                            placeholder="0"
-                                            className="w-full pl-5 pr-1 py-1 sm:py-1.5 bg-gray-50 dark:bg-gray-800/80 rounded-lg text-right font-black text-xs sm:text-sm text-gray-900 dark:text-white border border-gray-100 dark:border-white/10 outline-none transition-all shadow-inner"
-                                        />
-                                    </div>
-
-                                    {/* Brand Dropdown */}
-                                    <div className="col-span-4 sm:flex-[1.8] relative">
-                                        <select
-                                            value={cat.brand}
-                                            onChange={(e) => handleUpdate(cat.id, 'brand', e.target.value)}
-                                            className="w-full py-1 sm:py-1.5 px-1 sm:px-2 appearance-none bg-gray-50 dark:bg-gray-800/80 rounded-lg text-[8px] sm:text-xs font-black text-gray-600 dark:text-gray-200 tracking-wide uppercase border border-gray-100 dark:border-white/10 outline-none cursor-pointer text-center truncate shadow-inner"
-                                        >
-                                            <option value="">{txt.selectBrand}</option>
-                                            {BRANDS_DATA
-                                                .filter(brand => {
-                                                    const baseId = cat.id.replace(/_\d+$/, '');
-                                                    return brand.categories && brand.categories.includes(baseId);
-                                                })
-                                                .map(brand => (
-                                                    <option key={brand.name} value={brand.name}>{brand.name}</option>
-                                                ))
-                                            }
-                                        </select>
-                                    </div>
-
-                                    {/* Percentage Input */}
-                                    <div className="col-span-4 sm:flex-[1] relative">
-                                        {cat.fixedAmount !== undefined ? (
-                                            <div className="w-full py-1 sm:py-1.5 text-right font-black text-xs sm:text-sm text-purple-600 dark:text-purple-400">
-                                                €{cat.fixedAmount.toFixed(0)}
+                                    {/* LEFT SECTION: Icon + Name (Desktop) / TOP ROW (Mobile) */}
+                                    <div className="flex items-center justify-between sm:justify-start sm:w-[35%] shrink-0">
+                                        <div className="flex items-center gap-3 flex-1">
+                                            <div className={`w-12 h-12 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm ${cat.isExtra ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/40' : 'bg-gradient-to-br from-purple-100 to-indigo-100 text-purple-600 dark:from-purple-900/40 dark:to-indigo-900/40'}`}>
+                                                {React.cloneElement(getIcon(cat.icon), { size: 24, className: "sm:w-6 sm:h-6" })}
                                             </div>
-                                        ) : (
-                                            <div className="relative">
-                                                <input
-                                                    type="number"
-                                                    value={cat.percentage || ''}
-                                                    onChange={(e) => handleUpdate(cat.id, 'percentage', parseFloat(e.target.value) || 0)}
-                                                    onFocus={(e) => e.target.select()}
-                                                    placeholder="0"
-                                                    className="w-full pr-4 sm:pr-6 py-1 sm:py-1.5 bg-transparent text-right font-black text-xs sm:text-sm text-purple-600 dark:text-purple-400 border-b border-purple-100 dark:border-purple-900/50 outline-none"
-                                                    step="0.1"
-                                                />
-                                                <span className="absolute right-0 top-1/2 -translate-y-1/2 text-[10px] sm:text-xs text-purple-400 font-bold pointer-events-none">%</span>
+                                            <div className="flex-1 min-w-0">
+                                                <h3 className="font-black text-base sm:text-base text-gray-900 dark:text-white truncate uppercase sm:normal-case tracking-tight">{cat.name}</h3>
+                                                <p className="block sm:block text-[10px] sm:text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{cat.isExtra ? 'Promozione' : 'Budget Famiglia'}</p>
                                             </div>
-                                        )}
+                                        </div>
+
+                                        {/* Mobile Result (Hidden sm) */}
+                                        <div className="text-right sm:hidden relative flex flex-col items-end">
+                                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Cashback</span>
+                                            <AnimatePresence mode="wait">
+                                                <motion.p
+                                                    key={cat.percentage + (cat.brand || '')} // Trigger on update
+                                                    className={`font-black text-xl ${cat.amount > 0 && cat.percentage > 0 ? 'text-transparent bg-clip-text bg-gradient-to-b from-yellow-400 to-yellow-600 drop-shadow-[0_2px_4px_rgba(234,179,8,0.4)]' : 'text-gray-900 dark:text-white'}`}
+                                                    initial={{ scale: 1 }}
+                                                    animate={cat.amount > 0 && cat.percentage > 0 ? {
+                                                        scale: [1, 1.5, 1],
+                                                        textShadow: ["0 0 0px rgba(234,179,8,0)", "0 0 20px rgba(234,179,8,1)", "0 0 10px rgba(234,179,8,0.5)"]
+                                                    } : {}}
+                                                    transition={{ duration: 0.5, type: "spring", stiffness: 300 }}
+                                                >
+                                                    € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 0 })}
+                                                </motion.p>
+                                            </AnimatePresence>
+                                            {/* Mobile Sparkles */}
+                                            {(cat.amount * cat.percentage / 100) > 0 && (
+                                                <motion.div
+                                                    className="absolute -top-1 -right-2 text-yellow-500 text-xs"
+                                                    initial={{ opacity: 0, scale: 0 }}
+                                                    animate={{ opacity: [0, 1, 0], scale: [0, 1.5, 0], rotate: [0, 90, 180] }}
+                                                    transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
+                                                >
+                                                    ✨
+                                                </motion.div>
+                                            )}
+                                        </div>
                                     </div>
 
-                                    {/* Desktop Result (Visible sm only) */}
-                                    <div className="hidden sm:block sm:w-32 text-right shrink-0">
-                                        <p className="font-black text-lg sm:text-2xl text-gray-900 dark:text-white truncate">
-                                            € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 0 })}
-                                        </p>
+                                    {/* RIGHT SECTION: Inputs Grid (Desktop) / BOTTOM ROW (Mobile) */}
+                                    <div className="grid grid-cols-12 sm:flex-1 items-center gap-2">
+
+                                        {/* Amount Input */}
+                                        <div className="col-span-4 sm:flex-1 relative">
+                                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs sm:text-xs">€</div>
+                                            <input
+                                                type="number"
+                                                value={cat.amount || ''}
+                                                onChange={(e) => handleUpdate(cat.id, 'amount', parseFloat(e.target.value) || 0)}
+                                                onFocus={(e) => e.target.select()}
+                                                placeholder="0"
+                                                className="w-full pl-7 pr-2 py-3 sm:py-1.5 bg-gray-50 dark:bg-gray-800/80 rounded-xl sm:rounded-lg text-right font-black text-base sm:text-sm text-gray-900 dark:text-white border border-gray-100 dark:border-white/10 outline-none transition-all shadow-inner focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
+                                            />
+                                        </div>
+
+                                        {/* Brand Dropdown */}
+                                        <div className="col-span-4 sm:flex-[1.8] relative group/select">
+                                            <select
+                                                value={cat.brand}
+                                                onChange={(e) => handleUpdate(cat.id, 'brand', e.target.value)}
+                                                className={`w-full py-3 sm:py-1.5 px-2 sm:px-2 appearance-none rounded-xl sm:rounded-lg text-[10px] sm:text-xs font-black tracking-wide uppercase border outline-none cursor-pointer text-center truncate transition-all duration-300
+                                                ${cat.brand
+                                                        ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.4)]'
+                                                        : 'bg-gray-50 dark:bg-gray-800/80 text-gray-800 dark:text-gray-200 border-gray-100 dark:border-white/10 shadow-inner'
+                                                    }
+                                                focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20`}
+                                            >
+                                                <option value="">{txt.selectBrand}</option>
+                                                {BRANDS_DATA
+                                                    .filter(brand => {
+                                                        const baseId = cat.id.replace(/_\d+$/, '');
+                                                        return brand.categories && brand.categories.includes(baseId);
+                                                    })
+                                                    .map(brand => (
+                                                        <option key={brand.name} value={brand.name}>{brand.name}</option>
+                                                    ))
+                                                }
+                                            </select>
+
+                                            {/* Animated Halo Ring (Extra visual) */}
+                                            {cat.brand && (
+                                                <div className="absolute inset-0 rounded-xl sm:rounded-lg border-2 border-purple-400/30 animate-pulse pointer-events-none" />
+                                            )}
+                                        </div>
+
+                                        {/* Percentage Input */}
+                                        <div className="col-span-4 sm:flex-[1] relative">
+                                            {cat.fixedAmount !== undefined ? (
+                                                <div className="w-full py-3 sm:py-1.5 text-right font-black text-sm sm:text-sm text-purple-600 dark:text-purple-400 flex items-center justify-end">
+                                                    €{cat.fixedAmount.toFixed(0)}
+                                                </div>
+                                            ) : (
+                                                <div className="relative">
+                                                    <input
+                                                        type="number"
+                                                        value={cat.percentage || ''}
+                                                        onChange={(e) => handleUpdate(cat.id, 'percentage', parseFloat(e.target.value) || 0)}
+                                                        onFocus={(e) => e.target.select()}
+                                                        placeholder="0"
+                                                        className="w-full pr-5 sm:pr-6 py-2 sm:py-1.5 bg-transparent text-right font-black text-sm sm:text-sm text-purple-600 dark:text-purple-400 border-b border-purple-100 dark:border-purple-900/50 outline-none focus:border-purple-500 transition-colors"
+                                                        step="0.1"
+                                                    />
+                                                    <span className="absolute right-0 top-1/2 -translate-y-1/2 text-xs sm:text-xs text-purple-400 font-bold pointer-events-none">%</span>
+
+                                                    {/* POP EFFECT FOR PERCENTAGE */}
+                                                    {cat.percentage > 0 && (
+                                                        <motion.div
+                                                            key={`pop-${cat.percentage}`}
+                                                            className="absolute inset-0 pointer-events-none border border-yellow-400/50 rounded-lg"
+                                                            initial={{ opacity: 0, scale: 1.5 }}
+                                                            animate={{ opacity: [0, 1, 0], scale: [1.5, 1, 1.2] }}
+                                                            transition={{ duration: 0.5 }}
+                                                        />
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Desktop Result (Visible sm only) - GAME STYLE */}
+                                        <div className="hidden sm:block sm:w-32 text-right shrink-0 relative">
+                                            <AnimatePresence mode="wait">
+                                                <motion.div
+                                                    key={`res-${cat.id}-${cat.percentage}`}
+                                                    className="relative inline-block"
+                                                    initial={{ scale: 1 }}
+                                                    animate={cat.amount > 0 && cat.percentage > 0 ? { scale: [1, 1.2, 1] } : {}}
+                                                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                                                >
+                                                    <motion.p
+                                                        className={`font-black text-lg sm:text-3xl truncate transition-colors duration-300 ${cat.amount > 0 && cat.percentage > 0 ? 'text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-600 drop-shadow-[0_2px_4px_rgba(234,179,8,0.4)]' : 'text-gray-900 dark:text-white'}`}
+                                                    >
+                                                        € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 0 })}
+                                                    </motion.p>
+
+                                                    {/* Gold Sparkles if > 0 */}
+                                                    {(cat.amount * cat.percentage / 100) > 0 && (
+                                                        <motion.div
+                                                            className="absolute -top-2 -right-4 text-yellow-500"
+                                                            initial={{ opacity: 0, y: 10 }}
+                                                            animate={{ opacity: [0, 1, 0], y: -20 }}
+                                                            transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
+                                                        >
+                                                            ✨
+                                                        </motion.div>
+                                                    )}
+                                                </motion.div>
+                                            </AnimatePresence>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
 
-                {/* Footer */}
-                <div className="p-4 sm:p-6 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-gray-900 z-10 safe-area-bottom pb-8 sm:pb-8 flex flex-row items-center gap-3">
+                {/* Footer - ENLARGED */}
+                <div className="p-6 sm:p-8 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-gray-900 z-10 safe-area-bottom pb-10 sm:pb-12 flex flex-row items-center gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
                     <button
                         onClick={handleReset}
-                        className="flex items-center gap-2 px-4 py-3 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-xl transition-all shadow-sm font-bold border border-red-100 active:scale-95 group"
+                        className="flex items-center gap-2 px-6 py-4 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-2xl transition-all shadow-sm font-bold border border-red-100 active:scale-95 group"
                     >
-                        <RotateCcw size={16} />
-                        <span className="text-[10px] sm:text-xs uppercase font-black">{txt.reset}</span>
+                        <RotateCcw size={20} />
+                        <span className="text-xs sm:text-sm uppercase font-black">{txt.reset}</span>
                     </button>
 
                     <button
                         onClick={() => onConfirm(totalSpend, totalCashback, categories)}
-                        className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-black py-4 sm:py-6 rounded-xl sm:rounded-2xl shadow-xl hover:shadow-purple-500/40 active:scale-[0.98] transition-all text-xs sm:text-xl uppercase tracking-widest flex items-center justify-center gap-2"
+                        className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-black py-5 sm:py-8 rounded-2xl sm:rounded-3xl shadow-xl hover:shadow-purple-500/40 active:scale-[0.98] transition-all text-lg sm:text-3xl uppercase tracking-widest flex items-center justify-center gap-3 relative overflow-hidden group"
                     >
+                        {/* Button Shine Effect */}
+                        <div className="absolute inset-0 bg-white/20 skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+
                         {txt.confirm}
-                        <Check size={18} className="sm:w-6 sm:h-6" />
+                        <Check size={24} className="sm:w-8 sm:h-8" />
                     </button>
                 </div>
             </div >

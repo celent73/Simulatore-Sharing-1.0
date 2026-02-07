@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { X, ArrowRight, Zap, Users, Share2, TrendingUp, Building, Tv, Wallet, ShieldCheck, ChevronRight, ChevronLeft, Apple, Play, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { SharingNetworkAnimation } from './SharingNetworkAnimation';
@@ -217,9 +217,48 @@ const Step0Welcome = ({ language, onNext }: { language: 'it' | 'de', onNext: () 
 };
 
 const Step1TraditionVsInnovation = ({ language }: { language: 'it' | 'de' }) => {
+    // TILT & GLOW LOGIC FOR CARDS
+    // We use separate motion values for each card to allow independent movement
+    const x1 = useMotionValue(0);
+    const y1 = useMotionValue(0);
+    const rotateX1 = useTransform(y1, [-100, 100], [10, -10]); // Reduced rotation for subtlety
+    const rotateY1 = useTransform(x1, [-100, 100], [-10, 10]);
+
+    const x2 = useMotionValue(0);
+    const y2 = useMotionValue(0);
+    const rotateX2 = useTransform(y2, [-100, 100], [10, -10]);
+    const rotateY2 = useTransform(x2, [-100, 100], [-10, 10]);
+
+    function handleMouseMove1(event: React.MouseEvent<HTMLDivElement>) {
+        const rect = event.currentTarget.getBoundingClientRect();
+        const x = event.clientX - rect.left - rect.width / 2;
+        const y = event.clientY - rect.top - rect.height / 2;
+        x1.set(x);
+        y1.set(y);
+    }
+
+    function handleMouseLeave1() {
+        x1.set(0);
+        y1.set(0);
+    }
+
+    function handleMouseMove2(event: React.MouseEvent<HTMLDivElement>) {
+        const rect = event.currentTarget.getBoundingClientRect();
+        const x = event.clientX - rect.left - rect.width / 2;
+        const y = event.clientY - rect.top - rect.height / 2;
+        x2.set(x);
+        y2.set(y);
+    }
+
+    function handleMouseLeave2() {
+        x2.set(0);
+        y2.set(0);
+    }
+
+
     return (
         <motion.div
-            className="w-full flex flex-col md:flex-row gap-6 md:gap-12 items-center justify-center p-4 max-w-6xl mx-auto relative overflow-hidden"
+            className="w-full flex flex-col md:flex-row gap-6 md:gap-12 items-center justify-center p-4 max-w-6xl mx-auto relative overflow-visible perspective-1000"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, x: -100 }}
@@ -232,159 +271,272 @@ const Step1TraditionVsInnovation = ({ language }: { language: 'it' | 'de' }) => 
             </div>
 
             {/* TRADITION CARD - OLD ECONOMY */}
-            <div className="flex-1 flex flex-col items-center justify-center relative group w-full">
-                <div className="relative z-10 bg-[#0a0a0a]/80 border border-white/10 p-6 md:p-10 rounded-[2.5rem] backdrop-blur-3xl grayscale opacity-100 transition-all duration-700 w-full max-w-sm border-l-red-500/30 shadow-2xl overflow-hidden">
+            <motion.div
+                className="flex-1 flex flex-col items-center justify-center relative group w-full perspective-origin-center"
+                style={{ x: 0, y: 0, rotateX: rotateX1, rotateY: rotateY1, z: 100 }}
+                onMouseMove={handleMouseMove1}
+                onMouseLeave={handleMouseLeave1}
+            >
+                {/* Glitch Effect Container */}
+                <div className="relative z-10 w-full max-w-sm rounded-[2.5rem] p-[1px] bg-gradient-to-b from-white/10 to-transparent overflow-hidden">
 
-                    {/* Floating "Waste" Particles */}
-                    <div className="absolute inset-0 pointer-events-none">
-                        {[...Array(6)].map((_, i) => (
+                    {/* Inner Card Content */}
+                    <div className="bg-[#0a0a0a]/90 backdrop-blur-xl p-6 md:p-10 rounded-[2.5rem] w-full h-full relative overflow-hidden group-hover:shadow-[0_0_30px_rgba(255,50,50,0.15)] transition-shadow duration-500">
+
+                        {/* Static Noise Overlay (Old TV effect) */}
+                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
+
+                        {/* Flickering Light Overlay */}
+                        <motion.div
+                            className="absolute inset-0 bg-red-500/5 z-0 pointer-events-none"
+                            animate={{ opacity: [0, 0.1, 0, 0.05, 0] }}
+                            transition={{ duration: 3, repeat: Infinity, repeatType: "mirror" }}
+                        />
+
+                        {/* Floating "Waste" Particles - More erratic */}
+                        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                            {[...Array(6)].map((_, i) => (
+                                <motion.div
+                                    key={i}
+                                    className="absolute w-1 h-1 bg-red-500/40 rounded-full"
+                                    initial={{ x: Math.random() * 100 + "%", y: "110%", opacity: 0 }}
+                                    animate={{
+                                        y: "-10%",
+                                        opacity: [0, 0.5, 0],
+                                        x: [Math.random() * 10 - 5, Math.random() * 20 - 10] // Jittery movement
+                                    }}
+                                    transition={{ duration: Math.random() * 3 + 2, repeat: Infinity, delay: Math.random() * 5 }}
+                                />
+                            ))}
+                        </div>
+
+                        <div className="relative z-10 text-center mb-10">
+                            <motion.span
+                                className="px-3 py-1 rounded-full bg-white/5 text-gray-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block w-fit mx-auto border border-white/5 transition-colors"
+                                animate={{
+                                    color: ["#9ca3af", "#f87171", "#9ca3af"],
+                                    borderColor: ["rgba(255,255,255,0.05)", "rgba(239,68,68,0.2)", "rgba(255,255,255,0.05)"]
+                                }}
+                                transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
+                            >
+                                OLD ECONOMY
+                            </motion.span>
+                            <motion.h2
+                                className="text-3xl md:text-4xl font-black text-white/90 mb-2 tracking-tight transition-colors"
+                                animate={{ textShadow: ["0 0 0px rgba(255,0,0,0)", "2px 2px 0px rgba(255,0,0,0.3)", "0 0 0px rgba(255,0,0,0)"] }}
+                                transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 5 }}
+                            >
+                                Tradizionale
+                            </motion.h2>
+                            <motion.p
+                                className="text-[10px] text-red-500/60 font-bold tracking-tighter uppercase italic transition-colors"
+                                animate={{ opacity: [0.6, 1, 0.6] }}
+                                transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse", repeatDelay: 2 }}
+                            >
+                                Costi che paghi tu
+                            </motion.p>
+                        </div>
+
+                        <div className="space-y-6 relative z-10">
+                            {/* List Item 1 */}
                             <motion.div
-                                key={i}
-                                className="absolute w-1 h-1 bg-red-500/30 rounded-full"
-                                initial={{ x: Math.random() * 100 + "%", y: "110%", opacity: 0 }}
-                                animate={{ y: "-10%", opacity: [0, 0.5, 0] }}
-                                transition={{ duration: Math.random() * 3 + 2, repeat: Infinity, delay: Math.random() * 5 }}
-                            />
-                        ))}
-                    </div>
+                                className="flex items-start gap-5 group/item transition-all duration-300 hover:translate-x-1"
+                                whileHover={{ scale: 1.02 }}
+                            >
+                                <div className="p-3 bg-red-900/10 rounded-2xl border border-white/5 text-gray-400 group-hover/item:text-red-400 group-hover/item:bg-red-500/10 group-hover/item:border-red-500/20 transition-all shadow-inner">
+                                    <Building size={22} />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-gray-200 group-hover/item:text-white transition-colors">Strutture Pesanti</p>
+                                    <p className="text-xs text-gray-400 leading-relaxed italic group-hover/item:text-gray-300">"Affitti e uffici di lusso gonfiano il prezzo della tua bolletta."</p>
+                                </div>
+                            </motion.div>
 
-                    <div className="text-center mb-10">
-                        <span className="px-3 py-1 rounded-full bg-white/5 text-gray-300 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block w-fit mx-auto border border-white/10">
-                            OLD ECONOMY
-                        </span>
-                        <h2 className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tight">Tradizionale</h2>
-                        <p className="text-[10px] text-red-500/70 font-bold tracking-tighter uppercase italic">Costi che paghi tu</p>
-                    </div>
+                            {/* List Item 2 */}
+                            <motion.div
+                                className="flex items-start gap-5 group/item transition-all duration-300 hover:translate-x-1"
+                                whileHover={{ scale: 1.02 }}
+                            >
+                                <div className="p-3 bg-red-900/10 rounded-2xl border border-white/5 text-gray-400 group-hover/item:text-red-400 group-hover/item:bg-red-500/10 group-hover/item:border-red-500/20 transition-all shadow-inner">
+                                    <Tv size={22} />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-gray-200 group-hover/item:text-white transition-colors">Marketing Cieco</p>
+                                    <p className="text-xs text-gray-400 leading-relaxed italic group-hover/item:text-gray-300">"Milioni regalati ai Giganti Web invece di premiare il cliente."</p>
+                                </div>
+                            </motion.div>
 
-                    <div className="space-y-8">
-                        <div className="flex items-start gap-5">
-                            <div className="p-3 bg-red-500/10 rounded-2xl border border-white/10 text-gray-300">
-                                <Building size={22} />
-                            </div>
-                            <div>
-                                <p className="font-bold text-white">Strutture Pesanti</p>
-                                <p className="text-xs text-gray-200 leading-relaxed italic">"Affitti e uffici di lusso gonfiano il prezzo della tua bolletta."</p>
+                            {/* List Item 3 */}
+                            <motion.div
+                                className="flex items-start gap-5 group/item transition-all duration-300 hover:translate-x-1"
+                                whileHover={{ scale: 1.02 }}
+                            >
+                                <div className="p-3 bg-red-900/10 rounded-2xl border border-white/5 text-gray-400 group-hover/item:text-red-400 group-hover/item:bg-red-500/10 group-hover/item:border-red-500/20 transition-all shadow-inner">
+                                    <Zap size={22} opacity={0.8} />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-gray-200 group-hover/item:text-white transition-colors">Call Center Invasivi</p>
+                                    <p className="text-xs text-gray-400 leading-relaxed italic group-hover/item:text-gray-300">"Aggressività commerciale che paghi con costi di gestione elevati."</p>
+                                </div>
+                            </motion.div>
+                        </div>
+
+                        <div className="mt-10 pt-6 border-t border-white/5 text-center relative z-10 transition-colors group-hover:border-white/10">
+                            <p className="text-gray-500 font-mono text-[10px] tracking-widest uppercase mb-1">BILANCIO ECONOMICO</p>
+                            <div className="relative inline-block">
+                                <p className="text-red-500/50 font-black text-xl md:text-2xl opacity-60 line-through decoration-2 decoration-red-600/40 group-hover:opacity-80 transition-opacity">UTILE AL CLIENTE</p>
                             </div>
                         </div>
-                        <div className="flex items-start gap-5">
-                            <div className="p-3 bg-red-500/10 rounded-2xl border border-white/10 text-gray-300">
-                                <Tv size={22} />
-                            </div>
-                            <div>
-                                <p className="font-bold text-white">Marketing Cieco</p>
-                                <p className="text-xs text-gray-200 leading-relaxed italic">"Milioni regalati ai Giganti Web invece di premiare il cliente."</p>
-                            </div>
-                        </div>
-                        <div className="flex items-start gap-5">
-                            <div className="p-3 bg-red-500/10 rounded-2xl border border-white/10 text-gray-300">
-                                <Zap size={22} opacity={0.8} />
-                            </div>
-                            <div>
-                                <p className="font-bold text-white">Call Center Invasivi</p>
-                                <p className="text-xs text-gray-200 leading-relaxed italic">"Aggressività commerciale che paghi con costi di gestione elevati."</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="mt-12 pt-8 border-t border-white/10 text-center">
-                        <p className="text-gray-400 font-mono text-[10px] tracking-widest uppercase">BILANCIO ECONOMICO</p>
-                        <p className="text-red-500 font-black text-xl md:text-2xl mt-1 opacity-60 line-through">UTILE AL CLIENTE</p>
                     </div>
                 </div>
-            </div>
+            </motion.div>
 
-            {/* VS Badge - Animated Pulse */}
-            <div className="relative z-20 flex flex-col items-center justify-center py-4 md:py-0">
+            {/* VS Badge - Animated Pulse & Shockwave */}
+            <div className="relative z-30 flex flex-col items-center justify-center py-4 md:py-0 -my-6 md:-mx-8">
                 <motion.div
-                    className="w-16 h-16 rounded-full bg-white text-black font-black flex items-center justify-center text-xl shadow-[0_0_40px_rgba(255,255,255,0.4)] relative border-[6px] border-[#050510]"
-                    animate={{ scale: [1, 1.1, 1] }}
+                    className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white text-black font-black flex items-center justify-center text-xl md:text-2xl shadow-[0_0_50px_rgba(255,255,255,0.6)] relative z-20 border-[6px] border-[#050510]"
+                    animate={{
+                        scale: [1, 1.15, 1],
+                        boxShadow: [
+                            "0 0 20px rgba(255,255,255,0.4)",
+                            "0 0 50px rgba(255,255,255,0.8)",
+                            "0 0 20px rgba(255,255,255,0.4)"
+                        ]
+                    }}
                     transition={{ duration: 2, repeat: Infinity }}
                 >
                     VS
                 </motion.div>
+                {/* Shockwave Rings */}
+                <motion.div
+                    className="absolute z-10 w-full h-full rounded-full border-2 border-white/20"
+                    animate={{ scale: [1, 2], opacity: [1, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                />
+                <motion.div
+                    className="absolute z-10 w-full h-full rounded-full border border-white/10"
+                    animate={{ scale: [1, 2.5], opacity: [0.8, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+                />
             </div>
 
             {/* INNOVATION CARD - NEW ECONOMY */}
-            <div className="flex-1 flex flex-col items-center justify-center relative w-full">
-                <motion.div
-                    className="absolute inset-0 bg-union-blue-600/25 blur-[100px] rounded-full"
-                    animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.7, 0.3] }}
-                    transition={{ duration: 4, repeat: Infinity }}
-                />
+            <motion.div
+                className="flex-1 flex flex-col items-center justify-center relative w-full perspective-origin-center"
+                style={{ x: 0, y: 0, rotateX: rotateX2, rotateY: rotateY2, z: 100 }}
+                onMouseMove={handleMouseMove2}
+                onMouseLeave={handleMouseLeave2}
+            >
+                <div className="relative z-10 w-full max-w-sm rounded-[2.5rem] p-[1px] bg-gradient-to-br from-union-blue-400 to-union-orange-400">
+                    <div className="bg-[#080f1e] p-6 md:p-10 rounded-[2.5rem] w-full h-full relative overflow-hidden group hover:shadow-[0_0_50px_rgba(0,119,200,0.3)] transition-shadow duration-500">
 
-                <motion.div
-                    className="relative z-10 bg-gradient-to-br from-[#0c1e35]/90 to-[#050510]/98 border border-union-blue-400/50 p-6 md:p-10 rounded-[2.5rem] backdrop-blur-3xl shadow-[0_0_80px_-20px_rgba(0,119,200,0.6)] w-full max-w-sm overflow-hidden group"
-                    whileHover={{ scale: 1.05, y: -10 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                >
-                    {/* Floating "Value" Particles (Coins) */}
-                    <div className="absolute inset-0 pointer-events-none">
-                        {[...Array(8)].map((_, i) => (
-                            <motion.div
-                                key={i}
-                                className="absolute w-1.5 h-1.5 bg-union-green-400 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.8)]"
-                                initial={{ x: Math.random() * 100 + "%", y: "110%", opacity: 0 }}
-                                animate={{ y: "-10%", opacity: [0, 1, 0], rotate: 360 }}
-                                transition={{ duration: Math.random() * 2 + 1.5, repeat: Infinity, delay: Math.random() * 3 }}
-                            />
-                        ))}
-                    </div>
-
-                    {/* Animated Shine Sweep */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out skew-x-12" />
-
-                    <div className="text-center mb-10">
-                        <span className="px-4 py-1.5 rounded-full bg-union-blue-500 text-white font-black tracking-[0.2em] text-[10px] uppercase mb-4 block w-fit mx-auto shadow-[0_0_20px_rgba(0,119,200,0.5)] border border-white/20">
-                            NEW ECONOMY
-                        </span>
-                        <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">Union Energy</h2>
-                        <div className="h-1.5 w-20 bg-gradient-to-r from-union-blue-500 to-union-orange-500 mx-auto rounded-full mt-3" />
-                    </div>
-
-                    <div className="space-y-8">
-                        <motion.div className="flex items-start gap-5">
-                            <div className="p-3 bg-union-blue-500/30 text-union-blue-400 rounded-2xl border border-union-blue-400/30 shadow-lg glow">
-                                <Users size={24} />
-                            </div>
-                            <div>
-                                <p className="font-black text-white text-lg">Power to People</p>
-                                <p className="text-xs text-blue-100 leading-relaxed font-medium">Digitali, smart e veloci: tagliamo i costi inutili per premiare te.</p>
-                            </div>
-                        </motion.div>
-
-                        <motion.div className="flex items-start gap-5">
-                            <div className="p-3 bg-union-orange-500/30 text-union-orange-400 rounded-2xl border border-union-orange-400/30 shadow-lg glow">
-                                <Share2 size={24} />
-                            </div>
-                            <div>
-                                <p className="font-black text-white text-lg">Sharing Engine</p>
-                                <p className="text-xs text-blue-100 leading-relaxed font-medium">Il marketing sei tu. Ogni condivisione abbatte la tua spesa reale.</p>
-                            </div>
-                        </motion.div>
-
-                        <motion.div className="flex items-start gap-5">
-                            <div className="p-3 bg-union-green-500/30 text-union-green-400 rounded-2xl border border-union-green-400/30 shadow-lg glow">
-                                <TrendingUp size={24} />
-                            </div>
-                            <div>
-                                <p className="font-black text-union-green-400 text-lg uppercase">Cashback Reale</p>
-                                <p className="text-xs text-blue-100 leading-relaxed font-medium">Zero intermediari: il risparmio di filiera è il tuo guadagno mensile.</p>
-                            </div>
-                        </motion.div>
-                    </div>
-
-                    <div className="mt-12 pt-8 border-t border-union-blue-500/30 text-center">
-                        <p className="text-union-blue-300 font-bold text-xs tracking-widest uppercase mb-1">IL TUO RISULTATO</p>
+                        {/* 3D Holographic Sheen */}
                         <motion.div
-                            className="text-[#00FF00] font-black text-2xl md:text-3xl drop-shadow-[0_0_15px_rgba(0,255,0,0.6)]"
-                            animate={{ scale: [1, 1.1, 1], rotate: [-1, 1, -1] }}
-                            transition={{ duration: 1, repeat: Infinity }}
-                        >
-                            BOLLETTA &rarr; ZERO
-                        </motion.div>
+                            className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent z-20 pointer-events-none"
+                            style={{
+                                translateX: useTransform(x2, [-200, 200], [-50, 50]),
+                                translateY: useTransform(y2, [-200, 200], [-50, 50]),
+                            }}
+                        />
+
+                        {/* Floating "Value" Particles (Coins) - Richer & Smoother */}
+                        <div className="absolute inset-0 pointer-events-none z-10">
+                            {[...Array(8)].map((_, i) => (
+                                <motion.div
+                                    key={i}
+                                    className="absolute w-1.5 h-1.5 bg-union-green-400 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.8)]"
+                                    initial={{ x: Math.random() * 100 + "%", y: "110%", opacity: 0 }}
+                                    animate={{
+                                        y: "-10%",
+                                        opacity: [0, 1, 0],
+                                        scale: [0.8, 1.2, 0.8]
+                                    }}
+                                    transition={{ duration: Math.random() * 2 + 1.5, repeat: Infinity, delay: Math.random() * 3 }}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Animated Glow moving across - AUTOMATIC LOOP */}
+                        <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-union-blue-500/10 to-transparent skew-x-12 z-0"
+                            animate={{ translateX: ["-100%", "200%"] }}
+                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
+                        />
+
+                        <div className="relative z-30 text-center mb-10">
+                            <span className="px-4 py-1.5 rounded-full bg-gradient-to-r from-union-blue-600 to-union-blue-500 text-white font-black tracking-[0.2em] text-[10px] uppercase mb-4 block w-fit mx-auto shadow-[0_0_20px_rgba(0,119,200,0.4)] border border-white/20">
+                                NEW ECONOMY
+                            </span>
+                            <h2 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 tracking-tight drop-shadow-lg">Union Energy</h2>
+                            <div className="h-1.5 w-24 bg-gradient-to-r from-union-blue-500 via-white to-union-orange-500 mx-auto rounded-full mt-4 blur-[1px]" />
+                        </div>
+
+                        <div className="space-y-6 relative z-30">
+                            <motion.div
+                                className="flex items-start gap-5 group/item cursor-default"
+                                whileHover={{ x: 5, scale: 1.02 }}
+                                transition={{ type: "spring", stiffness: 300 }}
+                            >
+                                <div className="p-3 bg-union-blue-500/20 text-union-blue-400 rounded-2xl border border-union-blue-500/30 shadow-[0_0_15px_rgba(0,119,200,0.2)] group-hover/item:shadow-[0_0_25px_rgba(0,119,200,0.5)] group-hover/item:bg-union-blue-500/30 group-hover/item:text-white transition-all">
+                                    <Users size={24} />
+                                </div>
+                                <div>
+                                    <p className="font-black text-white text-lg group-hover/item:text-union-blue-300 transition-colors">Power to People</p>
+                                    <p className="text-xs text-blue-100 leading-relaxed font-medium opacity-80 group-hover/item:opacity-100">Digitali, smart e veloci: tagliamo i costi inutili per premiare te.</p>
+                                </div>
+                            </motion.div>
+
+                            <motion.div
+                                className="flex items-start gap-5 group/item cursor-default"
+                                whileHover={{ x: 5, scale: 1.02 }}
+                                transition={{ type: "spring", stiffness: 300 }}
+                            >
+                                <div className="p-3 bg-union-orange-500/20 text-union-orange-400 rounded-2xl border border-union-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.2)] group-hover/item:shadow-[0_0_25px_rgba(249,115,22,0.5)] group-hover/item:bg-union-orange-500/30 group-hover/item:text-white transition-all">
+                                    <Share2 size={24} />
+                                </div>
+                                <div>
+                                    <p className="font-black text-white text-lg group-hover/item:text-union-orange-300 transition-colors">Sharing Engine</p>
+                                    <p className="text-xs text-blue-100 leading-relaxed font-medium opacity-80 group-hover/item:opacity-100">Il marketing sei tu. Ogni condivisione abbatte la tua spesa reale.</p>
+                                </div>
+                            </motion.div>
+
+                            <motion.div
+                                className="flex items-start gap-5 group/item cursor-default"
+                                whileHover={{ x: 5, scale: 1.02 }}
+                                transition={{ type: "spring", stiffness: 300 }}
+                            >
+                                <div className="p-3 bg-union-green-500/20 text-union-green-400 rounded-2xl border border-union-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.2)] group-hover/item:shadow-[0_0_25px_rgba(34,197,94,0.5)] group-hover/item:bg-union-green-500/30 group-hover/item:text-white transition-all">
+                                    <TrendingUp size={24} />
+                                </div>
+                                <div>
+                                    <p className="font-black text-union-green-400 text-lg uppercase group-hover/item:text-green-300 transition-colors">Cashback Reale</p>
+                                    <p className="text-xs text-blue-100 leading-relaxed font-medium opacity-80 group-hover/item:opacity-100">Zero intermediari: il risparmio di filiera è il tuo guadagno mensile.</p>
+                                </div>
+                            </motion.div>
+                        </div>
+
+                        <div className="mt-10 pt-6 border-t border-union-blue-500/30 text-center relative z-30">
+                            <p className="text-union-blue-300 font-bold text-xs tracking-widest uppercase mb-2 opacity-80">IL TUO RISULTATO</p>
+                            <motion.div
+                                className="text-[#00FF00] font-black text-2xl md:text-3xl drop-shadow-[0_0_15px_rgba(0,255,0,0.6)] bg-black/40 inline-block px-4 py-1 rounded-lg border border-union-green-500/20 backdrop-blur-md relative overflow-hidden"
+                                animate={{
+                                    scale: [1, 1.05, 1],
+                                    textShadow: ["0 0 10px rgba(0,255,0,0.5)", "0 0 20px rgba(0,255,0,0.8)", "0 0 10px rgba(0,255,0,0.5)"],
+                                    boxShadow: ["0 0 0px rgba(0,255,0,0)", "0 0 20px rgba(0,255,0,0.2)", "0 0 0px rgba(0,255,0,0)"]
+                                }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                            >
+                                <motion.div
+                                    className="absolute inset-0 bg-white/20 skew-x-12"
+                                    animate={{ x: ["-150%", "150%"] }}
+                                    transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
+                                />
+                                <span className="relative z-10">BOLLETTA &rarr; ZERO</span>
+                            </motion.div>
+                        </div>
                     </div>
-                </motion.div>
-            </div>
+                </div>
+            </motion.div>
         </motion.div>
     );
 };
