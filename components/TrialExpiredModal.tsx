@@ -24,24 +24,24 @@ export const TrialExpiredModal: React.FC<TrialExpiredModalProps> = ({ isOpen, on
   return (
     <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-md z-[60] flex items-center justify-center p-4">
       <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl border border-gray-100 dark:border-slate-700">
-        
+
         <div className="p-8 text-center">
           <div className="w-20 h-20 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce-slow">
             <Lock className="text-red-500" size={40} />
           </div>
-          
+
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             Periodo di Prova Terminato
           </h2>
-          
+
           <p className="text-gray-600 dark:text-gray-300 mb-8">
             Hai raggiunto il limite di utilizzi gratuiti. Per continuare a generare simulazioni e chiudere contratti, scegli un piano.
           </p>
 
           <div className="space-y-3 mb-8">
-            {/* OPZIONE 1: ABBONAMENTO (1,99€) */}
+            {/* OPZIONE 1: ABBONAMENTO (3,99€) */}
             <a
-              href="https://buy.stripe.com/5kQ5kE0ALcc0gsreX73gk0g"
+              href="https://buy.stripe.com/5kQ9AUcjtdg4ccb8yJ3gk0i"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between w-full p-4 bg-white dark:bg-slate-700/50 border-2 border-gray-100 dark:border-slate-600 hover:border-union-blue-300 dark:hover:border-union-blue-500 text-left rounded-xl group transition-all"
@@ -53,14 +53,14 @@ export const TrialExpiredModal: React.FC<TrialExpiredModalProps> = ({ isOpen, on
                 <div className="text-xs text-gray-500 dark:text-gray-400">Flessibile, disdici quando vuoi</div>
               </div>
               <div className="text-right">
-                <span className="block font-bold text-lg text-union-blue-600 dark:text-union-blue-400">€1,99</span>
+                <span className="block font-bold text-lg text-union-blue-600 dark:text-union-blue-400">€3,99</span>
                 <span className="text-[10px] text-gray-400">/mese</span>
               </div>
             </a>
 
-            {/* OPZIONE 2: A VITA (5,99€) - EVIDENZIATA */}
+            {/* OPZIONE 2: A VITA (29,90€) - EVIDENZIATA */}
             <a
-              href="https://buy.stripe.com/5kQ28sfvFa3Sekj9CN3gk0f"
+              href="https://buy.stripe.com/bJe14obfpcc01xx5mx3gk0j"
               target="_blank"
               rel="noopener noreferrer"
               className="relative flex items-center justify-between w-full p-4 bg-gradient-to-r from-union-blue-600 to-purple-600 text-white text-left rounded-xl shadow-lg hover:shadow-union-blue-500/25 hover:scale-[1.02] transition-all"
@@ -76,7 +76,7 @@ export const TrialExpiredModal: React.FC<TrialExpiredModalProps> = ({ isOpen, on
                 <div className="text-xs text-blue-100">Paghi una volta, tuo per sempre</div>
               </div>
               <div className="text-right">
-                <span className="block font-bold text-xl">€5,99</span>
+                <span className="block font-bold text-xl">€29,90</span>
                 <span className="text-[10px] text-blue-100">una tantum</span>
               </div>
             </a>

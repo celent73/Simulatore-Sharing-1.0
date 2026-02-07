@@ -25,18 +25,20 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
   if (!isOpen) return null;
 
   // Link per i pagamenti (INSERISCI QUI I TUOI LINK REALI)
-  const LINK_ABBONAMENTO = "https://buy.stripe.com/5kQ5kE0ALcc0gsreX73gk0g"; // Link per 1,99€
-  const LINK_VITA = "https://buy.stripe.com/5kQ28sfvFa3Sekj9CN3gk0f";        // Link per 5,99€
+  // Link per i pagamenti (INSERISCI QUI I TUOI LINK REALI)
+  // Link per i pagamenti (INSERISCI QUI I TUOI LINK REALI)
+  const LINK_ABBONAMENTO = "https://buy.stripe.com/5kQ9AUcjtdg4ccb8yJ3gk0i"; // Link per 3,99€
+  const LINK_VITA = "https://buy.stripe.com/bJe14obfpcc01xx5mx3gk0j";        // Link per 29,90€
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300 border border-gray-200 dark:border-gray-700">
-        
+
         {/* Intestazione */}
         <div className="p-6 md:p-8 text-center bg-gradient-to-b from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 relative">
           {!forceLock && (
-            <button 
-              onClick={onClose} 
+            <button
+              onClick={onClose}
               className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               <X size={24} />
@@ -46,7 +48,7 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
           <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-4 leading-tight">
             Sblocca tutto il potenziale <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">PRO</span>
           </h2>
-          
+
           <div className="space-y-2 text-gray-600 dark:text-gray-300 text-lg">
             <p className="flex items-center justify-center gap-2">
               <Zap size={20} className="text-yellow-500 fill-yellow-500" />
@@ -57,7 +59,7 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
               Sarà un grande Supporto per la tua Attività
             </p>
           </div>
-          
+
           <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
             <Mail size={16} />
             Durante l'acquisto scrivi la tua mail per ricevere il codice
@@ -67,19 +69,19 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
         {/* Sezione Prezzi (Card) */}
         <div className="p-6 md:p-8 bg-white dark:bg-gray-900 flex-grow overflow-y-auto">
           <div className="grid md:grid-cols-2 gap-6 mb-8">
-            
+
             {/* OPZIONE 1: ABBONAMENTO 1.99€ */}
             <div className="relative p-6 rounded-2xl border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-800 transition-all hover:shadow-xl group">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Mensile</h3>
               <div className="flex items-baseline gap-1 mb-4">
-                <span className="text-4xl font-black text-gray-900 dark:text-white">€1,99</span>
+                <span className="text-4xl font-black text-gray-900 dark:text-white">€3,99</span>
                 <span className="text-gray-500">/mese</span>
               </div>
               <ul className="space-y-3 mb-6 text-sm text-gray-600 dark:text-gray-300">
                 <li className="flex gap-2"><Check size={16} className="text-green-500" /> Accesso completo</li>
                 <li className="flex gap-2"><Check size={16} className="text-green-500" /> Disdici quando vuoi</li>
               </ul>
-              <a 
+              <a
                 href={LINK_ABBONAMENTO}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -98,7 +100,7 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
 
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">A Vita</h3>
               <div className="flex items-baseline gap-1 mb-4">
-                <span className="text-4xl font-black text-blue-600 dark:text-blue-400">€5,99</span>
+                <span className="text-4xl font-black text-blue-600 dark:text-blue-400">€29,90</span>
                 <span className="text-gray-500">una tantum</span>
               </div>
               <ul className="space-y-3 mb-6 text-sm text-gray-600 dark:text-gray-300">
@@ -106,7 +108,7 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
                 <li className="flex gap-2"><Check size={16} className="text-blue-500" /> Aggiornamenti inclusi</li>
                 <li className="flex gap-2"><Check size={16} className="text-blue-500" /> Nessun abbonamento</li>
               </ul>
-              <a 
+              <a
                 href={LINK_VITA}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -129,7 +131,7 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
                 onChange={(e) => setLicenseCode(e.target.value.toUpperCase())}
                 className="w-full p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-center font-mono text-lg tracking-widest focus:ring-2 focus:ring-blue-500 outline-none transition-all uppercase placeholder:text-sm md:placeholder:text-base"
               />
-              
+
               {error && (
                 <div className="text-red-500 text-sm text-center font-medium animate-pulse">
                   {error}
@@ -146,7 +148,7 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
                   }`}
               >
                 {loading ? (
-                  <span className="animate-spin">⏳</span> 
+                  <span className="animate-spin">⏳</span>
                 ) : (
                   <>Attiva Licenza <Check size={20} /></>
                 )}
