@@ -705,25 +705,25 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                     </div>
                 </div>
 
-                {/* Footer - ENLARGED */}
-                <div className="p-6 sm:p-8 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-gray-900 z-10 safe-area-bottom pb-10 sm:pb-12 flex flex-row items-center gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+                {/* Footer - COMPACT */}
+                <div className="p-3 sm:p-6 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-gray-900 z-10 safe-area-bottom pb-4 sm:pb-8 flex flex-row items-center gap-3 sm:gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
                     <button
                         onClick={handleReset}
-                        className="flex items-center gap-2 px-6 py-4 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-2xl transition-all shadow-sm font-bold border border-red-100 active:scale-95 group"
+                        className="flex items-center gap-2 px-4 py-3 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-xl transition-all shadow-sm font-bold border border-red-100 active:scale-95 group"
                     >
-                        <RotateCcw size={20} />
-                        <span className="text-xs sm:text-sm uppercase font-black">{txt.reset}</span>
+                        <RotateCcw size={18} />
+                        <span className="text-[10px] sm:text-xs uppercase font-black">{txt.reset}</span>
                     </button>
 
                     <button
                         onClick={() => onConfirm(totalSpend, totalCashback, categories)}
-                        className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-black py-5 sm:py-8 rounded-2xl sm:rounded-3xl shadow-xl hover:shadow-purple-500/40 active:scale-[0.98] transition-all text-lg sm:text-3xl uppercase tracking-widest flex items-center justify-center gap-3 relative overflow-hidden group"
+                        className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-black py-3 sm:py-5 rounded-xl sm:rounded-2xl shadow-xl hover:shadow-purple-500/40 active:scale-[0.98] transition-all text-base sm:text-2xl uppercase tracking-widest flex items-center justify-center gap-2 relative overflow-hidden group"
                     >
                         {/* Button Shine Effect */}
                         <div className="absolute inset-0 bg-white/20 skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
 
                         {txt.confirm}
-                        <Check size={24} className="sm:w-8 sm:h-8" />
+                        <Check size={20} className="sm:w-6 sm:h-6" />
                     </button>
                 </div>
             </div >
