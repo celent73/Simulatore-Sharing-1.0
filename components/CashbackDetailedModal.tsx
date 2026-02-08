@@ -233,6 +233,7 @@ const uiTexts = {
         },
         estimatedBill: "BOLLETTA STIMATA",
         payOnly: "Paghi solo",
+        profit: "GUADAGNI",
         save: "Risparmi",
         billZero: "RECHNUNG AUF NULL!",
         coveredPart: "Hai coperto il",
@@ -265,6 +266,7 @@ const uiTexts = {
         },
         estimatedBill: "GESCHÄTZTE RECHNUNG",
         payOnly: "Nur noch",
+        profit: "GEWINN",
         save: "Ersparnis",
         billZero: "RECHNUNG AUF NULL!",
         coveredPart: "Sie haben",
@@ -504,7 +506,10 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                             className="w-full bg-transparent text-2xl sm:text-3xl font-black text-white group-focus-within:text-purple-900 outline-none placeholder:text-white/20 group-focus-within:placeholder:text-gray-300 transition-colors"
                                         />
                                     </div>
-                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-white/10 group-focus-within:bg-purple-100 rounded-xl text-white group-focus-within:text-purple-600 transition-colors">
+                                    <div
+                                        onClick={() => setTargetBill(0)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-white/10 group-focus-within:bg-purple-100 rounded-xl text-white group-focus-within:text-purple-600 transition-colors cursor-pointer hover:bg-white/20 active:scale-95 translation-all"
+                                    >
                                         <RotateCw size={16} />
                                     </div>
                                 </div>
@@ -512,15 +517,22 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                 {/* Result Box */}
                                 <div className="flex-1 bg-gradient-to-br from-gray-900 to-black rounded-2xl p-3 border border-white/10 flex flex-col justify-center items-end shadow-inner relative overflow-hidden group/result">
                                     <div className="absolute inset-0 bg-purple-500/10 opacity-0 group-hover/result:opacity-100 transition-opacity" />
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest relative z-10">{txt.payOnly}</p>
+                                    <p className={`text-[10px] font-bold uppercase tracking-widest relative z-10 ${extraProfit > 0 ? 'text-green-400' : 'text-gray-400'}`}>
+                                        {extraProfit > 0 ? txt.profit : txt.payOnly}
+                                    </p>
                                     <div className="flex items-baseline gap-1 relative z-10">
-                                        <p className={`text-2xl sm:text-4xl font-black tracking-tight ${remainingToPay === 0 ? 'text-green-400' : 'text-white'}`}>
-                                            €{remainingToPay.toFixed(0)}
+                                        <p className={`text-2xl sm:text-4xl font-black tracking-tight ${extraProfit > 0 ? 'text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,0.5)]' : (remainingToPay === 0 ? 'text-green-400' : 'text-white')}`}>
+                                            {extraProfit > 0 ? '+' : ''}€{extraProfit > 0 ? extraProfit.toFixed(0) : remainingToPay.toFixed(0)}
                                         </p>
                                         {/* Savings badge */}
-                                        {totalCashback > 0 && (
+                                        {totalCashback > 0 && remainingToPay > 0 && (
                                             <span className="text-[10px] px-1.5 py-0.5 bg-green-500/20 text-green-400 rounded-md font-bold mb-1">
                                                 -{Math.min(100, percentageCovered).toFixed(0)}%
+                                            </span>
+                                        )}
+                                        {extraProfit > 0 && (
+                                            <span className="text-[10px] px-1.5 py-0.5 bg-green-500/20 text-green-400 rounded-md font-bold mb-1 animate-pulse">
+                                                EXTRA!
                                             </span>
                                         )}
                                     </div>
