@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Users, Building2, Compass, Sparkles, Lock } from 'lucide-react';
 import { ClientModeIcon, FamilyModeIcon, CondoModeIcon } from './icons/ModeIcons';
 
@@ -15,6 +15,24 @@ const BottomDock: React.FC<BottomDockProps> = ({
     onOpenLightSimulator,
     isPremium
 }) => {
+    const [isVisible, setIsVisible] = useState(true);
+
+    useEffect(() => {
+        let lastScrollY = window.scrollY;
+
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            if (currentScrollY < lastScrollY || currentScrollY < 50) {
+                setIsVisible(true);
+            } else if (currentScrollY > lastScrollY && currentScrollY > 50) {
+                setIsVisible(false);
+            }
+            lastScrollY = currentScrollY;
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     // Helper for button classes
     const getButtonClass = (isActive: boolean) => `
@@ -29,7 +47,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
     `;
 
     return (
-        <div className="fixed bottom-4 left-4 right-4 z-[100] flex justify-center md:hidden">
+        <div className={`fixed bottom-4 left-4 right-4 z-[100] flex justify-center md:hidden transition-all duration-500 ease-in-out ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-[200%] opacity-0 pointer-events-none'}`}>
             <div
                 className="flex items-center justify-between w-full max-w-md md:max-w-2xl px-2 py-3 md:px-8 md:py-4 backdrop-blur-xl border border-white/10 shadow-2xl rounded-[2rem] ring-1 ring-black/20 transition-all duration-300 relative overflow-hidden"
                 style={{ background: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)', boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)' }}
