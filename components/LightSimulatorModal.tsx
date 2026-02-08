@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Calculator, Lightbulb, Users as UsersIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import EarningsSimulator from './light/EarningsSimulator';
@@ -22,6 +22,51 @@ const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClo
     const [networkSize, setNetworkSize] = useState([5, 15, 45, 100, 250, 500]);
     const [monthRange, setMonthRange] = useState('1');
     const [utilityType, setUtilityType] = useState<'DOMESTIC' | 'BUSINESS'>('DOMESTIC');
+
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    // Reset state when modal opens
+    useEffect(() => {
+        if (isOpen) {
+            handleReset();
+        } else {
+            // Ensure dock is visible when modal closes
+            const event = new CustomEvent('control-bottom-dock', { detail: { visible: true } });
+            window.dispatchEvent(event);
+        }
+    }, [isOpen]);
+
+    // Handle scroll to control bottom dock
+    useEffect(() => {
+        const handleScroll = () => {
+            if (!scrollRef.current) return;
+
+            const currentScrollY = scrollRef.current.scrollTop;
+            // We need a ref to store last scroll position to avoid re-renders or dependency loops
+            // But inside a simple handler variable it resets. We need a ref for lastScrollY.
+            // Let's use a closure variable or a ref.
+        };
+        // Changing strategy: implementation inside the ref callback or a specialized hook is cleaner,
+        // but for now let's use a ref for lastScrollY
+    }, []);
+
+    const lastScrollYRef = useRef(0);
+
+    const onScrollContent = () => {
+        if (!scrollRef.current) return;
+        const currentScrollY = scrollRef.current.scrollTop;
+        const lastScrollY = lastScrollYRef.current;
+
+        if (currentScrollY > lastScrollY && currentScrollY > 50) {
+            // Scrolling Down
+            window.dispatchEvent(new CustomEvent('control-bottom-dock', { detail: { visible: false } }));
+        } else if (currentScrollY < lastScrollY) {
+            // Scrolling Up
+            window.dispatchEvent(new CustomEvent('control-bottom-dock', { detail: { visible: true } }));
+        }
+
+        lastScrollYRef.current = currentScrollY;
+    };
 
     if (!isOpen) return null;
 
@@ -105,7 +150,11 @@ const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClo
                         </div>
 
                         {/* Content */}
-                        <div className="flex-1 overflow-y-auto p-6 bg-gray-50/30 dark:bg-slate-950/20 custom-scrollbar">
+                        <div
+                            ref={scrollRef}
+                            onScroll={onScrollContent}
+                            className="flex-1 overflow-y-auto p-6 bg-gray-50/30 dark:bg-slate-950/20 custom-scrollbar"
+                        >
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={activeTab}

@@ -176,14 +176,14 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                             <p className="text-xs text-union-green-600 font-bold">{t('light_simulator.personal_units_sub')}</p>
                         </div>
 
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1 md:gap-3">
                             <button
                                 onClick={() => setPersonalUnits(Math.max(0, personalUnits - 1))}
                                 className="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 transition-all shadow-sm active:scale-90"
                             >
                                 <Minus size={14} />
                             </button>
-                            <div className="bg-white px-4 py-2 rounded-2xl shadow-sm border border-union-green-100 min-w-[60px] text-center">
+                            <div className="bg-white px-2 py-2 rounded-2xl shadow-sm border border-union-green-100 min-w-[50px] md:min-w-[60px] text-center">
                                 <span className="text-2xl font-black text-union-green-500">{personalUnits}</span>
                             </div>
                             <button
@@ -232,7 +232,7 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                         <div className="flex justify-between items-center mb-3">
                             <span className="text-xs uppercase font-black text-union-green-600">{t('light_simulator.dupl_factor')}</span>
 
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-1 md:gap-3">
                                 <button
                                     onClick={() => onFactorChange(Math.max(1, duplicationFactor - 1))}
                                     className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 transition-all shadow-sm active:scale-90"
@@ -309,7 +309,7 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                                 : 'bg-gray-50/50 border-gray-100 opacity-40 grayscale-[0.5]'
                                 }`}>
                                 <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-1.5 md:gap-3">
                                         <div className={`p-2 rounded-xl ${isUnlocked ? 'bg-union-green-500 text-white shadow-lg shadow-union-green-500/20' : 'bg-gray-200 text-gray-400'}`}>
                                             {isUnlocked ? <CheckCircle2 size={16} /> : <Lock size={16} />}
                                         </div>
@@ -323,7 +323,7 @@ const EarningsSimulator: React.FC<EarningsSimulatorProps> = ({
                                         )}
                                     </div>
 
-                                    <div className="flex items-center gap-4">
+                                    <div className="flex items-center gap-1 md:gap-4">
                                         {(expansionMode === 'manual' || i === 0) && (
                                             <button
                                                 onClick={() => onLevelChange(i, Math.max(0, count - 1))}

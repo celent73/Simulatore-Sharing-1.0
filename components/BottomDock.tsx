@@ -30,8 +30,19 @@ const BottomDock: React.FC<BottomDockProps> = ({
             lastScrollY = currentScrollY;
         };
 
+        const handleCustomControl = (e: any) => {
+            if (e.detail && typeof e.detail.visible === 'boolean') {
+                setIsVisible(e.detail.visible);
+            }
+        };
+
         window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
+        window.addEventListener('control-bottom-dock', handleCustomControl);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('control-bottom-dock', handleCustomControl);
+        };
     }, []);
 
     // Helper for button classes
