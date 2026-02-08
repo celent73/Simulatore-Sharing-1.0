@@ -48,6 +48,8 @@ import CrownIconSVG from './components/icons/CrownIcon';
 import BackgroundMesh from './components/BackgroundMesh';
 import DisclaimerModal from './components/DisclaimerModal';
 import PaymentSuccessModal from './components/PaymentSuccessModal';
+import HeaderMenu from './components/HeaderMenu';
+import BottomDock from './components/BottomDock'; // NEW IMPORT // NEW IMPORT
 
 // --- SHARY ASSISTANT IMPORTS ---
 import { SharyProvider, useShary } from './contexts/SharyContext';
@@ -549,12 +551,12 @@ const AppContent = () => {
       <PaymentSuccessModal isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
       <ScrollToTopButton />
 
-      <div className={`container mx-auto p-4 sm:p-6 lg:p-8 relative z-10 flex-grow ${isTrialExpired ? 'blur-sm pointer-events-none select-none h-screen overflow-hidden' : ''}`}>
+      <div className={`container mx-auto p-4 sm:p-6 lg:p-8 pb-32 relative z-10 flex-grow ${isTrialExpired ? 'blur-sm pointer-events-none select-none h-screen overflow-hidden' : ''}`}>
 
         {/* Custom Styles Injection */}
         <style>{lightStyles}</style>
 
-        <header className="flex flex-col gap-4 mb-8 rounded-3xl p-6 border-0 shadow-xl backdrop-blur-xl transition-all duration-500 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0077c8 0%, #005596 100%)', boxShadow: headerShadow }}>
+        <header className="flex flex-col gap-4 mb-8 rounded-3xl p-6 border-0 shadow-xl backdrop-blur-xl transition-all duration-500 relative z-50" style={{ background: 'linear-gradient(135deg, #0077c8 0%, #005596 100%)', boxShadow: headerShadow }}>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
             <div className="w-full md:w-auto flex justify-center md:justify-start">
               <div className="flex items-center gap-3">
@@ -564,136 +566,66 @@ const AppContent = () => {
                   {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-union-orange-400" /></span>}
                 </h1>
                 {isCreatorMode && <span className="hidden sm:inline-flex bg-white/20 backdrop-blur-md text-white border border-white/40 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm uppercase tracking-wider">Creator Mode</span>}
-                {viewMode !== 'family' && (
-                  <img src="/logo_new.png" alt="Sharing Logo" className="h-20 w-20 sm:h-32 sm:w-32 object-contain ml-2 drop-shadow-lg animate-in fade-in zoom-in duration-300" />
-                )}
+                {/* Logo removed as per user request */}
               </div>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2 mt-2 md:mt-0">
-              <button onClick={toggleTheme} className="p-2.5 rounded-xl bg-white text-union-blue-600 hover:bg-gray-100 transition-all shadow-lg border-0 hover:scale-105" title="Cambia Tema"><div className="scale-90">{isDarkMode ? <SunIcon /> : <MoonIcon />}</div></button>
-              <button onClick={toggleLanguage} className="p-2.5 rounded-xl bg-white border-0 shadow-lg hover:bg-gray-100 transition-all hover:scale-105 flex items-center justify-center min-w-[48px]">{language === 'it' ? <ItalyFlag /> : <GermanyFlag />}</button>
+              {/* BUTTONS ROW - REORGANIZED */}
 
+              {/* 1. THEME TOGGLE */}
               <button
-                onClick={() => window.open('https://share.unionenergia.it/login?red=/il-mio-store/37633&nochecksession=true', '_blank')}
-                className="p-2.5 rounded-xl bg-white text-union-blue-600 hover:bg-gray-100 transition-all shadow-lg border-0 hover:scale-105 flex items-center justify-center"
-                title="Vai allo Store"
+                onClick={toggleTheme}
+                className="p-2.5 rounded-xl bg-white text-union-blue-600 hover:bg-gray-100 transition-all shadow-lg border-0 hover:scale-105"
+                title="Cambia Tema"
               >
-                <ExternalLink size={20} />
+                <div className="scale-90">{isDarkMode ? <SunIcon /> : <MoonIcon />}</div>
+              </button>
+
+              {/* 2. LANGUAGE TOGGLE */}
+              <button
+                onClick={toggleLanguage}
+                className="p-2.5 rounded-xl bg-white border-0 shadow-lg hover:bg-gray-100 transition-all hover:scale-105 flex items-center justify-center min-w-[48px]"
+                title="Cambia Lingua"
+              >
+                {language === 'it' ? <ItalyFlag /> : <GermanyFlag />}
+              </button>
+
+              {/* 3. CASHBACK BUTTON (PRIORITY) */}
+              <button
+                onClick={() => setIsCashbackDetailedOpen(true)}
+                className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all border-0 font-bold text-sm hover:scale-[1.05] animate-pulse-slow"
+                title="Configura Cashback"
+              >
+                <div className="p-0.5 bg-white/20 rounded-md">
+                  <Users size={16} className="text-white" />
+                </div>
+                <span className="hidden sm:inline">Cashback</span>
               </button>
 
               <div className="w-px h-8 bg-white/30 mx-1 hidden sm:block"></div>
 
-              {/* SHARY TOGGLE BUTTON */}
-              <button
-                onClick={toggleShary}
-                className={`flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 rounded-xl shadow-lg transition-all border-0 font-bold text-sm hover:scale-[1.02] ${isActive ? 'bg-cyan-500 text-white shadow-cyan-500/30' : 'bg-white text-gray-400 hover:bg-gray-100'}`}
-                title={isActive ? "Disattiva Shary" : "Attiva Shary"}
-              >
-                <span className="text-xl mr-0 sm:mr-2">🤖</span>
-                <span className="hidden sm:inline">{isActive ? 'Shary ON' : 'Attiva Shary'}</span>
-              </button>
-
-              <button onClick={() => setIsHelpOpen(true)} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-white text-union-blue-600 rounded-xl shadow-lg hover:bg-gray-100 transition-all border-0 font-bold text-sm hover:scale-[1.02]">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 sm:mr-2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" /></svg>
-                <span className="hidden sm:inline">{t('app.guide')}</span>
-              </button>
-
-              {/* PULSANTE FOCUS MODE */}
-              <button
-                onClick={() => setIsFocusModeOpen(true)}
-                className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gray-900 text-yellow-400 rounded-xl shadow-lg hover:shadow-yellow-400/20 transition-all border border-yellow-400/30 font-bold text-sm hover:scale-[1.05]"
-                title="Focus Mode"
-              >
-                <span className="text-xl sm:mr-2">⚡</span>
-                <span className="hidden sm:inline">Focus</span>
-              </button>
-
-              {/* PULSANTE UNION ECOSYSTEM (REVOLUTION) */}
-              <button
-                onClick={() => setIsUnionEcosystemOpen(true)}
-                className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl shadow-lg hover:shadow-cyan-500/30 transition-all border-0 font-bold text-sm hover:scale-[1.05]"
-                title="Union Ecosystem"
-              >
-                <Share2 className="w-5 h-5 sm:mr-2" />
-                <span className="hidden sm:inline">Revolution</span>
-              </button>
-
-              {/* PULSANTE PRESENTAZIONE BUSINESS */}
-              <button
-                onClick={() => setIsPresentationOpen(true)}
-                className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all border-0 font-bold text-sm hover:scale-[1.05]"
-                title="Presentazione Business"
-              >
-                <Presentation className="w-5 h-5 sm:mr-2" />
-                <span className="hidden sm:inline">Business</span>
-              </button>
-
-              {/* PULSANTE FUEL PITCH */}
-              <button
-                onClick={() => setIsFuelPitchOpen(true)}
-                className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl shadow-lg hover:shadow-red-500/30 transition-all border-0 font-bold text-sm hover:scale-[1.05]"
-                title="Fuel Saver"
-              >
-                <Fuel className="w-5 h-5 sm:mr-2" />
-                <span className="hidden sm:inline">Fuel</span>
-              </button>
-
-              {!isPremium && <button onClick={() => setShowPremiumModal(true)} className="flex items-center justify-center w-auto px-4 py-2.5 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-xl shadow-lg hover:scale-105 transition-all font-bold text-sm border border-yellow-300">Sblocca PRO</button>}
-
-              {!isStandalone && (canInstall || /iphone|ipad|ipod|android/i.test(window.navigator.userAgent.toLowerCase())) && (
-                <button onClick={() => setShowInstallModal(true)} className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl shadow-lg hover:bg-black transition-all font-bold text-sm border border-gray-700 animate-pulse">
-                  <Download size={18} />
-                  <span className="hidden lg:inline">Scarica App</span>
-                </button>
-              )}
-
-              {viewMode === 'family' && (
-                <>
-                  {/* 'Struttura' button removed as per user request */}
-                  <button onClick={handleTargetClick} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-emerald-400 to-cyan-400 text-white rounded-xl shadow-[0_0_20px_rgba(52,211,153,0.6)] hover:shadow-[0_0_30px_rgba(34,211,238,0.8)] transition-all border border-white/20 font-black text-sm hover:scale-[1.05] active:scale-95 animate-pulse-slow">
-                    <TargetIcon />
-                    <span className="hidden sm:inline ml-2 drop-shadow-md uppercase tracking-wide">{targetButtonText}</span>
-                  </button>
-                  <button
-                    onClick={() => setIsFutureTicketOpen(true)}
-                    className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2.5 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white rounded-xl shadow-[0_0_15px_rgba(217,70,239,0.5)] hover:shadow-[0_0_25px_rgba(168,85,247,0.8)] transition-all border border-white/20 font-black text-sm hover:scale-110 active:scale-95 relative group overflow-hidden animate-pulse"
-                    title="Il tuo biglietto"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-200%] group-hover:animate-shimmer" style={{ animationDuration: '1.5s' }}></div>
-                    <span className="text-xl">🎫</span>
-                    <span className="hidden sm:inline ml-2 drop-shadow-md uppercase tracking-wide italic">TICKET</span>
-                  </button>
-                </>
-              )}
+              {/* 4. MENU (SECONDARY ITEMS) */}
+              <HeaderMenu
+                onOpenPresentation={() => setIsPresentationOpen(true)}
+                onOpenUnionEcosystem={() => setIsUnionEcosystemOpen(true)}
+                onOpenFuelPitch={() => setIsFuelPitchOpen(true)}
+                onOpenFocusMode={() => setIsFocusModeOpen(true)}
+                toggleShary={toggleShary}
+                isSharyActive={isActive}
+                onOpenTarget={handleTargetClick}
+                onOpenFutureTicket={() => setIsFutureTicketOpen(true)}
+                onOpenGuide={() => setIsHelpOpen(true)}
+                onOpenInstall={() => setShowInstallModal(true)}
+                isPremium={isPremium}
+                viewMode={viewMode}
+                showInstall={!isStandalone && (canInstall || /iphone|ipad|ipod|android/i.test(window.navigator.userAgent.toLowerCase()))}
+              />
             </div>
           </div>
           <p className="text-blue-100 font-medium text-[10px] sm:text-sm md:text-base -mt-2 pl-1 relative z-10 opacity-90 text-center md:text-left max-w-xs md:max-w-none mx-auto md:mx-0 leading-tight">{t('app.subtitle')}</p>
         </header>
 
-        {/* ... RESTO DEL COMPONENTE ... */}
-        {/* NEW: Sharing Simulator Light Button */}
-        <div className="flex justify-center mb-6">
-          <button
-            onClick={() => setIsLightSimulatorOpen(true)}
-            className="flex items-center justify-center gap-3 px-10 py-3 bg-gradient-to-r from-union-green-500 to-union-green-600 text-white rounded-2xl shadow-xl hover:shadow-union-green-500/40 transition-all duration-300 font-black text-sm sm:text-lg uppercase tracking-wider group active:scale-95 border-b-4 border-union-green-700"
-          >
-            <Compass className="w-6 h-6 group-hover:rotate-12 transition-transform" />
-            <span>Sharing Simulator light</span>
-            <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse" />
-          </button>
-        </div>
-
-        <div className="flex justify-center mb-8 relative z-20">
-          <div className="relative p-1.5 rounded-2xl flex w-full sm:w-auto sm:min-w-[340px] border-2 border-white/20 shadow-[0_0_30px_rgba(0,119,200,0.6)] bg-gradient-to-r from-union-blue-600 to-union-blue-500">
-            <div className={`absolute top-1.5 bottom-1.5 w-[calc(33.333%-6px)] rounded-xl shadow-lg bg-white transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) ${viewMode === 'client' ? 'left-1.5 translate-x-0' : viewMode === 'family' ? 'left-1.5 translate-x-[100%]' : 'left-1.5 translate-x-[200%]'}`} />
-            <button onClick={() => handleModeChange('client')} className="flex-1 relative z-10 flex items-center justify-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-bold transition-all duration-300 text-sm sm:text-base leading-tight focus:outline-none"><div className={`flex items-center gap-2 transition-all duration-300 transform ${viewMode === 'client' ? 'scale-105 text-union-blue-600' : 'scale-95 opacity-90 text-white'}`}><div className={viewMode === 'client' ? '' : 'brightness-0 invert'}><ClientModeIcon /></div><span className="text-center w-full leading-tight text-[10px] sm:text-base">{t('mode.client')}</span></div></button>
-            <button onClick={() => handleModeChange('family')} className="flex-1 relative z-10 flex items-center justify-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-bold transition-all duration-300 text-sm sm:text-base leading-tight focus:outline-none"><div className={`flex items-center gap-2 transition-all duration-300 transform ${viewMode === 'family' ? 'scale-105 text-union-blue-600' : 'scale-95 opacity-90 text-white'}`}><div className={viewMode === 'family' ? '' : 'brightness-0 invert'}><FamilyModeIcon /></div><span className="text-center w-full leading-tight text-[10px] sm:text-base">{t('mode.family')}</span></div></button>
-            <button onClick={() => handleModeChange('condo')} className="flex-1 relative z-10 flex items-center justify-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-bold transition-all duration-300 text-sm sm:text-base leading-tight focus:outline-none">
-              {!isPremium && <div className="absolute -top-1 -right-1 bg-red-500 text-white p-1 rounded-full z-20 shadow-sm"><Lock size={10} /></div>}
-              <div className={`flex items-center gap-2 transition-all duration-300 transform ${viewMode === 'condo' ? 'scale-105 text-union-blue-600' : 'scale-95 opacity-90 text-white'}`}><div className={viewMode === 'condo' ? '' : 'brightness-0 invert'}><CondoModeIcon /></div><span className="text-center w-full leading-tight text-[10px] sm:text-base">{t('mode.condo')}</span></div>
-            </button>
-          </div>
-        </div>
+        {/* OLD NAVIGATION REMOVED */}
 
         <main key={viewMode} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
           <div className="md:col-span-1 lg:col-span-1 min-w-0">
@@ -783,6 +715,13 @@ const AppContent = () => {
       <LightSimulatorModal
         isOpen={isLightSimulatorOpen}
         onClose={() => setIsLightSimulatorOpen(false)}
+      />
+
+      <BottomDock
+        viewMode={viewMode}
+        handleModeChange={handleModeChange}
+        onOpenLightSimulator={() => setIsLightSimulatorOpen(true)}
+        isPremium={isPremium}
       />
     </div>
   );
