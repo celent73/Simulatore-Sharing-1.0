@@ -211,6 +211,7 @@ const BonusProgress: React.FC<BonusProgressProps> = ({ totalContracts, onBonusCh
           <SharyTrigger
             message="ENTRA NELLA SECONDA FASE DI CARRIERA! Con 600 utenze di rete (rispettando il 60% della gamba più forte) ottieni i bonus extra che si aggiungono ai guadagni di rete"
             messageDe="ERÖFFNE DIE ZWEITE KARRIEREPHASE! Mit 600 Netzwerk-Usern (unter Einhaltung der 60%-Regel des stärksten Beins) erhältst du Extra-Boni, die zu deinen Netzwerkgewinnen hinzugefügt werden!"
+            messageEn="ENTER THE SECOND PHASE OF CAREER! With 600 network utilities (respecting 60% of the strongest leg) you get extra bonuses that are added to network earnings"
           />
         </div>
 

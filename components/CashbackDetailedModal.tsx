@@ -280,7 +280,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
     onConfirm,
     initialDetails
 }) => {
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
     // Default to 'it' if language is undefined or not supported
     const lang = (language === 'de') ? 'de' : 'it';
     const txt = uiTexts[lang];
@@ -297,18 +297,26 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
         { id: 'carb_2', name: txt.cat.carb, amount: 0, brand: '', percentage: 0, icon: 'Car' },
         { id: 'tech_1', name: txt.cat.tech, amount: 0, brand: '', percentage: 0, icon: 'Calculator' },
         { id: 'tech_2', name: txt.cat.tech, amount: 0, brand: '', percentage: 0, icon: 'Calculator' },
-        { id: 'treni_1', name: txt.cat.treni, amount: 0, brand: '', percentage: 0, icon: 'Plane' },
-        { id: 'treni_2', name: txt.cat.treni, amount: 0, brand: '', percentage: 0, icon: 'Plane' },
-        { id: 'school_1', name: txt.cat.school, amount: 0, brand: '', percentage: 0, icon: 'BookOpen' },
-        { id: 'school_2', name: txt.cat.school, amount: 0, brand: '', percentage: 0, icon: 'BookOpen' },
-        { id: 'abb_1', name: txt.cat.abb, amount: 0, brand: '', percentage: 0, icon: 'Gift' },
-        { id: 'abb_2', name: txt.cat.abb, amount: 0, brand: '', percentage: 0, icon: 'Gift' },
-        { id: 'casa_1', name: txt.cat.casa, amount: 0, brand: '', percentage: 0, icon: 'Home' },
-        { id: 'casa_2', name: txt.cat.casa, amount: 0, brand: '', percentage: 0, icon: 'Home' },
-        { id: 'regali_1', name: txt.cat.regali, amount: 0, brand: '', percentage: 0, icon: 'Gift' },
-        { id: 'regali_2', name: txt.cat.regali, amount: 0, brand: '', percentage: 0, icon: 'Gift' },
-        { id: 'aff_int_1', name: txt.cat.aff_int, amount: 0, brand: '', percentage: 0, icon: 'ShoppingBag' },
-        { id: 'aff_int_2', name: txt.cat.aff_int, amount: 0, brand: '', percentage: 0, icon: 'ShoppingBag' },
+        { id: 'alim_1', name: '', amount: 0, brand: '', percentage: 0, icon: 'ShoppingBag' },
+        { id: 'alim_2', name: '', amount: 0, brand: '', percentage: 0, icon: 'ShoppingBag' },
+        { id: 'igiene_1', name: '', amount: 0, brand: '', percentage: 0, icon: 'ShoppingCart' },
+        { id: 'igiene_2', name: '', amount: 0, brand: '', percentage: 0, icon: 'ShoppingCart' },
+        { id: 'carb_1', name: '', amount: 0, brand: '', percentage: 0, icon: 'Car' },
+        { id: 'carb_2', name: '', amount: 0, brand: '', percentage: 0, icon: 'Car' },
+        { id: 'tech_1', name: '', amount: 0, brand: '', percentage: 0, icon: 'Calculator' },
+        { id: 'tech_2', name: '', amount: 0, brand: '', percentage: 0, icon: 'Calculator' },
+        { id: 'treni_1', name: '', amount: 0, brand: '', percentage: 0, icon: 'Plane' },
+        { id: 'treni_2', name: '', amount: 0, brand: '', percentage: 0, icon: 'Plane' },
+        { id: 'school_1', name: '', amount: 0, brand: '', percentage: 0, icon: 'BookOpen' },
+        { id: 'school_2', name: '', amount: 0, brand: '', percentage: 0, icon: 'BookOpen' },
+        { id: 'abb_1', name: '', amount: 0, brand: '', percentage: 0, icon: 'Gift' },
+        { id: 'abb_2', name: '', amount: 0, brand: '', percentage: 0, icon: 'Gift' },
+        { id: 'casa_1', name: '', amount: 0, brand: '', percentage: 0, icon: 'Home' },
+        { id: 'casa_2', name: '', amount: 0, brand: '', percentage: 0, icon: 'Home' },
+        { id: 'regali_1', name: '', amount: 0, brand: '', percentage: 0, icon: 'Gift' },
+        { id: 'regali_2', name: '', amount: 0, brand: '', percentage: 0, icon: 'Gift' },
+        { id: 'aff_int_1', name: '', amount: 0, brand: '', percentage: 0, icon: 'ShoppingBag' },
+        { id: 'aff_int_2', name: '', amount: 0, brand: '', percentage: 0, icon: 'ShoppingBag' },
     ];
 
     const [categories, setCategories] = useState<CashbackCategory[]>(defaultCategories);
@@ -318,13 +326,14 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
     useEffect(() => {
         setCategories(prev => prev.map(cat => {
             const baseId = cat.id.replace(/_\d+$/, '');
-            const defKey = Object.keys(txt.cat).find(k => k === baseId) as keyof typeof txt.cat | undefined;
-            if (defKey) {
-                return { ...cat, name: txt.cat[defKey] };
-            }
-            return cat;
+            // Get translation using baseId as key
+            const translatedName = t(`cashback_detailed.cat.${baseId}`);
+            return {
+                ...cat,
+                name: translatedName !== `cashback_detailed.cat.${baseId}` ? translatedName : (baseId === 'md' ? 'Discount' : cat.name)
+            };
         }));
-    }, [lang]);
+    }, [language, t]);
 
     useEffect(() => {
         if (isOpen) {
@@ -334,29 +343,34 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
 
     useEffect(() => {
         if (initialDetails && initialDetails.length > 0 && !isOpen) {
-            // Map existing saved details only if modal is NOT being opened fresh
             const initialMap = new Map(initialDetails.map(d => [d.id, d]));
 
-            // Iterate over ALL default fixed categories
-            // If we have saved data for that category, use it (amount, brand, percentage)
-            // If not (e.g. new 'tech' category), use default
             const merged = defaultCategories.map(defCat => {
                 const saved = initialMap.get(defCat.id);
+                const baseId = defCat.id.replace(/_\d+$/, '');
+                const translatedName = t(`cashback_detailed.cat.${baseId}`);
+
                 if (saved) {
                     return {
                         ...defCat,
+                        name: translatedName,
                         amount: saved.amount,
                         brand: saved.brand,
                         percentage: saved.percentage,
                     };
                 }
-                return defCat;
+                return { ...defCat, name: translatedName };
             });
             setCategories(merged);
         } else {
-            setCategories(defaultCategories);
+            // Re-initialize names potentially
+            setCategories(prev => prev.map(cat => {
+                const baseId = cat.id.replace(/_\d+$/, '');
+                const translatedName = t(`cashback_detailed.cat.${baseId}`);
+                return { ...cat, name: translatedName };
+            }));
         }
-    }, [initialDetails, isOpen, lang]);
+    }, [initialDetails, isOpen, language, t]); // Add t and language dep
 
     const handleUpdate = (id: string, field: keyof CashbackCategory, value: string | number) => {
         setCategories(prev => prev.map(cat => {
@@ -375,8 +389,6 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
             return cat;
         }));
     };
-
-
 
     const handleReset = () => {
         setCategories(categories.map(cat => ({ ...cat, amount: 0, brand: '', percentage: 0, fixedAmount: undefined })));
@@ -421,11 +433,12 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                 <ShoppingBag size={18} className="text-purple-100 sm:w-6 sm:h-6" />
                             </div>
                             <h2 className="text-lg sm:text-lg font-black tracking-tight uppercase">
-                                {txt.title}
+                                {t('cashback_detailed.title')}
                             </h2>
                             <SharyTrigger
                                 message="Inserisci per ogni categoria l'importo di spesa e poi seleziona il brand che vuoi. Nota immediatamente la percentuale di cashback! E se vuoi, imposta in alto un importo di bolletta e osserva come diminuisce con il cashback, buon divertimento!"
                                 messageDe="Gib für jede Kategorie den Ausgabenbetrag ein und wähle dann die gewünschte Marke. Beachte sofort den Cashback-Prozentsatz! Und wenn du willst, gib oben einen Rechnungsbetrag ein und beobachte, wie er durch das Cashback sinkt. Viel Spaß!"
+                                messageEn="Enter the spending amount for each category and then select the brand you want. Notice the cashback percentage immediately! And if you want, set a bill amount at the top and watch how it decreases with cashback, have fun!"
                             />
                         </div>
                         <button onClick={onClose} className="p-1 sm:p-1.5 hover:bg-white/10 rounded-full transition-colors">
@@ -440,9 +453,9 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                         <div className="grid grid-cols-2 gap-3 flex-1">
                             {/* Total Spend - Dark Glass */}
                             <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-3 lg:p-1 flex flex-col justify-center border border-white/10 shadow-lg">
-                                <p className="text-[10px] sm:text-xs lg:text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 lg:mb-0">{txt.totalSpend}</p>
+                                <p className="text-[10px] sm:text-xs lg:text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 lg:mb-0">{t('cashback_detailed.total_spend')}</p>
                                 <p className="text-2xl sm:text-3xl lg:text-xl font-black text-white tracking-tight drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                                    € {totalSpend.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 0 })}
+                                    € {totalSpend.toLocaleString(language === 'it' ? 'it-IT' : (language === 'de' ? 'de-DE' : 'en-US'), { maximumFractionDigits: 0 })}
                                 </p>
                             </div>
 
@@ -453,16 +466,16 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
 
                                 <div className="flex items-center justify-between mb-0 relative z-10">
                                     <p className="text-[10px] sm:text-xs lg:text-[10px] font-black uppercase tracking-widest text-purple-400 flex items-center gap-2 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)]">
-                                        {txt.monthlyReturn}
+                                        {t('cashback_detailed.monthly_return')}
                                     </p>
                                     <span className="bg-fuchsia-600 text-white text-[9px] sm:text-[10px] lg:text-[9px] px-2 py-0.5 rounded-full font-black animate-pulse shadow-[0_0_15px_rgba(232,121,249,0.5)] border border-fuchsia-400/50">
-                                        NON PERDERLI!
+                                        {t('cashback_detailed.dont_lose')}
                                     </span>
                                 </div>
 
                                 <div className="relative z-10">
                                     <p className="text-4xl sm:text-6xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 via-purple-400 to-cyan-400 tracking-tighter drop-shadow-[0_0_15px_rgba(168,85,247,0.5)] animate-[pulse_3s_ease-in-out_infinite]">
-                                        € {totalCashback.toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                        € {totalCashback.toLocaleString(language === 'it' ? 'it-IT' : (language === 'de' ? 'de-DE' : 'en-US'), { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </p>
                                 </div>
                             </div>
@@ -479,12 +492,12 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                     <div className="p-1.5 bg-white/20 rounded-lg">
                                         <Calculator size={14} className="text-white" />
                                     </div>
-                                    {txt.estimatedBill}
+                                    {t('cashback_detailed.estimated_bill')}
                                 </div>
 
                                 {/* Edit Hint */}
                                 <span className="text-[10px] text-gray-400 bg-white/5 px-2 py-1 rounded-full border border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
-                                    Modifica importo
+                                    {t('cashback_detailed.edit_amount')}
                                 </span>
                             </div>
 
@@ -493,7 +506,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                 {/* Input Field - VERY VISIBLE NOW */}
                                 <div className="flex-1 relative group bg-white/5 hover:bg-white/10 focus-within:bg-white rounded-2xl border-2 border-white/30 focus-within:border-white focus-within:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300">
                                     <div className="absolute top-2 left-3 text-[10px] font-bold text-purple-200 group-focus-within:text-purple-600 uppercase tracking-wider transition-colors">
-                                        Inserisci qui
+                                        {t('cashback_detailed.insert_here')}
                                     </div>
                                     <div className="flex items-center h-full px-3 pt-4 pb-1">
                                         <span className="text-xl sm:text-2xl font-black text-white group-focus-within:text-purple-700 mr-2 transition-colors">€</span>
@@ -518,7 +531,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                 <div className="flex-1 bg-gradient-to-br from-gray-900 to-black rounded-2xl p-3 border border-white/10 flex flex-col justify-center items-end shadow-inner relative overflow-hidden group/result">
                                     <div className="absolute inset-0 bg-purple-500/10 opacity-0 group-hover/result:opacity-100 transition-opacity" />
                                     <p className={`text-[10px] font-bold uppercase tracking-widest relative z-10 ${extraProfit > 0 ? 'text-green-400' : 'text-gray-400'}`}>
-                                        {extraProfit > 0 ? txt.profit : txt.payOnly}
+                                        {extraProfit > 0 ? t('cashback_detailed.profit') : t('cashback_detailed.pay_only')}
                                     </p>
                                     <div className="flex items-baseline gap-1 relative z-10">
                                         <p className={`text-2xl sm:text-4xl font-black tracking-tight ${extraProfit > 0 ? 'text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,0.5)]' : (remainingToPay === 0 ? 'text-green-400' : 'text-white')}`}>
@@ -584,7 +597,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                                     } : {}}
                                                     transition={{ duration: 0.5, type: "spring", stiffness: 300 }}
                                                 >
-                                                    € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 0 })}
+                                                    € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(language === 'it' ? 'it-IT' : (language === 'de' ? 'de-DE' : 'en-US'), { maximumFractionDigits: 0 })}
                                                 </motion.p>
                                             </AnimatePresence>
                                             {/* Mobile Sparkles */}
@@ -629,7 +642,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                                     }
                                                 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20`}
                                             >
-                                                <option value="">{txt.selectBrand}</option>
+                                                <option value="">{t('cashback_detailed.select_brand')}</option>
                                                 {BRANDS_DATA
                                                     .filter(brand => {
                                                         const baseId = cat.id.replace(/_\d+$/, '');
@@ -693,7 +706,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                                     <motion.p
                                                         className={`font-black text-lg sm:text-3xl truncate transition-colors duration-300 ${cat.amount > 0 && cat.percentage > 0 ? 'text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-600 drop-shadow-[0_2px_4px_rgba(234,179,8,0.4)]' : 'text-gray-900 dark:text-white'}`}
                                                     >
-                                                        € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(lang === 'it' ? 'it-IT' : 'de-DE', { maximumFractionDigits: 0 })}
+                                                        € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(language === 'it' ? 'it-IT' : (language === 'de' ? 'de-DE' : 'en-US'), { maximumFractionDigits: 0 })}
                                                     </motion.p>
 
                                                     {/* Gold Sparkles if > 0 */}
@@ -724,7 +737,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                         className="flex items-center gap-2 px-4 py-3 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-xl transition-all shadow-sm font-bold border border-red-100 active:scale-95 group"
                     >
                         <RotateCcw size={18} />
-                        <span className="text-[10px] sm:text-xs uppercase font-black">{txt.reset}</span>
+                        <span className="text-[10px] sm:text-xs uppercase font-black">{t('cashback_detailed.reset')}</span>
                     </button>
 
                     <button
@@ -734,7 +747,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                         {/* Button Shine Effect */}
                         <div className="absolute inset-0 bg-white/20 skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
 
-                        {txt.confirm}
+                        {t('cashback_detailed.confirm')}
                         <Check size={20} className="sm:w-6 sm:h-6" />
                     </button>
                 </div>

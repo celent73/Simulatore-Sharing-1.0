@@ -197,6 +197,28 @@ const texts = {
       potentialIncome2: "Rendita Mensile (2° Anno)",
       potentialIncome3: "Rendita Mensile (3° Anno)",
     }
+  },
+  en: {
+    title: "Your Structure",
+    subtitle: "Explore your Business Universe",
+    reset: "Reset View",
+    export: "Save PDF",
+    rankReached: "Current Rank",
+    makePro: "Activate Family Pro",
+    removePro: "Deactivate",
+    directs: "Directs",
+    indirects: "Indirects",
+    levels: "Depth",
+    contracts: "Contracts",
+    time: "Months",
+    navHint: "Drag to explore • Scroll to zoom",
+    rankDesc: { family5s: "5 Family Pro Lines", family3s: "3 Family Pro Lines", pro: "Quick Goal" },
+    hud: {
+      totalUsers: "Total Users",
+      potentialIncome: "Monthly Income (1st Year)",
+      potentialIncome2: "Monthly Income (2nd Year)",
+      potentialIncome3: "Monthly Income (3rd Year)",
+    }
   }
 };
 
@@ -354,7 +376,7 @@ const DraggableBox = ({ children, className = "" }: { children: React.ReactNode,
 
 export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ isOpen, onClose, inputs, onInputChange, onReset }) => {
   const { language } = useLanguage();
-  const txt = language === 'it' ? texts.it : texts.de;
+  const txt = language === 'it' ? texts.it : (language === 'de' ? texts.de : texts.en);
   const [zoom, setZoom] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
   const [proStatusL1, setProStatusL1] = useState<boolean[]>([]);
@@ -544,6 +566,7 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
             <SharyTrigger
               message="Ti Piace questa schermata WOW? Benvenuto nell'universo del Networker! Prima di iniziare, azzera tutto con l'apposito pulsante di reset in alto a destra. In basso troverai i comandi, ti conviene impostare in profondità 5 livelli, dopodichè divertiti inserendo 3 diretti e vedrai le prime 3 palline. Clicca su 3 indiretti ed ecco la magia. Se vuoi diventare Family pro in 2 mesi allora dovrai scegliere come numero di mesi sulla destra 1 o 2 e vedrai la targa Family pro se clicchi su un pallino nelle 3 gambe distinte facendolo diventare un F.P. vedrai la targhetta Family 3S e se aggiungerai altri 2 diretti e accenderai altri 2 FP diventerai Family 5S"
               messageDe="Gefällt dir dieser WOW-Screen? Willkommen im Networker-Universum! Bevor du beginnst, setze alles mit dem Reset-Button oben rechts zurück. Unten findest du die Steuerungen. Am besten stellst du die Tiefe auf 5 Ebenen ein, dann habe Spaß daran, 3 direkte Partner einzufügen, und du wirst die ersten 3 Kugeln sehen. Klicke auf 3 indirekte und erlebe die Magie. Wenn du in 2 Monaten Family Pro werden willst, wähle rechts 1 oder 2 Monate, und du siehst das Family Pro-Abzeichen. Wenn du auf eine Kugel in den 3 verschiedenen Beinen klickst und sie zum F.P. machst, siehst du das Family 3S-Abzeichen. Fügst du 2 weitere Direkte hinzu und aktivierst 2 weitere FPs, wirst du Family 5S."
+              messageEn="Do you like this WOW screen? Welcome to the Networker universe! Before starting, reset everything with the reset button at the top right. Below you will find the controls, it is best to set the depth to 5 levels, then have fun inserting 3 direct partners and you will see the first 3 balls. Click on 3 indirects and here is the magic. If you want to become Family Pro in 2 months then you will have to choose 1 or 2 months as the number of months on the right and you will see the Family Pro badge if you click on a ball in the 3 distinct legs making it an F.P. you will see the Family 3S badge and if you add 2 more directs and turn on 2 more FPs you will become Family 5S."
             />
           </div>
 

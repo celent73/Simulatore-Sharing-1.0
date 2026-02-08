@@ -146,7 +146,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
       onInputChange('networkDepth', 1);
     }
   };
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const monthlyCashback = planResult.monthlyCashback;
   const monthlyData = planResult.monthlyData;
@@ -333,6 +333,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
               <SharyTrigger
                 message="Sei pronto a far ESPLODERE il tuo Network? scegli quanti diretti vuoi ad esempio 3, scegli quanti contratti si faranno per ogni utente e scegli quanti indiretti faranno la stessa cosa. Dopodichè seleziona i livelli di profondità e SBAMM, osserva il POTENZIALE DEL TUO BUSINESS!!"
                 messageDe="Bist du bereit, dein Netzwerk EXPLODIEREN zu lassen? Wähle, wie viele direkte Partner du möchtest, z.B. 3, wähle, wie viele Verträge jeder Benutzer abschließt, und wähle, wie viele indirekte Partner dasselbe tun. Dann wähle die Tiefenebenen und BÄÄM, sieh dir das POTENZIAL DEINES BUSINESS an!!"
+                messageEn="Are you ready to make your Network EXPLODE? Choose how many direct recruits you want, e.g. 3, choose how many contracts each user will make and choose how many indirect recruits will do the same. Then select the depth levels and BOOM, watch the POTENTIAL OF YOUR BUSINESS!!"
               />
               {isFullScreen && (
                 <div className="flex items-center gap-2 ml-4">
@@ -360,12 +361,12 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                 {isFullScreen ? (
                   <>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5M15 15l5.25 5.25" /></svg>
-                    ESCI
+                    {t('results.exit_fullscreen')}
                   </>
                 ) : (
                   <>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>
-                    NETWORK FOCUS
+                    {t('results.enter_fullscreen')}
                   </>
                 )}
               </button>
@@ -401,15 +402,15 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.oneTimeBonus)}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.recurringYear1)}</div>
-                      <div className="text-[10px] text-gray-400 font-medium">anno: {formatCurrency(row.recurringYear1 * 12)}</div>
+                      <div className="text-[10px] text-gray-400 font-medium">{t('results.annual_suffix')} {formatCurrency(row.recurringYear1 * 12)}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.recurringYear2)}</div>
-                      <div className="text-[10px] text-gray-400 font-medium">anno: {formatCurrency(row.recurringYear2 * 12)}</div>
+                      <div className="text-[10px] text-gray-400 font-medium">{t('results.annual_suffix')} {formatCurrency(row.recurringYear2 * 12)}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-bold text-gray-900 dark:text-white">{formatCurrency(row.recurringYear3)}</div>
-                      <div className="text-[10px] text-gray-400 font-medium">anno: {formatCurrency(row.recurringYear3 * 12)}</div>
+                      <div className="text-[10px] text-gray-400 font-medium">{t('results.annual_suffix')} {formatCurrency(row.recurringYear3 * 12)}</div>
                     </td>
                   </tr>
                 ))}
@@ -417,20 +418,20 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                 {/* RIGA DEDICATA AL PARK / BENEFICI PERSONALI */}
                 {(planResult.monthlyPanelYield > 0 || (isAnnual && hasCashback)) && (
                   <tr className="bg-amber-50/50 dark:bg-amber-900/10 hover:bg-amber-100/60 dark:hover:bg-amber-900/20 transition-colors italic">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-amber-600 dark:text-amber-400">Cashback & Park</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-amber-600 dark:text-amber-400">{t('results.cashback_park')}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400 font-mono">-</td>
                     <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400">-</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
-                      <div className="text-[10px] text-gray-400">anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
+                      <div className="text-[10px] text-gray-400">{t('results.annual_suffix')} {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
-                      <div className="text-[10px] text-gray-400">anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
+                      <div className="text-[10px] text-gray-400">{t('results.annual_suffix')} {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
-                      <div className="text-[10px] text-gray-400">anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
+                      <div className="text-[10px] text-gray-400">{t('results.annual_suffix')} {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12)}</div>
                     </td>
                   </tr>
                 )}
@@ -439,7 +440,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                 {inputs.bonus3x3Active && (
                   <tr className="bg-yellow-50/50 dark:bg-yellow-900/10 hover:bg-yellow-100/60 dark:hover:bg-yellow-900/20 transition-colors animate-pulse">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-black text-yellow-600 dark:text-yellow-400 flex items-center gap-2">
-                      <StarIcon className="w-4 h-4" /> Bonus 3x3 (In 60gg)
+                      <StarIcon className="w-4 h-4" /> {t('results.bonus_3x3')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-400 font-mono">-</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-black text-yellow-600 dark:text-yellow-400">
@@ -465,7 +466,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                           title="Personalizza PDF"
                         >
                           <Edit3 size={16} />
-                          <span className="text-xs font-bold uppercase hidden md:inline">Personalizza</span>
+                          <span className="text-xs font-bold uppercase hidden md:inline">{t('results.customize_btn')}</span>
                         </button>
 
                         {/* DOWNLOAD BUTTON */}
@@ -687,6 +688,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
             consultantName={consultantName}
             consultantSurname={consultantSurname}
             consultantPhone={consultantPhone}
+            language={language}
           />
         </div>
       </div>

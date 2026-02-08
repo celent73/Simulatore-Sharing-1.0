@@ -124,6 +124,41 @@ const uiTexts = {
     configure: "Konfigurieren",
     parkToken: "Bonus",
     panelsLabel: "Paneele"
+  },
+  en: {
+    savings: "You Save",
+    cashbackTitle: "Cashback Earnings",
+    monthlyReturn: "Your Monthly Return",
+    monthlySpend: "Monthly Spending (€)",
+    cashbackPercent: "Cashback Percentage (%)",
+    confirm: "Confirm",
+    yourWork: "Your Work",
+    personalTitle: "Clients, Utilities and Sharing Park",
+    estimatedBonus: "Estimated Bonus",
+    clientMode: "Client Mode",
+    clientModeDesc: "Direct earnings and annuities are 50% compared to Sharing Partner (FU) mode.",
+    myUnits: "My Utilities",
+    private: "Private",
+    business: "Business",
+    myUnitsGreen: "My Green Utilities",
+    myUnitsLight: "My Light Utilities",
+    baseRent: "Base Annuity",
+    clientGreen: "Private Clients Green",
+    clientLight: "Private Clients Light",
+    busGreen: "Business Green",
+    busLight: "Business Light",
+    depthLabel: "Depth Levels",
+    contractsLabel: "Contracts per User",
+    months: "Months",
+    viewStructure: "View Structure",
+    exclusive: "Exclusive",
+    paramsTitle: "Network",
+    paramsSubtitle: "Parameters",
+    optimizedFor: "Optimized for tablet and PC/MAC",
+    advancedCalculator: "Advanced Calculator",
+    configure: "Configure",
+    parkToken: "Token",
+    panelsLabel: "Panels"
   }
 };
 
@@ -299,7 +334,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
 }) => {
   const { t, language } = useLanguage();
   const [modalOpen, setModalOpen] = useState<'none' | 'cashback' | 'cashback-detailed' | 'personal' | 'visualizer' | 'analisi'>('none');
-  const lang = language === 'it' ? 'it' : 'de';
+  const lang = (language === 'it' || language === 'de') ? language : 'en';
   const txt = uiTexts[lang];
 
   return (
@@ -433,8 +468,8 @@ const InputPanel: React.FC<InputPanelProps> = ({
                       onClick={(e) => { e.stopPropagation(); setCashbackPeriod(prev => prev === 'monthly' ? 'annual' : 'monthly'); }}
                       className="flex bg-white/80 dark:bg-black/40 rounded-lg p-0.5 cursor-pointer z-20 border border-purple-100 dark:border-white/10 hover:bg-white dark:hover:bg-black/60 transition-colors"
                     >
-                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md transition-all ${cashbackPeriod === 'monthly' ? 'bg-purple-600 text-white shadow-sm' : 'text-purple-600 dark:text-purple-400'}`}>Mese</span>
-                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md transition-all ${cashbackPeriod === 'annual' ? 'bg-purple-600 text-white shadow-sm' : 'text-purple-600 dark:text-purple-400'}`}>Anno</span>
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md transition-all ${cashbackPeriod === 'monthly' ? 'bg-purple-600 text-white shadow-sm' : 'text-purple-600 dark:text-purple-400'}`}>{t('input.month')}</span>
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md transition-all ${cashbackPeriod === 'annual' ? 'bg-purple-600 text-white shadow-sm' : 'text-purple-600 dark:text-purple-400'}`}>{t('input.year')}</span>
                     </div>
                   </div>
 
@@ -474,6 +509,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
                 <SharyTrigger
                   message="Qui definisci la tua struttura. Seleziona quanti collaboratori diretti porti, quanti ne porteranno loro (Indiretti) e fino a che livello di profondità vuoi calcolare. Ricorda: più è profonda la rete, più guadagni dalle royalty!"
                   messageDe="Hier definierst du deine Struktur. Wähle aus, wie viele direkte Mitarbeiter du mitbringst, wie viele sie mitbringen (indirekt) und bis zu welcher Tiefe du berechnen möchtest. Denke daran: Je tiefer das Netzwerk, desto mehr verdienst du an Lizenzgebühren!"
+                  messageEn="Here you define your structure. Select how many direct collaborators you bring, how many they will bring (Indirect) and up to which depth level you want to calculate. Remember: the deeper the network, the more you earn from royalties!"
                   highlightId="slider_direct"
                 />
               </div>
@@ -518,6 +554,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
                 <SharyTrigger
                   message="Il fattore tempo è cruciale. Sposta questo cursore per vedere come cresce la tua rendita nel corso dei mesi. Solitamente una rete solida si costruisce in 12-24 mesi."
                   messageDe="Der Zeitfaktor ist entscheidend. Verschiebe diesen Schieberegler, um zu sehen, wie dein Einkommen im Laufe der Monate wächst. Ein solides Netzwerk wird normalerweise in 12-24 Monaten aufgebaut."
+                  messageEn="The time factor is crucial. Move this slider to see how your income grows over the months. Usually a solid network is built in 12-24 months."
                   highlightId="slider_time"
                 />
               </div>

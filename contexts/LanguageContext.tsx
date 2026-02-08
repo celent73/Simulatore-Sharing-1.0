@@ -5,7 +5,7 @@ import { translations, Language } from '../utils/translations';
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, string | number>) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -13,7 +13,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider = ({ children }: { children?: ReactNode }) => {
   const [language, setLanguage] = useState<Language>('it');
 
-  const t = (key: string) => {
+  const t = (key: string, options?: Record<string, string | number>) => {
     const keys = key.split('.');
     let value: any = translations[language];
     for (const k of keys) {
@@ -23,7 +23,13 @@ export const LanguageProvider = ({ children }: { children?: ReactNode }) => {
         return key; // Return key if translation missing
       }
     }
-    return value as string;
+    let result = value as string;
+    if (options) {
+      Object.entries(options).forEach(([k, v]) => {
+        result = result.replace(new RegExp(`{{${k}}}`, 'g'), String(v));
+      });
+    }
+    return result;
   };
 
   return (

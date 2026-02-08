@@ -61,52 +61,10 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
     // Panels needed to zero the bill
     // monthlyYieldPerPanel = pun * 33.4
     const monthlyYieldPerPanel = pun * 33.4;
+
     const panelsNeeded = monthlyBill > 0 ? Math.ceil(monthlyBill / (monthlyYieldPerPanel || 1)) : 0;
 
-    const texts = {
-        it: {
-            title: "Sharing Park Simulator",
-            subtitle: "Configura i tuoi pannelli fotovoltaici condivisi",
-            panelsLabel: "Numero di Pannelli desiderati",
-            punLabel: "Prezzo Zonale (PUN) stimato",
-            yearsLabel: "Durata Simulazione (anni)",
-            billLabel: "Tua Bolletta Mensile (€)",
-            panelsNeededLabel: "Pannelli necessari per azzerarla",
-            purchaseCost: "Valore di Acquisto totale",
-            annualYield: "Valore di resa ANNUALE*",
-            monthlyYield: "Valore di resa MENSILE*",
-            totalYield: `Compensi stimati nei ${simulationYears} anni*`,
-            roi: "ROI Totale",
-            payback: "Payback stimato*",
-            confirm: "Conferma e Salva",
-            reset: "Azzera",
-            note: "* I valori di ricavo sono stime basate sul PUN medio impostato.",
-            punHint: "Inserisci il valore PUN desiderato o scegline uno rapido:",
-            zeroBillTitle: "Obiettivo Azzera Bolletta"
-        },
-        de: {
-            title: "Sharing Park Simulator",
-            subtitle: "Konfigurieren Sie Ihre geteilten PV-Paneele",
-            panelsLabel: "Anzahl der gewünschten Paneele",
-            punLabel: "Geschätzter Zonenpreis (PUN)",
-            yearsLabel: "Simulationsdauer (Jahre)",
-            billLabel: "Deine monatliche Rechnung (€)",
-            panelsNeededLabel: "Benötigte Paneele zur Deckung",
-            purchaseCost: "Gesamter Kaufwert",
-            annualYield: "JÄHRLICHER Ertragswert*",
-            monthlyYield: "MONATLICHER Ertragswert*",
-            totalYield: `Geschätzte Vergütung in ${simulationYears} Jahren*`,
-            roi: "Gesamt-ROI",
-            payback: "Geschätzter Payback*",
-            confirm: "Bestätigen und Speichern",
-            reset: "Zurücksetzen",
-            note: "* Die Ertragswerte sind Schätzungen basierend on dem eingestellten Durchschnitts-PUN.",
-            punHint: "Geben Sie den PUN-Wert ein o. wählen Sie einen Schnellwert:",
-            zeroBillTitle: "Ziel: Rechnung Null"
-        }
-    };
-
-    const t = texts[language === 'de' ? 'de' : 'it'];
+    const { t } = useLanguage();
 
     return (
         <div className="fixed inset-0 z-[400] flex items-center justify-center p-0 sm:p-4 bg-black/90 backdrop-blur-xl animate-in fade-in duration-300 overflow-y-auto">
@@ -121,13 +79,14 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                                 <Sun size={12} className="animate-pulse sm:w-4 sm:h-4" /> Sharing Park
                             </div>
                             <div className="flex items-center gap-2">
-                                <h2 className="text-xl sm:text-2xl font-black tracking-tight mb-0.5">{t.title}</h2>
+                                <h2 className="text-xl sm:text-2xl font-black tracking-tight mb-0.5">{t('union_park.title')}</h2>
                                 <SharyTrigger
                                     message="Benvenuto nello Sharing Park! Seleziona quanti pannelli vuoi (da 1 a 20). Ogni pannello ti garantisce un rendimento mensile passivo basato sul PUN. Usa il bottone 'Obiettivo Azzera Bolletta' per calcolare quanti te ne servono per coprire le tue spese!"
                                     messageDe="Willkommen im Sharing Park! Wähle, wie viele Paneele du möchtest (von 1 bis 20). Jedes Paneel garantiert dir ein passives monatliches Einkommen basierend auf dem PUN. Nutze den Button 'Ziel: Rechnung Null', um zu berechnen, wie viele du brauchst, um deine Ausgaben zu decken!"
+                                    messageEn="Welcome to Sharing Park! Select how many panels you want (from 1 to 20). Each panel guarantees you a passive monthly income based on the PUN. Use the 'Zero Bill Goal' button to calculate how many you need to cover your expenses!"
                                 />
                             </div>
-                            <p className="text-emerald-100 text-xs sm:text-sm font-medium opacity-90">{t.subtitle}</p>
+                            <p className="text-emerald-100 text-xs sm:text-sm font-medium opacity-90">{t('union_park.subtitle')}</p>
                         </div>
                         <button onClick={onClose} className="p-2 sm:p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 shadow-lg hover:rotate-90 duration-300">
                             <X size={20} className="sm:w-6 sm:h-6" />
@@ -143,11 +102,11 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             <div className="p-1.5 sm:p-2 bg-emerald-600 rounded-lg text-white">
                                 <Wallet size={16} className="sm:w-5 sm:h-5" />
                             </div>
-                            <h3 className="text-sm sm:text-lg font-black text-gray-900 dark:text-emerald-400 uppercase tracking-tight">{t.zeroBillTitle}</h3>
+                            <h3 className="text-sm sm:text-lg font-black text-gray-900 dark:text-emerald-400 uppercase tracking-tight">{t('union_park.zero_bill_title')}</h3>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-center">
                             <div className="space-y-1">
-                                <label className="text-[10px] sm:text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t.billLabel}</label>
+                                <label className="text-[10px] sm:text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('union_park.bill_label')}</label>
                                 <input
                                     type="number"
                                     value={monthlyBill || ''}
@@ -158,13 +117,13 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             </div>
                             {monthlyBill > 0 && (
                                 <div className="bg-emerald-600 p-5 sm:p-6 rounded-2xl sm:rounded-3xl text-white text-center shadow-lg shadow-emerald-500/20 animate-in zoom-in-95 duration-300">
-                                    <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest opacity-80 mb-1">{t.panelsNeededLabel}</p>
+                                    <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest opacity-80 mb-1">{t('union_park.panels_needed_label')}</p>
                                     <p className="text-4xl sm:text-6xl font-black">{panelsNeeded}</p>
                                     <button
                                         onClick={() => setPanels(panelsNeeded)}
                                         className="mt-2 text-xs sm:text-lg font-bold underline underline-offset-4 opacity-90 hover:opacity-100"
                                     >
-                                        Applica alla simulazione
+                                        {t('union_park.apply_simulation')}
                                     </button>
                                 </div>
                             )}
@@ -178,7 +137,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             {/* Panels Selector */}
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center">
-                                    <label className="text-sm sm:text-base font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t.panelsLabel}</label>
+                                    <label className="text-sm sm:text-base font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('union_park.panels_label')}</label>
                                     <div className="flex items-center gap-2">
                                         <input
                                             type="number"
@@ -219,7 +178,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
 
                             {/* PUN Selector */}
                             <div className="space-y-4">
-                                <label className="text-sm sm:text-base font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">{t.punLabel}</label>
+                                <label className="text-sm sm:text-base font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">{t('union_park.pun_label')}</label>
 
                                 <div className="relative group">
                                     <input
@@ -251,7 +210,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             {/* Duration Selector */}
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
-                                    <label className="text-xs sm:text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t.yearsLabel}</label>
+                                    <label className="text-xs sm:text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('union_park.years_label')}</label>
                                     <span className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">{simulationYears}</span>
                                 </div>
                                 <input
@@ -272,15 +231,15 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             {/* Summary Mini Cards */}
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50">
-                                    <p className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-tight mb-0.5">{t.purchaseCost}</p>
+                                    <p className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-tight mb-0.5">{t('union_park.purchase_cost')}</p>
                                     <p className="text-sm sm:text-lg font-black text-gray-900 dark:text-white">€ {purchaseCostValue.toLocaleString('it-IT', { maximumFractionDigits: 2 })}</p>
                                 </div>
                                 <div className="bg-emerald-50 dark:bg-emerald-900/10 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/20">
-                                    <p className="text-[9px] sm:text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-0.5">{t.monthlyYield}</p>
+                                    <p className="text-[9px] sm:text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-0.5">{t('union_park.monthly_yield')}</p>
                                     <p className="text-sm sm:text-lg font-black text-emerald-600 dark:text-emerald-400">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                 </div>
                                 <div className="bg-emerald-50 dark:bg-emerald-900/10 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/20">
-                                    <p className="text-[9px] sm:text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-0.5">{t.annualYield}</p>
+                                    <p className="text-[9px] sm:text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-0.5">{t('union_park.annual_yield')}</p>
                                     <p className="text-sm sm:text-lg font-black text-emerald-600 dark:text-emerald-400">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                 </div>
                             </div>
@@ -295,23 +254,23 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             <div>
                                 <div className="grid grid-cols-2 gap-4 mb-4">
                                     <div>
-                                        <p className="text-emerald-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">{t.monthlyYield}</p>
+                                        <p className="text-emerald-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">{t('union_park.monthly_yield')}</p>
                                         <p className="text-xl sm:text-2xl font-black text-white">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                     </div>
                                     <div>
-                                        <p className="text-emerald-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">{t.annualYield}</p>
+                                        <p className="text-emerald-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">{t('union_park.annual_yield')}</p>
                                         <p className="text-xl sm:text-2xl font-black text-white">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
                                     <div>
-                                        <p className="text-emerald-400/70 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">{t.totalYield}</p>
+                                        <p className="text-emerald-400/70 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">{t('union_park.total_yield', { years: simulationYears })}</p>
                                         <p className="text-xl sm:text-2xl font-black text-white">€ {totalYieldLongTerm.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                     </div>
                                     <div className="h-px bg-white/10 w-full"></div>
                                     <div className="flex items-baseline gap-2">
-                                        <p className="text-emerald-400/70 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">{t.roi}</p>
+                                        <p className="text-emerald-400/70 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">{t('union_park.roi')}</p>
                                         <p className="text-2xl sm:text-4xl font-black text-emerald-400">{roiTotal.toFixed(0)}%</p>
                                     </div>
                                 </div>
@@ -319,7 +278,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
 
                             <div className="flex flex-col justify-center items-center md:items-end text-center md:text-right">
                                 <div className="p-4 sm:p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl">
-                                    <p className="text-emerald-200 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-1">{t.payback}</p>
+                                    <p className="text-emerald-200 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-1">{t('union_park.payback')}</p>
                                     <p className="text-2xl sm:text-4xl font-black text-white leading-none">
                                         {paybackYears} <span className="text-xs sm:text-lg font-medium opacity-70">anni</span>
                                         {remainingMonths > 0 && <><br /><span className="text-lg sm:text-2xl">{remainingMonths}</span> <span className="text-xs sm:text-lg font-medium opacity-70">mesi</span></>}
@@ -327,7 +286,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                                 </div>
                                 <div className="mt-4 flex items-start gap-2 max-w-[200px] sm:max-w-xs">
                                     <Info size={14} className="text-emerald-400 shrink-0 mt-0.5 sm:w-4 sm:h-4" />
-                                    <p className="text-[8px] sm:text-[10px] text-emerald-100/60 leading-relaxed">{t.note}</p>
+                                    <p className="text-[8px] sm:text-[10px] text-emerald-100/60 leading-relaxed">{t('union_park.note')}</p>
                                 </div>
                             </div>
                         </div>
@@ -340,7 +299,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                     <button
                         onClick={handleReset}
                         className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-2xl sm:rounded-3xl transition-all shadow-sm hover:shadow-red-500/20 font-bold border border-red-100 hover:border-red-500 active:scale-95 group"
-                        title={t.reset}
+                        title={t('union_park.reset')}
                     >
                         <RotateCcw size={24} className="sm:w-8 sm:h-8 group-hover:rotate-[360deg] transition-transform duration-500" />
                     </button>
@@ -350,7 +309,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                         className="flex-1 py-4 sm:py-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl sm:rounded-[1.5rem] font-bold text-lg sm:text-xl shadow-xl shadow-emerald-900/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
                     >
                         <Check size={24} className="sm:w-6 sm:h-6" strokeWidth={3} />
-                        {t.confirm}
+                        {t('union_park.confirm')}
                     </button>
                 </div>
 

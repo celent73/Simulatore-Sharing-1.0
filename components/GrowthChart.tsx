@@ -124,7 +124,7 @@ const GrowthChart: React.FC<GrowthChartProps> = ({ data }) => {
                         <Area
                             type="monotone"
                             dataKey={dataKeyOneTime}
-                            name={isMonthly ? "Bonus Una Tantum (Mese)" : "Totale Una Tantum Incassato"}
+                            name={isMonthly ? t('chart.one_time') : t('chart.total_one_time')}
                             stackId="1"
                             stroke="#3b9eff"
                             strokeWidth={3}
@@ -134,7 +134,7 @@ const GrowthChart: React.FC<GrowthChartProps> = ({ data }) => {
                         <Area
                             type="monotone"
                             dataKey={dataKeyRecurring}
-                            name={isMonthly ? "Rendita Ricorrente (Mese)" : "Totale Rendite Incassate"}
+                            name={isMonthly ? t('chart.recurring') : t('chart.total_recurring')}
                             stackId="1"
                             stroke="#fb923c"
                             strokeWidth={3}

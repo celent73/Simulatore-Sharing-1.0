@@ -109,11 +109,85 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
             understood: "Verstanden!",
             downloadPdf: "PDF herunterladen",
             includeSpread: "Marge einbeziehen",
-            spreadImpact: "Margenwert"
+            spreadImpact: "Margenwert",
+            compareTitle: "Mit anderem Anbieter vergleichen",
+            otherSupplier: "Anderer Anbieter",
+            unionPower: "Union Energia",
+            versus: "VS",
+            otherSpreadLuce: "Spread Strom Anderer (€/kW)",
+            otherSpreadGas: "Spread Gas Anderer (€/Smc)",
+            otherFixedLuce: "Fixkosten Strom Anderer (€)",
+            otherFixedGas: "Fixkosten Gas Anderer (€)",
+            otherSupplierName: "Anbieter Name",
+            activateComparison: "VERGLEICH MIT ANDEREN",
+            deactivateComparison: "ZURÜCK ZUR RECHNUNG",
+            savingVersus: "Echte Ersparnis vs Andere",
+            modeConfronto: "VERGLEICHSMODUS",
+            savingWithOther: "Ersparnis mit {name}",
+            extraSavingUnion: "EXTRA Ersparnis mit Union",
+            lowerPrice: "Niedrigerer Preis",
+            payingLessWithOther: "Du zahlst weniger im Vergleich zu Union",
+            includeEarnings: "Netzwerkeinkommen einbeziehen",
+            addEarnings: "BONUS UND RENTEN HINZUFÜGEN",
+            earningsImpact: "Einkommenswert"
+        },
+        en: {
+            premiumAnalysis: "Premium Analysis",
+            title: "Utility Analysis",
+            subtitle: "Discover how much you can really save.",
+            reset: "Reset All",
+            electricity: "Electricity",
+            enterData: "Enter your bill data",
+            priceKw: "Light Spread (company margin)",
+            pun: "PUN (National Single Price)",
+            monthlyConsumption: "Monthly Consumption",
+            fixedCosts: "Fixed Costs / Charges (Monthly)",
+            totalElectricity: "Total Electricity",
+            annual: "Annual",
+            monthly: "Monthly",
+            gas: "Natural Gas",
+            priceSmc: "Gas Spread (company margin)",
+            psv: "PSV (Virtual Trading Point)",
+            totalGas: "Total Gas",
+            summary: "Summary",
+            total: "Total",
+            totalBillsCost: "Total Bill Cost (Energy + Fixed)",
+            yourCashback: "Your Cashback",
+            edit: "Edit",
+            cashbackSettings: "Cashback Settings",
+            spending: "Monthly Spending (€)",
+            newTotal: "New Total",
+            daPagare: "TO PAY",
+            profitto: "PROFIT!",
+            disclaimer: "* Values are estimates based on entered data. Calculation includes only energy portion and indicative cashback.",
+            understood: "Understood!",
+            downloadPdf: "Download PDF",
+            includeSpread: "Include Spread",
+            spreadImpact: "Spread Value",
+            compareTitle: "Compare with other provider",
+            otherSupplier: "Other Provider",
+            unionPower: "Union Energia",
+            versus: "VS",
+            otherSpreadLuce: "Other Light Spread (€/kW)",
+            otherSpreadGas: "Other Gas Spread (€/Smc)",
+            otherFixedLuce: "Other Fixed Light Costs (€)",
+            otherFixedGas: "Other Fixed Gas Costs (€)",
+            otherSupplierName: "Provider Name",
+            activateComparison: "COMPARE WITH OTHER",
+            deactivateComparison: "BACK TO BILL",
+            savingVersus: "Real savings vs Other",
+            modeConfronto: "COMPARISON MODE",
+            savingWithOther: "Savings with {name}",
+            extraSavingUnion: "EXTRA Savings with Union",
+            lowerPrice: "Lower Price",
+            payingLessWithOther: "You are paying less compared to Union",
+            includeEarnings: "Include Network Earnings",
+            addEarnings: "ADD BONUS AND ANNUITIES",
+            earningsImpact: "Earnings Value"
         }
     };
 
-    const txt = texts[language as keyof typeof texts] || texts.it;
+    const txt = texts[language as keyof typeof texts] || texts.en;
 
     // Use a helper to safely get values from inputs prop (which might be undefined initially)
     const getVal = (v: any) => v !== undefined ? v.toString().replace('.', ',') : '';
@@ -315,6 +389,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                 <SharyTrigger
                                     message="Ciao! Qui puoi analizzare il risparmio. Immetti 0.02 come lo spread di Union (se non ricordi, usa quello). Poi il PUN di mercato a circa 0.11 e le spese fisse Union a 11.50. Per il gas: Spread Union 0.12, PSV circa 0.33, Spese fisse 11.50. Ora se vuoi fare un confronto con un altro gestore clicca su confronta con altro e immetti i dati dell'altro gestore, in basso troverai il resoconto!"
                                     messageDe="Hallo! Hier kannst du die Ersparnis analysieren. Gib 0,02 als Union-Spread ein (wenn du dich nicht erinnerst, nimm diesen). Dann den Markt-PUN mit ca. 0,11 und die Union-Fixkosten mit 11,50. Für Gas: Union-Spread 0,12, PSV ca. 0,33, Fixkosten 11,50. Wenn du einen Vergleich mit einem anderen Anbieter machen möchtest, klicke auf 'Mit anderem vergleichen' und gib die Daten des anderen Anbieters ein. Unten findest du die Zusammenfassung!"
+                                    messageEn="Hello! Here you can analyze the savings. Enter 0.02 as the Union spread (if you don't remember, use that). Then the market PUN at about 0.11 and Union fixed costs at 11.50. For gas: Union Spread 0.12, PSV about 0.33, Fixed costs 11.50. Now if you want to make a comparison with another provider click on compare with other and enter the data of the other provider, at the bottom you will find the report!"
                                 />
                             </div>
                             <p className="text-indigo-100 font-medium text-xs md:text-lg opacity-90 hidden">{txt.subtitle}</p>

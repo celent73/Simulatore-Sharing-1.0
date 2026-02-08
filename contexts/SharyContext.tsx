@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { useLanguage } from './LanguageContext';
 
 interface SharyContextType {
     isActive: boolean;
@@ -13,6 +14,7 @@ interface SharyContextType {
 const SharyContext = createContext<SharyContextType | undefined>(undefined);
 
 export const SharyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const { t } = useLanguage();
     const [isActive, setIsActive] = useState(false);
     const [currentMessage, setCurrentMessage] = useState<string | null>(null);
     const [highlightedId, setHighlightedId] = useState<string | null>(null);
@@ -21,7 +23,7 @@ export const SharyProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setIsActive(prev => {
             const newState = !prev;
             if (newState) {
-                speak("Ciao! Sono Shary, il tuo assistente personale per lo Sharing Simulator. Clicca sulle mie piccole icone per ricevere aiuto passo-passo!");
+                speak(t('shary.welcome'));
             } else {
                 silence();
             }

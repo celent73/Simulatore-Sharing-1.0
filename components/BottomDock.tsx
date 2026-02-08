@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { User, Users, Building2, Compass, Sparkles, Lock } from 'lucide-react';
 import { ClientModeIcon, FamilyModeIcon, CondoModeIcon } from './icons/ModeIcons';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface BottomDockProps {
     viewMode: string;
@@ -15,6 +16,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
     onOpenLightSimulator,
     isPremium
 }) => {
+    const { t } = useLanguage();
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
@@ -74,7 +76,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
                         <Compass className="w-6 h-6 md:w-9 md:h-9" />
                     </div>
                     <span className="text-[9px] md:text-xs font-bold leading-none text-union-green-400 flex items-center gap-0.5">
-                        Light <Sparkles size={6} className="animate-pulse md:w-3 md:h-3" />
+                        {t('nav.light')} <Sparkles size={6} className="animate-pulse md:w-3 md:h-3" />
                     </span>
                 </button>
 
@@ -87,7 +89,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
                     <div className={getIconContainerClass(viewMode === 'condo')}>
                         <CondoModeIcon className={`w-6 h-6 md:w-9 md:h-9 transition-all ${viewMode !== 'condo' ? 'grayscale opacity-70' : ''}`} />
                     </div>
-                    <span className="text-[9px] md:text-xs font-bold leading-none text-center max-w-[60px] md:max-w-none">Admin</span>
+                    <span className="text-[9px] md:text-xs font-bold leading-none text-center max-w-[60px] md:max-w-none">{t('nav.admin')}</span>
                 </button>
 
                 {/* 3. PARTNER SHARING (FAMILY) */}
@@ -98,7 +100,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
                     <div className={getIconContainerClass(viewMode === 'family')}>
                         <FamilyModeIcon className={`w-6 h-6 md:w-9 md:h-9 transition-all ${viewMode !== 'family' ? 'grayscale opacity-70' : ''}`} />
                     </div>
-                    <span className="text-[9px] md:text-xs font-bold leading-none text-center max-w-[60px] md:max-w-none">Partner</span>
+                    <span className="text-[9px] md:text-xs font-bold leading-none text-center max-w-[60px] md:max-w-none">{t('nav.partner')}</span>
                 </button>
 
                 {/* 4. CLIENTE SEMPLICE (CLIENT) - Rightmost */}
@@ -109,7 +111,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
                     <div className={getIconContainerClass(viewMode === 'client')}>
                         <ClientModeIcon className={`w-6 h-6 md:w-9 md:h-9 transition-all ${viewMode !== 'client' ? 'grayscale opacity-70' : ''}`} />
                     </div>
-                    <span className="text-[9px] md:text-xs font-bold leading-none text-center max-w-[60px] md:max-w-none">Cliente</span>
+                    <span className="text-[9px] md:text-xs font-bold leading-none text-center max-w-[60px] md:max-w-none">{t('nav.client')}</span>
                 </button>
 
             </div>

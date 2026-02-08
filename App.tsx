@@ -43,7 +43,7 @@ import SunIcon from './components/icons/SunIcon';
 import MoonIcon from './components/icons/MoonIcon';
 import TargetIcon from './components/icons/TargetIcon';
 import { ClientModeIcon, FamilyModeIcon, CondoModeIcon } from './components/icons/ModeIcons';
-import { ItalyFlag, GermanyFlag } from './components/icons/Flags';
+import { ItalyFlag, GermanyFlag, UKFlag } from './components/icons/Flags';
 import CrownIconSVG from './components/icons/CrownIcon';
 import BackgroundMesh from './components/BackgroundMesh';
 import DisclaimerModal from './components/DisclaimerModal';
@@ -163,7 +163,7 @@ const AppContent = () => {
   // --- SHARY HOOK ---
   const { isActive, toggleShary } = useShary();
 
-  const targetButtonText = language === 'it' ? "Calcola Obiettivo" : "Ziel berechnen";
+  const targetButtonText = language === 'it' ? "Calcola Obiettivo" : (language === 'de' ? "Ziel berechnen" : "Calculate Goal");
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
@@ -446,7 +446,11 @@ const AppContent = () => {
   const handleCondoReset = () => setCondoInputs({ ...initialCondoInputs });
   const handleApplyTarget = (updates: Partial<PlanInput>) => setInputs({ ...inputs, ...updates });
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
-  const toggleLanguage = () => setLanguage(language === 'it' ? 'de' : 'it');
+  const toggleLanguage = () => {
+    if (language === 'it') setLanguage('de');
+    else if (language === 'de') setLanguage('en');
+    else setLanguage('it');
+  };
 
   const handleModeChange = (mode: ViewMode) => {
     if (mode === 'condo' && !isPremium) { setShowPremiumModal(true); return; }
@@ -520,7 +524,9 @@ const AppContent = () => {
 
   const headerShadow = language === 'it'
     ? '-30px 0 80px -5px rgba(0, 146, 70, 0.9), 30px 0 80px -5px rgba(206, 43, 55, 0.9), 0 0 50px -10px rgba(255, 255, 255, 0.8)'
-    : '-30px 0 80px -5px rgba(0, 0, 0, 0.95), 30px 0 80px -5px rgba(255, 204, 0, 0.9), 0 0 50px -10px rgba(221, 0, 0, 0.8)';
+    : (language === 'de'
+      ? '-30px 0 80px -5px rgba(0, 0, 0, 0.95), 30px 0 80px -5px rgba(255, 204, 0, 0.9), 0 0 50px -10px rgba(221, 0, 0, 0.8)'
+      : '-30px 0 80px -5px rgba(1, 33, 105, 0.9), 30px 0 80px -5px rgba(200, 16, 46, 0.9), 0 0 50px -10px rgba(255, 255, 255, 0.8)');
 
   return (
     <div className={`min-h-screen bg-transparent text-gray-800 dark:text-gray-200 transition-colors duration-300 relative flex flex-col overflow-x-hidden`}>
@@ -562,7 +568,7 @@ const AppContent = () => {
             <div className="w-full md:w-auto flex justify-center md:justify-start">
               <div className="flex items-center gap-3">
                 <h1 onClick={handleTitleClick} className="text-2xl sm:text-4xl font-extrabold text-white drop-shadow-sm select-none cursor-pointer active:scale-95 transition-transform flex items-center gap-3 flex-wrap justify-center md:justify-start">
-                  {language === 'it' ? <ItalyFlag /> : <GermanyFlag />}
+                  {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
                   <span className="text-white">Sharing</span> <span className="text-union-orange-400">Simulator</span>
                   {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-union-orange-400" /></span>}
                 </h1>
@@ -598,7 +604,7 @@ const AppContent = () => {
                 className="p-2.5 rounded-xl bg-white border-0 shadow-lg hover:bg-gray-100 transition-all hover:scale-105 flex items-center justify-center min-w-[48px]"
                 title="Cambia Lingua"
               >
-                {language === 'it' ? <ItalyFlag /> : <GermanyFlag />}
+                {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
               </button>
 
               {/* 3. CASHBACK BUTTON (PRIORITY) */}

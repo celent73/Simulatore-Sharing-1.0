@@ -6,16 +6,21 @@ import { useLanguage } from '../contexts/LanguageContext';
 interface SharyTriggerProps {
     message: string;
     messageDe?: string;
+    messageEn?: string;
     highlightId?: string;
 }
 
-const SharyTrigger: React.FC<SharyTriggerProps> = ({ message, messageDe, highlightId }) => {
+const SharyTrigger: React.FC<SharyTriggerProps> = ({ message, messageDe, messageEn, highlightId }) => {
     const { isActive, speak } = useShary();
     const { language } = useLanguage();
 
     if (!isActive) return null;
 
-    const textToSpeak = (language === 'de' && messageDe) ? messageDe : message;
+    const textToSpeak = (() => {
+        if (language === 'de' && messageDe) return messageDe;
+        if (language === 'en' && messageEn) return messageEn;
+        return message;
+    })();
 
     return (
         <button

@@ -48,6 +48,7 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                     <SharyTrigger
                         message="Osserviamo l'opportunità per gli amministratori, inannzi tutto seleziona il numero di contratti per condomini e osserva immediatamente quanto guadagnerai di Una Tantum e di RICORRENZE MENSILI per i prossimi 3 anni!! E se qualche condomino volesse diventare un utente? Seleziona la media di Famiglie per Condominio e la percentuali di chi passera le utente. Vedrai il totale dei guadagni sommarsi a quelli già calcolati"
                         messageDe="Schauen wir uns die Möglichkeiten für Verwalter an. Wähle zuerst die Anzahl der Verträge pro Wohnanlage und sieh sofort, wie viel Einmalzahlung und MONATLICHE RÜCKVERGÜTUNGEN du in den nächsten 3 Jahren verdienst!! Und wenn ein Bewohner Nutzer werden möchte? Wähle den Durchschnitt der Familien pro Wohnanlage und den Prozentsatz derer, die wechseln. Du wirst sehen, wie sich die Gesamteinnahmen zu den bereits berechneten addieren."
+                        messageEn="Let's observe the opportunity for administrators, first of all select the number of contracts per condominium and observe immediately how much One-off and MONTHLY RECURRING you will earn for the next 3 years!! And if some condominium member wanted to become a user? Select the average of Families per Condominium and the percentage of those who will switch utilities. You will see the total earnings add up to those already calculated"
                         highlightId="condo_green_units"
                     />
                 </div>
@@ -73,9 +74,9 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                             <Users size={20} className={inputs.showFamilyUtilityView ? 'text-white' : 'text-gray-500 dark:text-gray-400'} />
                         </div>
                         <div>
-                            <div className="text-sm font-bold leading-tight">Vista Partner Sharing (FU)</div>
+                            <div className="text-sm font-bold leading-tight">{t('admin_mode.partner_view_label')}</div>
                             <div className={`text-[10px] opacity-70 font-medium ${inputs.showFamilyUtilityView ? 'text-blue-50' : ''}`}>
-                                {inputs.showFamilyUtilityView ? 'Stai vedendo i TUOI guadagni' : 'Sei il Recruiter dell\'Amministratore?'}
+                                {inputs.showFamilyUtilityView ? t('admin_mode.partner_view_desc_on') : t('admin_mode.partner_view_desc_off')}
                             </div>
                         </div>
                     </div>
@@ -249,31 +250,31 @@ const CondoInputPanel: React.FC<CondoInputPanelProps> = ({ inputs, onInputChange
                                     <div className="space-y-2 border-t border-purple-500/50 pt-3 mt-3">
                                         {/* UNA TANTUM */}
                                         <div className="flex justify-between items-center text-xs">
-                                            <span className="opacity-90 flex items-center gap-1"><PiggyBank size={12} /> Una Tantum (30€)</span>
+                                            <span className="opacity-90 flex items-center gap-1"><PiggyBank size={12} /> {t('condo.one_time')}</span>
                                             <span className="font-bold font-mono">{fmt(netEarnings.oneTime)}</span>
                                         </div>
 
                                         {/* MONTHLY RECURRING */}
                                         <div className="flex justify-between items-center text-sm font-bold text-green-200">
-                                            <span className="flex items-center gap-1"><Calculator size={14} /> Ricorrenza Mensile (2€ &#8594; 4€)</span>
+                                            <span className="flex items-center gap-1"><Calculator size={14} /> {t('condo.monthly_recurring')}</span>
                                             <span className="font-mono bg-green-500/20 px-1 rounded">{fmt(monthlyRecurring)}/mo</span>
                                         </div>
 
                                         {/* ANNUAL RECURRING */}
                                         <div className="flex justify-between items-center text-xs opacity-80">
-                                            <span>Ricorrenza Annuale</span>
+                                            <span>{t('condo.annual_recurring')}</span>
                                             <span className="font-mono">{fmt(netEarnings.recurring)}</span>
                                         </div>
 
                                         {/* 3 YEAR RECURRING */}
                                         <div className="flex justify-between items-center text-xs opacity-80">
-                                            <span>Totale Ricorrente 3 Anni</span>
+                                            <span>{t('condo.total_recurring_3y')}</span>
                                             <span className="font-mono">{fmt(threeYearRecurring)}</span>
                                         </div>
 
                                         {/* TOTAL ESTIMATED */}
                                         <div className="pt-2 border-t border-purple-500/30 flex justify-between items-center">
-                                            <span className="uppercase text-[10px] font-bold tracking-wider">Totale Stimato (3 Anni)</span>
+                                            <span className="uppercase text-[10px] font-bold tracking-wider">{t('condo.total_est_3y')}</span>
                                             <span className="text-xl font-black text-yellow-300 drop-shadow-sm">{fmt(totalEarnings)}</span>
                                         </div>
                                     </div>

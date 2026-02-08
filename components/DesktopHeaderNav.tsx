@@ -1,6 +1,7 @@
 import React from 'react';
 import { Compass, Sparkles, Lock } from 'lucide-react';
 import { ClientModeIcon, FamilyModeIcon, CondoModeIcon } from './icons/ModeIcons';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface DesktopHeaderNavProps {
     viewMode: string;
@@ -15,6 +16,8 @@ export const DesktopHeaderNav: React.FC<DesktopHeaderNavProps> = ({
     onOpenLightSimulator,
     isPremium
 }) => {
+    const { t } = useLanguage();
+
     // Helper for button classes
     const getButtonClass = (isActive: boolean) => `
         relative flex flex-col items-center justify-center h-full px-6 py-2
@@ -27,19 +30,7 @@ export const DesktopHeaderNav: React.FC<DesktopHeaderNavProps> = ({
             {/* Glow effect */}
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent opacity-50" />
 
-            {/* 1. AMMINISTRATORI (CONDO) */}
-            <button
-                onClick={() => handleModeChange('condo')}
-                className={getButtonClass(viewMode === 'condo')}
-            >
-                {!isPremium && <div className="absolute top-1 right-2 bg-red-500 text-white p-0.5 rounded-full z-20 shadow-sm"><Lock size={8} /></div>}
-                <CondoModeIcon className={`w-6 h-6 mb-1 transition-all ${viewMode !== 'condo' ? 'grayscale opacity-70' : ''}`} />
-                <span className="text-[10px] font-bold leading-none tracking-wide">Admin</span>
-            </button>
-
-            <div className="w-px h-8 bg-slate-700/50 mx-1" />
-
-            {/* 2. SHARING SIMULATOR LIGHT */}
+            {/* 1. SHARING SIMULATOR LIGHT */}
             <button
                 onClick={onOpenLightSimulator}
                 className={getButtonClass(false)}
@@ -48,8 +39,20 @@ export const DesktopHeaderNav: React.FC<DesktopHeaderNavProps> = ({
                     <Compass className="w-6 h-6" />
                 </div>
                 <span className="text-[10px] font-bold leading-none text-union-green-400 flex items-center gap-1">
-                    Light <Sparkles size={8} className="animate-pulse text-union-green-300" />
+                    {t('nav.light')} <Sparkles size={8} className="animate-pulse text-union-green-300" />
                 </span>
+            </button>
+
+            <div className="w-px h-8 bg-slate-700/50 mx-1" />
+
+            {/* 2. AMMINISTRATORI (CONDO) */}
+            <button
+                onClick={() => handleModeChange('condo')}
+                className={getButtonClass(viewMode === 'condo')}
+            >
+                {!isPremium && <div className="absolute top-1 right-2 bg-red-500 text-white p-0.5 rounded-full z-20 shadow-sm"><Lock size={8} /></div>}
+                <CondoModeIcon className={`w-6 h-6 mb-1 transition-all ${viewMode !== 'condo' ? 'grayscale opacity-70' : ''}`} />
+                <span className="text-[10px] font-bold leading-none tracking-wide">{t('nav.admin')}</span>
             </button>
 
             <div className="w-px h-8 bg-slate-700/50 mx-1" />
@@ -60,7 +63,7 @@ export const DesktopHeaderNav: React.FC<DesktopHeaderNavProps> = ({
                 className={getButtonClass(viewMode === 'family')}
             >
                 <FamilyModeIcon className={`w-6 h-6 mb-1 transition-all ${viewMode !== 'family' ? 'grayscale opacity-70' : ''}`} />
-                <span className="text-[10px] font-bold leading-none tracking-wide">Partner</span>
+                <span className="text-[10px] font-bold leading-none tracking-wide">{t('nav.partner')}</span>
             </button>
 
             <div className="w-px h-8 bg-slate-700/50 mx-1" />
@@ -71,7 +74,7 @@ export const DesktopHeaderNav: React.FC<DesktopHeaderNavProps> = ({
                 className={getButtonClass(viewMode === 'client')}
             >
                 <ClientModeIcon className={`w-6 h-6 mb-1 transition-all ${viewMode !== 'client' ? 'grayscale opacity-70' : ''}`} />
-                <span className="text-[10px] font-bold leading-none tracking-wide">Cliente</span>
+                <span className="text-[10px] font-bold leading-none tracking-wide">{t('nav.client')}</span>
             </button>
 
         </div>

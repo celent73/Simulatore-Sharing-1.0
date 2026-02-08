@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Phone, PhoneMissed, Play, Pause, Zap, LogOut, RotateCcw, CheckCircle2, Target, BarChart3, Clock, Trophy, Sparkles } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface FocusModeModalProps {
     isOpen: boolean;
@@ -11,13 +12,14 @@ type FocusMode = 'instant' | 'pro';
 
 const PRESET_DURATIONS = [15, 30, 45, 60, 90];
 
-const CHECKLIST_ITEMS = [
-    { id: 'silence', label: 'Cellulare Silenzioso / Do Not Disturb' },
-    { id: 'water', label: 'Acqua a portata di mano' },
-    { id: 'focus', label: 'Eliminate distrazioni ambientali' }
-];
-
 export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose }) => {
+    const { t } = useLanguage();
+
+    const CHECKLIST_ITEMS = [
+        { id: 'silence', label: t('focus_mode.check_silence') },
+        { id: 'water', label: t('focus_mode.check_water') },
+        { id: 'focus', label: t('focus_mode.check_focus') }
+    ];
     const [sessionState, setSessionState] = useState<SessionState>('config');
     const [mode, setMode] = useState<FocusMode>('instant');
     const [duration, setDuration] = useState(45); // Minutes
@@ -149,7 +151,7 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                     onClick={onClose}
                     className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 transition-all text-sm font-bold uppercase tracking-wider"
                 >
-                    Esci
+                    {t('focus_mode.exit')}
                 </button>
             </div>
 
@@ -157,7 +159,7 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
 
                 {sessionState === 'config' && (
                     <div className="flex flex-col items-center w-full animate-in slide-in-from-bottom-10 duration-500 space-y-8">
-                        <h2 className="text-gray-400 font-bold tracking-[0.2em] text-xs sm:text-sm text-center uppercase">CONFIGURAZIONE SESSIONE</h2>
+                        <h2 className="text-gray-400 font-bold tracking-[0.2em] text-xs sm:text-sm text-center uppercase">{t('focus_mode.config_title')}</h2>
 
                         {/* Mode Toggle */}
                         <div className="flex bg-white/5 p-1 rounded-xl border border-white/10 w-full max-w-xs">
@@ -165,13 +167,13 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                                 onClick={() => setMode('instant')}
                                 className={`flex-1 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${mode === 'instant' ? 'bg-white text-black shadow-lg' : 'text-gray-500 hover:text-gray-300'}`}
                             >
-                                <Zap size={14} className={mode === 'instant' ? 'fill-black' : ''} /> Instant
+                                <Zap size={14} className={mode === 'instant' ? 'fill-black' : ''} /> {t('focus_mode.mode_instant')}
                             </button>
                             <button
                                 onClick={() => setMode('pro')}
                                 className={`flex-1 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${mode === 'pro' ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-black shadow-lg' : 'text-gray-500 hover:text-gray-300'}`}
                             >
-                                <Trophy size={14} className={mode === 'pro' ? 'fill-black' : ''} /> Pro
+                                <Trophy size={14} className={mode === 'pro' ? 'fill-black' : ''} /> {t('focus_mode.mode_pro')}
                             </button>
                         </div>
 
@@ -179,12 +181,12 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                         {mode === 'pro' && (
                             <div className="w-full space-y-4 animate-in fade-in slide-in-from-top-2">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Il tuo Obiettivo</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{t('focus_mode.goal_label')}</label>
                                     <div className="relative">
                                         <Target className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                                         <input
                                             type="text"
-                                            placeholder="Es. Chiudere 3 contratti..."
+                                            placeholder={t('focus_mode.goal_placeholder')}
                                             value={goalText}
                                             onChange={(e) => setGoalText(e.target.value)}
                                             className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-cyan-500/50 transition-all font-medium"
@@ -193,7 +195,7 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Target Contatti OK</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{t('focus_mode.target_label')}</label>
                                     <div className="flex items-center gap-4">
                                         <button onClick={() => setTargetContacts(p => Math.max(1, p - 1))} className="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-xl font-bold">-</button>
                                         <div className="flex-1 text-center font-black text-3xl tabular-nums">{targetContacts}</div>
@@ -205,7 +207,7 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
 
                         {/* Duration Selector */}
                         <div className="flex flex-col items-center gap-2">
-                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Durata</label>
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">{t('focus_mode.duration_label')}</label>
                             <div className="flex items-center justify-center gap-6">
                                 <button
                                     onClick={() => setDuration(prev => Math.max(5, prev - 5))}
@@ -215,7 +217,7 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                                 </button>
                                 <div className="text-center w-32">
                                     <div className="text-6xl font-black tracking-tighter tabular-nums leading-none">{duration}</div>
-                                    <div className="text-gray-500 font-medium text-xs uppercase tracking-widest mt-1">minuti</div>
+                                    <div className="text-gray-500 font-medium text-xs uppercase tracking-widest mt-1">{t('focus_mode.minutes')}</div>
                                 </div>
                                 <button
                                     onClick={() => setDuration(prev => Math.min(180, prev + 5))}
@@ -243,7 +245,7 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                         {/* PRO MODE: Pre-flight Checklist */}
                         {mode === 'pro' && (
                             <div className="w-full bg-white/5 rounded-2xl p-4 border border-white/10 animate-in fade-in slide-in-from-top-2">
-                                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2"><CheckCircle2 size={14} /> Checklist Preparazione</h3>
+                                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2"><CheckCircle2 size={14} /> {t('focus_mode.checklist_title')}</h3>
                                 <div className="space-y-2">
                                     {CHECKLIST_ITEMS.map(item => (
                                         <div key={item.id}
@@ -268,8 +270,8 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                                 ? 'bg-gradient-to-r from-orange-400 to-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.4)] hover:shadow-[0_0_50px_rgba(249,115,22,0.6)] hover:scale-[1.02] text-black cursor-pointer'
                                 : 'bg-gray-800 text-gray-500 cursor-not-allowed border border-white/5'}`}
                         >
-                            {mode === 'pro' && !allChecked && <span className="text-xs mr-1 opacity-70">(Completa Checklist)</span>}
-                            Avvia Sessione
+                            {mode === 'pro' && !allChecked && <span className="text-xs mr-1 opacity-70">{t('focus_mode.complete_checklist')}</span>}
+                            {t('focus_mode.start_btn')}
                         </button>
                     </div>
                 )}
@@ -280,14 +282,14 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                         {/* PRO MODE: Session Goal Header */}
                         {mode === 'pro' && (
                             <div className="w-full text-center mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
-                                <div className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-1">Obiettivo Sessione</div>
-                                <div className="text-xl sm:text-2xl font-bold text-white leading-tight">"{goalText || 'Alta Performance'}"</div>
+                                <div className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-1">{t('focus_mode.session_goal')}</div>
+                                <div className="text-xl sm:text-2xl font-bold text-white leading-tight">"{goalText || t('focus_mode.generic')}"</div>
                                 <div className="mt-2 w-full h-1.5 bg-gray-800 rounded-full overflow-hidden">
                                     <div className="h-full bg-cyan-500 transition-all duration-500 shadow-[0_0_10px_rgba(6,182,212,0.8)]" style={{ width: `${progressPercentage}%` }}></div>
                                 </div>
                                 <div className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider flex justify-between">
                                     <span>0</span>
-                                    <span className={isGoalReached ? "text-green-400 font-bold" : ""}>Target: {targetContacts}</span>
+                                    <span className={isGoalReached ? "text-green-400 font-bold" : ""}>{t('focus_mode.target')} {targetContacts}</span>
                                 </div>
                             </div>
                         )}
@@ -312,7 +314,7 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                             className={`text-sm font-bold tracking-widest uppercase mb-8 cursor-pointer transition-colors ${sessionState === 'paused' ? 'text-yellow-500 animate-pulse' : 'text-cyan-500 hover:text-cyan-400'
                                 }`}
                         >
-                            {sessionState === 'paused' ? 'SESSIONE IN PAUSA' : 'FOCUS ATTIVO'}
+                            {sessionState === 'paused' ? t('focus_mode.paused') : t('focus_mode.active')}
                         </div>
 
                         {/* Counters */}
@@ -320,12 +322,12 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                             <div className={`bg-white/5 border rounded-2xl p-6 flex flex-col items-center justify-center relative overflow-hidden group transition-all ${mode === 'pro' && isGoalReached ? 'border-green-500/50 shadow-[0_0_20px_rgba(34,197,94,0.2)]' : 'border-white/10 hover:border-cyan-500/30'}`}>
                                 <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r opacity-50 ${mode === 'pro' && isGoalReached ? 'from-green-500 to-emerald-500' : 'from-cyan-500 to-blue-500'}`}></div>
                                 <div className={`text-5xl font-black mb-2 group-hover:scale-110 transition-transform duration-300 ${mode === 'pro' && isGoalReached ? 'text-green-400' : 'text-cyan-400'}`}>{contactsOk}</div>
-                                <div className="text-xs font-bold text-gray-400 uppercase tracking-wider">Contatti OK</div>
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('focus_mode.contacts_ok')}</div>
                             </div>
                             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center relative overflow-hidden group hover:border-purple-500/30 transition-all">
                                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500 opacity-50"></div>
                                 <div className="text-5xl font-black text-purple-400 mb-2 group-hover:scale-110 transition-transform duration-300">{attempts}</div>
-                                <div className="text-xs font-bold text-gray-400 uppercase tracking-wider">Tentativi</div>
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('focus_mode.attempts')}</div>
                             </div>
                         </div>
 
@@ -336,14 +338,14 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                                 className="py-4 bg-white/10 hover:bg-white/20 active:bg-white/5 border border-white/10 rounded-xl font-bold text-gray-300 uppercase tracking-wide transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2"
                             >
                                 <PhoneMissed size={20} className="opacity-70" />
-                                <span className="text-sm">Non Risposto</span>
+                                <span className="text-sm">{t('focus_mode.not_answered')}</span>
                             </button>
                             <button
                                 onClick={() => setContactsOk(prev => prev + 1)}
                                 className="py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 rounded-xl font-black text-white uppercase tracking-wide transition-all shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2"
                             >
                                 <Phone size={20} className="fill-white" />
-                                <span className="text-sm">Risposto</span>
+                                <span className="text-sm">{t('focus_mode.answered')}</span>
                             </button>
                         </div>
 
@@ -352,7 +354,7 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                             onClick={handleStopSession}
                             className="w-full py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-xl font-bold uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2 mb-4 group"
                         >
-                            <RotateCcw size={14} className="group-hover:-rotate-180 transition-transform duration-500" /> Termina Sessione
+                            <RotateCcw size={14} className="group-hover:-rotate-180 transition-transform duration-500" /> {t('focus_mode.stop_btn')}
                         </button>
                     </div>
                 )}
@@ -370,28 +372,28 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                                     <Trophy size={80} className="text-yellow-400 relative z-10 drop-shadow-lg" />
                                 </div>
 
-                                <h2 className="text-3xl font-black text-white text-center mb-2">SESSIONE COMPLETATA</h2>
-                                <p className="text-gray-400 font-medium mb-8 text-center max-w-xs">{isGoalReached ? "Fantastico! Hai raggiunto il tuo obiettivo." : "Ottimo lavoro! La costanza è la chiave per il successo."}</p>
+                                <h2 className="text-3xl font-black text-white text-center mb-2">{t('focus_mode.completed_title')}</h2>
+                                <p className="text-gray-400 font-medium mb-8 text-center max-w-xs">{isGoalReached ? t('focus_mode.goal_reached_msg') : t('focus_mode.goal_missed_msg')}</p>
 
                                 <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 mb-8 relative overflow-hidden">
-                                    {isGoalReached && <div className="absolute -right-4 -top-4 bg-green-500 text-black text-[10px] font-black px-4 py-2 rotate-12 shadow-lg">OBIETTIVO RAGGIUNTO</div>}
+                                    {isGoalReached && <div className="absolute -right-4 -top-4 bg-green-500 text-black text-[10px] font-black px-4 py-2 rotate-12 shadow-lg">{t('focus_mode.goal_reached_badge')}</div>}
 
                                     <div className="grid grid-cols-2 gap-y-6 gap-x-4">
                                         <div>
-                                            <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-1"><Target size={12} /> Obiettivo</div>
-                                            <div className="text-lg font-bold text-white leading-tight">{goalText || "Generico"}</div>
+                                            <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-1"><Target size={12} /> {t('focus_mode.goal')}</div>
+                                            <div className="text-lg font-bold text-white leading-tight">{goalText || t('focus_mode.generic')}</div>
                                         </div>
                                         <div>
-                                            <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-1"><Clock size={12} /> Durata</div>
+                                            <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-1"><Clock size={12} /> {t('focus_mode.duration_label')}</div>
                                             <div className="text-lg font-bold text-white">{timeSpentMinutes} min</div>
                                         </div>
                                         <div className="col-span-2 h-px bg-white/10"></div>
                                         <div>
-                                            <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Contatti OK</div>
+                                            <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">{t('focus_mode.contacts_ok')}</div>
                                             <div className="text-3xl font-black text-cyan-400">{contactsOk} <span className="text-sm font-normal text-gray-500">/ {targetContacts}</span></div>
                                         </div>
                                         <div>
-                                            <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-1"><BarChart3 size={12} /> Ritmo</div>
+                                            <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-1"><BarChart3 size={12} /> {t('focus_mode.rhythm')}</div>
                                             <div className="text-xl font-bold text-purple-400">{contactsPerHour} <span className="text-xs font-normal text-gray-500">/ ora</span></div>
                                         </div>
                                     </div>
@@ -403,10 +405,10 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                                 <div className="relative mb-8">
                                     <Sparkles size={80} className="text-cyan-400 relative z-10 drop-shadow-lg" />
                                 </div>
-                                <h2 className="text-3xl font-black text-white text-center mb-2">TEMPO SCADUTO</h2>
-                                <p className="text-gray-400 font-medium mb-8 text-center">Sessione Instant terminata.</p>
+                                <h2 className="text-3xl font-black text-white text-center mb-2">{t('focus_mode.time_up_title')}</h2>
+                                <p className="text-gray-400 font-medium mb-8 text-center">{t('focus_mode.instant_finished_msg')}</p>
                                 <div className="text-2xl font-bold mb-8">
-                                    Hai registrato <span className="text-cyan-400">{contactsOk}</span> contatti utili.
+                                    {t('focus_mode.registered')} <span className="text-cyan-400">{contactsOk}</span> {t('focus_mode.contacts_useful')}
                                 </div>
                             </>
                         )}
@@ -416,7 +418,7 @@ export const FocusModeModal: React.FC<FocusModeModalProps> = ({ isOpen, onClose 
                             onClick={handleReset}
                             className="w-full py-4 bg-white text-black rounded-2xl font-black text-lg shadow-xl hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-wide"
                         >
-                            Nuova Sessione
+                            {t('focus_mode.new_session')}
                         </button>
                     </div>
                 )}

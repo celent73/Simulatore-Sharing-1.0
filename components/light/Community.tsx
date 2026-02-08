@@ -27,11 +27,11 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
     const profile = useProfileStore();
 
     const levels = [
-        { id: 0, name: 'Livello 0', sub: 'Commissioni Dirette (Collaboratori)', condition: 0 },
-        { id: 1, name: 'Livello 1', sub: 'Rendita Indiretta 1° Livello', condition: UNLOCK_CONDITIONS.LEVEL_1 },
-        { id: 2, name: 'Livello 2', sub: 'Rendita Indiretta 2° Livello', condition: UNLOCK_CONDITIONS.LEVEL_2 },
-        { id: 3, name: 'Livello 3', sub: 'Rendita Indiretta 3° Livello', condition: UNLOCK_CONDITIONS.LEVEL_3 },
-        { id: 4, name: 'Livello 4', sub: 'Rendita Indiretta 4° Livello', condition: UNLOCK_CONDITIONS.LEVEL_4 },
+        { id: 0, name: t('comm_sync.level_name', { n: 0 }), sub: t('comm_sync.level_sub_0'), condition: 0 },
+        { id: 1, name: t('comm_sync.level_name', { n: 1 }), sub: t('comm_sync.level_sub_n', { n: 1 }), condition: UNLOCK_CONDITIONS.LEVEL_1 },
+        { id: 2, name: t('comm_sync.level_name', { n: 2 }), sub: t('comm_sync.level_sub_n', { n: 2 }), condition: UNLOCK_CONDITIONS.LEVEL_2 },
+        { id: 3, name: t('comm_sync.level_name', { n: 3 }), sub: t('comm_sync.level_sub_n', { n: 3 }), condition: UNLOCK_CONDITIONS.LEVEL_3 },
+        { id: 4, name: t('comm_sync.level_name', { n: 4 }), sub: t('comm_sync.level_sub_n', { n: 4 }), condition: UNLOCK_CONDITIONS.LEVEL_4 },
     ];
 
     const [isExporting, setIsExporting] = useState(false);
@@ -57,8 +57,8 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                             <Users className="text-union-green-600 w-6 h-6" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-bold font-heading text-union-black">Community Sync</h2>
-                            <p className="text-xs opacity-60 text-union-black">Sblocca i livelli di profondità della tua rete in base alle tue utenze personali attive.</p>
+                            <h2 className="text-xl font-bold font-heading text-union-black">{t('comm_sync.title')}</h2>
+                            <p className="text-xs opacity-60 text-union-black">{t('comm_sync.subtitle')}</p>
                         </div>
                     </div>
 
@@ -71,7 +71,7 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                                 className="flex items-center gap-2 bg-cyan-50 text-cyan-700 px-3 py-2 rounded-xl border border-cyan-200 shadow-sm hover:shadow-cyan-100 transition-all"
                             >
                                 <span className="text-xl">🤖</span>
-                                <span className="text-xs font-bold">Consiglio</span>
+                                <span className="text-xs font-bold">{t('comm_sync.tip_btn')}</span>
                             </motion.button>
 
                             <AnimatePresence>
@@ -91,20 +91,20 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                                             <div className="flex items-center gap-3 mb-4">
                                                 <div className="w-12 h-12 rounded-full bg-cyan-100 flex items-center justify-center text-3xl">🤖</div>
                                                 <div>
-                                                    <h3 className="font-bold text-lg text-cyan-900 leading-tight">Come funziona il Simulator?</h3>
-                                                    <p className="text-[10px] text-cyan-600 font-medium uppercase tracking-wide">Guida Rapida Shary</p>
+                                                    <h3 className="font-bold text-lg text-cyan-900 leading-tight">{t('comm_sync.tip_title')}</h3>
+                                                    <p className="text-[10px] text-cyan-600 font-medium uppercase tracking-wide">{t('comm_sync.tip_subtitle')}</p>
                                                 </div>
                                                 <button onClick={() => setIsSharyTipOpen(false)} className="ml-auto p-2 bg-gray-100 rounded-full text-gray-400 hover:text-black hover:bg-gray-200"><X size={18} /></button>
                                             </div>
 
                                             <div className="space-y-3 text-cyan-900/80 text-xs font-medium leading-relaxed">
                                                 <p>
-                                                    <strong className="text-cyan-700 block mb-1">1. Calcolatore Guadagni</strong>
-                                                    Imposta la tua struttura ideale e scopri le rendite potenziali basate sul piano compensi ufficiale.
+                                                    <strong className="text-cyan-700 block mb-1">{t('comm_sync.tip_1_title')}</strong>
+                                                    {t('comm_sync.tip_1_desc')}
                                                 </p>
                                                 <p>
-                                                    <strong className="text-cyan-700 block mb-1">2. Community Sync</strong>
-                                                    Visualizza la tua rete ad albero! Aumenta le tue <b>Utenze Personali</b> per sbloccare i livelli di profondità (Livelli 1-4).
+                                                    <strong className="text-cyan-700 block mb-1">{t('comm_sync.tip_2_title')}</strong>
+                                                    <span dangerouslySetInnerHTML={{ __html: t('comm_sync.tip_2_desc') }} />
                                                 </p>
                                                 <div className="space-y-3 bg-cyan-50/50 p-4 rounded-xl">
                                                     <div className="flex justify-between items-center border-b border-cyan-100 pb-2">
@@ -129,8 +129,8 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                                                     </div>
                                                 </div>
                                                 <p>
-                                                    <strong className="text-cyan-700 block mb-1">3. Road to Zero</strong>
-                                                    Scopri l'obiettivo finale: azzerare le bollette grazie alla tua rete.
+                                                    <strong className="text-cyan-700 block mb-1">{t('comm_sync.tip_3_title')}</strong>
+                                                    {t('comm_sync.tip_3_desc')}
                                                 </p>
                                             </div>
 
@@ -139,7 +139,7 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                                                     onClick={() => setIsSharyTipOpen(false)}
                                                     className="px-6 py-2 bg-cyan-600 text-white rounded-xl font-bold text-xs hover:bg-cyan-700 transition-colors"
                                                 >
-                                                    HO CAPITO!
+                                                    {t('comm_sync.understand_btn')}
                                                 </button>
                                             </div>
                                         </motion.div>
@@ -242,11 +242,11 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                                         {isUnlocked ? (
                                             <div className="flex items-center gap-1 text-union-green-600 font-bold text-[10px] uppercase">
                                                 <CheckCircle2 size={12} />
-                                                SBLOCCATO
+                                                {t('comm_sync.unlocked')}
                                             </div>
                                         ) : (
                                             <div className="text-[10px] font-black text-white bg-union-black/20 px-2 py-1 rounded-md uppercase">
-                                                SERVE {lvl.condition} UTENZE
+                                                {t('comm_sync.needs_units', { n: lvl.condition })}
                                             </div>
                                         )}
                                     </motion.div>
@@ -264,12 +264,12 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                         >
                             <div className="flex justify-between items-start mb-6 no-export">
                                 <div>
-                                    <h3 className="text-lg font-black uppercase tracking-widest text-union-green-600">Visualizer PRO</h3>
-                                    <p className="text-[10px] opacity-60">Analisi e proiezione crescita community</p>
+                                    <h3 className="text-lg font-black uppercase tracking-widest text-union-green-600">{t('comm_sync.visualizer_pro')}</h3>
+                                    <p className="text-[10px] opacity-60">{t('comm_sync.visualizer_desc')}</p>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-2xl font-black text-union-green-600">{isProjection ? '20+' : '12'}</p>
-                                    <p className="text-[10px] opacity-40 uppercase font-black">Membri Totali</p>
+                                    <p className="text-[10px] opacity-40 uppercase font-black">{t('comm_sync.total_members')}</p>
                                 </div>
                             </div>
 
@@ -296,13 +296,13 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                             className="relative bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl overflow-hidden"
                         >
                             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-union-green-500 to-union-green-700" />
-                            <h2 className="text-2xl font-black mb-1 text-union-black">Personalizza Brand</h2>
-                            <p className="text-xs opacity-60 mb-8 font-medium italic text-union-black">Le tue info appariranno sulle immagini esportate.</p>
+                            <h2 className="text-2xl font-black mb-1 text-union-black">{t('comm_sync.customize_brand')}</h2>
+                            <p className="text-xs opacity-60 mb-8 font-medium italic text-union-black">{t('comm_sync.customize_desc')}</p>
 
                             <div className="space-y-4">
                                 <div className="space-y-1">
                                     <label className="text-[10px] font-black uppercase text-union-green-600 flex items-center gap-1">
-                                        <User size={12} /> Nome Intero
+                                        <User size={12} /> {t('comm_sync.full_name')}
                                     </label>
                                     <input
                                         value={profile.name} onChange={(e) => profile.setProfile({ name: e.target.value })}
@@ -334,7 +334,7 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-[10px] font-black uppercase text-union-green-600 flex items-center gap-1">
-                                        <Phone size={12} /> Telefono
+                                        <Phone size={12} /> {t('comm_sync.phone')}
                                     </label>
                                     <input
                                         value={profile.phone} onChange={(e) => profile.setProfile({ phone: e.target.value })}
@@ -348,7 +348,7 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                                 onClick={() => setIsSettingsOpen(false)}
                                 className="w-full mt-8 bg-union-black text-white rounded-xl py-4 font-black flex items-center justify-center gap-2 hover:bg-union-green-600 transition-all shadow-lg"
                             >
-                                <Save size={18} /> SALVA E CHIUDI
+                                <Save size={18} /> {t('comm_sync.save_close')}
                             </button>
                         </motion.div>
                     </div>
@@ -364,9 +364,9 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                 <div className="flex gap-3">
                     <Info className="text-union-green-600 w-5 h-5 shrink-0" />
                     <div>
-                        <p className="text-xs font-bold text-union-green-700 uppercase tracking-wider">Regola dello Sblocco</p>
+                        <p className="text-xs font-bold text-union-green-700 uppercase tracking-wider">{t('comm_sync.unlock_rule_title')}</p>
                         <p className="text-[10px] text-union-black opacity-70 leading-relaxed font-medium">
-                            Ogni utenza personale sblocca una percentuale di provvigione sui livelli inferiori. Raggiungi {UNLOCK_CONDITIONS.LEVEL_5} utenze dirette per sbloccare il massimo potenziale del Piano Compensi.
+                            {t('comm_sync.unlock_rule_desc', { n: UNLOCK_CONDITIONS.LEVEL_5 })}
                         </p>
                     </div>
                 </div>
