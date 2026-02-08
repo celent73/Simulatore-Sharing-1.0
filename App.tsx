@@ -49,6 +49,7 @@ import BackgroundMesh from './components/BackgroundMesh';
 import DisclaimerModal from './components/DisclaimerModal';
 import PaymentSuccessModal from './components/PaymentSuccessModal';
 import HeaderMenu from './components/HeaderMenu';
+import { DesktopHeaderNav } from './components/DesktopHeaderNav'; // Import Navigation
 import BottomDock from './components/BottomDock'; // NEW IMPORT // NEW IMPORT
 
 // --- SHARY ASSISTANT IMPORTS ---
@@ -569,6 +570,16 @@ const AppContent = () => {
                 {/* Logo removed as per user request */}
               </div>
             </div>
+
+
+            {/* DESKTOP NAVIGATION */}
+            <DesktopHeaderNav
+              viewMode={viewMode}
+              handleModeChange={handleModeChange}
+              onOpenLightSimulator={() => setIsLightSimulatorOpen(true)}
+              isPremium={isPremium}
+            />
+
             <div className="flex flex-wrap items-center justify-center gap-2 mt-2 md:mt-0">
               {/* BUTTONS ROW - REORGANIZED */}
 
@@ -672,7 +683,7 @@ const AppContent = () => {
             )}
           </div>
         </main>
-      </div>
+      </div >
 
       <div className="mt-12"><LegalFooter onOpenLegal={handleOpenLegalDoc} /></div>
       <DisclaimerModal isOpen={isDisclaimerOpen} onClose={() => setIsDisclaimerOpen(false)} />
@@ -723,7 +734,7 @@ const AppContent = () => {
         onOpenLightSimulator={() => setIsLightSimulatorOpen(true)}
         isPremium={isPremium}
       />
-    </div>
+    </div >
   );
 };
 
