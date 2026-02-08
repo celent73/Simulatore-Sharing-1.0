@@ -59,9 +59,9 @@ const SmartGauge = ({ percentage, value, label, icon: Icon, colorTheme }: any) =
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
     const themes: any = {
-        blue: { stroke: "stroke-blue-500", text: "text-blue-100", glow: "drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]" },
-        purple: { stroke: "stroke-purple-500", text: "text-purple-100", glow: "drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]" },
-        emerald: { stroke: "stroke-emerald-500", text: "text-emerald-100", glow: "drop-shadow-[0_0_10px_rgba(16,185,129,0.8)]" },
+        blue: { stroke: "stroke-cyan-400", text: "text-cyan-400", glow: "drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]" },
+        purple: { stroke: "stroke-fuchsia-500", text: "text-fuchsia-400", glow: "drop-shadow-[0_0_15px_rgba(217,70,239,0.8)]" },
+        emerald: { stroke: "stroke-emerald-400", text: "text-emerald-400", glow: "drop-shadow-[0_0_15px_rgba(52,211,153,0.8)]" },
     };
     const t = themes[colorTheme] || themes.blue;
 
@@ -69,7 +69,7 @@ const SmartGauge = ({ percentage, value, label, icon: Icon, colorTheme }: any) =
         <div className="flex flex-col items-center relative group">
             <div className="relative w-40 h-40 flex items-center justify-center">
                 <svg className="w-full h-full -rotate-90 transform" viewBox="0 0 140 140">
-                    <circle cx="70" cy="70" r={radius} fill="none" strokeWidth="8" className="stroke-gray-800" />
+                    <circle cx="70" cy="70" r={radius} fill="none" strokeWidth="8" className="stroke-white/5" />
                     <circle
                         cx="70"
                         cy="70"
@@ -98,14 +98,18 @@ const SmartGauge = ({ percentage, value, label, icon: Icon, colorTheme }: any) =
     );
 };
 
-const StatCard = ({ label, value, subtext, icon: Icon, colorClass }: any) => (
-    <div className="bg-[#13132b] border border-gray-800 p-4 rounded-2xl relative overflow-hidden group hover:border-gray-600 transition-colors">
-        <div className={`absolute top-0 right-0 p-2 opacity-20 group-hover:opacity-40 transition-opacity ${colorClass}`}>
+const StatCard = ({ label, value, subtext, icon: Icon, colorClass, special = false }: any) => (
+    <div className={`relative overflow-hidden group transition-all duration-500 rounded-2xl p-4 border border-white/10 ${special ? 'bg-gradient-to-br from-yellow-900/20 to-black shadow-[0_0_30px_rgba(234,179,8,0.2)] border-yellow-500/30' : 'bg-white/5 backdrop-blur-md hover:bg-white/10'}`}>
+        <div className={`absolute top-0 right-0 p-2 opacity-20 group-hover:opacity-100 transition-all duration-500 ${colorClass} group-hover:scale-110`}>
             <Icon size={40} />
         </div>
-        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{label}</p>
-        <p className={`text-2xl font-black ${colorClass} tracking-tight`}>{value}</p>
-        <p className="text-[10px] text-gray-500 mt-1">{subtext}</p>
+        <p className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${special ? 'text-yellow-500' : 'text-gray-400'}`}>{label}</p>
+        <p className={`text-2xl font-black ${colorClass} tracking-tight drop-shadow-lg ${special ? 'animate-pulse' : ''}`}>{value}</p>
+        <p className="text-[10px] text-gray-400/80 mt-1 font-medium">{subtext}</p>
+
+        {special && (
+            <div className="absolute inset-0 bg-yellow-400/10 blur-xl -z-10 animate-pulse" />
+        )}
     </div>
 );
 
@@ -245,9 +249,9 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre-v2.png')] opacity-20 mix-blend-overlay"></div>
             </div>
 
-            <div className="bg-[#0a0a12] border border-gray-800 rounded-[2.5rem] shadow-[0_0_50px_rgba(0,0,0,0.8)] w-full max-w-3xl relative overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div className="bg-gradient-to-br from-gray-900 via-gray-900 to-indigo-950 border border-white/10 rounded-[2.5rem] shadow-[0_0_60px_rgba(79,70,229,0.3)] w-full max-w-3xl relative overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col max-h-[90vh] overflow-y-auto custom-scrollbar backdrop-blur-2xl">
 
-                <div className="p-6 pb-4 relative z-10 flex justify-between items-center border-b border-gray-800">
+                <div className="p-6 pb-4 relative z-10 flex justify-between items-center border-b border-white/10 bg-white/5 backdrop-blur-xl">
                     <div className="flex items-center gap-3">
                         <div className="p-2.5 bg-gray-900 rounded-xl border border-gray-700">
                             <Target size={24} className="text-emerald-400 animate-pulse" />
@@ -297,10 +301,10 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                                 value={inputValue}
                                 onChange={handleInputChange}
                                 min={0}
-                                className="w-full bg-transparent text-white font-mono text-6xl font-black text-center py-2 focus:outline-none border-b-2 border-gray-700 focus:border-emerald-500 transition-colors placeholder-gray-700"
+                                className="w-full bg-transparent text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 font-mono text-7xl font-black text-center py-4 focus:outline-none border-b-2 border-white/10 focus:border-emerald-500 transition-all placeholder-white/10 drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]"
                                 placeholder="0"
                             />
-                            <span className="absolute top-1/2 -translate-y-1/2 -right-4 text-gray-600 text-3xl font-light">€</span>
+                            <span className="absolute top-1/2 -translate-y-1/2 -right-6 text-gray-500 text-4xl font-thin opacity-50">€</span>
 
                             {/* RESET BUTTON */}
                             {inputValue !== "0" && inputValue !== "" && (
@@ -325,7 +329,7 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <StatCard label={txt.rankLabel} value={results.structure} subtext={txt.rankSub} icon={Zap} colorClass="text-yellow-400" />
+                        <StatCard label={txt.rankLabel} value={results.structure} subtext={txt.rankSub} icon={Zap} colorClass="text-yellow-400" special={true} />
                         <StatCard label={txt.projY2Label} value={formatCurrency(results.projY2)} subtext={txt.projY2Sub} icon={TrendingUp} colorClass="text-emerald-400" />
                         <StatCard label={txt.projY3Label} value={formatCurrency(results.projY3)} subtext={txt.projY3Sub} icon={Activity} colorClass="text-purple-400" />
                     </div>
@@ -335,8 +339,9 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                     </div>
                 </div>
 
-                <div className="p-6 bg-gray-900/50 border-t border-gray-800">
-                    <button onClick={onClose} className="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white rounded-2xl font-black text-lg uppercase tracking-widest transition-all shadow-lg hover:shadow-emerald-900/50 hover:-translate-y-1 active:translate-y-0">
+                <div className="p-6 bg-white/5 backdrop-blur-md border-t border-white/10">
+                    <button onClick={onClose} className="w-full py-5 bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-400 hover:to-cyan-500 text-white rounded-2xl font-black text-xl uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:-translate-y-1 active:translate-y-0 relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-white/20 skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
                         {txt.backBtn}
                     </button>
                 </div>

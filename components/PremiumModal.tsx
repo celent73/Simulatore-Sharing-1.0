@@ -31,11 +31,12 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
   const LINK_VITA = "https://buy.stripe.com/bJe14obfpcc01xx5mx3gk0j";        // Link per 29,90€
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300 border border-gray-200 dark:border-gray-700">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-500">
+      <div className="bg-gray-950 rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300 border border-white/10 ring-1 ring-white/5">
 
         {/* Intestazione */}
-        <div className="p-6 md:p-8 text-center bg-gradient-to-b from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 relative">
+        <div className="p-6 md:p-10 text-center bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] bg-gray-950 relative border-b border-white/5">
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-950 to-transparent pointer-events-none"></div>
           {!forceLock && (
             <button
               onClick={onClose}
@@ -45,77 +46,88 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
             </button>
           )}
 
-          <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-4 leading-tight">
-            Sblocca tutto il potenziale <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">PRO</span>
+          <h2 className="text-3xl md:text-5xl font-black text-white mb-4 leading-tight tracking-tight">
+            Sblocca il Potenziale <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]">PRO</span>
           </h2>
 
-          <div className="space-y-2 text-gray-600 dark:text-gray-300 text-lg">
+          <div className="space-y-2 text-gray-400 text-lg">
             <p className="flex items-center justify-center gap-2">
-              <Zap size={20} className="text-yellow-500 fill-yellow-500" />
+              <Zap size={20} className="text-amber-400 fill-amber-400" />
               Sblocca tutta la potenzialità della App
             </p>
             <p className="flex items-center justify-center gap-2">
-              <Star size={20} className="text-orange-500 fill-orange-500" />
+              <Star size={20} className="text-yellow-500 fill-yellow-500" />
               Sarà un grande Supporto per la tua Attività
             </p>
           </div>
 
-          <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
+          <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500/20 to-yellow-600/20 border border-amber-500/30 text-amber-200 rounded-full text-sm font-medium">
             <Mail size={16} />
             Durante l'acquisto scrivi la tua mail per ricevere il codice
           </div>
         </div>
 
         {/* Sezione Prezzi (Card) */}
-        <div className="p-6 md:p-8 bg-white dark:bg-gray-900 flex-grow overflow-y-auto">
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="p-6 md:p-10 bg-gray-950 flex-grow overflow-y-auto">
+          <div className="grid md:grid-cols-2 gap-8 mb-10 max-w-3xl mx-auto items-stretch">
 
-            {/* OPZIONE 1: ABBONAMENTO 1.99€ */}
-            <div className="relative p-6 rounded-2xl border-2 border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-800 transition-all hover:shadow-xl group">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Mensile</h3>
+            {/* OPZIONE 1: ABBONAMENTO 3.99€ (SILVER) */}
+            <div className="relative p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm hover:border-white/30 transition-all hover:bg-white/10 group">
+              <h3 className="text-xl font-bold text-gray-300 mb-2 uppercase tracking-widest">Mensile</h3>
               <div className="flex items-baseline gap-1 mb-4">
-                <span className="text-4xl font-black text-gray-900 dark:text-white">€3,99</span>
-                <span className="text-gray-500">/mese</span>
+                <span className="text-4xl font-black text-white drop-shadow-md">€3,99</span>
+                <span className="text-gray-400">/mese</span>
               </div>
-              <ul className="space-y-3 mb-6 text-sm text-gray-600 dark:text-gray-300">
-                <li className="flex gap-2"><Check size={16} className="text-green-500" /> Accesso completo</li>
-                <li className="flex gap-2"><Check size={16} className="text-green-500" /> Disdici quando vuoi</li>
+              <ul className="space-y-3 mb-8 text-sm text-gray-400">
+                <li className="flex gap-2"><Check size={16} className="text-gray-300" /> Accesso completo</li>
+                <li className="flex gap-2"><Check size={16} className="text-gray-300" /> Disdici quando vuoi</li>
               </ul>
               <a
                 href={LINK_ABBONAMENTO}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full py-3 px-4 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-bold rounded-xl text-center transition-colors"
+                className="block w-full py-3 px-4 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-gray-200 font-bold rounded-xl text-center transition-all uppercase tracking-wider text-sm"
               >
                 Scegli Mensile
               </a>
             </div>
 
-            {/* OPZIONE 2: A VITA 5.99€ (CONSIGLIATO) */}
-            <div className="relative p-6 rounded-2xl border-2 border-blue-500 dark:border-blue-500 shadow-2xl shadow-blue-500/10 transform md:-translate-y-2 bg-gradient-to-b from-blue-50/50 to-white dark:from-blue-900/10 dark:to-gray-900">
-              {/* Targhetta Consigliato */}
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg uppercase tracking-wide">
-                Consigliato
-              </div>
+            {/* OPZIONE 2: A VITA 29.90€ (GOLD VIP) */}
+            <div className="relative p-1 rounded-2xl bg-gradient-to-br from-yellow-300 via-amber-500 to-yellow-800 shadow-[0_0_40px_rgba(234,179,8,0.3)] transform md:-translate-y-4 hover:scale-[1.02] transition-transform duration-300 group">
 
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">A Vita</h3>
-              <div className="flex items-baseline gap-1 mb-4">
-                <span className="text-4xl font-black text-blue-600 dark:text-blue-400">€29,90</span>
-                <span className="text-gray-500">una tantum</span>
+              {/* Contenuto Card */}
+              <div className="bg-gray-950 rounded-xl p-6 h-full relative overflow-hidden">
+
+                {/* Shine Effect Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-in-out pointer-events-none" />
+
+                {/* Targhetta Consigliato -> BEST VALUE */}
+                <div className="absolute -top-[1px] left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-black px-6 py-1.5 rounded-b-xl text-xs font-black shadow-lg uppercase tracking-widest flex items-center gap-1 border border-yellow-200">
+                  <Star size={12} className="fill-black" /> BEST VALUE <Star size={12} className="fill-black" />
+                </div>
+
+                <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-amber-400 to-yellow-600 mb-2 mt-4 uppercase tracking-widest text-center">A Vita</h3>
+
+                <div className="flex items-baseline justify-center gap-1 mb-6">
+                  <span className="text-5xl font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">€29,90</span>
+                  <span className="text-amber-500 font-bold">una tantum</span>
+                </div>
+
+                <ul className="space-y-3 mb-8 text-sm text-gray-300 border-t border-white/10 pt-6">
+                  <li className="flex gap-3 items-center"><div className="p-1 rounded-full bg-amber-500/20"><Check size={12} className="text-amber-400" /></div> <span className="font-semibold text-white">Paghi una volta sola</span></li>
+                  <li className="flex gap-3 items-center"><div className="p-1 rounded-full bg-amber-500/20"><Check size={12} className="text-amber-400" /></div> <span className="font-semibold text-white">Aggiornamenti inclusi</span></li>
+                  <li className="flex gap-3 items-center"><div className="p-1 rounded-full bg-amber-500/20"><Check size={12} className="text-amber-400" /></div> <span className="font-semibold text-white">Nessun abbonamento</span></li>
+                </ul>
+
+                <a
+                  href={LINK_VITA}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full py-4 px-4 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 hover:from-yellow-300 hover:via-amber-400 hover:to-yellow-500 text-black font-black rounded-xl text-center transition-all shadow-lg shadow-amber-500/20 uppercase tracking-widest text-lg relative overflow-hidden"
+                >
+                  <span className="relative z-10 flex items-center justify-center gap-2">Sblocca ORA <Zap size={20} className="fill-black" /></span>
+                </a>
               </div>
-              <ul className="space-y-3 mb-6 text-sm text-gray-600 dark:text-gray-300">
-                <li className="flex gap-2"><Check size={16} className="text-blue-500" /> Paghi una volta sola</li>
-                <li className="flex gap-2"><Check size={16} className="text-blue-500" /> Aggiornamenti inclusi</li>
-                <li className="flex gap-2"><Check size={16} className="text-blue-500" /> Nessun abbonamento</li>
-              </ul>
-              <a
-                href={LINK_VITA}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-bold rounded-xl text-center transition-all shadow-lg shadow-blue-500/25"
-              >
-                Sblocca per Sempre
-              </a>
             </div>
 
           </div>
