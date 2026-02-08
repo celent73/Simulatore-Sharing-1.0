@@ -177,7 +177,7 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
   const isClientMode = viewMode === 'client';
   const multiplier = 1;
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 dark:bg-black/80 backdrop-blur-md animate-in fade-in">
+    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/50 dark:bg-black/80 backdrop-blur-md animate-in fade-in">
       <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden relative animate-in zoom-in-95 duration-300 max-h-[90vh] flex flex-col border border-gray-100 dark:border-gray-700">
         <div className="p-6 flex justify-between items-start pb-2">
           <div className="flex items-center gap-3">

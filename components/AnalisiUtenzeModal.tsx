@@ -330,7 +330,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                 title={isComparisonMode ? (txt as any).deactivateComparison : (txt as any).activateComparison}
                             >
                                 <RefreshCcw size={20} className={`${isComparisonMode ? 'animate-spin-slow' : 'transition-transform duration-500'}`} />
-                                <span className="whitespace-nowrap">
+                                <span className="whitespace-nowrap hidden sm:block">
                                     {isComparisonMode ? (txt as any).modeConfronto : (txt as any).activateComparison}
                                 </span>
                             </button>

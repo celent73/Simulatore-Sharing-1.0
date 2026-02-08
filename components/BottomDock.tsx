@@ -36,19 +36,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
             >
                 <div className="absolute inset-0 bg-white/5 pointer-events-none" />
 
-                {/* 1. AMMINISTRATORI (CONDO) - Leftmost */}
-                <button
-                    onClick={() => handleModeChange('condo')}
-                    className={getButtonClass(viewMode === 'condo')}
-                >
-                    {!isPremium && <div className="absolute top-1 right-4 md:right-8 bg-red-500 text-white p-0.5 rounded-full z-20 shadow-sm"><Lock size={8} className="md:w-3 md:h-3" /></div>}
-                    <div className={getIconContainerClass(viewMode === 'condo')}>
-                        <CondoModeIcon className={`w-6 h-6 md:w-9 md:h-9 transition-all ${viewMode !== 'condo' ? 'grayscale opacity-70' : ''}`} />
-                    </div>
-                    <span className="text-[9px] md:text-xs font-bold leading-none text-center max-w-[60px] md:max-w-none">Admin</span>
-                </button>
-
-                {/* 2. SHARING SIMULATOR LIGHT */}
+                {/* 1. SHARING SIMULATOR LIGHT - Leftmost */}
                 <button
                     onClick={onOpenLightSimulator}
                     className={getButtonClass(false)} // Always inactive style unless we want to track light modal state
@@ -59,6 +47,18 @@ const BottomDock: React.FC<BottomDockProps> = ({
                     <span className="text-[9px] md:text-xs font-bold leading-none text-union-green-400 flex items-center gap-0.5">
                         Light <Sparkles size={6} className="animate-pulse md:w-3 md:h-3" />
                     </span>
+                </button>
+
+                {/* 2. AMMINISTRATORI (CONDO) */}
+                <button
+                    onClick={() => handleModeChange('condo')}
+                    className={getButtonClass(viewMode === 'condo')}
+                >
+                    {!isPremium && <div className="absolute top-1 right-4 md:right-8 bg-red-500 text-white p-0.5 rounded-full z-20 shadow-sm"><Lock size={8} className="md:w-3 md:h-3" /></div>}
+                    <div className={getIconContainerClass(viewMode === 'condo')}>
+                        <CondoModeIcon className={`w-6 h-6 md:w-9 md:h-9 transition-all ${viewMode !== 'condo' ? 'grayscale opacity-70' : ''}`} />
+                    </div>
+                    <span className="text-[9px] md:text-xs font-bold leading-none text-center max-w-[60px] md:max-w-none">Admin</span>
                 </button>
 
                 {/* 3. PARTNER SHARING (FAMILY) */}
