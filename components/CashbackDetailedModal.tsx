@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Calculator, RefreshCw, ShoppingBag, Car, ShoppingCart, Gift, Plane, Home, BookOpen, Coffee, Check, Trash2, PlusCircle, RotateCcw, RotateCw } from 'lucide-react';
+import { X, Calculator, RefreshCw, ShoppingBag, Car, ShoppingCart, Gift, Plane, Home, BookOpen, Coffee, Check, Trash2, PlusCircle, RotateCcw, RotateCw, MoreVertical, Camera } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { CashbackCategory } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 import SharyTrigger from './SharyTrigger';
+
 
 
 
@@ -434,9 +435,12 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                 messageEn="Enter the spending amount for each category and then select the brand you want. Notice the cashback percentage immediately! And if you want, set a bill amount at the top and watch how it decreases with cashback, have fun!"
                             />
                         </div>
-                        <button onClick={onClose} className="p-1 sm:p-1.5 hover:bg-white/10 rounded-full transition-colors">
-                            <X size={20} className="sm:w-5 sm:h-5" />
-                        </button>
+
+                        <div className="flex items-center gap-1">
+                            <button onClick={onClose} className="p-1 sm:p-1.5 hover:bg-white/10 rounded-full transition-colors">
+                                <X size={20} className="sm:w-5 sm:h-5" />
+                            </button>
+                        </div>
                     </div>
 
                     {/* DESKTOP LAYOUT: Side-by-Side Header */}
@@ -466,7 +470,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                     </span>
                                 </div>
 
-                                <div className="relative z-10">
+                                <div className="relative z-10 flex flex-col">
                                     <p className="text-4xl sm:text-6xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 via-purple-400 to-cyan-400 tracking-tighter drop-shadow-[0_0_15px_rgba(168,85,247,0.5)] animate-[pulse_3s_ease-in-out_infinite]">
                                         € {totalCashback.toLocaleString(language === 'it' ? 'it-IT' : (language === 'de' ? 'de-DE' : 'en-US'), { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </p>
@@ -745,6 +749,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                     </button>
                 </div>
             </div >
+
 
         </div >
     );

@@ -55,16 +55,20 @@ export const translations = {
       level_sub_n: "Rendita Indiretta {{n}}° Livello",
       needs_units: "SERVE {{n}} UTENZE",
       unlocked: "SBLOCCATO",
-      nav: {
-        light: "Light",
-        pro: "Pro",
-        network: "Network",
-        scanner: "AI Scanner",
-        focus: "Focus Mode",
-        admin: "Admin",
-        partner: "Partner",
-        client: "Cliente"
-      },
+    },
+    nav: {
+      light: "Light",
+      pro: "Pro",
+      network: "Network",
+      scanner: "AI Scanner",
+      focus: "Focus Mode",
+      admin: "Admin",
+      partner: "Partner",
+      client: "Cliente"
+    },
+    nav_mobile: {
+      input: "Inserimento",
+      results: "Risultati"
     },
     menu: {
       presentations: "Presentazioni",
@@ -774,16 +778,20 @@ export const translations = {
       level_sub_n: "Indirekte Rente {{n}}. Ebene",
       needs_units: "BENÖTIGT {{n}} EINHEITEN",
       unlocked: "FREIGESCHALTET",
-      nav: {
-        light: "Light",
-        pro: "Pro",
-        network: "Netzwerk",
-        scanner: "AI Scanner",
-        focus: "Fokus",
-        admin: "Admin",
-        partner: "Partner",
-        client: "Kunde"
-      },
+    },
+    nav: {
+      light: "Light",
+      pro: "Pro",
+      network: "Netzwerk",
+      scanner: "AI Scanner",
+      focus: "Fokus",
+      admin: "Admin",
+      partner: "Partner",
+      client: "Kunde"
+    },
+    nav_mobile: {
+      input: "Eingabe",
+      results: "Ergebnisse"
     },
     menu: {
       presentations: "Präsentationen",
@@ -1458,6 +1466,11 @@ export const translations = {
       level_sub_n: "Indirect Recurring {{n}}° Level",
       needs_units: "NEEDS {{n}} UNITS",
       unlocked: "UNLOCKED"
+    },
+
+    nav_mobile: {
+      input: "Input",
+      results: "Results"
     },
     menu: {
       presentations: "Presentations",

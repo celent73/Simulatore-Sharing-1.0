@@ -140,7 +140,6 @@ const AppContent = () => {
   const [isFocusModeOpen, setIsFocusModeOpen] = useState(false); // NEW STATE FOR FOCUS MODE
   const [isFuelPitchOpen, setIsFuelPitchOpen] = useState(false); // NEW STATE FOR FUEL PITCH
   const [isUnionEcosystemOpen, setIsUnionEcosystemOpen] = useState(false); // NEW STATE FOR UNION ECOSYSTEM
-  const [mobileTab, setMobileTab] = useState<'input' | 'results'>('input'); // NEW STATE FOR MOBILE SWIPE
 
   // --- NUOVI STATI PER LA VERIFICA SUPABASE ---
   const [licenseCode, setLicenseCode] = useState('');
@@ -538,7 +537,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.1.54
+        v1.1.52
       </div>
 
 
@@ -564,7 +563,7 @@ const AppContent = () => {
         {/* Custom Styles Injection */}
         <style>{lightStyles}</style>
 
-        <header className="flex flex-col gap-4 mb-4 sm:mb-8 rounded-3xl p-6 border-0 shadow-xl backdrop-blur-xl transition-all duration-500 relative z-50" style={{ background: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)', boxShadow: headerShadow }}>
+        <header className="flex flex-col gap-4 mb-8 rounded-3xl p-6 border-0 shadow-xl backdrop-blur-xl transition-all duration-500 relative z-50" style={{ background: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)', boxShadow: headerShadow }}>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
             <div className="w-full md:w-auto flex justify-center md:justify-start">
               <div className="flex items-center gap-3">
@@ -643,165 +642,51 @@ const AppContent = () => {
           <p className="text-blue-100 font-medium text-[10px] sm:text-sm md:text-base -mt-2 pl-1 relative z-10 opacity-90 text-center md:text-left max-w-xs md:max-w-none mx-auto md:mx-0 leading-tight">{t('app.subtitle')}</p>
         </header>
 
-        {/* MOBILE SWIPE NAVIGATION TABS */}
-        <div
-          className="md:hidden flex justify-center mb-6 p-1 rounded-2xl mx-auto max-w-sm border-0 shadow-xl relative z-30"
-          style={{ background: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)', boxShadow: headerShadow }}
-        >
-          <button
-            onClick={() => setMobileTab('input')}
-            className={`flex-1 py-3 text-base font-bold rounded-xl transition-all duration-300 ${mobileTab === 'input'
-              ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg scale-105 border border-white/10 ring-1 ring-white/5'
-              : 'text-gray-400 hover:text-white'
-              }`}
-          >
-            {t('nav_mobile.input')}
-          </button>
-          <button
-            onClick={() => setMobileTab('results')}
-            className={`flex-1 py-3 text-base font-bold rounded-xl transition-all duration-300 ${mobileTab === 'results'
-              ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg scale-105 border border-white/10 ring-1 ring-white/5'
-              : 'text-gray-400 hover:text-white'
-              }`}
-          >
-            {t('nav_mobile.results')}
-          </button>
-        </div>
+        {/* OLD NAVIGATION REMOVED */}
 
         <main key={viewMode} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
-          {/* MOBILE VIEW IS HANDLED VIA SWIPE/TABS */}
-          {/* DESKTOP VIEW IS STANDARD GRID */}
-
-          {/* INPUT PANEL - Visible on Desktop OR if mobileTab is 'input' */}
-          <div className={`${mobileTab === 'results' ? 'hidden md:block' : 'block'} md:col-span-1 lg:col-span-1 min-w-0`}>
-            {/* SWIPE HANDLER FOR MOBILE INPUT */}
-            <div
-              className="md:hidden h-full touch-pan-y"
-              onTouchStart={(e) => {
-                const touch = e.touches[0];
-                // @ts-ignore
-                window.touchStartX = touch.clientX;
-              }}
-              onTouchEnd={(e) => {
-                // @ts-ignore
-                const touchEndX = e.changedTouches[0].clientX;
-                // @ts-ignore
-                const diff = window.touchStartX - touchEndX;
-                if (diff > 50) { // Swipe Left -> Go to Results
-                  setMobileTab('results');
-                }
-              }}
-            >
-              {viewMode === 'condo' ? (
-                <CondoInputPanel inputs={condoInputs} onInputChange={handleCondoInputChange} onReset={handleCondoReset} results={condoResult} />
-              ) : (
-                <InputPanel
-                  inputs={inputs}
-                  viewMode={viewMode}
-                  onInputChange={handleInputChange}
-                  onReset={handleResetToZero}
-                  onResetPersonalClients={handleResetPersonalClients}
-                  onUndo={undo}
-                  onRedo={redo}
-                  canUndo={canUndo}
-                  canRedo={canRedo}
-                  cashbackPeriod={cashbackPeriod}
-                  setCashbackPeriod={setCashbackPeriod}
-                  planResult={planResult}
-                  onOpenCashbackDetailed={() => setIsCashbackDetailedOpen(true)}
-                />
-              )}
-            </div>
-
-            {/* DESKTOP RENDER (No swipe handlers needed) */}
-            <div className="hidden md:block h-full">
-              {viewMode === 'condo' ? (
-                <CondoInputPanel inputs={condoInputs} onInputChange={handleCondoInputChange} onReset={handleCondoReset} results={condoResult} />
-              ) : (
-                <InputPanel
-                  inputs={inputs}
-                  viewMode={viewMode}
-                  onInputChange={handleInputChange}
-                  onReset={handleResetToZero}
-                  onResetPersonalClients={handleResetPersonalClients}
-                  onUndo={undo}
-                  onRedo={redo}
-                  canUndo={canUndo}
-                  canRedo={canRedo}
-                  cashbackPeriod={cashbackPeriod}
-                  setCashbackPeriod={setCashbackPeriod}
-                  planResult={planResult}
-                  onOpenCashbackDetailed={() => setIsCashbackDetailedOpen(true)} // FIXED
-                />
-              )}
-            </div>
+          <div className="md:col-span-1 lg:col-span-1 min-w-0">
+            {viewMode === 'condo' ? (
+              <CondoInputPanel inputs={condoInputs} onInputChange={handleCondoInputChange} onReset={handleCondoReset} results={condoResult} />
+            ) : (
+              <InputPanel
+                inputs={inputs}
+                viewMode={viewMode}
+                onInputChange={handleInputChange}
+                onReset={handleResetToZero}
+                onResetPersonalClients={handleResetPersonalClients}
+                onUndo={undo}
+                onRedo={redo}
+                canUndo={canUndo}
+                canRedo={canRedo}
+                cashbackPeriod={cashbackPeriod}
+                setCashbackPeriod={setCashbackPeriod}
+                planResult={planResult}
+                onOpenCashbackDetailed={() => setIsCashbackDetailedOpen(true)}
+              />
+            )}
           </div>
-
-          {/* RESULTS DISPLAY - Visible on Desktop OR if mobileTab is 'results' */}
-          <div className={`${mobileTab === 'input' ? 'hidden md:block' : 'block'} md:col-span-1 lg:col-span-2 relative min-w-0`}>
-            {/* SWIPE HANDLER FOR MOBILE RESULTS */}
-            <div
-              className="md:hidden h-full touch-pan-y"
-              onTouchStart={(e) => {
-                const touch = e.touches[0];
-                // @ts-ignore
-                window.touchStartX = touch.clientX;
-              }}
-              onTouchEnd={(e) => {
-                // @ts-ignore
-                const touchEndX = e.changedTouches[0].clientX;
-                // @ts-ignore
-                const diff = window.touchStartX - touchEndX;
-                if (diff < -50) { // Swipe Right -> Go back to Input
-                  setMobileTab('input');
-                }
-              }}
-            >
-              {!isPremium && (
-                <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-gray-900 dark:via-gray-900/80 z-20 flex items-center justify-center pointer-events-none">
-                  <div className="bg-union-blue-600/90 text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-2 backdrop-blur-md pointer-events-auto cursor-pointer" onClick={() => setShowPremiumModal(true)}>
-                    <Lock size={16} /> <span>Sblocca Analisi Completa</span>
-                  </div>
+          <div className="md:col-span-1 lg:col-span-2 relative min-w-0">
+            {!isPremium && (
+              <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-gray-900 dark:via-gray-900/80 z-20 flex items-center justify-center pointer-events-none">
+                <div className="bg-union-blue-600/90 text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-2 backdrop-blur-md pointer-events-auto cursor-pointer" onClick={() => setShowPremiumModal(true)}>
+                  <Lock size={16} /> <span>Sblocca Analisi Completa</span>
                 </div>
-              )}
-              {viewMode === 'condo' ? (
-                <CondoResultsDisplay results={condoResult} />
-              ) : (
-                <ResultsDisplay
-                  planResult={planResult}
-                  viewMode={viewMode}
-                  inputs={inputs}
-                  cashbackPeriod={cashbackPeriod}
-                  onInputChange={handleInputChange}
-                  isFullScreen={isResultsFullScreen}
-                  onToggleFullScreen={handleToggleFullScreen}
-                />
-              )}
-            </div>
-
-            {/* DESKTOP RENDER */}
-            <div className="hidden md:block h-full relative">
-              {!isPremium && (
-                <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-gray-900 dark:via-gray-900/80 z-20 flex items-center justify-center pointer-events-none">
-                  <div className="bg-union-blue-600/90 text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-2 backdrop-blur-md pointer-events-auto cursor-pointer" onClick={() => setShowPremiumModal(true)}>
-                    <Lock size={16} /> <span>Sblocca Analisi Completa</span>
-                  </div>
-                </div>
-              )}
-              {viewMode === 'condo' ? (
-                <CondoResultsDisplay results={condoResult} />
-              ) : (
-                <ResultsDisplay
-                  planResult={planResult}
-                  viewMode={viewMode}
-                  inputs={inputs}
-                  cashbackPeriod={cashbackPeriod}
-                  onInputChange={handleInputChange}
-                  isFullScreen={isResultsFullScreen}
-                  onToggleFullScreen={handleToggleFullScreen}
-                />
-              )}
-            </div>
+              </div>
+            )}
+            {viewMode === 'condo' ? (
+              <CondoResultsDisplay results={condoResult} />
+            ) : (
+              <ResultsDisplay
+                planResult={planResult}
+                viewMode={viewMode}
+                inputs={inputs}
+                cashbackPeriod={cashbackPeriod}
+                onInputChange={handleInputChange}
+                isFullScreen={isResultsFullScreen}
+                onToggleFullScreen={handleToggleFullScreen}
+              />
+            )}
           </div>
         </main>
       </div >

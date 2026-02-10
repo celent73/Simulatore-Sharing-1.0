@@ -24,6 +24,7 @@ import LiveBattleMode from './LiveBattleMode';
 import AICoach from './AICoach';
 import SharyTrigger from './SharyTrigger';
 
+
 interface ResultsDisplayProps {
   planResult: CompensationPlanResult;
   viewMode?: ViewMode;
@@ -136,6 +137,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   const [consultantSurname, setConsultantSurname] = useState('');
   const [consultantPhone, setConsultantPhone] = useState('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+
 
 
   const handleReset = () => {
@@ -251,6 +254,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         years={projectionYears}
         onYearChange={setProjectionYears}
         monthlyRecurring={totalRecurringYear3 + (isAnnual ? monthlyCashback : 0)}
+
+
         totalOneTime={oneTimeBonusWithoutCashback + (isAnnual ? 0 : monthlyCashback)}
       />
 
@@ -353,6 +358,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
               )}
             </h2>
             <div className="flex items-center gap-2">
+
               <button
                 onClick={onToggleFullScreen}
                 className={`hidden sm:flex items-center gap-2 px-4 py-2 ${isFullScreen ? 'bg-union-blue-50 text-union-blue-600' : 'bg-union-blue-50 text-union-blue-600'} hover:bg-union-blue-100 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95 border border-transparent hover:border-union-blue-200`}

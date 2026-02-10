@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
-import * as pdfjsLib from 'pdfjs-dist';
+// Remove static import to prevent startup lockdown
+// import * as pdfjsLib from 'pdfjs-dist';
 
-// Imposta il worker per PDF.js
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+// Worker will be set dynamically
+
 
 interface BusinessPresentationModalProps {
     isOpen: boolean;
@@ -16,12 +17,12 @@ interface BusinessPresentationModalProps {
 export const BusinessPresentationModal: React.FC<BusinessPresentationModalProps> = ({ isOpen, onClose, onOpenCashback, onOpenFocus, initialPage = 1 }) => {
     const [page, setPage] = useState(initialPage);
     const [totalPages, setTotalPages] = useState(0);
-    const [pdfDoc, setPdfDoc] = useState<pdfjsLib.PDFDocumentProxy | null>(null);
+    const [pdfDoc, setPdfDoc] = useState<any>(null); // Use any for dynamic type
     const [isLoading, setIsLoading] = useState(true);
     const [renderError, setRenderError] = useState<string | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const renderTaskRef = useRef<pdfjsLib.RenderTask | null>(null);
+    const renderTaskRef = useRef<any>(null); // Use any for dynamic type
 
     // Carica il documento PDF all'apertura
     useEffect(() => {
@@ -39,6 +40,10 @@ export const BusinessPresentationModal: React.FC<BusinessPresentationModalProps>
             setIsLoading(true);
             setRenderError(null);
             try {
+                // Dynamic import
+                const pdfjsLib = await import('pdfjs-dist');
+                pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+
                 const loadingTask = pdfjsLib.getDocument('/UnionPresentazioneBusiness.pdf');
                 const doc = await loadingTask.promise;
                 setPdfDoc(doc);

@@ -64,6 +64,8 @@ export interface CondoInput {
 
 export type ViewMode = 'family' | 'client' | 'condo';
 
+
+
 export interface LevelData {
   level: number;
   users: number;

@@ -49,7 +49,7 @@ interface InputPanelProps {
   cashbackPeriod: 'monthly' | 'annual';
   setCashbackPeriod: React.Dispatch<React.SetStateAction<'monthly' | 'annual'>>;
   planResult: CompensationPlanResult;
-  onOpenCashbackDetailed: () => void; // NEW PROP
+  onOpenCashbackDetailed: () => void;
 }
 
 const uiTexts = {
