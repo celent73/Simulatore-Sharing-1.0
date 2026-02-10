@@ -347,7 +347,7 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="relative z-20 mb-16 sm:mb-10 w-full max-w-[200px]"
+                                className="relative z-20 mb-32 sm:mb-16 w-full max-w-[200px]"
                             >
                                 <label className="block text-xs font-bold text-purple-200 uppercase tracking-widest mb-2 opacity-70">
                                     {getLabel('cashback_detailed.insert_spending') || "Inserisci Spesa"}
@@ -388,12 +388,12 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
 
                                 {/* Sparkles Overlay */}
                                 <motion.div
-                                    className="absolute -top-10 -right-10 text-yellow-400"
+                                    className="absolute -top-6 -right-4 sm:-top-10 sm:-right-10 text-yellow-400"
                                     initial={{ scale: 0, rotate: 0 }}
                                     animate={{ scale: 1.5, rotate: 180 }}
                                     transition={{ delay: 0.5, duration: 0.5 }}
                                 >
-                                    <Sparkles size={80} />
+                                    <Sparkles size={60} className="sm:w-20 sm:h-20" />
                                 </motion.div>
                             </div>
 
