@@ -119,7 +119,7 @@ const GridMenu: React.FC<GridMenuProps> = ({
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-start pt-32 md:pt-48 p-4 sm:p-6"
+                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-start pt-24 md:pt-32 p-4 sm:p-6"
                     initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
                     animate={{ opacity: 1, backdropFilter: 'blur(12px)' }}
                     exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
