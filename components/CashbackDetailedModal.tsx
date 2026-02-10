@@ -200,7 +200,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
         setTargetBill(0);
     };
 
-    const handleFocusModeSelect = (categoryBaseId: string, brandName: string) => {
+    const handleFocusModeSelect = (categoryBaseId: string, brandName: string, amount?: number) => {
         const brandData = BRANDS_DATA.find(b => b.name === brandName);
         if (!brandData) return;
 
@@ -215,7 +215,8 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
             // Try to find the first empty slot (no brand selected)
             let targetSlotIndex = slots.find(s => !s.brand)?.index;
 
-            // If no empty slot, use the first slot
+            // If no empty slot, use the first slot or maybe overwrite the one with same brand? 
+            // For now default behavior: first slot if all full?
             if (targetSlotIndex === undefined) {
                 targetSlotIndex = slots[0].index;
             }
@@ -225,7 +226,9 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                 ...newCategories[targetSlotIndex],
                 brand: brandName,
                 percentage: brandData.percentage,
-                fixedAmount: brandData.fixedAmount
+                fixedAmount: brandData.fixedAmount,
+                // If amount is passed, use it, otherwise keep existing
+                amount: amount !== undefined ? amount : newCategories[targetSlotIndex].amount
             };
 
             return newCategories;

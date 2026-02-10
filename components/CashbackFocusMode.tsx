@@ -6,7 +6,7 @@ import { BRANDS_DATA, getIcon } from './CashbackData';
 interface CashbackFocusModeProps {
     isOpen: boolean;
     onClose: () => void;
-    onSelect: (categoryBaseId: string, brandName: string) => void;
+    onSelect: (categoryBaseId: string, brandName: string, amount?: number) => void;
     t: (key: string) => string;
     language: string;
 }
@@ -15,6 +15,7 @@ interface CashbackFocusModeProps {
 const AVAILABLE_CATEGORIES = Array.from(new Set(BRANDS_DATA.flatMap(b => b.categories)));
 
 export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, onClose, onSelect, t, language }) => {
+    const [spendingAmount, setSpendingAmount] = useState<string>('');
     const [step, setStep] = useState<'category' | 'brand' | 'reveal'>('category');
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [selectedBrand, setSelectedBrand] = useState<typeof BRANDS_DATA[0] | null>(null);
@@ -46,6 +47,11 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
             it: 'SELEZIONA',
             de: 'AUSWÄHLEN',
             en: 'SELECT'
+        },
+        'cashback_detailed.insert_spending': {
+            it: 'INSERISCI SPESA',
+            de: 'AUSGABEN EINGEBEN',
+            en: 'ENTER SPENDING'
         },
         'cashback_detailed.cat.alim': {
             it: 'Alimentari',
@@ -123,6 +129,7 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                 setSelectedCategory(null);
                 setSelectedBrand(null);
                 setSearchTerm('');
+                setSpendingAmount('');
             }, 500);
         }
     }, [isOpen]);
@@ -140,7 +147,8 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
 
     const handleConfirm = () => {
         if (selectedCategory && selectedBrand) {
-            onSelect(selectedCategory, selectedBrand.name);
+            const amount = parseFloat(spendingAmount) || 0;
+            onSelect(selectedCategory, selectedBrand.name, amount);
             onClose();
         }
     };
@@ -182,6 +190,10 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
             default: return 'Coffee';
         }
     };
+
+    // Calculate cashback return based on input
+    const parsedAmount = parseFloat(spendingAmount) || 0;
+    const cashbackReturn = selectedBrand ? (parsedAmount * selectedBrand.percentage / 100) : 0;
 
     return (
         <div className="fixed inset-0 z-[100001] bg-black text-white flex flex-col overflow-hidden font-sans">
@@ -330,15 +342,49 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                 {selectedBrand.name}
                             </motion.div>
 
+                            {/* SPENDING INPUT */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.3 }}
+                                className="relative z-20 mb-6 w-full max-w-[200px]"
+                            >
+                                <label className="block text-xs font-bold text-purple-200 uppercase tracking-widest mb-2 opacity-70">
+                                    {getLabel('cashback_detailed.insert_spending') || "Inserisci Spesa"}
+                                </label>
+                                <div className="relative group">
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-white/50 group-focus-within:text-purple-400 transition-colors">€</span>
+                                    <input
+                                        type="number"
+                                        value={spendingAmount}
+                                        onChange={(e) => setSpendingAmount(e.target.value)}
+                                        placeholder="0"
+                                        className="w-full bg-white/10 border-2 border-white/10 rounded-2xl py-3 pl-10 pr-4 text-3xl font-black text-center text-white placeholder-white/20 focus:outline-none focus:bg-white/20 focus:border-purple-500 transition-all"
+                                        autoFocus
+                                    />
+                                </div>
+                            </motion.div>
+
                             <div className="relative z-10">
-                                <motion.div
-                                    className="text-[20vw] sm:text-[180px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-gray-400 drop-shadow-[0_0_60px_rgba(255,255,255,0.3)]"
-                                    initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)" }}
-                                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                                    transition={{ duration: 0.8, ease: "easeOut" }}
-                                >
-                                    {selectedBrand?.percentage}%
-                                </motion.div>
+                                {parsedAmount > 0 ? (
+                                    <motion.div
+                                        className="text-[15vw] sm:text-[120px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-yellow-100 to-yellow-600 drop-shadow-[0_0_60px_rgba(234,179,8,0.5)]"
+                                        initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)" }}
+                                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                                        key="cashback-amount"
+                                    >
+                                        € {cashbackReturn.toLocaleString(language === 'de' ? 'de-DE' : 'it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        className="text-[20vw] sm:text-[180px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-gray-400 drop-shadow-[0_0_60px_rgba(255,255,255,0.3)]"
+                                        initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)" }}
+                                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                                        transition={{ duration: 0.8, ease: "easeOut" }}
+                                    >
+                                        {selectedBrand?.percentage}%
+                                    </motion.div>
+                                )}
 
                                 {/* Sparkles Overlay */}
                                 <motion.div
@@ -357,7 +403,10 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.8 }}
                             >
-                                {getLabel('cashback_detailed.return') || "Ritorno Cashback"}
+                                {parsedAmount > 0 ?
+                                    (getLabel('cashback_detailed.return') + ` (${selectedBrand.percentage}%)`) :
+                                    (getLabel('cashback_detailed.return') || "Ritorno Cashback")
+                                }
                             </motion.div>
 
                             {/* ACTION BUTTONS */}
