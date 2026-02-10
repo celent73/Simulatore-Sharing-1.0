@@ -119,7 +119,7 @@ const GridMenu: React.FC<GridMenuProps> = ({
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-start pt-10 md:pt-16 p-4 sm:p-6"
+                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-start pt-2 md:pt-8 p-4 sm:p-6"
                     initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
                     animate={{ opacity: 1, backdropFilter: 'blur(12px)' }}
                     exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
@@ -136,7 +136,7 @@ const GridMenu: React.FC<GridMenuProps> = ({
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0 }}
                         onClick={onClose}
-                        className="absolute top-4 right-4 p-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-white hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors z-20 shadow-lg"
+                        className="absolute top-2 right-4 p-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-white hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors z-20 shadow-lg"
                     >
                         <X size={20} />
                     </motion.button>
@@ -149,11 +149,11 @@ const GridMenu: React.FC<GridMenuProps> = ({
                         exit="exit"
                         className="relative z-10 w-full max-w-4xl"
                     >
-                        <div className="text-center mb-4">
-                            <motion.h2 variants={itemVariants} className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white mb-1">
+                        <div className="text-center mb-2">
+                            <motion.h2 variants={itemVariants} className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white mb-0">
                                 Menu
                             </motion.h2>
-                            <motion.p variants={itemVariants} className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                            <motion.p variants={itemVariants} className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">
                                 Tutte le app a portata di mano
                             </motion.p>
                         </div>
@@ -203,24 +203,21 @@ const GridMenu: React.FC<GridMenuProps> = ({
                                 onClick={toggleShary}
                             />
 
-                            {viewMode === 'family' && (
-                                <>
-                                    <MenuItem
-                                        icon={Target}
-                                        label={t('menu.calc_goal')}
-                                        colorClass="bg-emerald-100 text-emerald-600"
-                                        gradient="from-emerald-400 to-teal-500"
-                                        onClick={onOpenTarget}
-                                    />
-                                    <MenuItem
-                                        icon={Ticket}
-                                        label={t('menu.your_ticket')}
-                                        colorClass="bg-fuchsia-100 text-fuchsia-600"
-                                        gradient="from-fuchsia-400 to-pink-500"
-                                        onClick={onOpenFutureTicket}
-                                    />
-                                </>
-                            )}
+                            <MenuItem
+                                icon={Target}
+                                label={t('menu.calc_goal')}
+                                colorClass="bg-emerald-100 text-emerald-600"
+                                gradient="from-emerald-400 to-teal-500"
+                                onClick={onOpenTarget}
+                            />
+
+                            <MenuItem
+                                icon={Ticket}
+                                label={t('menu.your_ticket')}
+                                colorClass="bg-fuchsia-100 text-fuchsia-600"
+                                gradient="from-fuchsia-400 to-pink-500"
+                                onClick={onOpenFutureTicket}
+                            />
 
                             {/* UTILS SECTION */}
                             <MenuItem
