@@ -45,6 +45,7 @@ import TargetIcon from './components/icons/TargetIcon';
 import { ClientModeIcon, FamilyModeIcon, CondoModeIcon } from './components/icons/ModeIcons';
 import { ItalyFlag, GermanyFlag, UKFlag } from './components/icons/Flags';
 import CrownIconSVG from './components/icons/CrownIcon';
+import { BroadcastModal } from './components/BroadcastModal';
 import BackgroundMesh from './components/BackgroundMesh';
 import DisclaimerModal from './components/DisclaimerModal';
 import PaymentSuccessModal from './components/PaymentSuccessModal';
@@ -145,20 +146,28 @@ const AppContent = () => {
   // --- DASHBOARD TUTORIAL STATE ---
   const [showDashboardTutorial, setShowDashboardTutorial] = useState(false);
 
+  // --- BROADCAST MODAL STATE ---
+  const [showBroadcastModal, setShowBroadcastModal] = useState(false);
+
   useEffect(() => {
-    // Check if user has seen the dashboard swipe tutorial
-    const hasSeen = localStorage.getItem('hasSeenDashboardSwipeTutorial');
-    // Only show if mobile (simple check) and hasn't seen it
-    if (!hasSeen && window.innerWidth < 768) {
-      // Delay slightly to let app load
+    // Check dashboard tutorial
+    const hasSeenTutorial = localStorage.getItem('hasSeenDashboardSwipeTutorial');
+    if (!hasSeenTutorial && window.innerWidth < 768) {
       setTimeout(() => {
         setShowDashboardTutorial(true);
-        // Hide after 4 seconds
         setTimeout(() => {
           setShowDashboardTutorial(false);
           localStorage.setItem('hasSeenDashboardSwipeTutorial', 'true');
         }, 4000);
       }, 1000);
+    }
+
+    // Check broadcast modal (give it a bit of delay so it doesn't clash with other startups)
+    const hasSeenBroadcast = localStorage.getItem('hasSeenBroadcastModal');
+    if (!hasSeenBroadcast) {
+      setTimeout(() => {
+        setShowBroadcastModal(true);
+      }, 2000); // 2 seconds delay
     }
   }, []);
 
@@ -556,9 +565,14 @@ const AppContent = () => {
       {/* SHARY UI */}
       <SharyAssistant />
 
+      <BroadcastModal
+        isOpen={showBroadcastModal}
+        onClose={() => setShowBroadcastModal(false)}
+      />
+
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.1.62
+        v1.1.63
       </div>
 
 
