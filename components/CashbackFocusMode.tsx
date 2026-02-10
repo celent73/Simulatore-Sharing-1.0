@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, Check, Sparkles, Search, ArrowRight } from 'lucide-react';
+import { X, ChevronLeft, Check, Sparkles, Search, ArrowRight, Share2, Download } from 'lucide-react';
+import { toPng } from 'html-to-image';
 import { BRANDS_DATA, getIcon } from './CashbackData';
 
 interface CashbackFocusModeProps {
@@ -20,6 +21,7 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [selectedBrand, setSelectedBrand] = useState<typeof BRANDS_DATA[0] | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const reportRef = useRef<HTMLDivElement>(null);
 
     // Local translations to fix missing keys/underscores
     const LABELS: Record<string, Record<string, string>> = {
@@ -108,6 +110,16 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
             de: 'Beispiel Internet-Affiliates',
             en: 'Example Internet Affiliates'
         },
+        'focus.annual_projection': {
+            it: 'Proiezione 12 Mesi',
+            de: '12-Monats-Prognose',
+            en: '12-Month Projection'
+        },
+        'focus.share': {
+            it: 'CONDIVIDI',
+            de: 'TEILEN',
+            en: 'SHARE'
+        }
     };
 
     const getLabel = (key: string) => {
@@ -163,9 +175,48 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
         }
     };
 
+    const handleShare = async () => {
+        if (reportRef.current === null) return;
+
+        try {
+            // Create a clone or style the current element for capture? 
+            // We use the current element but ensuring background is opaque if needed.
+            // Since we have a complex background, we capture the specific container.
+
+            const dataUrl = await toPng(reportRef.current, {
+                cacheBust: true,
+                backgroundColor: '#0f172a', // Ensure dark background
+                style: {
+                    borderRadius: '24px',
+                    padding: '40px',
+                }
+            });
+
+            const blob = await (await fetch(dataUrl)).blob();
+            const file = new File([blob], 'sharing-simulator-result.png', { type: 'image/png' });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    files: [file],
+                    title: 'Sharing Simulator Focus Mode',
+                    text: `Guarda il mio potenziale risparmio con ${selectedBrand?.name}!`,
+                });
+            } else {
+                const link = document.createElement('a');
+                link.download = 'sharing-simulator-result.png';
+                link.href = dataUrl;
+                link.click();
+            }
+        } catch (err) {
+            console.error('Failed to share:', err);
+            alert('Impossibile condividere l\'immagine al momento.');
+        }
+    };
+
     if (!isOpen) return null;
 
     // Filter brands based on category and search
+    // ... (same as before)
     const filteredBrands = selectedCategory
         ? BRANDS_DATA.filter(b =>
             b.categories.includes(selectedCategory) &&
@@ -194,6 +245,7 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
     // Calculate cashback return based on input
     const parsedAmount = parseFloat(spendingAmount) || 0;
     const cashbackReturn = selectedBrand ? (parsedAmount * selectedBrand.percentage / 100) : 0;
+    const annualProjection = cashbackReturn * 12;
 
     return (
         <div className="fixed inset-0 z-[100001] bg-black text-white flex flex-col overflow-hidden font-sans">
@@ -327,78 +379,98 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                             transition={{ duration: 0.5, type: "spring" }}
                             className="flex flex-col items-center justify-center text-center relative w-full h-full"
                         >
-                            {/* Background Explosion Effect */}
-                            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                                <div className="absolute w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] animate-pulse" />
-                                <div className="absolute w-[300px] h-[300px] bg-yellow-500/10 rounded-full blur-[80px]" />
-                            </div>
-
-                            <motion.div
-                                initial={{ y: 20, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ delay: 0.2 }}
-                                className="mb-4 text-purple-300 text-xl sm:text-2xl font-bold uppercase tracking-widest relative z-10"
-                            >
-                                {selectedBrand.name}
-                            </motion.div>
-
-                            {/* SPENDING INPUT */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3 }}
-                                className="relative z-20 mb-32 sm:mb-16 w-full max-w-[200px]"
-                            >
-                                <label className="block text-xs font-bold text-purple-200 uppercase tracking-widest mb-2 opacity-70">
-                                    {getLabel('cashback_detailed.insert_spending') || "Inserisci Spesa"}
-                                </label>
-                                <div className="relative group">
-                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-white/50 group-focus-within:text-purple-400 transition-colors">€</span>
-                                    <input
-                                        type="number"
-                                        value={spendingAmount}
-                                        onChange={(e) => setSpendingAmount(e.target.value)}
-                                        placeholder="0"
-                                        className="w-full bg-white/10 border-2 border-white/10 rounded-2xl py-3 pl-10 pr-4 text-3xl font-black text-center text-white placeholder-white/20 focus:outline-none focus:bg-white/20 focus:border-purple-500 transition-all"
-                                        autoFocus
-                                    />
+                            {/* WRAPPER FOR CAPTURE */}
+                            <div ref={reportRef} className="flex flex-col items-center justify-center p-8 rounded-[3rem] transition-colors relative">
+                                {/* Background Explosion Effect */}
+                                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                                    <div className="absolute w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] animate-pulse" />
+                                    <div className="absolute w-[300px] h-[300px] bg-yellow-500/10 rounded-full blur-[80px]" />
                                 </div>
-                            </motion.div>
 
-                            <div className="relative z-10">
-                                {parsedAmount > 0 ? (
-                                    <motion.div
-                                        className="text-[15vw] sm:text-[120px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-yellow-100 to-yellow-600 drop-shadow-[0_0_60px_rgba(234,179,8,0.5)]"
-                                        initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)" }}
-                                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                                        key="cashback-amount"
-                                    >
-                                        € {cashbackReturn.toLocaleString(language === 'de' ? 'de-DE' : 'it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                    </motion.div>
-                                ) : (
-                                    <motion.div
-                                        className="text-[20vw] sm:text-[180px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-gray-400 drop-shadow-[0_0_60px_rgba(255,255,255,0.3)]"
-                                        initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)" }}
-                                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                                        transition={{ duration: 0.8, ease: "easeOut" }}
-                                    >
-                                        {selectedBrand?.percentage}%
-                                    </motion.div>
-                                )}
-
-                                {/* Sparkles Overlay */}
                                 <motion.div
-                                    className="absolute -top-6 -right-4 sm:-top-10 sm:-right-10 text-yellow-400"
-                                    initial={{ scale: 0, rotate: 0 }}
-                                    animate={{ scale: 1.5, rotate: 180 }}
-                                    transition={{ delay: 0.5, duration: 0.5 }}
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="mb-4 text-purple-300 text-xl sm:text-2xl font-bold uppercase tracking-widest relative z-10"
                                 >
-                                    <Sparkles size={60} className="sm:w-20 sm:h-20" />
+                                    {selectedBrand.name}
                                 </motion.div>
+
+                                {/* SPENDING INPUT */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                    className="relative z-20 mb-32 sm:mb-16 w-full max-w-[200px]"
+                                >
+                                    <label className="block text-xs font-bold text-purple-200 uppercase tracking-widest mb-2 opacity-70">
+                                        {getLabel('cashback_detailed.insert_spending') || "Inserisci Spesa"}
+                                    </label>
+                                    <div className="relative group">
+                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-white/50 group-focus-within:text-purple-400 transition-colors">€</span>
+                                        <input
+                                            type="number"
+                                            value={spendingAmount}
+                                            onChange={(e) => setSpendingAmount(e.target.value)}
+                                            placeholder="0"
+                                            className="w-full bg-white/10 border-2 border-white/10 rounded-2xl py-3 pl-10 pr-4 text-3xl font-black text-center text-white placeholder-white/20 focus:outline-none focus:bg-white/20 focus:border-purple-500 transition-all"
+                                            autoFocus
+                                        />
+                                    </div>
+                                </motion.div>
+
+                                <div className="relative z-10">
+                                    {parsedAmount > 0 ? (
+                                        <div className="flex flex-col items-center">
+                                            <motion.div
+                                                className="text-[15vw] sm:text-[120px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-yellow-100 to-yellow-600 drop-shadow-[0_0_60px_rgba(234,179,8,0.5)]"
+                                                initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)" }}
+                                                animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                                                key="cashback-amount"
+                                            >
+                                                € {cashbackReturn.toLocaleString(language === 'de' ? 'de-DE' : 'it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                            </motion.div>
+
+                                            {/* ANNUAL PROJECTION */}
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: 0.6 }}
+                                                className="mt-6 flex flex-col items-center bg-white/5 px-6 py-3 rounded-2xl border border-white/10"
+                                            >
+                                                <span className="text-xs text-white/60 uppercase tracking-widest font-bold mb-1">
+                                                    {getLabel('focus.annual_projection') || "Proiezione 12 Mesi"}
+                                                </span>
+                                                <span className="text-xl sm:text-2xl font-black text-yellow-400">
+                                                    € {annualProjection.toLocaleString(language === 'de' ? 'de-DE' : 'it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </span>
+                                            </motion.div>
+                                        </div>
+                                    ) : (
+                                        <motion.div
+                                            className="text-[20vw] sm:text-[180px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-gray-400 drop-shadow-[0_0_60px_rgba(255,255,255,0.3)]"
+                                            initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)" }}
+                                            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                                            transition={{ duration: 0.8, ease: "easeOut" }}
+                                        >
+                                            {selectedBrand?.percentage}%
+                                        </motion.div>
+                                    )}
+
+                                    {/* Sparkles Overlay */}
+                                    <motion.div
+                                        className="absolute -top-24 -right-2 sm:-top-32 sm:-right-12 text-yellow-400"
+                                        initial={{ scale: 0, rotate: 0 }}
+                                        animate={{ scale: 1.5, rotate: 180 }}
+                                        transition={{ delay: 0.5, duration: 0.5 }}
+                                    >
+                                        <Sparkles size={60} className="sm:w-20 sm:h-20" />
+                                    </motion.div>
+                                </div>
                             </div>
 
                             <motion.div
-                                className="mt-4 text-gray-400 text-lg sm:text-xl font-medium"
+                                className="mt-4 text-gray-400 text-lg sm:text-xl font-medium relative z-20"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.8 }}
@@ -411,20 +483,29 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
 
                             {/* ACTION BUTTONS */}
                             <motion.div
-                                className="mt-16 flex flex-col sm:flex-row gap-4 relative z-20 w-full sm:w-auto px-6"
+                                className="mt-12 flex flex-col sm:flex-row gap-4 relative z-20 w-full sm:w-auto px-6"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 1 }}
                             >
-                                <button
-                                    onClick={handleBack}
-                                    className="px-8 py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-white font-bold backdrop-blur-md transition-all text-center"
-                                >
-                                    {getLabel('common.back') || "Indietro"}
-                                </button>
+                                <div className="flex gap-4 w-full">
+                                    <button
+                                        onClick={handleShare}
+                                        className="flex-1 sm:flex-none px-6 py-4 bg-purple-600/20 hover:bg-purple-600/40 rounded-2xl text-purple-300 font-bold backdrop-blur-md transition-all text-center flex items-center justify-center gap-2 border border-purple-500/20"
+                                        title="Condividi"
+                                    >
+                                        <Share2 size={24} />
+                                    </button>
+                                    <button
+                                        onClick={handleBack}
+                                        className="flex-1 px-8 py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-white font-bold backdrop-blur-md transition-all text-center"
+                                    >
+                                        {getLabel('common.back') || "Indietro"}
+                                    </button>
+                                </div>
                                 <button
                                     onClick={handleConfirm}
-                                    className="px-10 py-4 bg-white text-black rounded-2xl font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(255,255,255,0.4)] flex items-center justify-center gap-2 group text-center"
+                                    className="w-full sm:w-auto px-10 py-4 bg-white text-black rounded-2xl font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(255,255,255,0.4)] flex items-center justify-center gap-2 group text-center"
                                 >
                                     <Check size={24} className="group-hover:scale-110 transition-transform" />
                                     {getLabel('common.select') || "SELEZIONA"}
