@@ -347,7 +347,7 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="relative z-20 mb-6 w-full max-w-[200px]"
+                                className="relative z-20 mb-16 sm:mb-10 w-full max-w-[200px]"
                             >
                                 <label className="block text-xs font-bold text-purple-200 uppercase tracking-widest mb-2 opacity-70">
                                     {getLabel('cashback_detailed.insert_spending') || "Inserisci Spesa"}
