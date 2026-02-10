@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, Check, Sparkles, Search, ArrowRight, Share2, Download } from 'lucide-react';
+import { X, ChevronLeft, Check, Sparkles, Search, ArrowRight, Share2, Download, Hand } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import { BRANDS_DATA, getIcon } from './CashbackData';
 
@@ -22,6 +22,11 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
     const [selectedBrand, setSelectedBrand] = useState<typeof BRANDS_DATA[0] | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const reportRef = useRef<HTMLDivElement>(null);
+
+    // Swipe Logic State
+    const [touchStart, setTouchStart] = useState<number | null>(null);
+    const [touchEnd, setTouchEnd] = useState<number | null>(null);
+    const [showTutorial, setShowTutorial] = useState(false);
 
     // Local translations to fix missing keys/underscores
     const LABELS: Record<string, Record<string, string>> = {
@@ -119,6 +124,11 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
             it: 'CONDIVIDI',
             de: 'TEILEN',
             en: 'SHARE'
+        },
+        'focus.swipe_hint': {
+            it: 'Scorri per chiudere',
+            de: 'Wischen zum Schließen',
+            en: 'Swipe to close'
         }
     };
 
@@ -135,16 +145,53 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
 
     useEffect(() => {
         if (!isOpen) {
-            // Reset state after exit animation might be nice, but for now just reset on open/close triggers if needed
+            // Reset state on close
             setTimeout(() => {
                 setStep('category');
                 setSelectedCategory(null);
                 setSelectedBrand(null);
                 setSearchTerm('');
                 setSpendingAmount('');
+                setTouchStart(null);
+                setTouchEnd(null);
             }, 500);
+        } else {
+            // Check for tutorial on open
+            const hasSeenTutorial = localStorage.getItem('hasSeenFocusSwipeTutorial');
+            if (!hasSeenTutorial) {
+                setShowTutorial(true);
+                // Hide after 4 seconds and mark as seen
+                setTimeout(() => {
+                    setShowTutorial(false);
+                    localStorage.setItem('hasSeenFocusSwipeTutorial', 'true');
+                }, 4000);
+            }
         }
     }, [isOpen]);
+
+    // Touch Event Handlers for Swipe
+    const minSwipeDistance = 50;
+
+    const onTouchStart = (e: React.TouchEvent) => {
+        setTouchEnd(null); // Reset
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const onTouchMove = (e: React.TouchEvent) => {
+        setTouchEnd(e.targetTouches[0].clientX);
+    };
+
+    const onTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > minSwipeDistance;
+        const isRightSwipe = distance < -minSwipeDistance;
+
+        if (isRightSwipe) {
+            // Swipe right to close (like going back/closing modal on iOS)
+            onClose();
+        }
+    };
 
     const handleCategorySelect = (cat: string) => {
         setSelectedCategory(cat);
@@ -179,10 +226,6 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
         if (reportRef.current === null) return;
 
         try {
-            // Create a clone or style the current element for capture? 
-            // We use the current element but ensuring background is opaque if needed.
-            // Since we have a complex background, we capture the specific container.
-
             const dataUrl = await toPng(reportRef.current, {
                 cacheBust: true,
                 backgroundColor: '#0f172a', // Ensure dark background
@@ -216,7 +259,6 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
     if (!isOpen) return null;
 
     // Filter brands based on category and search
-    // ... (same as before)
     const filteredBrands = selectedCategory
         ? BRANDS_DATA.filter(b =>
             b.categories.includes(selectedCategory) &&
@@ -224,19 +266,19 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
         )
         : [];
 
-    // Helper to get category icon name (mapping back from getIcon logic if possible, or manual)
+    // Helper to get category icon name
     const getCategoryIconName = (catId: string) => {
         switch (catId) {
             case 'alim': return 'ShoppingBag';
             case 'carb': return 'Car';
             case 'igiene': return 'ShoppingCart';
-            case 'tech': return 'Calculator'; // fallback
+            case 'tech': return 'Calculator';
             case 'treni': return 'Plane';
             case 'school': return 'BookOpen';
             case 'abb': return 'Gift';
             case 'casa': return 'Home';
             case 'regali': return 'Gift';
-            case 'md': return 'ShoppingBag'; // Fallback
+            case 'md': return 'ShoppingBag';
             case 'aff_int': return 'Coffee';
             default: return 'Coffee';
         }
@@ -248,13 +290,46 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
     const annualProjection = cashbackReturn * 12;
 
     return (
-        <div className="fixed inset-0 z-[100001] bg-black text-white flex flex-col overflow-hidden font-sans">
+        <div
+            className="fixed inset-0 z-[100001] bg-black text-white flex flex-col overflow-hidden font-sans"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+        >
             {/* AMBIENT BACKGROUND */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-[-20%] left-[-20%] w-[70vw] h-[70vw] bg-purple-900/20 rounded-full blur-[120px] animate-[pulse_8s_infinite]" />
                 <div className="absolute bottom-[-20%] right-[-20%] w-[60vw] h-[60vw] bg-indigo-900/20 rounded-full blur-[100px] animate-[pulse_10s_infinite_reverse]" />
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
             </div>
+
+            {/* TUTORIAL OVERLAY */}
+            <AnimatePresence>
+                {showTutorial && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100002] pointer-events-none flex items-center justify-center bg-black/40 backdrop-blur-[2px]"
+                    >
+                        <div className="flex flex-col items-center">
+                            <motion.div
+                                animate={{ x: [0, 100, 0] }}
+                                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                            >
+                                <Hand size={64} className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] rotate-90" />
+                            </motion.div>
+                            <motion.p
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="mt-4 text-white font-bold text-lg bg-black/50 px-4 py-2 rounded-full"
+                            >
+                                {getLabel('focus.swipe_hint')}
+                            </motion.p>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* HEADER */}
             <div className="relative z-50 flex items-center justify-between p-6">

@@ -37,7 +37,7 @@ import { LegalModal } from './components/LegalModal';
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 import { PremiumModal } from './components/PremiumModal';
 import { InAppBrowserOverlay } from './components/InAppBrowserOverlay';
-import { Lock, Copy, Check, PartyPopper, Gem, Building2, ExternalLink, Download, Users } from 'lucide-react';
+import { Lock, Copy, Check, PartyPopper, Gem, Building2, ExternalLink, Download, Users, Hand } from 'lucide-react';
 
 import SunIcon from './components/icons/SunIcon';
 import MoonIcon from './components/icons/MoonIcon';
@@ -141,6 +141,26 @@ const AppContent = () => {
   const [isFuelPitchOpen, setIsFuelPitchOpen] = useState(false); // NEW STATE FOR FUEL PITCH
   const [isUnionEcosystemOpen, setIsUnionEcosystemOpen] = useState(false); // NEW STATE FOR UNION ECOSYSTEM
   const [mobileTab, setMobileTab] = useState<'input' | 'results'>('input'); // NEW STATE FOR MOBILE SWIPE
+
+  // --- DASHBOARD TUTORIAL STATE ---
+  const [showDashboardTutorial, setShowDashboardTutorial] = useState(false);
+
+  useEffect(() => {
+    // Check if user has seen the dashboard swipe tutorial
+    const hasSeen = localStorage.getItem('hasSeenDashboardSwipeTutorial');
+    // Only show if mobile (simple check) and hasn't seen it
+    if (!hasSeen && window.innerWidth < 768) {
+      // Delay slightly to let app load
+      setTimeout(() => {
+        setShowDashboardTutorial(true);
+        // Hide after 4 seconds
+        setTimeout(() => {
+          setShowDashboardTutorial(false);
+          localStorage.setItem('hasSeenDashboardSwipeTutorial', 'true');
+        }, 4000);
+      }, 1000);
+    }
+  }, []);
 
   // --- NUOVI STATI PER LA VERIFICA SUPABASE ---
   const [licenseCode, setLicenseCode] = useState('');
@@ -538,7 +558,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.1.60
+        v1.1.62
       </div>
 
 
