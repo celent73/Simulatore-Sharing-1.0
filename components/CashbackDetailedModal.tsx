@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Calculator, RefreshCw, ShoppingBag, Car, ShoppingCart, Gift, Plane, Home, BookOpen, Coffee, Check, Trash2, PlusCircle, RotateCcw, RotateCw, MoreVertical, Camera } from 'lucide-react';
+import { X, Calculator, RefreshCw, ShoppingBag, Car, ShoppingCart, Gift, Plane, Home, BookOpen, Coffee, Check, Trash2, PlusCircle, RotateCcw, RotateCw, MoreVertical, Camera, Eye, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { CashbackCategory } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 import SharyTrigger from './SharyTrigger';
-
-
-
-
+import { BRANDS_DATA, getIcon } from './CashbackData';
+import { CashbackFocusMode } from './CashbackFocusMode';
 
 interface CashbackDetailedModalProps {
     isOpen: boolean;
@@ -16,194 +14,6 @@ interface CashbackDetailedModalProps {
     onConfirm: (totalSpending: number, totalCashback: number, details: CashbackCategory[]) => void;
     initialDetails?: CashbackCategory[];
 }
-
-const getIcon = (name: string) => {
-    switch (name) {
-        case 'ShoppingBag': return <ShoppingBag size={20} />;
-        case 'Car': return <Car size={20} />;
-        case 'ShoppingCart': return <ShoppingCart size={20} />;
-        case 'Gift': return <Gift size={20} />;
-        case 'Plane': return <Plane size={20} />;
-        case 'Home': return <Home size={20} />;
-        case 'BookOpen': return <BookOpen size={20} />;
-        default: return <Coffee size={20} />;
-    }
-};
-
-// List of available brands with cashback percentages
-// List of available brands with cashback percentages and categories
-const BRANDS_DATA = [
-    // ALIMENTARI
-    { name: 'Conad', percentage: 1.69, categories: ['alim'] },
-    { name: 'Carrefour', percentage: 2.25, categories: ['alim'] },
-    { name: 'Penny.', percentage: 3.38, categories: ['alim', 'md'] },
-    { name: 'Bennet', percentage: 3.38, categories: ['alim'] },
-    { name: 'ALI\'', percentage: 2.63, categories: ['alim'] },
-    { name: 'Iper La grande i', percentage: 3.00, categories: ['alim'] },
-    { name: 'Unes', percentage: 2.63, categories: ['alim'] },
-    { name: 'Pam Panorama', percentage: 2.25, categories: ['alim'] },
-    { name: 'Despar Nordest', percentage: 2.25, categories: ['alim'] },
-    { name: 'Iperal', percentage: 2.25, categories: ['alim'] },
-    { name: 'Mercatò', percentage: 2.25, categories: ['alim'] },
-    { name: 'Unicomm', percentage: 2.25, categories: ['alim'] },
-    { name: 'MAXI DI', percentage: 2.25, categories: ['alim'] },
-    { name: 'Il Gigante', percentage: 2.25, categories: ['alim'] },
-    { name: 'BASKO', percentage: 2.78, categories: ['alim'] },
-    { name: 'Deco', percentage: 3.75, categories: ['alim'] },
-    { name: 'SuperConveniente', percentage: 3.75, categories: ['alim'] },
-    { name: 'Megamark', percentage: 3.00, categories: ['alim'] },
-    { name: 'Martinelli Supermercati', percentage: 2.25, categories: ['alim'] },
-    { name: 'Eataly', percentage: 3.38, categories: ['alim', 'regali'] },
-    { name: 'Italmark', percentage: 2.25, categories: ['alim'] },
-    { name: 'Migross', percentage: 2.25, categories: ['alim'] },
-    { name: 'Iper Tosano', percentage: 2.25, categories: ['alim'] },
-    { name: 'Rossetto', percentage: 2.25, categories: ['alim'] },
-    { name: 'EKOM', percentage: 2.78, categories: ['alim', 'md'] },
-    { name: 'MD', percentage: 1.95, categories: ['alim', 'md'] },
-    { name: 'Todis', percentage: 1.88, categories: ['alim'] },
-    { name: 'Eurospin', percentage: 0.5, categories: ['alim'] },
-
-
-    // CARBURANTE
-    { name: 'Tamoil', percentage: 1.88, categories: ['carb'] },
-    { name: 'Q8', percentage: 1.88, categories: ['carb'] },
-    { name: 'IP', percentage: 1.88, categories: ['carb'] },
-    { name: 'Buono Enilive Digitale', percentage: 1.88, categories: ['carb'] },
-    { name: 'Buono Enilive Servito Digitale', percentage: 2.25, categories: ['carb'] },
-
-    // IGIENE PERSONAL
-    { name: 'Tigotà', percentage: 4.13, categories: ['igiene', 'casa'] },
-    { name: 'Acqua & Sapone', percentage: 3.38, categories: ['igiene', 'casa'] },
-    { name: 'Douglas', percentage: 4.13, categories: ['igiene', 'regali'] },
-    { name: 'Sephora', percentage: 4.13, categories: ['igiene', 'regali'] },
-    { name: 'Marionnaud Paris', percentage: 4.87, categories: ['igiene', 'regali'] },
-    { name: 'Bottega Verde', percentage: 3.38, categories: ['igiene', 'regali'] },
-    { name: 'L\'ERBOLARIO', percentage: 3.00, categories: ['igiene', 'regali'] },
-    { name: 'Rituals', percentage: 6.38, categories: ['igiene', 'regali'] },
-    { name: 'EsserBella Profumerie', percentage: 3.75, categories: ['igiene', 'regali'] },
-
-    // JOLLY (Valid for almost everything)
-    { name: 'Amazon.it', percentage: 1.88, categories: ['alim', 'igiene', 'abb', 'regali', 'casa', 'school', 'md'] },
-    { name: 'ideaShopping', percentage: 1.88, categories: ['alim', 'igiene', 'abb', 'regali', 'casa', 'school', 'md', 'treni'] },
-
-    // TRASPORTI
-    { name: 'Trenitalia', percentage: 3.38, categories: ['treni', 'regali'] },
-    { name: 'Italo', percentage: 2.78, categories: ['treni', 'regali'] },
-    { name: 'FlixBus', percentage: 3.75, categories: ['treni', 'regali'] },
-    { name: 'ITA AIRWAYS', percentage: 3.38, categories: ['treni', 'regali'] },
-    { name: 'UBER', percentage: 2.40, categories: ['treni'] },
-    { name: 'Volagratis', percentage: 6.00, categories: ['treni', 'regali'] },
-    { name: 'IBERIA LÍNEAS AÉREAS', percentage: 3.75, categories: ['treni'] },
-    { name: 'Airbnb', percentage: 3.00, categories: ['treni', 'regali'] },
-    { name: 'Booking.com', percentage: 3.00, categories: ['treni', 'regali'] },
-
-    // ABBIGLIAMENTO
-    { name: 'OVS', percentage: 5.63, categories: ['abb', 'regali'] },
-    { name: 'Zalando', percentage: 5.63, categories: ['abb', 'regali'] },
-    { name: 'H&M', percentage: 4.88, categories: ['abb', 'regali'] },
-    { name: 'Primark', percentage: 3.75, categories: ['abb', 'regali'] },
-    { name: 'Tezenis', percentage: 3.38, categories: ['abb', 'regali'] },
-    { name: 'Terranova', percentage: 4.50, categories: ['abb', 'regali'] },
-    { name: 'PittaRosso', percentage: 4.50, categories: ['abb', 'regali'] },
-    { name: 'Intimissimi', percentage: 3.38, categories: ['abb', 'regali'] },
-    { name: 'Scarpe&Scarpe', percentage: 2.63, categories: ['abb', 'regali'] },
-    { name: 'Calzedonia', percentage: 3.38, categories: ['abb', 'regali'] },
-    { name: 'Nike', percentage: 3.00, categories: ['abb', 'regali'] },
-    { name: 'Guess', percentage: 4.13, categories: ['abb', 'regali'] },
-    { name: 'Foot Locker', percentage: 6.00, categories: ['abb', 'regali'] },
-    { name: 'Calliope', percentage: 3.38, categories: ['abb', 'regali'] },
-    { name: 'Doppelganger', percentage: 4.88, categories: ['abb', 'regali'] },
-    { name: 'Rinascimento', percentage: 3.75, categories: ['abb', 'regali'] },
-    { name: 'Asos', percentage: 4.88, categories: ['abb', 'regali'] },
-    { name: 'Falconeri', percentage: 4.88, categories: ['abb', 'regali'] },
-    { name: 'Chicco', percentage: 4.88, categories: ['abb', 'regali', 'school'] },
-    { name: 'Du Pareil Au Meme', percentage: 4.50, categories: ['abb', 'regali'] },
-    { name: 'Coccinelle', percentage: 3.00, categories: ['abb', 'regali'] },
-    { name: 'Ray-Ban', percentage: 4.13, categories: ['abb', 'regali'] },
-    { name: 'Coin', percentage: 4.50, categories: ['abb', 'regali', 'casa'] },
-
-    // ELETTRONICA & CASA & SCHOOL & REGALI (Misti)
-    { name: 'MediaWorld', percentage: 1.88, categories: ['regali', 'casa', 'tech'] },
-    { name: 'Unieuro', percentage: 2.25, categories: ['regali', 'casa', 'tech'] },
-    { name: 'Trony', percentage: 1.65, categories: ['regali', 'casa', 'tech'] },
-    { name: 'Expert', percentage: 1.88, categories: ['regali', 'casa', 'tech'] },
-    { name: 'TOYS CENTER', percentage: 4.50, categories: ['regali', 'school'] },
-    { name: 'Kasanova', percentage: 3.00, categories: ['casa', 'regali'] },
-    { name: 'IKEA', percentage: 4.88, categories: ['casa', 'regali'] },
-    { name: 'Brico Io', percentage: 4.50, categories: ['casa', 'regali'] },
-    { name: 'Bricocenter', percentage: 2.62, categories: ['casa', 'regali'] },
-    { name: 'Maisons du Monde', percentage: 5.63, categories: ['casa', 'regali'] },
-    { name: 'Feltrinelli', percentage: 5.25, categories: ['school', 'regali', 'tech'] },
-    { name: 'Mondadori Store', percentage: 4.13, categories: ['school', 'regali', 'tech'] },
-    { name: 'Libraccio.it', percentage: 4.50, categories: ['school', 'regali'] },
-    { name: 'Giunti al Punto', percentage: 4.13, categories: ['school', 'regali'] },
-    { name: 'Hoepli.it', percentage: 4.88, categories: ['school', 'regali'] },
-    { name: 'IBS.it', percentage: 4.50, categories: ['school', 'regali'] },
-    { name: 'Decathlon', percentage: 4.13, categories: ['regali', 'abb'] },
-    { name: 'Gamelife', percentage: 3.00, categories: ['regali', 'tech'] },
-    { name: 'Google Play IT', percentage: 2.25, categories: ['regali', 'tech'] },
-    { name: 'Grand Vision Italy', percentage: 4.50, categories: ['regali'] },
-    { name: 'Signorvino', percentage: 4.13, categories: ['regali', 'alim'] },
-    { name: 'QC SPA', percentage: 5.62, categories: ['regali'] },
-    { name: 'Swarovski', percentage: 7.13, categories: ['regali'] },
-    { name: 'Smartbox', percentage: 6.37, categories: ['regali'] },
-    { name: 'Xbox', percentage: 5.63, categories: ['regali', 'tech'] },
-    { name: 'Tannico.it', percentage: 4.88, categories: ['regali', 'alim'] },
-    { name: 'GetYourGuide', percentage: 5.25, categories: ['regali', 'treni'] },
-    { name: 'VISTASì', percentage: 4.13, categories: ['regali'] },
-    { name: 'Global Hotel Card', percentage: 5.25, categories: ['regali', 'treni'] },
-    { name: 'LEGO', percentage: 4.13, categories: ['regali'] },
-    { name: 'Boscolo', percentage: 12.38, categories: ['regali', 'treni'] },
-    { name: 'Interflora', percentage: 7.88, categories: ['regali'] },
-    { name: 'XBOX Live', percentage: 5.63, categories: ['regali', 'tech'] },
-    { name: 'DAZN FULL', percentage: 3.38, categories: ['regali'] },
-    { name: 'Lastminute', percentage: 5.25, categories: ['regali', 'treni'] },
-    { name: 'Piquadro.com', percentage: 8.63, categories: ['regali', 'abb'] },
-    { name: 'AS Roma', percentage: 3.75, categories: ['regali', 'abb'] },
-    { name: 'Best Western Hotels & Resorts', percentage: 4.13, categories: ['regali', 'treni'] },
-    { name: 'DisneyPlus Premium', percentage: 2.63, categories: ['regali'] },
-    { name: 'Global Experiences Card', percentage: 5.25, categories: ['regali'] },
-    { name: 'Abbonamenti.it', percentage: 5.63, categories: ['regali'] },
-    { name: 'Venchi', percentage: 4.13, categories: ['regali', 'alim'] },
-    { name: 'WeRoad', percentage: 5.63, categories: ['regali', 'treni'] },
-    { name: 'Hotelgift', percentage: 3.75, categories: ['regali', 'treni'] },
-    { name: 'Twitch', percentage: 2.25, categories: ['regali', 'tech'] },
-    { name: 'Winelivery', percentage: 3.00, categories: ['regali', 'alim'] },
-    { name: 'Ecobnb', percentage: 4.13, categories: ['regali', 'treni', 'casa'] },
-    { name: 'Flightgift', percentage: 2.63, categories: ['regali', 'treni'] },
-    { name: 'Salute Semplice', percentage: 7.88, categories: ['regali', 'igiene'] },
-    { name: 'Activitygift', percentage: 4.87, categories: ['regali'] },
-    { name: 'FAO Schwarz', percentage: 4.88, categories: ['regali'] },
-    { name: 'HotelsGift', percentage: 3.75, categories: ['regali', 'treni'] },
-    { name: 'I primi 3 mesi di Sky TV + Sky Calcio + Sky Sport', percentage: 3.38, categories: ['regali'] },
-    { name: 'I primi 3 mesi di Sky TV e Netflix (Intrattenimento plus) + Sky Cinema', percentage: 3.38, categories: ['regali'] },
-    { name: 'UTravel', percentage: 5.25, categories: ['regali', 'treni'] },
-    { name: 'Zoologos', percentage: 3.75, categories: ['regali', 'casa'] },
-
-    // ESEMPIO AFFILIAZIONI INTERNET
-    { name: 'AliExpress', percentage: 6.92, categories: ['aff_int'] },
-    { name: 'Nespresso', percentage: 7.00, categories: ['aff_int'] },
-    { name: 'Folletto', percentage: 6.00, categories: ['aff_int'] },
-    { name: 'Avon', percentage: 7.00, categories: ['aff_int'] },
-    { name: 'Nord Vpn', percentage: 40.00, categories: ['aff_int'] },
-    { name: 'Panda security', percentage: 35.00, categories: ['aff_int'] },
-    { name: 'Thun', percentage: 8.00, categories: ['aff_int'] },
-    { name: 'Kaspersky', percentage: 20.00, categories: ['aff_int'] },
-    { name: 'Wondershare', percentage: 30.00, categories: ['aff_int'] },
-    { name: 'Axa', percentage: 12.00, categories: ['aff_int'] },
-    { name: 'Veratour', percentage: 0, fixedAmount: 21, categories: ['aff_int'] },
-    { name: 'Babbel', percentage: 0, fixedAmount: 60, categories: ['aff_int'] },
-    { name: 'Verymobile', percentage: 0, fixedAmount: 15, categories: ['aff_int'] },
-    { name: 'Bidoo', percentage: 0, fixedAmount: 5, categories: ['aff_int'] },
-    { name: 'Uni salute', percentage: 0, fixedAmount: 26.93, categories: ['aff_int'] },
-    { name: 'La Stampa', percentage: 0, fixedAmount: 12, categories: ['aff_int'] },
-    { name: 'La Repubblica', percentage: 0, fixedAmount: 12, categories: ['aff_int'] },
-    { name: 'Allianz Assicurazioni', percentage: 0, fixedAmount: 13, categories: ['aff_int'] },
-    { name: 'Telepass', percentage: 0, fixedAmount: 25, categories: ['aff_int'] },
-    { name: 'Ho Mobile', percentage: 0, fixedAmount: 11, categories: ['aff_int'] },
-    { name: 'Lycamobile', percentage: 0, fixedAmount: 10, categories: ['aff_int'] }
-].sort((a, b) => a.name.localeCompare(b.name));
-
 
 
 const uiTexts = {
@@ -315,6 +125,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
 
     const [categories, setCategories] = useState<CashbackCategory[]>(defaultCategories);
     const [targetBill, setTargetBill] = useState<number>(0);
+    const [isFocusModeOpen, setIsFocusModeOpen] = useState(false);
 
     // Update categories when language changes
     useEffect(() => {
@@ -389,6 +200,38 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
         setTargetBill(0);
     };
 
+    const handleFocusModeSelect = (categoryBaseId: string, brandName: string) => {
+        const brandData = BRANDS_DATA.find(b => b.name === brandName);
+        if (!brandData) return;
+
+        setCategories(prev => {
+            const newCategories = [...prev];
+            // Find all slots for this category
+            const slots = newCategories.map((c, i) => ({ ...c, index: i }))
+                .filter(c => c.id.startsWith(categoryBaseId));
+
+            if (slots.length === 0) return prev;
+
+            // Try to find the first empty slot (no brand selected)
+            let targetSlotIndex = slots.find(s => !s.brand)?.index;
+
+            // If no empty slot, use the first slot
+            if (targetSlotIndex === undefined) {
+                targetSlotIndex = slots[0].index;
+            }
+
+            // Update the slot
+            newCategories[targetSlotIndex] = {
+                ...newCategories[targetSlotIndex],
+                brand: brandName,
+                percentage: brandData.percentage,
+                fixedAmount: brandData.fixedAmount
+            };
+
+            return newCategories;
+        });
+    };
+
     // Calculate totals
     const totalSpend = categories.reduce((sum, cat) => sum + cat.amount, 0);
     const totalCashback = categories.reduce((sum, cat) => {
@@ -436,7 +279,16 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                             />
                         </div>
 
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setIsFocusModeOpen(true)}
+                                className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full font-bold text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(168,85,247,0.4)] hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:scale-105 active:scale-95 transition-all border border-white/20"
+                            >
+                                <Eye size={14} />
+                                <span className="hidden lg:inline">Focus Mode</span>
+                                <Sparkles size={12} className="text-yellow-300 animate-pulse" />
+                            </button>
+
                             <button onClick={onClose} className="p-1 sm:p-1.5 hover:bg-white/10 rounded-full transition-colors">
                                 <X size={20} className="sm:w-5 sm:h-5" />
                             </button>
@@ -750,7 +602,13 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                 </div>
             </div >
 
-
+            <CashbackFocusMode
+                isOpen={isFocusModeOpen}
+                onClose={() => setIsFocusModeOpen(false)}
+                onSelect={handleFocusModeSelect}
+                t={t}
+                language={language}
+            />
         </div >
     );
 };
