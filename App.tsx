@@ -16,26 +16,26 @@ import CondoInputPanel from './components/CondoInputPanel';
 import ResultsDisplay from './components/ResultsDisplay';
 import CondoResultsDisplay from './components/CondoResultsDisplay';
 import { useSmartState } from './hooks/useSmartState';
-import TargetCalculatorModal from './components/TargetCalculatorModal';
-import { NetworkVisualizerModal } from './components/NetworkVisualizerModal';
-import DetailedGuideModal from './components/DetailedGuideModal';
-import ContractInfoModal from './components/ContractInfoModal';
+
+
+
+
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
-import { InstallModal } from './components/InstallModal';
-import FutureTicketModal from './components/FutureTicketModal';
-import { BusinessPresentationModal } from './components/BusinessPresentationModal'; // NEW IMPORT
-import { CashbackDetailedModal } from './components/CashbackDetailedModal'; // NEW IMPORT
-import { FocusModeModal } from './components/FocusModeModal'; // NEW IMPORT
-import FuelPitchModal from './components/FuelPitchModal'; // NEW IMPORT
-import { UnionEcosystemModal } from './components/UnionEcosystemModal'; // NEW IMPORT
-import LightSimulatorModal from './components/LightSimulatorModal'; // NEW IMPORT
+
+
+
+
+
+
+
+
 import { Presentation, Fuel, Share2, Compass, Sparkles } from 'lucide-react'; // NEW ICON Import
 
 // --- IMPORTAZIONI LEGALI E UI ---
 import { LegalFooter } from './components/LegalFooter';
-import { LegalModal } from './components/LegalModal';
+
 import { ScrollToTopButton } from './components/ScrollToTopButton';
-import { PremiumModal } from './components/PremiumModal';
+
 import { InAppBrowserOverlay } from './components/InAppBrowserOverlay';
 import { Lock, Copy, Check, PartyPopper, Gem, Building2, ExternalLink, Download, Users, Hand } from 'lucide-react';
 
@@ -45,13 +45,16 @@ import TargetIcon from './components/icons/TargetIcon';
 import { ClientModeIcon, FamilyModeIcon, CondoModeIcon } from './components/icons/ModeIcons';
 import { ItalyFlag, GermanyFlag, UKFlag } from './components/icons/Flags';
 import CrownIconSVG from './components/icons/CrownIcon';
-import { BroadcastModal } from './components/BroadcastModal';
+
 import BackgroundMesh from './components/BackgroundMesh';
-import DisclaimerModal from './components/DisclaimerModal';
-import PaymentSuccessModal from './components/PaymentSuccessModal';
+
+
 import HeaderMenu from './components/HeaderMenu';
 import { DesktopHeaderNav } from './components/DesktopHeaderNav'; // Import Navigation
 import BottomDock from './components/BottomDock'; // NEW IMPORT // NEW IMPORT
+
+import { ModalProvider, useModal } from './contexts/ModalContext';
+import ModalManager from './components/ModalManager';
 
 // --- SHARY ASSISTANT IMPORTS ---
 import { SharyProvider, useShary } from './contexts/SharyContext';
@@ -92,62 +95,24 @@ const initialCondoInputs: CondoInput = {
 };
 
 const AppContent = () => {
+  const { openModal, closeModal } = useModal();
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false);
-  const [isTargetCalcOpen, setIsTargetCalcOpen] = useState(false);
-  const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
-  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
-  const [showInstallModal, setShowInstallModal] = useState(false);
+
   const [canInstall, setCanInstall] = useState(false); // New state to track if install is possible
   const [isTrialExpired, setIsTrialExpired] = useState(false);
   const [secretClickCount, setSecretClickCount] = useState(0);
-
-  const [showLegalModal, setShowLegalModal] = useState(false);
-  const [legalDocType, setLegalDocType] = useState<'privacy' | 'terms' | 'cookie' | 'none'>('none');
-  const [legalMode, setLegalMode] = useState<'startup' | 'view'>('startup');
-
   const [isCreatorMode, setIsCreatorMode] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
-  const [showPremiumModal, setShowPremiumModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [isFutureTicketOpen, setIsFutureTicketOpen] = useState(false);
-  const [isPresentationOpen, setIsPresentationOpen] = useState(false); // NEW STATE FOR PRESENTATION
-  const [isCashbackDetailedOpen, setIsCashbackDetailedOpen] = useState(false);
-  const [isLightSimulatorOpen, setIsLightSimulatorOpen] = useState(false);
 
-  // Custom Styles for Light Simulator
-  const lightStyles = `
-    .glass-card-light {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 1.5rem;
-      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
-    }
-    .dark .glass-card-light {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    @keyframes bounce-subtle {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-2px); }
-    }
-    .animate-bounce-subtle {
-      animation: bounce-subtle 2s infinite ease-in-out;
-    }
-  `; // NEW STATE FOR CASHBACK
-  const [isFocusModeOpen, setIsFocusModeOpen] = useState(false); // NEW STATE FOR FOCUS MODE
-  const [isFuelPitchOpen, setIsFuelPitchOpen] = useState(false); // NEW STATE FOR FUEL PITCH
-  const [isUnionEcosystemOpen, setIsUnionEcosystemOpen] = useState(false); // NEW STATE FOR UNION ECOSYSTEM
+
   const [mobileTab, setMobileTab] = useState<'input' | 'results'>('input'); // NEW STATE FOR MOBILE SWIPE
 
   // --- DASHBOARD TUTORIAL STATE ---
   const [showDashboardTutorial, setShowDashboardTutorial] = useState(false);
 
   // --- BROADCAST MODAL STATE ---
-  const [showBroadcastModal, setShowBroadcastModal] = useState(false);
+
 
   useEffect(() => {
     // Check dashboard tutorial
@@ -166,7 +131,7 @@ const AppContent = () => {
     const hasSeenBroadcast = localStorage.getItem('hasSeenBroadcastModal');
     if (!hasSeenBroadcast) {
       setTimeout(() => {
-        setShowBroadcastModal(true);
+        openModal('BROADCAST');
       }, 2000); // 2 seconds delay
     }
   }, []);
@@ -199,15 +164,13 @@ const AppContent = () => {
     const query = new URLSearchParams(window.location.search);
     // GESTIONE RITORNO DAL PAGAMENTO
     if (query.get('payment_success') === 'true') {
-      setShowSuccessModal(true);
+      openModal('PAYMENT_SUCCESS');
       window.history.replaceState({}, document.title, window.location.pathname);
     }
 
     const hasAccepted = localStorage.getItem('legal_accepted');
     if (!hasAccepted) {
-      setLegalDocType('none');
-      setLegalMode('startup');
-      setShowLegalModal(true);
+      openModal('LEGAL', { type: 'none', mode: 'startup', onAccept: handleAcceptLegal });
     }
   }, []);
 
@@ -322,7 +285,16 @@ const AppContent = () => {
       setIsPremium(true);
       localStorage.setItem('is_premium', 'true');
       localStorage.setItem('licenseCode', result.finalCode || licenseCode.trim().toUpperCase());
-      setShowPremiumModal(false);
+      openModal('PREMIUM_UNLOCK', {
+        isOpen: true,
+        onClose: closeModal,
+        onUnlock: handleVerifyCode,
+        licenseCode: licenseCode,
+        setLicenseCode: setLicenseCode,
+        loading: loading,
+        error: error,
+        forceLock: false
+      });
       alert("Codice valido! App sbloccata su questo dispositivo.");
     } else {
       setError(result.error || 'Errore durante la verifica.');
@@ -361,13 +333,11 @@ const AppContent = () => {
 
   const handleAcceptLegal = () => {
     localStorage.setItem('legal_accepted', 'true');
-    setShowLegalModal(false);
+    closeModal();
   };
 
   const handleOpenLegalDoc = (type: 'privacy' | 'terms' | 'cookie') => {
-    setLegalDocType(type);
-    setLegalMode('view');
-    setShowLegalModal(true);
+    openModal('LEGAL', { type, mode: 'view' });
   };
 
   useEffect(() => { if (isDarkMode) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); }, [isDarkMode]);
@@ -393,7 +363,7 @@ const AppContent = () => {
       if (isIos) {
         // Small delay to let user see app first
         installTimerRef.current = setTimeout(() => {
-          setShowInstallModal(true);
+          openModal('INSTALL_PROMPT', { installPrompt: null });
         }, 5000);
       } else {
         // For Android/Desktop: Check if we have the prompt
@@ -403,7 +373,8 @@ const AppContent = () => {
           // @ts-ignore
           setInstallPrompt(window.deferredPrompt); // Sync state
           installTimerRef.current = setTimeout(() => {
-            setShowInstallModal(true);
+            // @ts-ignore
+            openModal('INSTALL_PROMPT', { installPrompt: window.deferredPrompt });
           }, 5000);
         }
       }
@@ -424,7 +395,7 @@ const AppContent = () => {
       if (installTimerRef.current) clearTimeout(installTimerRef.current);
 
       installTimerRef.current = setTimeout(() => {
-        setShowInstallModal(true);
+        openModal('INSTALL_PROMPT', { installPrompt: e });
       }, 5000);
     };
 
@@ -438,12 +409,24 @@ const AppContent = () => {
   }, []);
 
   useEffect(() => { setIsTrialExpired(false); }, []);
-  useEffect(() => { if (isInitialMount.current) { isInitialMount.current = false; return; } if (inputs.contractsPerUser === 2) { setIsContractInfoModalOpen(true); } }, [inputs.contractsPerUser]);
+  useEffect(() => { if (isInitialMount.current) { isInitialMount.current = false; return; } if (inputs.contractsPerUser === 2) { openModal('CONTRACT_INFO'); } }, [inputs.contractsPerUser]);
 
   const handleTitleClick = () => {
     const newCount = secretClickCount + 1;
     setSecretClickCount(newCount);
-    if (newCount >= 5) { setShowPremiumModal(true); setSecretClickCount(0); }
+    if (newCount >= 5) {
+      openModal('PREMIUM_UNLOCK', {
+        isOpen: true,
+        onClose: closeModal,
+        onUnlock: handleVerifyCode,
+        licenseCode: licenseCode,
+        setLicenseCode: setLicenseCode,
+        loading: loading,
+        error: error,
+        forceLock: false
+      });
+      setSecretClickCount(0);
+    }
   };
 
   const handleInputChange = (field: keyof PlanInput, value: number | any) => {
@@ -456,11 +439,11 @@ const AppContent = () => {
       return;
     }
     if (!isPremium) {
-      if (field === 'directRecruits' && value > 2) { setShowPremiumModal(true); return; }
-      if (field === 'indirectRecruits' && value > 2) { setShowPremiumModal(true); return; }
-      if (field === 'networkDepth' && value > 2) { setShowPremiumModal(true); return; }
-      if (field === 'contractsPerUser' && value > 1) { setShowPremiumModal(true); return; }
-      if (field === 'cashbackSpending' && value > 500) { setShowPremiumModal(true); return; }
+      if (field === 'directRecruits' && value > 2) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
+      if (field === 'indirectRecruits' && value > 2) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
+      if (field === 'networkDepth' && value > 2) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
+      if (field === 'contractsPerUser' && value > 1) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
+      if (field === 'cashbackSpending' && value > 500) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
     }
     setInputs(prev => ({ ...prev, [field]: value }));
   };
@@ -468,7 +451,7 @@ const AppContent = () => {
   const handleCondoInputChange = (field: keyof CondoInput, value: number) => setCondoInputs(prev => ({ ...prev, [field]: value }));
 
   const handleResetToZero = () => {
-    if (!isPremium) { setShowPremiumModal(true); return; }
+    if (!isPremium) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
     setInputs(initialInputs);
   };
 
@@ -483,7 +466,7 @@ const AppContent = () => {
   };
 
   const handleModeChange = (mode: ViewMode) => {
-    if (mode === 'condo' && !isPremium) { setShowPremiumModal(true); return; }
+    if (mode === 'condo' && !isPremium) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
     setViewMode(mode);
   };
 
@@ -503,12 +486,12 @@ const AppContent = () => {
     // Use type assertion if needed as cashbackDetails might not be in PlanInput definition yet strictly
     // but based on usage it seems it is.
     handleInputChange('cashbackDetails' as any, details);
-    setIsCashbackDetailedOpen(false);
+    closeModal();
   };
 
   const handleTargetClick = () => {
-    if (!isPremium) { setShowPremiumModal(true); return; }
-    setIsTargetCalcOpen(true);
+    if (!isPremium) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
+    openModal('TARGET_CALCULATOR', { currentInputs: inputs, onApply: handleApplyTarget });
   };
 
   const [isResultsFullScreen, setIsResultsFullScreen] = useState(false);
@@ -532,7 +515,11 @@ const AppContent = () => {
 
       // SE ERAVAMO ARRIVATI DALLA PRESENTAZIONE, LA RIAPRIAMO
       if (returnToPresentationPage !== null) {
-        setIsPresentationOpen(true);
+        openModal('BUSINESS_PRESENTATION', {
+          onOpenCashback: () => openModal('CASHBACK_DETAILED', { initialDetails: (inputs as any).cashbackDetails, onConfirm: handleCashbackDetailedConfirm }),
+          onOpenFocus: handleOpenFocusFromPresentation,
+          initialPage: returnToPresentationPage || 1
+        });
         // NON resettiamo subito a null qui perché serve passarlo come prop
         // Lo faremo quando la modale si chiude o quando si riapre (managed by props update)
         // Ma per il flusso attuale, resettiamo SOLO se la modale è gestita per "dimenticare" dopo l'apertura
@@ -548,7 +535,7 @@ const AppContent = () => {
 
   const handleOpenFocusFromPresentation = (page: number) => {
     setReturnToPresentationPage(page); // SALVIAMO LA PAGINA
-    setIsPresentationOpen(false);
+    closeModal();
     handleToggleFullScreen(); // APRIAMO IL NETWORK FOCUS (FULL SCREEN)
   };
 
@@ -565,10 +552,7 @@ const AppContent = () => {
       {/* SHARY UI */}
       <SharyAssistant />
 
-      <BroadcastModal
-        isOpen={showBroadcastModal}
-        onClose={() => setShowBroadcastModal(false)}
-      />
+
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
@@ -577,26 +561,17 @@ const AppContent = () => {
 
 
 
-      <PremiumModal
-        isOpen={showPremiumModal}
-        onClose={() => setShowPremiumModal(false)}
-        onUnlock={handleVerifyCode} // <-- USIAMO LA NUOVA FUNZIONE
-        licenseCode={licenseCode}   // <-- PASSIAMO GLI STATI
-        setLicenseCode={setLicenseCode}
-        loading={loading}
-        error={error}
-        forceLock={false}
-      />
+
 
       <InAppBrowserOverlay />
-      {showLegalModal && <LegalModal isOpen={showLegalModal} onAccept={handleAcceptLegal} onClose={() => setShowLegalModal(false)} type={legalDocType} mode={legalMode} />}
-      <PaymentSuccessModal isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
+
+
       <ScrollToTopButton />
 
       <div className={`container mx-auto p-4 sm:p-6 lg:p-8 pb-32 relative z-10 flex-grow ${isTrialExpired ? 'blur-sm pointer-events-none select-none h-screen overflow-hidden' : ''}`}>
 
         {/* Custom Styles Injection */}
-        <style>{lightStyles}</style>
+
 
         <header className="flex flex-col gap-4 mb-4 sm:mb-8 rounded-3xl p-6 border-0 shadow-xl backdrop-blur-xl transition-all duration-500 relative z-50" style={{ background: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)', boxShadow: headerShadow }}>
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
@@ -617,7 +592,7 @@ const AppContent = () => {
             <DesktopHeaderNav
               viewMode={viewMode}
               handleModeChange={handleModeChange}
-              onOpenLightSimulator={() => setIsLightSimulatorOpen(true)}
+              onOpenLightSimulator={() => openModal('LIGHT_SIMULATOR')}
               isPremium={isPremium}
             />
 
@@ -644,7 +619,7 @@ const AppContent = () => {
 
               {/* 3. CASHBACK BUTTON (PRIORITY) */}
               <button
-                onClick={() => setIsCashbackDetailedOpen(true)}
+                onClick={() => openModal('CASHBACK_DETAILED', { initialDetails: (inputs as any).cashbackDetails, onConfirm: handleCashbackDetailedConfirm })}
                 className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all border-0 font-bold text-sm hover:scale-[1.05] animate-pulse-slow"
                 title="Configura Cashback"
               >
@@ -658,16 +633,24 @@ const AppContent = () => {
 
               {/* 4. MENU (SECONDARY ITEMS) */}
               <HeaderMenu
-                onOpenPresentation={() => setIsPresentationOpen(true)}
-                onOpenUnionEcosystem={() => setIsUnionEcosystemOpen(true)}
-                onOpenFuelPitch={() => setIsFuelPitchOpen(true)}
-                onOpenFocusMode={() => setIsFocusModeOpen(true)}
+                onOpenPresentation={() => openModal('BUSINESS_PRESENTATION', {
+                  onOpenCashback: () => openModal('CASHBACK_DETAILED', { initialDetails: (inputs as any).cashbackDetails, onConfirm: handleCashbackDetailedConfirm }),
+                  onOpenFocus: handleOpenFocusFromPresentation,
+                  initialPage: returnToPresentationPage || 1
+                })}
+                onOpenUnionEcosystem={() => openModal('UNION_ECOSYSTEM')}
+                onOpenFuelPitch={() => openModal('FUEL_PITCH')}
+                onOpenFocusMode={() => openModal('FOCUS_MODE')}
                 toggleShary={toggleShary}
                 isSharyActive={isActive}
                 onOpenTarget={handleTargetClick}
-                onOpenFutureTicket={() => setIsFutureTicketOpen(true)}
-                onOpenGuide={() => setIsHelpOpen(true)}
-                onOpenInstall={() => setShowInstallModal(true)}
+                onOpenFutureTicket={() => openModal('FUTURE_TICKET', {
+                  monthlyRecurring: planResult?.monthlyData?.length > 0 ? planResult.monthlyData[planResult.monthlyData.length - 1].monthlyRecurring : 0,
+                  estimatedMonths: inputs.realizationTimeMonths,
+                  userName: isPremium ? "Partner Pro" : "Guest"
+                })}
+                onOpenGuide={() => openModal('GUIDE')}
+                onOpenInstall={() => openModal('INSTALL_PROMPT', { installPrompt })}
                 isPremium={isPremium}
                 viewMode={viewMode}
                 showInstall={!isStandalone && (canInstall || /iphone|ipad|ipod|android/i.test(window.navigator.userAgent.toLowerCase()))}
@@ -742,7 +725,7 @@ const AppContent = () => {
                   cashbackPeriod={cashbackPeriod}
                   setCashbackPeriod={setCashbackPeriod}
                   planResult={planResult}
-                  onOpenCashbackDetailed={() => setIsCashbackDetailedOpen(true)}
+                  onOpenCashbackDetailed={() => openModal('CASHBACK_DETAILED', { initialDetails: (inputs as any).cashbackDetails, onConfirm: handleCashbackDetailedConfirm })}
                 />
               )}
             </div>
@@ -765,7 +748,7 @@ const AppContent = () => {
                   cashbackPeriod={cashbackPeriod}
                   setCashbackPeriod={setCashbackPeriod}
                   planResult={planResult}
-                  onOpenCashbackDetailed={() => setIsCashbackDetailedOpen(true)} // FIXED
+                  onOpenCashbackDetailed={() => openModal('CASHBACK_DETAILED', { initialDetails: (inputs as any).cashbackDetails, onConfirm: handleCashbackDetailedConfirm })} // FIXED
                 />
               )}
             </div>
@@ -793,7 +776,7 @@ const AppContent = () => {
             >
               {!isPremium && (
                 <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-gray-900 dark:via-gray-900/80 z-20 flex items-center justify-center pointer-events-none">
-                  <div className="bg-union-blue-600/90 text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-2 backdrop-blur-md pointer-events-auto cursor-pointer" onClick={() => setShowPremiumModal(true)}>
+                  <div className="bg-union-blue-600/90 text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-2 backdrop-blur-md pointer-events-auto cursor-pointer" onClick={() => openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error })}>
                     <Lock size={16} /> <span>Sblocca Analisi Completa</span>
                   </div>
                 </div>
@@ -817,7 +800,7 @@ const AppContent = () => {
             <div className="hidden md:block h-full relative">
               {!isPremium && (
                 <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-gray-900 dark:via-gray-900/80 z-20 flex items-center justify-center pointer-events-none">
-                  <div className="bg-union-blue-600/90 text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-2 backdrop-blur-md pointer-events-auto cursor-pointer" onClick={() => setShowPremiumModal(true)}>
+                  <div className="bg-union-blue-600/90 text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-2 backdrop-blur-md pointer-events-auto cursor-pointer" onClick={() => openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error })}>
                     <Lock size={16} /> <span>Sblocca Analisi Completa</span>
                   </div>
                 </div>
@@ -841,52 +824,24 @@ const AppContent = () => {
       </div >
 
       <div className="mt-12"><LegalFooter onOpenLegal={handleOpenLegalDoc} /></div>
-      <DisclaimerModal isOpen={isDisclaimerOpen} onClose={() => setIsDisclaimerOpen(false)} />
-      <DetailedGuideModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
-      <BusinessPresentationModal
-        isOpen={isPresentationOpen}
-        onClose={() => {
-          setIsPresentationOpen(false);
-          setReturnToPresentationPage(null); // Reset quando chiude manualmente la modale
-        }}
-        onOpenCashback={() => setIsCashbackDetailedOpen(true)}
-        onOpenFocus={handleOpenFocusFromPresentation}
-        initialPage={returnToPresentationPage || 1}
-      />
-      <FuelPitchModal
-        isOpen={isFuelPitchOpen}
-        onClose={() => setIsFuelPitchOpen(false)}
-      />
-      <TargetCalculatorModal isOpen={isTargetCalcOpen} onClose={() => setIsTargetCalcOpen(false)} currentInputs={inputs} onApply={handleApplyTarget} />
-      <NetworkVisualizerModal isOpen={isNetworkModalOpen} onClose={() => setIsNetworkModalOpen(false)} inputs={inputs} onInputChange={handleInputChange} onReset={handleResetToZero} />
-      <ContractInfoModal isOpen={isContractInfoModalOpen} onClose={() => setIsContractInfoModalOpen(false)} />
-      <FutureTicketModal
-        isOpen={isFutureTicketOpen}
-        onClose={() => setIsFutureTicketOpen(false)}
-        monthlyRecurring={planResult?.monthlyData?.length > 0 ? planResult.monthlyData[planResult.monthlyData.length - 1].monthlyRecurring : 0}
-        estimatedMonths={inputs.realizationTimeMonths}
-        userName={isPremium ? "Partner Pro" : "Guest"}
-      />
 
-      <CashbackDetailedModal
-        isOpen={isCashbackDetailedOpen}
-        onClose={() => setIsCashbackDetailedOpen(false)}
-        initialDetails={(inputs as any).cashbackDetails}
-        onConfirm={handleCashbackDetailedConfirm}
-      />
-      <UnionEcosystemModal isOpen={isUnionEcosystemOpen} onClose={() => setIsUnionEcosystemOpen(false)} />
-      <FocusModeModal isOpen={isFocusModeOpen} onClose={() => setIsFocusModeOpen(false)} />
-      <InstallModal isOpen={showInstallModal} onClose={() => setShowInstallModal(false)} installPrompt={installPrompt} />
 
-      <LightSimulatorModal
-        isOpen={isLightSimulatorOpen}
-        onClose={() => setIsLightSimulatorOpen(false)}
-      />
+
+
+
+
+
+
+
+
+
+
+
 
       <BottomDock
         viewMode={viewMode}
         handleModeChange={handleModeChange}
-        onOpenLightSimulator={() => setIsLightSimulatorOpen(true)}
+        onOpenLightSimulator={() => openModal('LIGHT_SIMULATOR')}
         isPremium={isPremium}
       />
     </div >
@@ -894,6 +849,17 @@ const AppContent = () => {
 };
 
 
-const App = () => { return <LanguageProvider><SharyProvider><AppContent /></SharyProvider></LanguageProvider>; }
+const App = () => {
+  return (
+    <LanguageProvider>
+      <SharyProvider>
+        <ModalProvider>
+          <AppContent />
+          <ModalManager />
+        </ModalProvider>
+      </SharyProvider>
+    </LanguageProvider>
+  );
+}
 
 export default App;
