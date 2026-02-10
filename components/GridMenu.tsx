@@ -78,6 +78,7 @@ const GridMenu: React.FC<GridMenuProps> = ({
         exit: { opacity: 0, scale: 0.8, y: 20 }
     };
 
+    // Compact MenuItem for better visibility on mobile
     const MenuItem = ({ icon: Icon, label, onClick, colorClass, gradient }: any) => (
         <motion.button
             variants={itemVariants}
@@ -89,7 +90,7 @@ const GridMenu: React.FC<GridMenuProps> = ({
             whileTap={{ scale: 0.95 }}
             className={`
                 relative flex flex-col items-center justify-center 
-                aspect-square p-4 rounded-3xl 
+                aspect-square p-2 rounded-2xl 
                 bg-white dark:bg-slate-800 
                 shadow-xl border border-slate-100 dark:border-slate-700
                 group overflow-hidden
@@ -101,14 +102,14 @@ const GridMenu: React.FC<GridMenuProps> = ({
             `} />
 
             <div className={`
-                p-4 rounded-2xl mb-3 
+                p-2.5 rounded-xl mb-2 
                 ${colorClass} 
                 shadow-sm
             `}>
-                <Icon size={32} strokeWidth={1.5} />
+                <Icon size={24} strokeWidth={1.5} />
             </div>
 
-            <span className="text-xs font-bold text-center text-slate-700 dark:text-slate-200 leading-tight">
+            <span className="text-[10px] font-bold text-center text-slate-700 dark:text-slate-200 leading-tight">
                 {label}
             </span>
         </motion.button>
@@ -157,8 +158,8 @@ const GridMenu: React.FC<GridMenuProps> = ({
                             </motion.p>
                         </div>
 
-                        {/* GRID */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
+                        {/* GRID - 3 columns on mobile, 4 on larger screens */}
+                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 sm:gap-6">
 
                             {/* APPS SECTION */}
                             <MenuItem
