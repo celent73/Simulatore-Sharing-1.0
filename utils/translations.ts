@@ -1592,15 +1592,17 @@ export const translations = {
     },
     fuel_focus: {
       title: "Fuel Focus",
-      step1_title: "Pump Price",
-      step1_desc: "How much do you pay per liter today?",
-      step2_title: "Smart Shopping",
-      step2_desc: "Monthly spending and cashback",
-      step3_title: "Your Savings",
-      step3_desc: "Here's the price you deserve",
-      cta_reveal: "Reveal Price",
+      step_price: "Pump Price",
+      step_shopping: "Smart Shopping",
+      input_spending: "Monthly Food/Other Spending",
+      expected_cashback: "EXPECTED CASHBACK",
+      reveal_btn: "REVEAL SAVINGS",
+      pump_price_label: "PUMP PRICE",
+      sharing_price_label: "Sharing Price",
+      monthly_saving: "Monthly Saving",
+      annual_saving: "Annual Saving",
+      swipe_close: "Swipe right to close",
       cta_share: "Share Result",
-      swipe_tip: "Swipe right to close",
       tutorial_title: "Welcome to Focus Mode",
       tutorial_desc: "An immersive experience to visualize your real savings."
     },
@@ -1696,7 +1698,7 @@ export const translations = {
       total_recurring_3y: "Total Recurring 3 Years",
       total_est_3y: "Total Estimated (3 Years)"
     },
-    cashback_modal: {
+    cashback_detailed: {
       title: "Cashback PRO Calculator",
       subtitle: "Customize your monthly spending by category",
       total_spend: "Total Spend",
@@ -1714,7 +1716,23 @@ export const translations = {
       save: "You save",
       bill_zero: "BILL ZEROED!",
       covered_part: "You covered",
-      extra: "extra!"
+      extra: "extra!",
+      dont_lose: "DON'T LOSE IT!",
+      edit_amount: "Edit Amount",
+      insert_here: "Insert here",
+      cat: {
+        alim: "Groceries",
+        igiene: "Personal Care",
+        carb: "Fuel",
+        tech: "Electronics & Tech",
+        treni: "Transport",
+        school: "School Supplies",
+        abb: "Clothing",
+        casa: "Home",
+        regali: "Gifts & Leisure",
+        md: "Discount Stores",
+        aff_int: "Internet Affiliates Example"
+      }
     },
     simulator: {
       title: "Earnings Simulator",
