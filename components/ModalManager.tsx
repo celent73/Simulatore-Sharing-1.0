@@ -23,6 +23,7 @@ import DisclaimerModal from './DisclaimerModal';
 import TargetCalculatorModal from './TargetCalculatorModal';
 import { AnalisiUtenzeModal } from './AnalisiUtenzeModal';
 import GridMenu from './GridMenu';
+import { FuelFocusMode } from './FuelFocusMode';
 
 
 // Lazy load ONLY very rarely used or extremely heavy modals
@@ -61,7 +62,8 @@ const ModalManager: React.FC = () => {
             {activeModal === 'DISCLAIMER' && <DisclaimerModal isOpen={true} onClose={closeModal} {...modalProps} />}
             {activeModal === 'TARGET_CALCULATOR' && <TargetCalculatorModal isOpen={true} onClose={closeModal} {...modalProps} />}
             {activeModal === 'GRID_MENU' && <GridMenu isOpen={true} onClose={closeModal} {...modalProps} />}
-            {/* Add other modals here */}
+            {activeModal === 'FUEL_FOCUS' && <FuelFocusMode isOpen={true} onClose={closeModal} {...modalProps} />}
+            {activeModal === 'ANALISI_UTENZE' && <AnalisiUtenzeModal isOpen={true} onClose={closeModal} {...modalProps} />}
         </Suspense>
     );
 };

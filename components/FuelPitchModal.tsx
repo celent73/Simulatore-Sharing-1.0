@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
-import { X, Fuel, ArrowRight, TrendingDown, PiggyBank, Calendar, Info } from 'lucide-react';
+import { X, Fuel, ArrowRight, TrendingDown, PiggyBank, Calendar, Info, Zap } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { CustomSlider } from './CustomSlider';
+import { useModalDispatch } from '../contexts/ModalContext';
 
 interface FuelPitchModalProps {
     isOpen: boolean;
@@ -11,6 +12,7 @@ interface FuelPitchModalProps {
 
 const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
     const { t } = useLanguage();
+    const { openModal } = useModalDispatch();
     const [pricePerLiter, setPricePerLiter] = useState(1.80);
     const [tankCapacity, setTankCapacity] = useState(50);
     const [otherSpending, setOtherSpending] = useState(500); // Default 500€
@@ -54,9 +56,18 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                             <p className="text-red-200 text-xs font-bold uppercase tracking-widest">Simulatore Risparmio</p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="p-2 bg-black/20 hover:bg-black/30 text-white rounded-full transition-colors relative z-10">
-                        <X size={24} />
-                    </button>
+                    <div className="flex items-center gap-2 relative z-10">
+                        <button
+                            onClick={() => openModal('FUEL_FOCUS')}
+                            className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-xl font-bold text-xs transition-all border border-white/30 shadow-lg active:scale-95 group backdrop-blur-sm"
+                        >
+                            <Zap size={14} className="group-hover:animate-pulse" />
+                            FOCUS MODE
+                        </button>
+                        <button onClick={onClose} className="p-2 bg-black/20 hover:bg-black/30 text-white rounded-full transition-colors">
+                            <X size={24} />
+                        </button>
+                    </div>
                 </div>
 
                 {/* DISPLAY SECTION (Digital Pump Style) */}

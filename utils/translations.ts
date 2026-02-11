@@ -691,6 +691,18 @@ export const translations = {
       new_session: "Nuova Sessione",
       exit: "Esci"
     },
+    fuel_focus: {
+      title: "Fuel Saver Focus",
+      step_price: "PREZZO ALLA POMPA",
+      step_shopping: "SMART SHOPPING",
+      step_reveal: "IL TUO PREZZO SHARING",
+      input_price: "Inserisci prezzo al litro",
+      input_spending: "Spesa mensile stimata",
+      fuel_price: "Prezzo Carburante",
+      sharing_price: "Prezzo Sharing",
+      annual_savings: "Risparmio Annuo Stimato",
+      swipe_close: "Scorri per chiudere"
+    },
     pdf: {
       prepared_by: "Prospetto preparato da",
       generated_on: "GENERATO IL",
@@ -1281,7 +1293,7 @@ export const translations = {
       comm_quote: "\"Je mehr persönliche Einheiten du verwaltest, desto tiefer wird deine passive Rente im Netzwerk berechnet.\"",
       rtz_title: "Road to Zero",
       rtz_bill: "Deine durchschnittliche Rechnung (€)",
-      rtz_spend: "Ausgaben Lebensmittel/Benzin monatlich (€)",
+      rtz_spend: "Spesa Alimentari/Benzina monatlich (€)",
       rtz_coverage: "Rechnungsdeckung",
       rtz_zeroed: "GEZAHLT!",
       rtz_detail: "Details monatlicher Rabatt",
@@ -1328,6 +1340,18 @@ export const translations = {
       contacts_useful: "nützliche Kontakte.",
       new_session: "Neue Sitzung",
       exit: "Verlassen"
+    },
+    fuel_focus: {
+      title: "Fuel Saver Fokus",
+      step_price: "PUMPENPREIS",
+      step_shopping: "SMART SHOPPING",
+      step_reveal: "DEIN SHARING-PREIS",
+      input_price: "Preis pro Liter eingeben",
+      input_spending: "Geschätzte monatliche Ausgaben",
+      fuel_price: "Kraftstoffpreis",
+      sharing_price: "Sharing-Preis",
+      annual_savings: "Geschätzte jährliche Ersparnis",
+      swipe_close: "Wischen zum Schließen"
     },
     pdf: {
       prepared_by: "Prospekt erstellt von",
@@ -1839,7 +1863,7 @@ export const translations = {
         apartments: "Apartments",
         rent_desc: "rented at 150k€",
         time: "Realization Time",
-        part_time: "in Part-Time"
+        part_time: "part-time commitment"
       },
       pitch_text_1: "Hi! 🚀\n\nI'm working on a project to build a Digital Asset (time-independent) in about",
       pitch_text_2: "months.\n\nThe numbers are crazy:\n💎 Generated Asset Value:",
@@ -2177,6 +2201,18 @@ export const translations = {
       contacts_useful: "useful contacts.",
       new_session: "New Session",
       exit: "Exit"
+    },
+    fuel_focus: {
+      title: "Fuel Saver Focus",
+      step_price: "PUMP PRICE",
+      step_shopping: "SMART SHOPPING",
+      step_reveal: "YOUR SHARING PRICE",
+      input_price: "Enter price per liter",
+      input_spending: "Estimated monthly spending",
+      fuel_price: "Fuel Price",
+      sharing_price: "Sharing Price",
+      annual_savings: "Estimated Annual Savings",
+      swipe_close: "Swipe to close"
     },
     pdf: {
       prepared_by: "Prospectus prepared by",
