@@ -556,7 +556,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.1.79
+        v1.1.80
       </div>
 
 
@@ -580,7 +580,7 @@ const AppContent = () => {
                 <h1 onClick={handleTitleClick} className="text-2xl sm:text-4xl font-extrabold text-white drop-shadow-sm select-none cursor-pointer active:scale-95 transition-transform flex items-center gap-3 flex-wrap justify-center md:justify-start">
                   {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
                   <span className="text-white">Sharing</span>
-                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.1.79</span>
+                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.1.80</span>
                   <span className="text-union-orange-400">Simulator</span>
                   {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-union-orange-400" /></span>}
                 </h1>
@@ -700,13 +700,25 @@ const AppContent = () => {
                 const touch = e.touches[0];
                 // @ts-ignore
                 window.touchStartX = touch.clientX;
+                // @ts-ignore
+                window.touchStartY = touch.clientY;
+                // @ts-ignore
+                window.touchStartTime = Date.now();
               }}
               onTouchEnd={(e) => {
                 // @ts-ignore
                 const touchEndX = e.changedTouches[0].clientX;
                 // @ts-ignore
-                const diff = window.touchStartX - touchEndX;
-                if (diff > 120) { // Swipe Left -> Go to Results
+                const touchEndY = e.changedTouches[0].clientY;
+                // @ts-ignore
+                const diffX = window.touchStartX - touchEndX;
+                // @ts-ignore
+                const diffY = window.touchStartY - touchEndY;
+                // @ts-ignore
+                const duration = Date.now() - window.touchStartTime;
+
+                // Solo swipe orizzontali veloci (flick) - ignoriamo scroll lenti o verticali
+                if (Math.abs(diffX) > Math.abs(diffY) && duration < 250 && diffX > 100) {
                   setMobileTab('results');
                 }
               }}
@@ -765,13 +777,25 @@ const AppContent = () => {
                 const touch = e.touches[0];
                 // @ts-ignore
                 window.touchStartX = touch.clientX;
+                // @ts-ignore
+                window.touchStartY = touch.clientY;
+                // @ts-ignore
+                window.touchStartTime = Date.now();
               }}
               onTouchEnd={(e) => {
                 // @ts-ignore
                 const touchEndX = e.changedTouches[0].clientX;
                 // @ts-ignore
-                const diff = window.touchStartX - touchEndX;
-                if (diff < -120) { // Swipe Right -> Go back to Input
+                const touchEndY = e.changedTouches[0].clientY;
+                // @ts-ignore
+                const diffX = window.touchStartX - touchEndX;
+                // @ts-ignore
+                const diffY = window.touchStartY - touchEndY;
+                // @ts-ignore
+                const duration = Date.now() - window.touchStartTime;
+
+                // Solo swipe orizzontali veloci (flick) - ignoriamo scroll lenti o verticali
+                if (Math.abs(diffX) > Math.abs(diffY) && duration < 250 && diffX < -100) {
                   setMobileTab('input');
                 }
               }}
