@@ -8,21 +8,25 @@ import { BroadcastModal } from './BroadcastModal';
 import { InstallModal } from './InstallModal'; // Is this PromptModal? Yes
 import PaymentSuccessModal from './PaymentSuccessModal';
 
-// Lazy load heavy or less frequent modals
-const NetworkVisualizerModal = lazy(() => import('./NetworkVisualizerModal').then(module => ({ default: module.NetworkVisualizerModal })));
-const DetailedGuideModal = lazy(() => import('./DetailedGuideModal'));
-const ContractInfoModal = lazy(() => import('./ContractInfoModal'));
-const FutureTicketModal = lazy(() => import('./FutureTicketModal'));
-const BusinessPresentationModal = lazy(() => import('./BusinessPresentationModal').then(module => ({ default: module.BusinessPresentationModal })));
-const CashbackDetailedModal = lazy(() => import('./CashbackDetailedModal').then(module => ({ default: module.CashbackDetailedModal })));
-const FocusModeModal = lazy(() => import('./FocusModeModal').then(module => ({ default: module.FocusModeModal })));
-const FuelPitchModal = lazy(() => import('./FuelPitchModal'));
-const UnionEcosystemModal = lazy(() => import('./UnionEcosystemModal').then(module => ({ default: module.UnionEcosystemModal })));
-const LightSimulatorModal = lazy(() => import('./LightSimulatorModal'));
-const DisclaimerModal = lazy(() => import('./DisclaimerModal'));
-const TargetCalculatorModal = lazy(() => import('./TargetCalculatorModal'));
-const AnalisiUtenzeModal = lazy(() => import('./AnalisiUtenzeModal').then(module => ({ default: module.AnalisiUtenzeModal })));
-const GridMenu = lazy(() => import('./GridMenu')); // If we decide to use it as modal for menu
+// Eager load frequently used modals for better performance
+import { NetworkVisualizerModal } from './NetworkVisualizerModal';
+import DetailedGuideModal from './DetailedGuideModal';
+import ContractInfoModal from './ContractInfoModal';
+import FutureTicketModal from './FutureTicketModal';
+import { BusinessPresentationModal } from './BusinessPresentationModal';
+import { CashbackDetailedModal } from './CashbackDetailedModal';
+import { FocusModeModal } from './FocusModeModal';
+import FuelPitchModal from './FuelPitchModal';
+import { UnionEcosystemModal } from './UnionEcosystemModal';
+import LightSimulatorModal from './LightSimulatorModal';
+import DisclaimerModal from './DisclaimerModal';
+import TargetCalculatorModal from './TargetCalculatorModal';
+import { AnalisiUtenzeModal } from './AnalisiUtenzeModal';
+import GridMenu from './GridMenu';
+
+
+// Lazy load ONLY very rarely used or extremely heavy modals
+// Currently moving almost everything to eager to fix "slowness" perception
 
 // Loading component
 const LoadingSpinner = () => (

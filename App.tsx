@@ -53,7 +53,7 @@ import HeaderMenu from './components/HeaderMenu';
 import { DesktopHeaderNav } from './components/DesktopHeaderNav'; // Import Navigation
 import BottomDock from './components/BottomDock'; // NEW IMPORT // NEW IMPORT
 
-import { ModalProvider, useModal } from './contexts/ModalContext';
+import { ModalProvider, useModalDispatch } from './contexts/ModalContext';
 import ModalManager from './components/ModalManager';
 
 // --- SHARY ASSISTANT IMPORTS ---
@@ -95,7 +95,7 @@ const initialCondoInputs: CondoInput = {
 };
 
 const AppContent = () => {
-  const { openModal, closeModal } = useModal();
+  const { openModal, closeModal } = useModalDispatch();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
 
@@ -556,7 +556,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.1.70
+        v1.1.71
       </div>
 
 

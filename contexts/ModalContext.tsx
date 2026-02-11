@@ -28,14 +28,18 @@ export type ModalKey =
     | 'ANALISI_UTENZE' // And any others
     | null;
 
-interface ModalContextType {
+interface ModalState {
     activeModal: ModalKey;
     modalProps: any;
+}
+
+interface ModalDispatch {
     openModal: (key: ModalKey, props?: any) => void;
     closeModal: () => void;
 }
 
-const ModalContext = createContext<ModalContextType | undefined>(undefined);
+const ModalStateContext = createContext<ModalState | undefined>(undefined);
+const ModalDispatchContext = createContext<ModalDispatch | undefined>(undefined);
 
 export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [activeModal, setActiveModal] = useState<ModalKey>(null);
@@ -52,16 +56,33 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }, []);
 
     return (
-        <ModalContext.Provider value={{ activeModal, modalProps, openModal, closeModal }}>
-            {children}
-        </ModalContext.Provider>
+        <ModalDispatchContext.Provider value={{ openModal, closeModal }}>
+            <ModalStateContext.Provider value={{ activeModal, modalProps }}>
+                {children}
+            </ModalStateContext.Provider>
+        </ModalDispatchContext.Provider>
     );
 };
 
-export const useModal = () => {
-    const context = useContext(ModalContext);
+export const useModalState = () => {
+    const context = useContext(ModalStateContext);
     if (context === undefined) {
-        throw new Error('useModal must be used within a ModalProvider');
+        throw new Error('useModalState must be used within a ModalProvider');
     }
     return context;
+};
+
+export const useModalDispatch = () => {
+    const context = useContext(ModalDispatchContext);
+    if (context === undefined) {
+        throw new Error('useModalDispatch must be used within a ModalProvider');
+    }
+    return context;
+};
+
+// Deprecated: attempt to use split hooks where possible to avoid re-renders
+export const useModal = () => {
+    const state = useModalState();
+    const dispatch = useModalDispatch();
+    return { ...state, ...dispatch };
 };
