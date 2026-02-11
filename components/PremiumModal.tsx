@@ -1,34 +1,117 @@
 import React, { useState } from 'react';
 import { X, Check, Star, Zap, Mail } from 'lucide-react';
+import { supabase, supabaseUrl } from '../utils/supabaseClient';
 
 interface PremiumModalProps {
   isOpen: boolean;
   onClose: () => void;
   onUnlock?: () => void; // Opzionale, se serve per test
-  licenseCode: string;
-  setLicenseCode: (code: string) => void;
-  loading: boolean;
-  error: string;
+  licenseCode?: string; // Ora opzionale
+  setLicenseCode?: (code: string) => void; // Ora opzionale
+  loading?: boolean; // Ora opzionale
+  error?: string; // Ora opzionale
   forceLock?: boolean; // Se true, non mostra la X per chiudere (blocco totale)
 }
 
 export const PremiumModal: React.FC<PremiumModalProps> = ({
   isOpen,
   onClose,
-  licenseCode,
-  setLicenseCode,
-  onUnlock,
-  loading,
-  error,
   forceLock = false
 }) => {
+  // STATO INTERNO - Non dipende più da props esterne
+  const [licenseCode, setLicenseCode] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
   if (!isOpen) return null;
 
-  // Link per i pagamenti (INSERISCI QUI I TUOI LINK REALI)
-  // Link per i pagamenti (INSERISCI QUI I TUOI LINK REALI)
-  // Link per i pagamenti (INSERISCI QUI I TUOI LINK REALI)
-  const LINK_ABBONAMENTO = "https://buy.stripe.com/5kQ9AUcjtdg4ccb8yJ3gk0i"; // Link per 3,99€
-  const LINK_VITA = "https://buy.stripe.com/bJe14obfpcc01xx5mx3gk0j";        // Link per 29,90€
+  // Link per i pagamenti
+  const LINK_ABBONAMENTO = "https://buy.stripe.com/5kQ9AUcjtdg4ccb8yJ3gk0i";
+  const LINK_VITA = "https://buy.stripe.com/bJe14obfpcc01xx5mx3gk0j";
+
+  // FUNZIONE DI VERIFICA INTEGRATA
+  const handleVerifyCode = async () => {
+    if (!licenseCode.trim()) {
+      setError('Inserisci un codice licenza');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      // Pulisci il codice
+      let cleanCode = licenseCode.replace(/\s+/g, '').replace(/[\u200B-\u200D\uFEFF]/g, '').toUpperCase();
+
+      // Verifica su Supabase
+      let { data: licenses, error: dbError } = await supabase
+        .from('licenses')
+        .select('*')
+        .ilike('code', cleanCode);
+
+      // Prova senza trattini
+      if ((!licenses || licenses.length === 0) && cleanCode.includes('-')) {
+        const noDashes = cleanCode.replace(/-/g, '');
+        const { data: retryData } = await supabase
+          .from('licenses')
+          .select('*')
+          .ilike('code', noDashes);
+        if (retryData && retryData.length > 0) {
+          licenses = retryData;
+          cleanCode = noDashes;
+        }
+      }
+
+      // Prova con trattini formattati
+      if ((!licenses || licenses.length === 0) && !cleanCode.includes('-') && cleanCode.length === 12) {
+        const formatted = `${cleanCode.slice(0, 4)}-${cleanCode.slice(4, 8)}-${cleanCode.slice(8, 12)}`;
+        const { data: retryData2 } = await supabase
+          .from('licenses')
+          .select('*')
+          .ilike('code', formatted);
+        if (retryData2 && retryData2.length > 0) {
+          licenses = retryData2;
+          cleanCode = formatted;
+        }
+      }
+
+      if (dbError || !licenses || licenses.length === 0) {
+        setError('Codice non valido o non trovato');
+        setLoading(false);
+        return;
+      }
+
+      const data = licenses[0];
+      const currentUses = data.uses || 0;
+      const maxUses = data.max_uses || 3;
+
+      if (currentUses >= maxUses) {
+        setError(`Limite dispositivi raggiunto (${maxUses}/${maxUses})`);
+        setLoading(false);
+        return;
+      }
+
+      // Incrementa contatore
+      await supabase
+        .from('licenses')
+        .update({ uses: currentUses + 1 })
+        .eq('id', data.id);
+
+      // Salva in localStorage
+      localStorage.setItem('is_premium', 'true');
+      localStorage.setItem('licenseCode', cleanCode);
+
+      // Successo!
+      alert('✅ Codice valido! App sbloccata.\n\nRicarica la pagina per vedere le modifiche.');
+      window.location.reload();
+
+    } catch (err) {
+      console.error('Errore verifica:', err);
+      setError('Errore di connessione. Riprova.');
+    }
+
+    setLoading(false);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-500">
@@ -132,7 +215,7 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
 
           </div>
 
-          {/* Area Inserimento Codice (Già Esistente) */}
+          {/* Area Inserimento Codice */}
           <div className="pt-6 border-t border-gray-100 dark:border-gray-800">
             <p className="text-center text-sm text-gray-500 mb-4">Hai già ricevuto il codice via email?</p>
             <div className="flex flex-col gap-3">
@@ -141,7 +224,11 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
                 placeholder="INCOLLA IL TUO CODICE LICENZA QUI..."
                 value={licenseCode}
                 onChange={(e) => setLicenseCode(e.target.value.toUpperCase())}
-                className="w-full p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-center font-mono text-lg tracking-widest focus:ring-2 focus:ring-blue-500 outline-none transition-all uppercase placeholder:text-sm md:placeholder:text-base"
+                className="w-full p-4 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-xl text-center font-mono text-lg tracking-widest focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all uppercase placeholder:text-sm md:placeholder:text-base text-gray-900 dark:text-white"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="characters"
+                spellCheck="false"
               />
 
               {error && (
@@ -151,7 +238,7 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
               )}
 
               <button
-                onClick={onUnlock} // Collega la funzione di verifica
+                onClick={handleVerifyCode}
                 disabled={!licenseCode || loading}
                 className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transition-all flex items-center justify-center gap-2
                   ${!licenseCode || loading
