@@ -10,7 +10,7 @@ import PaymentSuccessModal from './PaymentSuccessModal';
 
 // Eager load frequently used modals for better performance
 import { NetworkVisualizerModal } from './NetworkVisualizerModal';
-import DetailedGuideModal from './DetailedGuideModal';
+import GuideHubModal from './GuideHubModal';
 import ContractInfoModal from './ContractInfoModal';
 import FutureTicketModal from './FutureTicketModal';
 import { BusinessPresentationModal } from './BusinessPresentationModal';
@@ -51,7 +51,7 @@ const ModalManager: React.FC = () => {
             {activeModal === 'PAYMENT_SUCCESS' && <PaymentSuccessModal isOpen={true} onClose={closeModal} {...modalProps} />}
 
             {activeModal === 'NETWORK_VISUALIZER' && <NetworkVisualizerModal isOpen={true} onClose={closeModal} {...modalProps} />}
-            {activeModal === 'GUIDE' && <DetailedGuideModal isOpen={true} onClose={closeModal} {...modalProps} />}
+            {activeModal === 'GUIDE' && <GuideHubModal isOpen={true} onClose={closeModal} {...modalProps} />}
             {activeModal === 'CONTRACT_INFO' && <ContractInfoModal isOpen={true} onClose={closeModal} {...modalProps} />}
             {activeModal === 'FUTURE_TICKET' && <FutureTicketModal isOpen={true} onClose={closeModal} {...modalProps} />}
             {activeModal === 'BUSINESS_PRESENTATION' && <BusinessPresentationModal isOpen={true} onClose={closeModal} {...modalProps} />}
