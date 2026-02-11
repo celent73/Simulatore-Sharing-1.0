@@ -5,6 +5,8 @@ import EarningsSimulator from './light/EarningsSimulator';
 import RoadToZero from './light/RoadToZero';
 import Community from './light/Community';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useModalDispatch } from '../contexts/ModalContext';
+import { Target } from 'lucide-react';
 
 interface LightSimulatorModalProps {
     isOpen: boolean;
@@ -13,6 +15,7 @@ interface LightSimulatorModalProps {
 
 const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClose }) => {
     const { t } = useLanguage();
+    const { openModal } = useModalDispatch();
     const [activeTab, setActiveTab] = useState('simulator');
 
     // Shared State for all tabs
@@ -141,12 +144,21 @@ const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClo
                                 </h2>
                                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{t('light_simulator.subtitle')}</p>
                             </div>
-                            <button
-                                onClick={onClose}
-                                className="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full transition-colors text-gray-500"
-                            >
-                                <X size={24} />
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => openModal('TARGET_FOCUS')}
+                                    className="hidden sm:flex items-center gap-2 px-4 py-2 bg-union-green-500/10 hover:bg-union-green-500/20 text-union-green-600 dark:text-union-green-400 rounded-full transition-all text-sm font-bold border border-union-green-500/20"
+                                >
+                                    <Target size={18} />
+                                    <span>{t('app.calc_target')}</span>
+                                </button>
+                                <button
+                                    onClick={onClose}
+                                    className="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full transition-colors text-gray-500"
+                                >
+                                    <X size={24} />
+                                </button>
+                            </div>
                         </div>
 
                         {/* Content */}

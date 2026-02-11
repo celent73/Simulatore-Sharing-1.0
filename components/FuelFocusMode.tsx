@@ -75,8 +75,8 @@ export const FuelFocusMode: React.FC<FuelFocusModeProps> = ({ isOpen, onClose })
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({
                     files: [file],
-                    title: 'Fuel Saver Focus Mode',
-                    text: `Risparmio carburante incredibile!`,
+                    title: t('fuel_focus.tutorial_title'),
+                    text: t('fuel_focus.tutorial_desc'),
                 });
             } else {
                 const link = document.createElement('a');
@@ -187,7 +187,7 @@ export const FuelFocusMode: React.FC<FuelFocusModeProps> = ({ isOpen, onClose })
                                 onClick={() => setStep('spending')}
                                 className="mt-12 w-full max-w-xs py-6 bg-white text-black rounded-2xl font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)] flex items-center justify-center gap-3"
                             >
-                                AVANTI <ArrowRight size={24} />
+                                {t('common.next')} <ArrowRight size={24} />
                             </button>
                         </motion.div>
                     )}
@@ -223,7 +223,7 @@ export const FuelFocusMode: React.FC<FuelFocusModeProps> = ({ isOpen, onClose })
 
                                 <div className="space-y-6">
                                     <label className="flex justify-between items-end text-sm font-bold text-white/40 uppercase tracking-widest px-4">
-                                        <span>CASHBACK ATTESO</span>
+                                        <span>{t('fuel_focus.expected_cashback')}</span>
                                         <span className="text-4xl font-black text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.3)]">{cashbackPercent}%</span>
                                     </label>
 
@@ -266,7 +266,7 @@ export const FuelFocusMode: React.FC<FuelFocusModeProps> = ({ isOpen, onClose })
                                 onClick={() => setStep('reveal')}
                                 className="mt-12 w-full max-w-xs py-6 bg-emerald-500 text-white rounded-2xl font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_-10px_rgba(16,185,129,0.4)] flex items-center justify-center gap-3"
                             >
-                                REVEAL <Sparkles size={24} />
+                                {t('fuel_focus.reveal_btn')} <Sparkles size={24} />
                             </button>
                         </motion.div>
                     )}
@@ -291,7 +291,7 @@ export const FuelFocusMode: React.FC<FuelFocusModeProps> = ({ isOpen, onClose })
                                     animate={{ y: 0, opacity: 1 }}
                                     className="mb-8 p-6 bg-white/5 border border-white/10 rounded-[2rem] backdrop-blur-xl relative z-10"
                                 >
-                                    <span className="text-white/40 text-xs font-bold uppercase tracking-[0.3em] mb-4 block">PREZZO ALLA POMPA</span>
+                                    <span className="text-white/40 text-xs font-bold uppercase tracking-[0.3em] mb-4 block">{t('fuel_focus.pump_price_label')}</span>
                                     <span className="text-4xl font-mono text-red-500/50 line-through">€ {pPrice.toFixed(2)}</span>
                                 </motion.div>
 
@@ -306,7 +306,7 @@ export const FuelFocusMode: React.FC<FuelFocusModeProps> = ({ isOpen, onClose })
                                             € {newPricePerLiter.toFixed(2)}
                                         </div>
                                         <span className="mt-4 px-6 py-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full text-emerald-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2">
-                                            <TrendingDown size={16} /> Prezzo Sharing
+                                            <TrendingDown size={16} /> {t('fuel_focus.sharing_price_label')}
                                         </span>
                                     </motion.div>
 
@@ -326,11 +326,11 @@ export const FuelFocusMode: React.FC<FuelFocusModeProps> = ({ isOpen, onClose })
                                     className="mt-12 grid grid-cols-2 gap-4 w-full"
                                 >
                                     <div className="bg-white/5 p-6 rounded-3xl border border-white/5 backdrop-blur-md">
-                                        <span className="text-[10px] font-black text-white/30 uppercase block mb-1">Risparmio Mensile</span>
+                                        <span className="text-[10px] font-black text-white/30 uppercase block mb-1">{t('fuel_focus.monthly_saving')}</span>
                                         <span className="text-2xl font-bold text-white">€ {totalSavings.toFixed(2)}</span>
                                     </div>
                                     <div className="bg-gradient-to-br from-emerald-600/20 to-emerald-900/20 p-6 rounded-3xl border border-emerald-500/20 backdrop-blur-md">
-                                        <span className="text-[10px] font-black text-emerald-300/50 uppercase block mb-1">Risparmio Annuo</span>
+                                        <span className="text-[10px] font-black text-emerald-300/50 uppercase block mb-1">{t('fuel_focus.annual_saving')}</span>
                                         <span className="text-2xl font-bold text-emerald-400">€ {(totalSavings * 12).toFixed(2)}</span>
                                     </div>
                                 </motion.div>
@@ -353,7 +353,7 @@ export const FuelFocusMode: React.FC<FuelFocusModeProps> = ({ isOpen, onClose })
                                     onClick={onClose}
                                     className="flex-1 py-6 bg-white text-black rounded-3xl font-black text-xl hover:scale-[1.02] active:scale-95 transition-all shadow-[0_20px_40px_rgba(255,255,255,0.2)] uppercase"
                                 >
-                                    Fatto
+                                    {t('common.done')}
                                 </button>
                             </motion.div>
                         </motion.div>

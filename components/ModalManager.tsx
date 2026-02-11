@@ -24,7 +24,7 @@ import TargetCalculatorModal from './TargetCalculatorModal';
 import { AnalisiUtenzeModal } from './AnalisiUtenzeModal';
 import GridMenu from './GridMenu';
 import { FuelFocusMode } from './FuelFocusMode';
-
+import { TargetFocusMode } from './TargetFocusMode';
 
 // Lazy load ONLY very rarely used or extremely heavy modals
 // Currently moving almost everything to eager to fix "slowness" perception
@@ -63,6 +63,7 @@ const ModalManager: React.FC = () => {
             {activeModal === 'TARGET_CALCULATOR' && <TargetCalculatorModal isOpen={true} onClose={closeModal} {...modalProps} />}
             {activeModal === 'GRID_MENU' && <GridMenu isOpen={true} onClose={closeModal} {...modalProps} />}
             {activeModal === 'FUEL_FOCUS' && <FuelFocusMode isOpen={true} onClose={closeModal} {...modalProps} />}
+            {activeModal === 'TARGET_FOCUS' && <TargetFocusMode isOpen={true} onClose={closeModal} {...modalProps} />}
             {activeModal === 'ANALISI_UTENZE' && <AnalisiUtenzeModal isOpen={true} onClose={closeModal} {...modalProps} />}
         </Suspense>
     );

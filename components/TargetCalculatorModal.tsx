@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Target, Users, Clock, TrendingUp, Zap, FileText, Activity, Briefcase, Star } from 'lucide-react';
 import { PlanInput } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
+import { TargetFocusMode } from './TargetFocusMode';
 
 interface TargetCalculatorModalProps {
     isOpen: boolean;
@@ -131,6 +132,7 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
     const [workMode, setWorkMode] = useState<'basic' | 'pro'>('basic');
     const [results, setResults] = useState({ people: 0, time: 0, structure: 'N/A', contracts: 0, projY2: 0, projY3: 0 });
     const [animating, setAnimating] = useState(false);
+    const [isFocusModeOpen, setIsFocusModeOpen] = useState(false);
 
     useEffect(() => {
         setAnimating(true);
@@ -253,19 +255,28 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
 
                 <div className="p-6 pb-4 relative z-10 flex justify-between items-center border-b border-white/10 bg-white/5 backdrop-blur-xl">
                     <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-gray-900 rounded-xl border border-gray-700">
-                            <Target size={24} className="text-emerald-400 animate-pulse" />
+                        <div className="p-2.5 bg-gray-900 rounded-xl border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                            <Target size={24} className="text-amber-500 animate-pulse" />
                         </div>
                         <div>
                             <h2 className="text-2xl font-black text-white tracking-tight">
-                                Target <span className="text-emerald-500">Simulator</span>
+                                Target <span className="text-amber-500">Simulator</span>
                             </h2>
                             <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">{txt.subtitle}</p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="p-2 bg-gray-900 text-gray-400 rounded-full hover:bg-gray-800 hover:text-white transition-all border border-gray-800">
-                        <X size={20} />
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => setIsFocusModeOpen(true)}
+                            className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-full text-amber-500 text-xs font-black uppercase tracking-wider transition-all"
+                        >
+                            <Zap size={14} fill="currentColor" />
+                            Focus Mode
+                        </button>
+                        <button onClick={onClose} className="p-2 bg-gray-900 text-gray-400 rounded-full hover:bg-gray-800 hover:text-white transition-all border border-gray-800">
+                            <X size={20} />
+                        </button>
+                    </div>
                 </div>
 
                 <div className="p-6 space-y-8 relative z-10">
@@ -301,7 +312,7 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                                 value={inputValue}
                                 onChange={handleInputChange}
                                 min={0}
-                                className="w-full bg-transparent text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 font-mono text-7xl font-black text-center py-4 focus:outline-none border-b-2 border-white/10 focus:border-emerald-500 transition-all placeholder-white/10 drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+                                className="w-full bg-transparent text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600 font-mono text-7xl font-black text-center py-4 focus:outline-none border-b-2 border-white/10 focus:border-amber-500 transition-all placeholder-white/10 drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]"
                                 placeholder="0"
                             />
                             <span className="absolute top-1/2 -translate-y-1/2 -right-6 text-gray-500 text-4xl font-thin opacity-50">€</span>
@@ -340,12 +351,17 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                 </div>
 
                 <div className="p-6 bg-white/5 backdrop-blur-md border-t border-white/10">
-                    <button onClick={onClose} className="w-full py-5 bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-400 hover:to-cyan-500 text-white rounded-2xl font-black text-xl uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:-translate-y-1 active:translate-y-0 relative overflow-hidden group">
+                    <button onClick={onClose} className="w-full py-5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white rounded-2xl font-black text-xl uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:shadow-[0_0_30px_rgba(245,158,11,0.6)] hover:-translate-y-1 active:translate-y-0 relative overflow-hidden group">
                         <div className="absolute inset-0 bg-white/20 skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
                         {txt.backBtn}
                     </button>
                 </div>
             </div>
+
+            <TargetFocusMode
+                isOpen={isFocusModeOpen}
+                onClose={() => setIsFocusModeOpen(false)}
+            />
         </div>
     );
 };
