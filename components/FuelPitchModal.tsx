@@ -52,8 +52,8 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                             <Fuel className="text-white w-7 h-7" />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-black text-white uppercase italic tracking-wider">Fuel Saver</h2>
-                            <p className="text-red-200 text-xs font-bold uppercase tracking-widest">Simulatore Risparmio</p>
+                            <h2 className="text-2xl font-black text-white uppercase italic tracking-wider">{t('fuel_pitch.title')}</h2>
+                            <p className="text-red-200 text-xs font-bold uppercase tracking-widest">{t('fuel_pitch.subtitle')}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 relative z-10">
@@ -62,7 +62,7 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                             className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-xl font-bold text-xs transition-all border border-white/30 shadow-lg active:scale-95 group backdrop-blur-sm"
                         >
                             <Zap size={14} className="group-hover:animate-pulse" />
-                            FOCUS MODE
+                            {t('fuel_pitch.focus_mode_btn')}
                         </button>
                         <button onClick={onClose} className="p-2 bg-black/20 hover:bg-black/30 text-white rounded-full transition-colors">
                             <X size={24} />
@@ -75,7 +75,7 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                     <div className="grid grid-cols-2 gap-8">
                         {/* OLD PRICE */}
                         <div className="flex flex-col items-center opacity-50 grayscale transition-all duration-500">
-                            <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Prezzo alla Pompa</span>
+                            <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">{t('fuel_pitch.pump_price_label')}</span>
                             <div className="bg-gray-900 p-4 rounded-xl border border-gray-700 w-full text-center relative overflow-hidden">
                                 <span className="font-mono text-3xl font-bold text-red-500 line-through decoration-red-500/50 decoration-2">{pricePerLiter.toFixed(2)} €</span>
                                 <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(0,0,0,0.3)_50%,transparent_75%)] bg-[length:10px_10px]"></div>
@@ -89,7 +89,7 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
 
                         {/* NEW PRICE */}
                         <div className="flex flex-col items-center scale-110 origin-center transform transition-all duration-500">
-                            <span className="text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-1 animate-pulse">Prezzo Sharing</span>
+                            <span className="text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-1 animate-pulse">{t('fuel_pitch.sharing_price_label')}</span>
                             <div className="bg-gray-900 p-4 rounded-xl border border-emerald-500/50 shadow-[0_0_30px_-10px_rgba(16,185,129,0.3)] w-full text-center relative overflow-hidden group">
                                 <span className="font-mono text-4xl font-black text-emerald-400 drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">{newPricePerLiter.toFixed(2)} €</span>
                                 <div className="absolute top-0 right-0 p-1">
@@ -108,7 +108,7 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                         {/* PRICE INPUT */}
                         <div>
                             <div className="flex justify-between items-center mb-2 ml-1">
-                                <span className="text-gray-500 text-xs font-bold uppercase">Prezzo Benzina</span>
+                                <span className="text-gray-500 text-xs font-bold uppercase">{t('fuel_pitch.fuel_price_label')}</span>
                                 <div className="flex items-center bg-slate-800 rounded-lg border border-slate-600 focus-within:border-union-blue-500 focus-within:ring-1 focus-within:ring-union-blue-500 transition-all">
                                     <input
                                         type="number"
@@ -136,7 +136,7 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                         {/* TANK CAPACITY INPUT */}
                         <div>
                             <div className="flex justify-between items-center mb-2 ml-1">
-                                <span className="text-gray-500 text-xs font-bold uppercase">Capacità Serbatoio</span>
+                                <span className="text-gray-500 text-xs font-bold uppercase">{t('fuel_pitch.tank_capacity_label')}</span>
                                 <div className="flex items-center bg-slate-800 rounded-lg border border-slate-600 focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 transition-all">
                                     <input
                                         type="number"
@@ -147,7 +147,7 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                                         onChange={(e) => setTankCapacity(Number(e.target.value))}
                                         className="w-16 bg-transparent text-white font-mono text-sm text-right px-2 py-1 outline-none"
                                     />
-                                    <span className="text-gray-400 text-xs font-bold pr-2">Litri</span>
+                                    <span className="text-gray-400 text-xs font-bold pr-2">{t('fuel_pitch.liters')}</span>
                                 </div>
                             </div>
                             <input
@@ -165,13 +165,13 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                     {/* OTHER SPENDING SECTION */}
                     <div className="bg-slate-800/80 p-5 rounded-2xl border border-white/5 space-y-6">
                         <h4 className="text-gray-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2 mb-4">
-                            <PiggyBank size={14} className="text-union-orange-400" /> Genera Crediti da Altre Spese
+                            <PiggyBank size={14} className="text-union-orange-400" /> {t('fuel_pitch.other_spending_title')}
                         </h4>
 
                         {/* SPESA MENSILE SLIDER */}
                         <div>
                             <div className="flex justify-between text-xs font-bold uppercase text-gray-500 mb-2 ml-1">
-                                <span>Spesa Mensile (Smart Shopping)</span>
+                                <span>{t('fuel_pitch.monthly_spending_label')}</span>
                                 <span className="text-white">{formatCurrency(otherSpending)}</span>
                             </div>
                             <input
@@ -188,7 +188,7 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                         {/* CASHBACK % SLIDER */}
                         <div>
                             <div className="flex justify-between text-xs font-bold uppercase text-gray-500 mb-2 ml-1">
-                                <span>Cashback Ottenuto</span>
+                                <span>{t('fuel_pitch.cashback_obtained_label')}</span>
                                 <span className="text-white">{otherCashbackPercent}%</span>
                             </div>
                             <div className="relative">
@@ -212,7 +212,7 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
 
                         {/* GENERATED CREDIT DISPLAY */}
                         <div className="flex justify-between items-center bg-black/20 p-3 rounded-xl border border-white/5">
-                            <span className="text-gray-400 text-xs font-bold uppercase">Credito Generato</span>
+                            <span className="text-gray-400 text-xs font-bold uppercase">{t('fuel_pitch.generated_credit_label')}</span>
                             <span className="text-union-orange-400 font-mono font-bold">+ {formatCurrency(otherSavings)}</span>
                         </div>
                     </div>
@@ -221,21 +221,21 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                     {/* CALCULATION BREAKDOWN */}
                     <div className="bg-slate-800/80 p-5 rounded-2xl border border-white/5 space-y-3">
                         <h4 className="text-emerald-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                            <TrendingDown size={14} /> Abbattimento Costo Pieno
+                            <TrendingDown size={14} /> {t('fuel_pitch.cost_reduction_title')}
                         </h4>
 
                         <div className="flex justify-between items-center text-sm">
-                            <span className="text-gray-300">Costo Pieno ({tankCapacity}L)</span>
+                            <span className="text-gray-300">{t('fuel_pitch.tank_cost_label')} ({tankCapacity}L)</span>
                             <span className="text-white font-mono">{formatCurrency(costPerTankStandard)}</span>
                         </div>
 
                         <div className="space-y-1">
                             <div className="flex justify-between items-center text-xs opacity-70">
-                                <span className="text-gray-400 flex items-center gap-1"><Fuel size={10} /> Cashback Benzina (1.88%)</span>
+                                <span className="text-gray-400 flex items-center gap-1"><Fuel size={10} /> {t('fuel_pitch.fuel_cashback_label')}</span>
                                 <span className="text-emerald-400 font-mono">- {formatCurrency(directFuelSavings)}</span>
                             </div>
                             <div className="flex justify-between items-center text-xs opacity-70">
-                                <span className="text-gray-400 flex items-center gap-1"><PiggyBank size={10} /> Crediti Altre Spese</span>
+                                <span className="text-gray-400 flex items-center gap-1"><PiggyBank size={10} /> {t('fuel_pitch.other_credits_label')}</span>
                                 <span className="text-union-orange-400 font-mono">- {formatCurrency(otherSavings)}</span>
                             </div>
                         </div>
@@ -243,12 +243,12 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                         <div className="h-px bg-white/10 my-1"></div>
 
                         <div className="flex justify-between items-center text-base font-bold">
-                            <span className="text-white">Nuovo Costo Pieno</span>
+                            <span className="text-white">{t('fuel_pitch.new_tank_cost_label')}</span>
                             <span className="text-emerald-400 font-mono text-xl">{formatCurrency(costPerTankDiscounted)}</span>
                         </div>
 
                         <div className="flex justify-between items-center text-sm font-bold mt-2 bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">
-                            <span className="text-emerald-300 uppercase text-[10px]">Risparmio al Litro</span>
+                            <span className="text-emerald-300 uppercase text-[10px]">{t('fuel_pitch.savings_per_liter_label')}</span>
                             <span className="text-white font-mono">- {formatCurrency(savingsPerLiter)} / L</span>
                         </div>
                     </div>
@@ -259,7 +259,7 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                             <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center mb-2">
                                 <PiggyBank className="text-emerald-400" size={16} />
                             </div>
-                            <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Totale Risparmio</span>
+                            <span className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">{t('fuel_pitch.total_savings_label')}</span>
                             <span className="text-2xl font-black text-white mt-1">{formatCurrency(totalSavings)}</span>
                         </div>
                         <div className="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 p-4 rounded-2xl border border-indigo-500/30 flex flex-col items-center text-center relative overflow-hidden">
@@ -267,7 +267,7 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                             <div className="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center mb-2 relative z-10">
                                 <Calendar className="text-indigo-400" size={16} />
                             </div>
-                            <span className="text-indigo-300 text-[10px] font-bold uppercase tracking-widest relative z-10">Valore su 12 Mesi</span>
+                            <span className="text-indigo-300 text-[10px] font-bold uppercase tracking-widest relative z-10">{t('fuel_pitch.value_12_months_label')}</span>
                             <span className="text-2xl font-black text-white mt-1 relative z-10">{formatCurrency(totalSavings * 12)}</span>
                         </div>
                     </div>
