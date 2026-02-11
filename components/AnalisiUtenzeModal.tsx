@@ -213,6 +213,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
     const [scanType, setScanType] = useState<'electricity' | 'gas' | 'any'>('any');
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isFocusModeOpen, setIsFocusModeOpen] = useState(false);
+    const [currentPeriod, setCurrentPeriod] = useState<'monthly' | 'annual'>(period);
 
     // Sync helper
     const syncInput = (field: keyof PlanInput, strVal: string) => {
@@ -342,7 +343,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
 
     const earningsMonthly = isEarningsActive ? (monthlyRecurringEarning + oneTimeBonus) : 0;
     const earningsAnnual = isEarningsActive ? ((monthlyRecurringEarning * 12) + oneTimeBonus) : 0;
-    const currentEarnings = period === 'annual' ? earningsAnnual : earningsMonthly;
+    const currentEarnings = currentPeriod === 'annual' ? earningsAnnual : earningsMonthly;
 
     const rawNetMonthly = totalMonthlyCost - monthlyCashback - earningsMonthly;
     const rawNetAnnual = totalAnnualCost - annualCashback - earningsAnnual;
@@ -356,14 +357,14 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
     // Spread Impact Calculation (Difference)
     const monthlySpreadImpact = (elecSpread * elecCons) + (gasSpread * gasCons);
     const annualSpreadImpact = monthlySpreadImpact * 12;
-    const currentSpreadImpact = period === 'annual' ? annualSpreadImpact : monthlySpreadImpact;
+    const currentSpreadImpact = currentPeriod === 'annual' ? annualSpreadImpact : monthlySpreadImpact;
 
 
     // Determine Status
     // > 0 means Cost is higher than Cashback (Debt)
     // <= 0 means Cashback covers Cost (Surplus or Break-even)
-    const isDebt = (period === 'annual' ? rawNetAnnual : rawNetMonthly) > 0.01; // small epsilon
-    const isSurplus = (period === 'annual' ? rawNetAnnual : rawNetMonthly) < -0.01;
+    const isDebt = (currentPeriod === 'annual' ? rawNetAnnual : rawNetMonthly) > 0.01; // small epsilon
+    const isSurplus = (currentPeriod === 'annual' ? rawNetAnnual : rawNetMonthly) < -0.01;
 
     // Dynamic Gradient - FORCED GREEN as requested
     let gradientClass = "from-emerald-400 via-green-400 to-teal-400";
@@ -574,8 +575,8 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
 
                         {/* Result Mini-Card */}
                         <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/10 rounded-2xl border border-yellow-100 dark:border-yellow-900/20 flex justify-between items-center">
-                            <span className="text-sm font-bold text-yellow-700 dark:text-yellow-500 uppercase">{txt.totalElectricity} {period === 'annual' ? txt.annual : txt.monthly}</span>
-                            <span className="text-xl font-black text-yellow-600 dark:text-yellow-400">€{(period === 'annual' ? annualElectricityCost : monthlyElectricityCost).toLocaleString('it-IT', { minimumFractionDigits: 2 })}</span>
+                            <span className="text-sm font-bold text-yellow-700 dark:text-yellow-500 uppercase">{txt.totalElectricity} {currentPeriod === 'annual' ? txt.annual : txt.monthly}</span>
+                            <span className="text-xl font-black text-yellow-600 dark:text-yellow-400">€{(currentPeriod === 'annual' ? annualElectricityCost : monthlyElectricityCost).toLocaleString('it-IT', { minimumFractionDigits: 2 })}</span>
                         </div>
                     </div>
 
@@ -653,8 +654,8 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
 
                         {/* Result Mini-Card */}
                         <div className="mt-6 p-4 bg-orange-50 dark:bg-orange-900/10 rounded-2xl border border-orange-100 dark:border-orange-900/20 flex justify-between items-center">
-                            <span className="text-sm font-bold text-orange-700 dark:text-orange-500 uppercase">{txt.totalGas} {period === 'annual' ? txt.annual : txt.monthly}</span>
-                            <span className="text-xl font-black text-orange-600 dark:text-orange-400">€{(period === 'annual' ? annualGasCost : monthlyGasCost).toLocaleString('it-IT', { minimumFractionDigits: 2 })}</span>
+                            <span className="text-sm font-bold text-orange-700 dark:text-orange-500 uppercase">{txt.totalGas} {currentPeriod === 'annual' ? txt.annual : txt.monthly}</span>
+                            <span className="text-xl font-black text-orange-600 dark:text-orange-400">€{(currentPeriod === 'annual' ? annualGasCost : monthlyGasCost).toLocaleString('it-IT', { minimumFractionDigits: 2 })}</span>
                         </div>
                     </div>
 
@@ -665,7 +666,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
 
                         <div className="bg-white/95 dark:bg-gray-900/95 rounded-[2.3rem] p-6 relative z-10">
                             <div className="text-center mb-6">
-                                <h3 className="text-lg font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">{txt.summary} {period === 'annual' ? txt.annual : txt.monthly} {txt.total}</h3>
+                                <h3 className="text-lg font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">{txt.summary} {currentPeriod === 'annual' ? txt.annual : txt.monthly} {txt.total}</h3>
                                 {isComparisonMode ? (
                                     <div className="flex flex-col items-center gap-4 py-2">
                                         <div className="flex items-center justify-center gap-4 w-full px-2">
@@ -716,10 +717,10 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                             <div className="flex flex-col items-center">
                                                 {/* CHANGED TO RED */}
                                                 <span className="text-5xl font-black text-red-600 dark:text-red-400">
-                                                    €{(period === 'annual' ? totalAnnualCost : totalMonthlyCost).toLocaleString('it-IT', { minimumFractionDigits: 2 })}
+                                                    €{(currentPeriod === 'annual' ? totalAnnualCost : totalMonthlyCost).toLocaleString('it-IT', { minimumFractionDigits: 2 })}
                                                 </span>
                                                 <span className="text-sm font-bold text-gray-400 mt-1">
-                                                    (€{(period === 'annual' ? totalMonthlyCost : totalAnnualCost).toLocaleString('it-IT', { minimumFractionDigits: 2 })} / {period === 'annual' ? 'mese' : 'anno'})
+                                                    (€{(currentPeriod === 'annual' ? totalMonthlyCost : totalAnnualCost).toLocaleString('it-IT', { minimumFractionDigits: 2 })} / {currentPeriod === 'annual' ? 'mese' : 'anno'})
                                                 </span>
                                             </div>
                                         </div>
@@ -763,9 +764,9 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                             <Wallet size={24} />
                                         </div>
                                         <div>
-                                            <p className="text-xs font-bold text-purple-400 uppercase tracking-wider">{txt.yourCashback}</p>
+                                            <p className="text-xs font-bold text-purple-400 uppercase tracking-wider">{txt.yourCashback} {currentPeriod === 'annual' ? txt.annual : txt.monthly}</p>
                                             <div className="flex items-center gap-2">
-                                                <p className="text-xl font-black text-purple-600 dark:text-purple-300">-€{(period === 'annual' ? annualCashback : monthlyCashback).toLocaleString('it-IT', { minimumFractionDigits: 2 })}</p>
+                                                <p className="text-xl font-black text-purple-600 dark:text-purple-300">-€{(currentPeriod === 'annual' ? annualCashback : monthlyCashback).toLocaleString('it-IT', { minimumFractionDigits: 2 })}</p>
                                                 {!isEditingCashback && (
                                                     <button
                                                         onClick={() => setIsEditingCashback(true)}
@@ -801,6 +802,22 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                                     <X size={16} />
                                                 </button>
                                             </div>
+                                        </div>
+
+                                        {/* Period Toggle */}
+                                        <div className="flex p-1 bg-white dark:bg-gray-800 rounded-xl border border-purple-100 dark:border-purple-800 mb-4 h-10">
+                                            <button
+                                                onClick={() => setCurrentPeriod('monthly')}
+                                                className={`flex-1 flex items-center justify-center rounded-lg text-xs font-black transition-all ${currentPeriod === 'monthly' ? 'bg-purple-600 text-white shadow-md' : 'text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30'}`}
+                                            >
+                                                {txt.monthly.toUpperCase()}
+                                            </button>
+                                            <button
+                                                onClick={() => setCurrentPeriod('annual')}
+                                                className={`flex-1 flex items-center justify-center rounded-lg text-xs font-black transition-all ${currentPeriod === 'annual' ? 'bg-purple-600 text-white shadow-md' : 'text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30'}`}
+                                            >
+                                                {txt.annual.toUpperCase()}
+                                            </button>
                                         </div>
 
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -848,11 +865,11 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                 <div className="flex-1 flex flex-col gap-4">
                                     <div className={`w-full bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/30 dark:to-teal-900/30 border-emerald-100 dark:border-emerald-800 p-4 rounded-2xl flex items-center justify-between shadow-lg transform scale-105 border-2 relative overflow-hidden`}>
                                         <div className="relative z-10">
-                                            <p className={`text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider`}>{txt.newTotal} {period === 'annual' ? txt.annual : txt.monthly}</p>
+                                            <p className={`text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider`}>{txt.newTotal} {currentPeriod === 'annual' ? txt.annual : txt.monthly}</p>
 
                                             {/* Main Value */}
                                             <p className={`text-3xl font-black text-emerald-600 dark:text-emerald-400`}>
-                                                {isSurplus ? '+' : ''}€{Math.abs(period === 'annual' ? rawNetAnnual : rawNetMonthly).toLocaleString('it-IT', { minimumFractionDigits: 2 })}
+                                                {isSurplus ? '+' : ''}€{Math.abs(currentPeriod === 'annual' ? rawNetAnnual : rawNetMonthly).toLocaleString('it-IT', { minimumFractionDigits: 2 })}
                                             </p>
 
                                             {/* Secondary Value / Label */}
