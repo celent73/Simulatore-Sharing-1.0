@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { X, Calculator, Wallet, ArrowRight, Settings, ChevronDown, ChevronUp, Plus, Minus, Edit2, RotateCcw, Download, Camera, Loader2, RefreshCcw } from 'lucide-react';
+import { X, Calculator, Wallet, ArrowRight, Settings, ChevronDown, ChevronUp, Plus, Minus, Edit2, RotateCcw, Download, Camera, Loader2, RefreshCcw, Zap } from 'lucide-react';
 import { PlanInput, CompensationPlanResult } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 import { analyzeBillImage, ExtractedBillData } from '../utils/aiService';
 import AIScannerModal from './AIScannerModal';
 import SharyTrigger from './SharyTrigger';
+import { AnalisiUtenzeFocusMode } from './AnalisiUtenzeFocusMode';
 
 interface AnalisiUtenzeModalProps {
     isOpen: boolean;
@@ -211,6 +212,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
     const [isScannerModalOpen, setIsScannerModalOpen] = useState(false);
     const [scanType, setScanType] = useState<'electricity' | 'gas' | 'any'>('any');
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isFocusModeOpen, setIsFocusModeOpen] = useState(false);
 
     // Sync helper
     const syncInput = (field: keyof PlanInput, strVal: string) => {
@@ -395,6 +397,14 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                             <p className="text-indigo-100 font-medium text-xs md:text-lg opacity-90 hidden">{txt.subtitle}</p>
                         </div>
                         <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setIsFocusModeOpen(true)}
+                                className="flex items-center gap-2 px-3 md:px-4 py-2 md:py-3 bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-400/30 rounded-2xl text-indigo-300 text-xs font-black uppercase tracking-wider transition-all shadow-lg"
+                                title="Focus Mode"
+                            >
+                                <Zap size={16} fill="currentColor" />
+                                <span className="hidden sm:inline">Focus</span>
+                            </button>
                             <button
                                 onClick={() => {
                                     const newVal = !isComparisonMode;
@@ -923,6 +933,11 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                     scanType={scanType}
                 />
             )}
+
+            <AnalisiUtenzeFocusMode
+                isOpen={isFocusModeOpen}
+                onClose={() => setIsFocusModeOpen(false)}
+            />
         </div>
     );
 };

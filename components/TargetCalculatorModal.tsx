@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { X, Target, Users, Clock, TrendingUp, Zap, FileText, Activity, Briefcase, Star } from 'lucide-react';
 import { PlanInput } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
-import { TargetFocusMode } from './TargetFocusMode';
 
 interface TargetCalculatorModalProps {
     isOpen: boolean;
@@ -132,7 +131,6 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
     const [workMode, setWorkMode] = useState<'basic' | 'pro'>('basic');
     const [results, setResults] = useState({ people: 0, time: 0, structure: 'N/A', contracts: 0, projY2: 0, projY3: 0 });
     const [animating, setAnimating] = useState(false);
-    const [isFocusModeOpen, setIsFocusModeOpen] = useState(false);
 
     useEffect(() => {
         setAnimating(true);
@@ -265,18 +263,9 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                             <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest">{txt.subtitle}</p>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={() => setIsFocusModeOpen(true)}
-                            className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 rounded-full text-amber-500 text-xs font-black uppercase tracking-wider transition-all"
-                        >
-                            <Zap size={14} fill="currentColor" />
-                            Focus Mode
-                        </button>
-                        <button onClick={onClose} className="p-2 bg-gray-900 text-gray-400 rounded-full hover:bg-gray-800 hover:text-white transition-all border border-gray-800">
-                            <X size={20} />
-                        </button>
-                    </div>
+                    <button onClick={onClose} className="p-2 bg-gray-900 text-gray-400 rounded-full hover:bg-gray-800 hover:text-white transition-all border border-gray-800">
+                        <X size={20} />
+                    </button>
                 </div>
 
                 <div className="p-6 space-y-8 relative z-10">
@@ -357,11 +346,6 @@ const TargetCalculatorModal: React.FC<TargetCalculatorModalProps> = ({ isOpen, o
                     </button>
                 </div>
             </div>
-
-            <TargetFocusMode
-                isOpen={isFocusModeOpen}
-                onClose={() => setIsFocusModeOpen(false)}
-            />
         </div>
     );
 };

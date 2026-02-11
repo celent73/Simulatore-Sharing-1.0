@@ -26,8 +26,10 @@ export type ModalKey =
     | 'CONTRACT_INFO'
     | 'DISCLAIMER'
     | 'ANALISI_UTENZE' // And any others
+    | 'ANALISI_UTENZE_FOCUS'
     | 'FUEL_FOCUS'
     | 'TARGET_FOCUS'
+    | 'SHARING_PARK_FOCUS'
     | null;
 
 interface ModalState {

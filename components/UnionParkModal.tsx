@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sun, Info, TrendingUp, Wallet, Check, RotateCcw, Minus, Plus } from 'lucide-react';
+import { X, Sun, Info, TrendingUp, Wallet, Check, RotateCcw, Minus, Plus, Zap } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import SharyTrigger from './SharyTrigger';
+import { SharingParkFocusMode } from './SharingParkFocusMode';
 
 interface UnionParkModalProps {
     isOpen: boolean;
@@ -25,6 +26,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
     const [pun, setPun] = useState(initialPun || 0.20);
     const [simulationYears, setSimulationYears] = useState(initialDuration || 26);
     const [monthlyBill, setMonthlyBill] = useState(0);
+    const [isFocusModeOpen, setIsFocusModeOpen] = useState(false);
 
     const handleReset = () => {
         setPanels(0);
@@ -74,19 +76,28 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                 <div className="relative overflow-hidden p-3 sm:px-6 sm:py-2 bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-800 text-white shrink-0">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                     <div className="relative z-10 flex justify-between items-start">
-                        <div>
+                        <div className="flex-1">
                             <div className="inline-flex items-center gap-2 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] sm:text-[10px] font-bold uppercase tracking-widest mb-1 sm:mb-2 shadow-lg">
                                 <Sun size={12} className="animate-pulse sm:w-4 sm:h-4" /> Sharing Park
                             </div>
-                            <div className="flex items-center gap-2">
-                                <h2 className="text-xl sm:text-2xl font-black tracking-tight mb-0.5">{t('union_park.title')}</h2>
+                            <div className="flex items-center gap-2 mb-1">
+                                <h2 className="text-xl sm:text-2xl font-black tracking-tight">{t('union_park.title')}</h2>
                                 <SharyTrigger
                                     message="Benvenuto nello Sharing Park! Seleziona quanti pannelli vuoi (da 1 a 20). Ogni pannello ti garantisce un rendimento mensile passivo basato sul PUN. Usa il bottone 'Obiettivo Azzera Bolletta' per calcolare quanti te ne servono per coprire le tue spese!"
                                     messageDe="Willkommen im Sharing Park! Wähle, wie viele Paneele du möchtest (von 1 bis 20). Jedes Paneel garantiert dir ein passives monatliches Einkommen basierend auf dem PUN. Nutze den Button 'Ziel: Rechnung Null', um zu berechnen, wie viele du brauchst, um deine Ausgaben zu decken!"
                                     messageEn="Welcome to Sharing Park! Select how many panels you want (from 1 to 20). Each panel guarantees you a passive monthly income based on the PUN. Use the 'Zero Bill Goal' button to calculate how many you need to cover your expenses!"
                                 />
                             </div>
-                            <p className="text-emerald-100 text-xs sm:text-sm font-medium opacity-90">{t('union_park.subtitle')}</p>
+                            <div className="flex items-center gap-3">
+                                <p className="text-emerald-100 text-xs sm:text-sm font-medium opacity-90">{t('union_park.subtitle')}</p>
+                                <button
+                                    onClick={() => setIsFocusModeOpen(true)}
+                                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-white/20 hover:bg-white/30 rounded-full transition-all flex items-center gap-2 text-white font-bold text-xs sm:text-sm backdrop-blur-md border border-white/20 shadow-lg group"
+                                >
+                                    <Zap size={14} className="text-white group-hover:scale-110 transition-transform sm:w-4 sm:h-4" />
+                                    <span className="uppercase tracking-wider">Focus Mode</span>
+                                </button>
+                            </div>
                         </div>
                         <button onClick={onClose} className="p-2 sm:p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 shadow-lg hover:rotate-90 duration-300">
                             <X size={20} className="sm:w-6 sm:h-6" />
@@ -313,7 +324,13 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                     </button>
                 </div>
 
-            </div>
-        </div>
+            </div >
+
+            {/* Focus Mode */}
+            < SharingParkFocusMode
+                isOpen={isFocusModeOpen}
+                onClose={() => setIsFocusModeOpen(false)}
+            />
+        </div >
     );
 };
