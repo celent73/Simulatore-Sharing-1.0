@@ -100,7 +100,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, suffix, variant
             {icon}
           </div>
         )}
-        <h4 className={`${styles.title} text-[10px]`}>{title}</h4>
+        <h4 className={`${styles.title} text-[12px] md:text-[10px]`}>{title}</h4>
       </div>
       <div className="mt-auto w-full space-y-2">
         <div className={`text-3xl lg:text-4xl font-black tracking-tighter ${styles.value} leading-none`}>{value}</div>
@@ -227,8 +227,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           value={formatValueWithSuffix(displayMonthlyRec1).value}
           suffix={
             <div className="flex flex-col items-start gap-1">
-              <span className="text-[10px] font-black text-slate-400 tracking-tighter uppercase">/ Mese</span>
-              <div className="text-[11px] font-black bg-white/60 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
+              <span className="text-[11px] md:text-[10px] font-black text-slate-400 tracking-tighter uppercase">/ Mese</span>
+              <div className="text-[13px] md:text-[11px] font-black bg-white/60 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
                 ANNO: {formatCurrency(displayMonthlyRec1 * 12).replace(",00", "")}{parkSuffix}
               </div>
             </div>
@@ -241,8 +241,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           value={formatValueWithSuffix(displayMonthlyRec2).value}
           suffix={
             <div className="flex flex-col items-start gap-1">
-              <span className="text-[10px] font-black text-slate-400 tracking-tighter uppercase">/ Mese</span>
-              <div className="text-[11px] font-black bg-white/60 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
+              <span className="text-[11px] md:text-[10px] font-black text-slate-400 tracking-tighter uppercase">/ Mese</span>
+              <div className="text-[13px] md:text-[11px] font-black bg-white/60 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
                 ANNO: {formatCurrency(displayMonthlyRec2 * 12).replace(",00", "")}{parkSuffix}
               </div>
             </div>
@@ -255,8 +255,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           value={formatValueWithSuffix(displayMonthlyRec3).value}
           suffix={
             <div className="flex flex-col items-start gap-1">
-              <span className="text-[10px] font-black text-orange-950/60 tracking-tighter uppercase">/ Mese</span>
-              <div className="text-[11px] font-black bg-white/80 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-white/50 dark:border-white/10 text-slate-900 whitespace-nowrap shadow-sm backdrop-blur-sm">
+              <span className="text-[11px] md:text-[10px] font-black text-orange-950/60 tracking-tighter uppercase">/ Mese</span>
+              <div className="text-[13px] md:text-[11px] font-black bg-white/80 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-white/50 dark:border-white/10 text-slate-900 whitespace-nowrap shadow-sm backdrop-blur-sm">
                 ANNO: {formatCurrency(displayMonthlyRec3 * 12).replace(",00", "")}{parkSuffix}
               </div>
             </div>
