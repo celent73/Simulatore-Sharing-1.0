@@ -488,7 +488,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
         )}
 
         {/* CONTENITORE PRINCIPALE INPUT */}
-        <div className="bg-white/70 backdrop-blur-3xl rounded-[3rem] shadow-2xl border border-white/80 flex-grow flex flex-col p-8 overflow-hidden relative z-10">
+        <div className="bg-white/70 backdrop-blur-3xl rounded-[3rem] shadow-2xl border border-white/80 flex-grow flex flex-col p-4 sm:p-8 overflow-hidden relative z-10">
 
           {/* HEADER PREMIUM */}
           <div className="flex justify-between items-start mb-10 shrink-0">
@@ -497,40 +497,21 @@ const InputPanel: React.FC<InputPanelProps> = ({
                 <Heart size={32} fill="currentColor" strokeWidth={0} />
               </div>
               <div>
-                <h2 className="text-3xl font-black text-slate-900 leading-[0.9] tracking-tighter">
+                <h2 className="text-2xl font-black text-slate-900 leading-[0.9] tracking-tighter">
                   {txt.paramsTitle}<br />
-                  <span className="text-union-blue-600 font-extrabold text-xl tracking-tight opacity-90">{txt.paramsSubtitle}</span>
+                  <span className="text-union-blue-600 font-extrabold text-base tracking-tight opacity-90">{txt.paramsSubtitle}</span>
                 </h2>
               </div>
             </div>
 
-            {/* SEGMENTED CONTROL PER HISTORY */}
-            <div className="flex bg-slate-100/80 backdrop-blur-md p-1.5 rounded-2xl border border-slate-200/50 shadow-inner-white">
-              <div className="flex gap-1">
-                <button
-                  onClick={onUndo}
-                  disabled={!canUndo}
-                  className="p-3 bg-white shadow-sm border border-slate-200/50 text-slate-400 hover:text-slate-900 rounded-xl transition-all disabled:opacity-20 disabled:shadow-none active:scale-90"
-                >
-                  <RotateCcw size={20} strokeWidth={2.5} />
-                </button>
-                <button
-                  onClick={onRedo}
-                  disabled={!canRedo}
-                  className="p-3 bg-white shadow-sm border border-slate-200/50 text-slate-400 hover:text-slate-900 rounded-xl transition-all disabled:opacity-20 disabled:shadow-none active:scale-90"
-                >
-                  <RotateCw size={20} strokeWidth={2.5} />
-                </button>
-              </div>
-              <div className="w-px bg-slate-300/50 mx-2 my-1"></div>
-              <button
-                onClick={onReset}
-                className="p-3 bg-[#FF3B30] text-white rounded-xl shadow-lg shadow-red-500/20 hover:bg-[#D72C21] hover:scale-105 active:scale-90 transition-all border border-red-400/20"
-                title="Reset"
-              >
-                <RefreshCcw size={20} strokeWidth={3} />
-              </button>
-            </div>
+            {/* RESET BUTTON ONLY */}
+            <button
+              onClick={onReset}
+              className="w-14 h-14 flex items-center justify-center bg-[#FF3B30] text-white rounded-[1.25rem] shadow-xl shadow-red-500/30 hover:bg-[#D72C21] hover:scale-110 active:scale-90 transition-all border-2 border-white ring-4 ring-red-50"
+              title="Reset"
+            >
+              <RefreshCcw size={24} strokeWidth={3} />
+            </button>
           </div>
 
           <div className="flex-grow overflow-y-auto pr-1 custom-scrollbar space-y-4">
@@ -598,8 +579,8 @@ const InputPanel: React.FC<InputPanelProps> = ({
                     </div>
                   </div>
                 </div>
-                <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-purple-600 group-hover:text-white transition-all shadow-sm border border-slate-100">
-                  <ChevronRight size={24} strokeWidth={3} />
+                <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-purple-600 group-hover:text-white transition-all shadow-sm border border-slate-100 shrink-0">
+                  <ChevronRight size={20} strokeWidth={3} />
                 </div>
               </button>
 
@@ -624,8 +605,8 @@ const InputPanel: React.FC<InputPanelProps> = ({
                     </div>
                   </div>
                 </div>
-                <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-slate-100">
-                  <ChevronRight size={24} strokeWidth={3} />
+                <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-slate-100 shrink-0">
+                  <ChevronRight size={20} strokeWidth={3} />
                 </div>
               </button>
             </div>
