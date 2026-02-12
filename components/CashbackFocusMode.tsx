@@ -129,6 +129,11 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
             it: 'Scorri per chiudere',
             de: 'Wischen zum Schließen',
             en: 'Swipe to close'
+        },
+        'focus.provider_question': {
+            it: 'TE LI DA IL TUO GESTORE?',
+            de: 'GIBT DEIN ANBIETER DIR DAS?',
+            en: 'DOES YOUR PROVIDER GIVE THEM TO YOU?'
         }
     };
 
@@ -506,19 +511,33 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                                 € {cashbackReturn.toLocaleString(language === 'de' ? 'de-DE' : 'it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </motion.div>
 
-                                            {/* ANNUAL PROJECTION */}
+                                            {/* PROVIDER PROVOCATION BUTTON */}
                                             <motion.div
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ delay: 0.6 }}
-                                                className="mt-6 flex flex-col items-center bg-white/5 px-6 py-3 rounded-2xl border border-white/10"
+                                                className="mt-8 flex flex-col items-center"
                                             >
-                                                <span className="text-xs text-white/60 uppercase tracking-widest font-bold mb-1">
-                                                    {getLabel('focus.annual_projection') || "Proiezione 12 Mesi"}
-                                                </span>
-                                                <span className="text-xl sm:text-2xl font-black text-yellow-400">
-                                                    € {annualProjection.toLocaleString(language === 'de' ? 'de-DE' : 'it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                </span>
+                                                <motion.div
+                                                    animate={{
+                                                        scale: [1, 1.05, 1],
+                                                        boxShadow: [
+                                                            "0 0 20px rgba(168,85,247,0.2)",
+                                                            "0 0 40px rgba(168,85,247,0.5)",
+                                                            "0 0 20px rgba(168,85,247,0.2)"
+                                                        ]
+                                                    }}
+                                                    transition={{ repeat: Infinity, duration: 3 }}
+                                                    className="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 px-8 py-4 rounded-[2rem] border-2 border-white/20 backdrop-blur-xl shadow-2xl relative overflow-hidden group"
+                                                >
+                                                    <div className="absolute inset-0 bg-white/10 group-hover:bg-white/20 transition-colors" />
+                                                    <div className="flex items-center gap-3 relative z-10">
+                                                        <span className="text-xl sm:text-2xl font-black text-white tracking-tight uppercase">
+                                                            {getLabel('focus.provider_question')}
+                                                        </span>
+                                                        <Sparkles size={24} className="text-yellow-400 animate-pulse" />
+                                                    </div>
+                                                </motion.div>
                                             </motion.div>
                                         </div>
                                     ) : (
