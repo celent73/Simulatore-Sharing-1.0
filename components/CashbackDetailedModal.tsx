@@ -257,12 +257,12 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
     if (!isOpen) return null;
 
     return (
-        <div ref={modalRef} className="fixed inset-0 z-[100000] flex items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
-            <div className="share-modal-content bg-white dark:bg-gray-900 w-full h-full sm:h-auto sm:max-w-[90vw] xl:max-w-7xl sm:rounded-[2rem] shadow-2xl flex flex-col max-h-[100vh] sm:max-h-[90vh] overflow-hidden border border-purple-500/20">
+        <div ref={modalRef} className="fixed inset-0 z-[100000] flex items-center justify-center p-0 sm:p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="share-modal-content bg-white/90 dark:bg-gray-900/90 backdrop-blur-2xl w-full h-full sm:h-auto sm:max-w-[90vw] xl:max-w-7xl sm:rounded-[2rem] shadow-2xl flex flex-col max-h-[100vh] sm:max-h-[90vh] overflow-hidden border border-purple-500/20">
 
                 {/* Header */}
                 {/* Header - MIDNIGHT GLASS STYLE */}
-                <div className="p-1 sm:px-6 sm:py-4 lg:py-1 bg-gradient-to-br from-gray-900 via-gray-900 to-indigo-950 text-white shrink-0 relative overflow-hidden flex flex-col gap-4 lg:gap-1">
+                <div className="p-1 sm:px-6 sm:py-4 lg:py-1 bg-gradient-to-br from-gray-900/90 via-gray-900/80 to-indigo-950/90 text-white shrink-0 relative overflow-hidden flex flex-col gap-4 lg:gap-1 backdrop-blur-xl border-b border-white/5">
                     {/* Background patterns - Subtle & Deep */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] -mr-20 -mt-20 pointer-events-none"></div>
                     <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[80px] -ml-10 -mb-10 pointer-events-none"></div>
@@ -417,10 +417,10 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
 
 
                 {/* Content - Scrollable List (GRID ON DESKTOP) */}
-                <div className="flex-1 overflow-y-auto p-3 sm:p-6 bg-gray-50/50 dark:bg-gray-950 custom-scrollbar">
+                <div className="flex-1 overflow-y-auto p-3 sm:p-6 bg-gray-50/20 dark:bg-gray-950/20 backdrop-blur-md custom-scrollbar">
                     <div className="space-y-3 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-4">
                         {categories.map((cat) => (
-                            <div key={cat.id} className="bg-white dark:bg-gray-900 p-2 rounded-2xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-white/5 transition-all group hover:border-purple-200 h-full flex flex-col justify-center">
+                            <div key={cat.id} className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl p-2 rounded-2xl sm:rounded-2xl shadow-sm border border-gray-100/20 dark:border-white/5 transition-all group hover:border-purple-200/50 h-full flex flex-col justify-center">
                                 <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
 
                                     {/* LEFT SECTION: Icon + Name (Desktop) / TOP ROW (Mobile) */}
@@ -583,7 +583,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                 </div>
 
                 {/* Footer - COMPACT */}
-                <div className="p-3 sm:p-6 border-t border-gray-100 dark:border-white/5 bg-white dark:bg-gray-900 z-10 safe-area-bottom pb-4 sm:pb-8 flex flex-row items-center gap-3 sm:gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+                <div className="p-3 sm:p-6 border-t border-gray-100/20 dark:border-white/5 bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl z-10 safe-area-bottom pb-4 sm:pb-8 flex flex-row items-center gap-3 sm:gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
                     <button
                         onClick={handleReset}
                         className="flex items-center gap-2 px-4 py-3 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-xl transition-all shadow-sm font-bold border border-red-100 active:scale-95 group"
