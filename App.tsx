@@ -556,7 +556,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.1.98
+        v1.1.99
       </div>
 
 
@@ -573,14 +573,16 @@ const AppContent = () => {
         {/* Custom Styles Injection */}
 
 
-        <header className="flex flex-col gap-4 mb-4 sm:mb-8 rounded-3xl p-6 border-0 shadow-xl backdrop-blur-xl transition-all duration-500 relative z-50" style={{ background: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)', boxShadow: headerShadow }}>
+        <header className="flex flex-col gap-4 mb-4 sm:mb-8 rounded-[2.5rem] p-6 border border-white/10 shadow-[0_32px_80px_0_rgba(0,0,0,0.7)] backdrop-blur-[64px] transition-all duration-500 relative z-50 overflow-hidden" style={{ background: 'rgba(10, 10, 12, 0.88)' }}>
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/[0.05] pointer-events-none" />
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none" />
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
             <div className="w-full md:w-auto flex justify-center md:justify-start">
               <div className="flex items-center gap-3">
                 <h1 onClick={handleTitleClick} className="text-2xl sm:text-4xl font-extrabold text-white drop-shadow-sm select-none cursor-pointer active:scale-95 transition-transform flex items-center gap-3 flex-wrap justify-center md:justify-start">
                   {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
                   <span className="text-white">Sharing</span>
-                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.1.98</span>
+                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.1.99</span>
                   <span className="text-union-orange-400">Simulator</span>
                   {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-union-orange-400" /></span>}
                 </h1>
@@ -604,16 +606,16 @@ const AppContent = () => {
               {/* 1. THEME TOGGLE */}
               <button
                 onClick={toggleTheme}
-                className="p-2.5 rounded-xl bg-white text-union-blue-600 hover:bg-gray-100 transition-all shadow-lg border-0 hover:scale-105"
+                className="p-3 rounded-2xl bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all border border-white/10 shadow-lg active:scale-90"
                 title="Cambia Tema"
               >
-                <div className="scale-90">{isDarkMode ? <SunIcon /> : <MoonIcon />}</div>
+                <div className="scale-90 opacity-80">{isDarkMode ? <SunIcon /> : <MoonIcon />}</div>
               </button>
 
               {/* 2. LANGUAGE TOGGLE */}
               <button
                 onClick={toggleLanguage}
-                className="p-2.5 rounded-xl bg-white border-0 shadow-lg hover:bg-gray-100 transition-all hover:scale-105 flex items-center justify-center min-w-[48px]"
+                className="p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 shadow-lg hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center min-w-[52px]"
                 title="Cambia Lingua"
               >
                 {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}

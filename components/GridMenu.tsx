@@ -78,38 +78,39 @@ const GridMenu: React.FC<GridMenuProps> = ({
         exit: { opacity: 0, scale: 0.8, y: 20 }
     };
 
-    // Compact MenuItem for better visibility on mobile
-    const MenuItem = ({ icon: Icon, label, onClick, colorClass, gradient }: any) => (
+    // Enhanced MenuItem matching the visual reference: Large white rounded square cards
+    const MenuItem = ({ icon: Icon, label, onClick, colorClass = "bg-slate-500", gradient }: any) => (
         <motion.button
             variants={itemVariants}
             onClick={() => {
                 onClick();
                 onClose();
             }}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, y: -5 }}
             whileTap={{ scale: 0.95 }}
             className={`
                 relative flex flex-col items-center justify-center 
-                aspect-square p-2 rounded-2xl 
-                bg-white dark:bg-slate-800 
-                shadow-xl border border-slate-100 dark:border-slate-700
-                group overflow-hidden
+                aspect-square w-full rounded-[2.5rem]
+                bg-white
+                shadow-[0_20px_40px_rgba(0,0,0,0.06)] 
+                hover:shadow-[0_30px_60px_rgba(0,0,0,0.12)]
+                border border-white/50
+                group transition-all duration-300
+                overflow-hidden
             `}
         >
+            {/* Vibrant background icon container as per reference */}
             <div className={`
-                absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300
-                bg-gradient-to-br ${gradient}
-            `} />
-
-            <div className={`
-                p-2.5 rounded-xl mb-2 
-                ${colorClass} 
-                shadow-sm
+                p-4 sm:p-5 rounded-[1.8rem] mb-3 
+                ${colorClass}
+                flex items-center justify-center
+                transition-transform duration-500 group-hover:scale-110
+                shadow-lg
             `}>
-                <Icon size={24} strokeWidth={1.5} />
+                <Icon size={32} strokeWidth={2.5} className="text-white" />
             </div>
 
-            <span className="text-[10px] font-bold text-center text-slate-700 dark:text-slate-200 leading-tight">
+            <span className="text-[12px] sm:text-[14px] font-bold text-center text-slate-800 leading-tight tracking-tight px-2 relative z-10 uppercase">
                 {label}
             </span>
         </motion.button>
@@ -119,78 +120,78 @@ const GridMenu: React.FC<GridMenuProps> = ({
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-start pt-2 md:pt-8 p-4 sm:p-6"
-                    initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-                    animate={{ opacity: 1, backdropFilter: 'blur(12px)' }}
-                    exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+                    className="fixed inset-0 z-[100000] flex flex-col items-center justify-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                 >
-                    {/* Dark overlay backdrop */}
+                    {/* Light frosted backdrop - covers EVERYTHING */}
                     <div
-                        className="absolute inset-0 bg-slate-100/80 dark:bg-black/80"
+                        className="absolute inset-0 bg-white/40 dark:bg-black/60 backdrop-blur-[60px]"
                         onClick={onClose}
                     />
 
-                    {/* Close Button */}
+                    {/* Close Button - Floats at the top right of the whole screen */}
                     <motion.button
-                        initial={{ opacity: 0, scale: 0 }}
+                        initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0 }}
+                        exit={{ opacity: 0, scale: 0.5 }}
                         onClick={onClose}
-                        className="absolute top-2 right-4 p-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-white hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors z-20 shadow-lg"
+                        className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md text-slate-800 border border-slate-200 hover:bg-white hover:scale-110 active:scale-95 transition-all z-30 shadow-2xl"
                     >
-                        <X size={20} />
+                        <X size={24} />
                     </motion.button>
 
-                    {/* Main Grid Container */}
+                    {/* Main Grid Container - Expansive UI Card */}
                     <motion.div
                         variants={containerVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        className="relative z-10 w-full max-w-4xl"
+                        initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, y: 30 }}
+                        className="relative z-10 w-[94%] max-w-4xl h-auto max-h-[90vh] bg-white/80 dark:bg-white/5 border border-white/40 rounded-[3.5rem] p-6 py-10 sm:p-16 sm:py-20 backdrop-blur-3xl shadow-[0_60px_120px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center overflow-y-auto hide-scrollbar"
                     >
-                        <div className="text-center mb-2">
-                            <motion.h2 variants={itemVariants} className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white mb-0">
+                        <div className="text-center mb-8">
+                            <motion.h2 variants={itemVariants} className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mb-1 tracking-tight">
                                 Menu
                             </motion.h2>
-                            <motion.p variants={itemVariants} className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">
+                            <motion.p variants={itemVariants} className="text-slate-500 dark:text-slate-400 font-medium text-xs sm:text-base">
                                 Tutte le app a portata di mano
                             </motion.p>
                         </div>
 
-                        {/* GRID - 3 columns on mobile, 4 on larger screens */}
-                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 sm:gap-6">
+                        {/* GRID - 3x3 layout with large cards */}
+                        <div className="grid grid-cols-3 gap-3 sm:gap-10 w-full">
 
                             {/* APPS SECTION */}
                             <MenuItem
                                 icon={Presentation}
                                 label={t('menu.business')}
-                                colorClass="bg-purple-100 text-purple-600"
-                                gradient="from-purple-500 to-indigo-500"
+                                colorClass="bg-purple-600"
+                                gradient="from-purple-500 to-indigo-600"
                                 onClick={onOpenPresentation}
                             />
 
                             <MenuItem
                                 icon={Share2}
                                 label={t('menu.revolution')}
-                                colorClass="bg-cyan-100 text-cyan-600"
-                                gradient="from-cyan-500 to-blue-500"
+                                colorClass="bg-union-blue-500"
+                                gradient="from-union-blue-400 to-blue-600"
                                 onClick={onOpenUnionEcosystem}
                             />
 
                             <MenuItem
                                 icon={Zap}
                                 label={t('menu.focus_mode')}
-                                colorClass="bg-yellow-100 text-yellow-600"
-                                gradient="from-yellow-400 to-orange-500"
+                                colorClass="bg-union-orange-500"
+                                gradient="from-union-orange-400 to-orange-600"
                                 onClick={onOpenFocusMode}
                             />
 
                             <MenuItem
                                 icon={Fuel}
                                 label={t('menu.fuel_pitch')}
-                                colorClass="bg-red-100 text-red-600"
-                                gradient="from-red-500 to-rose-500"
+                                colorClass="bg-rose-500"
+                                gradient="from-rose-500 to-red-600"
                                 onClick={onOpenFuelPitch}
                             />
 
@@ -198,24 +199,24 @@ const GridMenu: React.FC<GridMenuProps> = ({
                             <MenuItem
                                 icon={Bot}
                                 label={isSharyActive ? t('menu.shary_active') : t('menu.activate_shary')}
-                                colorClass={isSharyActive ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-500"}
-                                gradient="from-green-400 to-emerald-500"
+                                colorClass={isSharyActive ? "bg-emerald-500" : "bg-slate-500"}
+                                gradient="from-emerald-400 to-teal-600"
                                 onClick={toggleShary}
                             />
 
                             <MenuItem
                                 icon={Target}
                                 label={t('menu.calc_goal')}
-                                colorClass="bg-emerald-100 text-emerald-600"
-                                gradient="from-emerald-400 to-teal-500"
+                                colorClass="bg-indigo-600"
+                                gradient="from-indigo-400 to-blue-700"
                                 onClick={onOpenTarget}
                             />
 
                             <MenuItem
                                 icon={Ticket}
                                 label={t('menu.your_ticket')}
-                                colorClass="bg-fuchsia-100 text-fuchsia-600"
-                                gradient="from-fuchsia-400 to-pink-500"
+                                colorClass="bg-fuchsia-600"
+                                gradient="from-fuchsia-400 to-pink-600"
                                 onClick={onOpenFutureTicket}
                             />
 
@@ -223,30 +224,35 @@ const GridMenu: React.FC<GridMenuProps> = ({
                             <MenuItem
                                 icon={BookOpen}
                                 label={t('menu.guide')}
-                                colorClass="bg-blue-100 text-blue-600"
-                                gradient="from-blue-400 to-indigo-500"
+                                colorClass="bg-blue-600"
+                                gradient="from-blue-400 to-indigo-600"
                                 onClick={onOpenGuide}
                             />
 
                             <MenuItem
                                 icon={ExternalLink}
                                 label={t('menu.store')}
-                                colorClass="bg-indigo-100 text-indigo-600"
-                                gradient="from-indigo-400 to-violet-500"
+                                colorClass="bg-slate-800"
+                                gradient="from-slate-700 to-slate-900"
                                 onClick={() => window.open('https://share.unionenergia.it/login?red=/il-mio-store/37633&nochecksession=true', '_blank')}
                             />
 
-                            {showInstall && (
-                                <MenuItem
-                                    icon={Download}
-                                    label={t('menu.install')}
-                                    colorClass="bg-slate-800 text-white"
-                                    gradient="from-slate-700 to-slate-900"
-                                    onClick={onOpenInstall}
-                                />
-                            )}
-
                         </div>
+
+                        {showInstall && (
+                            <motion.div variants={itemVariants} className="mt-16 flex justify-center">
+                                <button
+                                    onClick={() => {
+                                        onOpenInstall();
+                                        onClose();
+                                    }}
+                                    className="flex items-center gap-3 px-10 py-5 rounded-[2rem] bg-slate-900 text-white font-bold text-sm tracking-tight hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-slate-900/20"
+                                >
+                                    <Download size={20} />
+                                    {t('menu.install')}
+                                </button>
+                            </motion.div>
+                        )}
                     </motion.div>
                 </motion.div>
             )}

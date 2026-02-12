@@ -55,29 +55,27 @@ const BottomDock: React.FC<BottomDockProps> = ({
     `;
 
     const getIconContainerClass = (isActive: boolean) => `
-        p-2 rounded-2xl mb-1 transition-all duration-300
-        ${isActive ? 'bg-white/10 shadow-lg shadow-black/20 transform -translate-y-1 ring-1 ring-white/10' : 'bg-transparent'}
+        p-2 transition-all duration-300
+        ${isActive ? 'transform -translate-y-1' : ''}
     `;
 
     return (
         <div className={`fixed bottom-4 left-4 right-4 z-[100] flex justify-center md:hidden transition-all duration-500 ease-in-out ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-[200%] opacity-0 pointer-events-none'}`}>
             <div
-                className="flex items-center justify-between w-full max-w-md md:max-w-2xl px-2 py-3 md:px-8 md:py-4 backdrop-blur-xl border border-white/10 shadow-2xl rounded-[2rem] ring-1 ring-black/20 transition-all duration-300 relative overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, #334155 0%, #0f172a 100%)', boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)' }}
+                className="flex items-center justify-between w-full max-w-md md:max-w-2xl px-4 py-4 backdrop-blur-[64px] border border-white/10 shadow-[0_45px_100px_0_rgba(0,0,0,0.8)] rounded-[2.5rem] transition-all duration-300 relative overflow-hidden"
+                style={{ background: 'rgba(10, 10, 12, 0.92)' }}
             >
-                <div className="absolute inset-0 bg-white/5 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none" />
 
                 {/* 1. SHARING SIMULATOR LIGHT - Leftmost */}
                 <button
                     onClick={onOpenLightSimulator}
-                    className={getButtonClass(false)} // Always inactive style unless we want to track light modal state
+                    className={getButtonClass(false)}
                 >
-                    <div className="p-2 rounded-2xl mb-1 bg-union-green-500/10 text-union-green-400 shadow-sm border border-union-green-500/20 group-hover:scale-110 transition-transform">
-                        <Compass className="w-6 h-6 md:w-9 md:h-9" />
+                    <div className="group-hover:scale-110 transition-transform">
+                        <Compass className="w-8 h-8 md:w-10 md:h-10 text-union-green-400" />
                     </div>
-                    <span className="text-[9px] md:text-xs font-bold leading-none text-union-green-400 flex items-center gap-0.5">
-                        {t('nav.light')} <Sparkles size={6} className="animate-pulse md:w-3 md:h-3" />
-                    </span>
                 </button>
 
                 {/* 2. AMMINISTRATORI (CONDO) */}
@@ -85,11 +83,10 @@ const BottomDock: React.FC<BottomDockProps> = ({
                     onClick={() => handleModeChange('condo')}
                     className={getButtonClass(viewMode === 'condo')}
                 >
-                    {!isPremium && <div className="absolute top-1 right-4 md:right-8 bg-red-500 text-white p-0.5 rounded-full z-20 shadow-sm"><Lock size={8} className="md:w-3 md:h-3" /></div>}
+                    {!isPremium && <div className="absolute top-1 right-2 bg-red-500 text-white p-0.5 rounded-full z-20 shadow-sm"><Lock size={8} /></div>}
                     <div className={getIconContainerClass(viewMode === 'condo')}>
-                        <CondoModeIcon className={`w-6 h-6 md:w-9 md:h-9 transition-all ${viewMode !== 'condo' ? 'grayscale opacity-70' : ''}`} />
+                        <CondoModeIcon className={`w-8 h-8 md:w-10 md:h-10 transition-all ${viewMode !== 'condo' ? 'grayscale opacity-40' : 'drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'}`} />
                     </div>
-                    <span className="text-[9px] md:text-xs font-bold leading-none text-center max-w-[60px] md:max-w-none">{t('nav.admin')}</span>
                 </button>
 
                 {/* 3. PARTNER SHARING (FAMILY) */}
@@ -98,9 +95,8 @@ const BottomDock: React.FC<BottomDockProps> = ({
                     className={getButtonClass(viewMode === 'family')}
                 >
                     <div className={getIconContainerClass(viewMode === 'family')}>
-                        <FamilyModeIcon className={`w-6 h-6 md:w-9 md:h-9 transition-all ${viewMode !== 'family' ? 'grayscale opacity-70' : ''}`} />
+                        <FamilyModeIcon className={`w-8 h-8 md:w-10 md:h-10 transition-all ${viewMode !== 'family' ? 'grayscale opacity-40' : 'drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'}`} />
                     </div>
-                    <span className="text-[9px] md:text-xs font-bold leading-none text-center max-w-[60px] md:max-w-none">{t('nav.partner')}</span>
                 </button>
 
                 {/* 4. CLIENTE SEMPLICE (CLIENT) - Rightmost */}
@@ -109,9 +105,8 @@ const BottomDock: React.FC<BottomDockProps> = ({
                     className={getButtonClass(viewMode === 'client')}
                 >
                     <div className={getIconContainerClass(viewMode === 'client')}>
-                        <ClientModeIcon className={`w-6 h-6 md:w-9 md:h-9 transition-all ${viewMode !== 'client' ? 'grayscale opacity-70' : ''}`} />
+                        <ClientModeIcon className={`w-8 h-8 md:w-10 md:h-10 transition-all ${viewMode !== 'client' ? 'grayscale opacity-40' : 'drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'}`} />
                     </div>
-                    <span className="text-[9px] md:text-xs font-bold leading-none text-center max-w-[60px] md:max-w-none">{t('nav.client')}</span>
                 </button>
 
             </div>

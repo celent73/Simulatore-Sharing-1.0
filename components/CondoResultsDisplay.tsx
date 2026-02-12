@@ -24,174 +24,101 @@ const RecruiterCard = ({ fullResults }: { fullResults: CondoSimulationResult }) 
     const condoMetersTotal = earnings.total3Years - networkTotal;
 
     return (
-        <div className="bg-gradient-to-br from-union-blue-600 via-union-blue-700 to-indigo-800 text-white rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden border border-white/20 mb-8 animate-in zoom-in duration-500">
-            <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+        <div className="bg-gradient-to-br from-union-blue-600 via-union-blue-700 to-indigo-900 text-white rounded-[2.5rem] p-8 shadow-[0_32px_80px_rgba(0,0,0,0.3)] relative overflow-hidden border border-white/20 mb-8 animate-in zoom-in duration-500 group">
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none scale-150 rotate-12">
                 <Users size={120} />
             </div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent pointer-events-none" />
+
             <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl">
-                        <Wallet size={24} className="text-white" />
+                <div className="flex items-center gap-4 mb-8">
+                    <div className="p-4 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-xl">
+                        <Wallet size={28} className="text-white" />
                     </div>
                     <div>
-                        <h3 className="text-xl font-black uppercase tracking-wider">Tuo Guadagno Potenziale</h3>
-                        <p className="text-xs text-blue-100 font-medium opacity-80">Come Recruiter dell'Amministratore</p>
+                        <h3 className="text-2xl font-black uppercase tracking-tighter leading-none">Tuo Guadagno Potenziale</h3>
+                        <p className="text-xs text-blue-200/80 font-bold uppercase tracking-widest mt-1">Recruiter Amministratore</p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div className="bg-white/10 backdrop-blur-sm p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
+                    <div className="bg-white/10 backdrop-blur-[40px] p-6 rounded-3xl border border-white/20 flex flex-col justify-between shadow-2xl transform transition-transform hover:scale-[1.02]">
                         <div>
-                            <p className="text-[10px] font-bold text-blue-100 uppercase tracking-widest mb-1">Guadagno Totale (3 Anni)</p>
-                            <p className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-100 drop-shadow-sm">
+                            <p className="text-[10px] font-black text-blue-200 uppercase tracking-[0.2em] mb-2 opacity-70">Guadagno Totale (3 Anni)</p>
+                            <p className="text-4xl font-black text-white drop-shadow-2xl tracking-tighter">
                                 {formatCurrency(earnings.total3Years)}
                             </p>
                         </div>
                         {fullResults.networkStats && fullResults.networkStats.usersCount > 0 && (
-                            <div className="mt-3 pt-2 border-t border-white/10 text-[10px] opacity-60 flex flex-col gap-1.5">
+                            <div className="mt-4 pt-4 border-t border-white/10 text-[10px] opacity-60 flex flex-col gap-2 font-bold uppercase tracking-wider">
                                 <div className="flex justify-between">
                                     <span>Contatori Condo:</span>
-                                    <span className="font-bold">{formatCurrency(condoMetersTotal)}</span>
+                                    <span className="text-white">{formatCurrency(condoMetersTotal)}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span>Rete Famiglie:</span>
-                                    <span className="font-bold">{formatCurrency(networkTotal)}</span>
+                                    <span className="text-white">{formatCurrency(networkTotal)}</span>
                                 </div>
                             </div>
                         )}
                     </div>
 
-                    {/* YEAR 1 CARD RECRUITER */}
-                    <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
-                        <p className="text-[10px] font-bold text-blue-200 uppercase tracking-widest mb-1">Guadagno 1° Anno</p>
-                        <p className="text-2xl font-black mb-2">{formatCurrency(earnings.year1.total)}</p>
-                        <div className="mt-2 pt-2 border-t border-white/10 text-xs font-bold flex flex-col gap-2">
-                            <div className="flex flex-col">
-                                <span className="text-blue-200 uppercase text-[9px] font-black tracking-wider">Una Tantum (30€/Condo)</span>
-                                <span className="text-white text-sm">{formatCurrency(earnings.year1.oneTime - (earnings.year1.networkPart?.oneTime || 0))}</span>
+                    {/* YEAR 1 */}
+                    <div className="bg-black/20 backdrop-blur-md p-5 rounded-3xl border border-white/10 hover:border-white/20 transition-all">
+                        <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-2 opacity-60">1° Anno</p>
+                        <p className="text-3xl font-black mb-4 tracking-tighter">{formatCurrency(earnings.year1.total)}</p>
+                        <div className="space-y-3">
+                            <div className="flex flex-col bg-white/5 p-2 rounded-xl border border-white/5">
+                                <span className="text-blue-300 uppercase text-[9px] font-black tracking-widest opacity-60">Una Tantum</span>
+                                <span className="text-white text-base font-black">{formatCurrency(earnings.year1.oneTime - (earnings.year1.networkPart?.oneTime || 0))}</span>
                             </div>
-                            <div className="flex flex-col">
-                                <span className="text-blue-200 uppercase text-[9px] font-black tracking-wider">Rendite (3€/Mese)</span>
-                                <span className="text-white text-sm">{formatCurrency(earnings.year1.recurring - (earnings.year1.networkPart?.recurring || 0))}</span>
+                            <div className="flex flex-col bg-white/5 p-2 rounded-xl border border-white/5">
+                                <span className="text-blue-300 uppercase text-[9px] font-black tracking-widest opacity-60">Rendite</span>
+                                <span className="text-white text-base font-black">{formatCurrency(earnings.year1.recurring - (earnings.year1.networkPart?.recurring || 0))}</span>
                             </div>
-                            {(earnings.year1.networkPart?.oneTime! > 0 || earnings.year1.networkPart?.recurring! > 0) && (
-                                <div className="mt-1 pt-1 border-t border-white/5 flex flex-col gap-1 text-purple-200">
-                                    <span className="text-[8px] font-black uppercase tracking-widest">Guadagni Network (Famiglie)</span>
-                                    {earnings.year1.networkPart?.oneTime! > 0 && (
-                                        <div className="flex justify-between text-[9px] opacity-80">
-                                            <span>Una Tantum:</span>
-                                            <span>{formatCurrency(earnings.year1.networkPart.oneTime)}</span>
-                                        </div>
-                                    )}
-                                    {earnings.year1.networkPart?.recurring! > 0 && (
-                                        <div className="flex justify-between text-[9px] opacity-80">
-                                            <span>Rendita:</span>
-                                            <span>{formatCurrency(earnings.year1.networkPart.recurring)}</span>
-                                        </div>
-                                    )}
-                                    <div className="flex justify-between text-[10px] border-t border-white/5 pt-0.5 mt-0.5">
-                                        <span>Totale:</span>
-                                        <span className="font-black">{formatCurrency((earnings.year1.networkPart?.oneTime || 0) + (earnings.year1.networkPart?.recurring || 0))}</span>
-                                    </div>
-                                </div>
-                            )}
                         </div>
                     </div>
 
-                    {/* YEAR 2 CARD RECRUITER */}
-                    <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
-                        <p className="text-[10px] font-bold text-blue-200 uppercase tracking-widest mb-1">Guadagno 2° Anno</p>
-                        <p className="text-2xl font-black mb-2">{formatCurrency(earnings.year2.total)}</p>
-                        <div className="mt-2 pt-2 border-t border-white/10 text-xs font-bold flex flex-col gap-2">
+                    {/* YEAR 2 */}
+                    <div className="bg-black/20 backdrop-blur-md p-5 rounded-3xl border border-white/10 hover:border-white/20 transition-all">
+                        <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-2 opacity-60">2° Anno</p>
+                        <p className="text-3xl font-black mb-4 tracking-tighter">{formatCurrency(earnings.year2.total)}</p>
+                        <div className="space-y-3">
+                            <div className="flex flex-col bg-white/5 p-2 rounded-xl border border-white/5">
+                                <span className="text-blue-300 uppercase text-[9px] font-black tracking-widest opacity-60">Rendite</span>
+                                <span className="text-white text-base font-black">{formatCurrency(earnings.year2.recurring - (earnings.year2.networkPart?.recurring || 0))}</span>
+                            </div>
                             {(earnings.year2.oneTime - (earnings.year2.networkPart?.oneTime || 0)) > 0 && (
-                                <div className="flex flex-col">
-                                    <span className="text-blue-200 uppercase text-[9px] font-black tracking-wider">Una Tantum (Nuovi)</span>
-                                    <span className="text-white text-sm">{formatCurrency(earnings.year2.oneTime - (earnings.year2.networkPart?.oneTime || 0))}</span>
-                                </div>
-                            )}
-                            <div className="flex flex-col">
-                                <span className="text-blue-200 uppercase text-[9px] font-black tracking-wider">Rendite (Fino a 4€/M)</span>
-                                <span className="text-white text-sm">{formatCurrency(earnings.year2.recurring - (earnings.year2.networkPart?.recurring || 0))}</span>
-                            </div>
-                            {(earnings.year2.networkPart?.recurring! > 0 || earnings.year2.networkPart?.oneTime! > 0) && (
-                                <div className="mt-1 pt-1 border-t border-white/5 flex flex-col gap-1 text-purple-200">
-                                    <span className="text-[8px] font-black uppercase tracking-widest">Guadagni Network (Famiglie)</span>
-                                    {earnings.year2.networkPart?.oneTime! > 0 && (
-                                        <div className="flex justify-between text-[9px] opacity-80">
-                                            <span>Una Tantum:</span>
-                                            <span>{formatCurrency(earnings.year2.networkPart.oneTime)}</span>
-                                        </div>
-                                    )}
-                                    {earnings.year2.networkPart?.recurring! > 0 && (
-                                        <div className="flex justify-between text-[9px] opacity-80">
-                                            <span>Rendita:</span>
-                                            <span>{formatCurrency(earnings.year2.networkPart.recurring)}</span>
-                                        </div>
-                                    )}
-                                    <div className="flex justify-between text-[10px] border-t border-white/5 pt-0.5 mt-0.5">
-                                        <span>Totale:</span>
-                                        <span className="font-black">{formatCurrency((earnings.year2.networkPart?.oneTime || 0) + (earnings.year2.networkPart?.recurring || 0))}</span>
-                                    </div>
+                                <div className="flex flex-col bg-white/5 p-2 rounded-xl border border-white/5">
+                                    <span className="text-blue-300 uppercase text-[9px] font-black tracking-widest opacity-60">Nuovi</span>
+                                    <span className="text-white text-base font-black">{formatCurrency(earnings.year2.oneTime - (earnings.year2.networkPart?.oneTime || 0))}</span>
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    {/* YEAR 3 CARD RECRUITER */}
-                    <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
-                        <p className="text-[10px] font-bold text-blue-200 uppercase tracking-widest mb-1">Guadagno 3° Anno</p>
-                        <p className="text-2xl font-black mb-2">{formatCurrency(earnings.year3.total)}</p>
-                        <div className="mt-2 pt-2 border-t border-white/10 text-xs font-bold flex flex-col gap-2">
-                            {(earnings.year3.oneTime - (earnings.year3.networkPart?.oneTime || 0)) > 0 && (
-                                <div className="flex flex-col">
-                                    <span className="text-blue-200 uppercase text-[9px] font-black tracking-wider">Una Tantum (Nuovi)</span>
-                                    <span className="text-white text-sm">{formatCurrency(earnings.year3.oneTime - (earnings.year3.networkPart?.oneTime || 0))}</span>
-                                </div>
-                            )}
-                            <div className="flex flex-col">
-                                <span className="text-blue-200 uppercase text-[9px] font-black tracking-wider">Rendite (Fino a 6€/M)</span>
-                                <span className="text-white text-sm">{formatCurrency(earnings.year3.recurring - (earnings.year3.networkPart?.recurring || 0))}</span>
+                    {/* YEAR 3 */}
+                    <div className="bg-white/5 backdrop-blur-md p-5 rounded-3xl border border-white/10 hover:border-white/20 transition-all ring-2 ring-yellow-400/20">
+                        <p className="text-[10px] font-black text-yellow-400 uppercase tracking-widest mb-2">3° Anno MAX</p>
+                        <p className="text-3xl font-black mb-4 tracking-tighter text-yellow-300 drop-shadow-md">{formatCurrency(earnings.year3.total)}</p>
+                        <div className="space-y-3">
+                            <div className="flex flex-col bg-yellow-400/10 p-2 rounded-xl border border-yellow-400/20">
+                                <span className="text-yellow-400 uppercase text-[9px] font-black tracking-widest">Rendite</span>
+                                <span className="text-white text-base font-black">{formatCurrency(earnings.year3.recurring - (earnings.year3.networkPart?.recurring || 0))}</span>
                             </div>
-                            {(earnings.year3.networkPart?.recurring! > 0 || earnings.year3.networkPart?.oneTime! > 0) && (
-                                <div className="mt-2 pt-2 border-t border-white/10 flex flex-col gap-1 bg-black/20 p-2 rounded-xl">
-                                    <span className="text-[8px] font-black uppercase tracking-widest text-yellow-300">Guadagni Network (Famiglie)</span>
-                                    {earnings.year3.networkPart?.oneTime! > 0 && (
-                                        <div className="flex justify-between text-[9px] text-yellow-100/80">
-                                            <span>Una Tantum:</span>
-                                            <span>{formatCurrency(earnings.year3.networkPart.oneTime)}</span>
-                                        </div>
-                                    )}
-                                    {earnings.year3.networkPart?.recurring! > 0 && (
-                                        <div className="flex justify-between text-[9px] text-yellow-100/80">
-                                            <span>Rendita:</span>
-                                            <span>{formatCurrency(earnings.year3.networkPart.recurring)}</span>
-                                        </div>
-                                    )}
-                                    <div className="flex justify-between text-[10px] text-yellow-100 border-t border-white/10 pt-1 mt-1">
-                                        <span>Totale:</span>
-                                        <span className="font-black text-white">{formatCurrency((earnings.year3.networkPart?.oneTime || 0) + (earnings.year3.networkPart?.recurring || 0))}</span>
-                                    </div>
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-6 flex flex-wrap items-center gap-3">
-                    <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold bg-black/20 px-3 py-1.5 rounded-full text-blue-100 border border-white/10">
+                <div className="mt-8 flex flex-wrap items-center gap-3">
+                    <div className="flex items-center gap-2 text-[10px] font-black bg-black/40 px-4 py-2 rounded-full text-blue-100 border border-white/10 shadow-lg">
                         <ShieldCheck size={14} className="text-emerald-400" />
-                        Override Diretto (30€ OT / 3-4-6€ Rendita)
+                        OVERRIDE DIRETTO ATTIVO
                     </div>
                     {fullResults.networkStats && fullResults.networkStats.usersCount > 0 && (
-                        <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold bg-black/20 px-3 py-1.5 rounded-full text-blue-100 border border-white/10">
-                            <TrendingUp size={14} className="text-purple-400" />
-                            Network Livello 1 (Rete Famiglie)
-                        </div>
-                    )}
-                    {fullResults.familyUtilityEarnings?.total3Years !== undefined && fullResults.familyUtilityEarnings.total3Years > (fullResults.networkStats?.totalAnnualYear1 || 0) + (fullResults.networkStats?.totalAnnualYear2 || 0) + (fullResults.networkStats?.totalAnnualYear3 || 0) + (earnings.year1.oneTime - (fullResults.networkStats?.oneTimeBonus || 0)) && (
-                        <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold bg-purple-500/30 px-3 py-1.5 rounded-full text-purple-100 border border-purple-400/30 animate-pulse">
-                            <Gem size={14} className="text-purple-300" />
-                            + Rete Partner Sharing (FU) Inclusa
+                        <div className="flex items-center gap-2 text-[10px] font-black bg-purple-600/30 px-4 py-2 rounded-full text-purple-100 border border-purple-400/30 shadow-lg animate-pulse">
+                            <TrendingUp size={14} className="text-purple-300" />
+                            NETWORK LIVELLO 1 INCLUSO
                         </div>
                     )}
                 </div>
@@ -201,10 +128,11 @@ const RecruiterCard = ({ fullResults }: { fullResults: CondoSimulationResult }) 
 };
 
 const Card = ({ title, value, subValue, colorClass }: any) => (
-    <div className={`p-5 rounded-[2rem] border backdrop-blur-md shadow-lg transition-all duration-300 hover:-translate-y-1 ${colorClass}`}>
-        <p className="text-[10px] font-bold opacity-70 uppercase tracking-widest mb-1">{title}</p>
-        <p className="text-3xl sm:text-4xl font-black mb-1 text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-gray-300 drop-shadow-sm">{value}</p>
-        {subValue && <div className="text-xs opacity-80 font-medium mt-2">{subValue}</div>}
+    <div className={`p-6 rounded-[2.5rem] border backdrop-blur-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 group relative overflow-hidden ${colorClass}`}>
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        <p className="text-[10px] font-black opacity-40 uppercase tracking-[0.2em] mb-3">{title}</p>
+        <p className="text-4xl sm:text-5xl font-black mb-2 text-slate-900 dark:text-white tracking-tighter leading-none">{value}</p>
+        {subValue && <div className="text-xs font-bold mt-4 leading-relaxed">{subValue}</div>}
     </div>
 );
 
@@ -273,304 +201,260 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
             </div>
 
             {/* MAIN HEADER */}
-            <div className={`rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden border transition-colors duration-500 ${isRecruiterView
-                ? 'bg-gradient-to-br from-union-blue-600 via-union-blue-700 to-indigo-800 border-white/20 text-white'
-                : 'bg-gradient-to-r from-slate-800 to-slate-900 text-white border-slate-600 dark:border-white/10'}`}>
+            <div className={`rounded-[3rem] p-10 shadow-[0_45px_100px_rgba(0,0,0,0.2)] relative overflow-hidden border transition-all duration-700 ${isRecruiterView
+                ? 'bg-gradient-to-br from-union-blue-600 via-union-blue-800 to-indigo-950 border-white/20 text-white'
+                : 'bg-slate-900/90 dark:bg-black/60 backdrop-blur-[40px] text-white border-white/10'}`}>
 
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.15),transparent)] pointer-events-none" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-union-blue-500/10 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none"></div>
 
-                <div className="relative z-10 text-center">
-                    <div className="flex justify-between items-start mb-3">
-                        <div className="flex-1"></div>
-                        <p className="font-bold text-xs uppercase tracking-[0.2em] opacity-70 text-center flex-1">
-                            {isRecruiterView ? "Tuo Guadagno Potenziale (Recruiter)" : t('condo_results.total_business_plan')}
-                        </p>
-                        <div className="flex-1 flex justify-end gap-2">
+                <div className="relative z-10">
+                    <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-10">
+                        <div className="flex-1 text-left">
+                            <span className="inline-block px-4 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[10px] font-black uppercase tracking-[0.3em] mb-4">
+                                {isRecruiterView ? "Executive Summary" : "Condo Business Plan"}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-3">
                             <button
                                 onClick={() => setIsEditModalOpen(true)}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all border border-transparent hover:border-white/20 ${isRecruiterView
-                                    ? 'bg-white/10 hover:bg-white/20 text-white'
-                                    : 'bg-white/10 hover:bg-white/20 text-white dark:bg-white/5 dark:hover:bg-white/10'
-                                    }`}
+                                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-[11px] font-black uppercase tracking-wider transition-all hover:scale-105 active:scale-95"
                             >
-                                <Edit3 size={14} />
+                                <Edit3 size={16} />
                                 Personalizza
                             </button>
                             <button
                                 onClick={handleExportPDF}
                                 disabled={isGeneratingPdf}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all ${isRecruiterView
-                                    ? 'bg-white/10 hover:bg-white/20 text-white'
-                                    : 'bg-white/10 hover:bg-white/20 text-white dark:bg-white/5 dark:hover:bg-white/10'
-                                    }`}
+                                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white text-slate-900 hover:bg-white/90 shadow-xl shadow-white/10 text-[11px] font-black uppercase tracking-wider transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
                             >
-                                {isGeneratingPdf ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
-                                {isGeneratingPdf ? 'Generazione...' : 'Scarica PDF'}
+                                {isGeneratingPdf ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
+                                {isGeneratingPdf ? 'Esportazione...' : 'Crea Report PDF'}
                             </button>
                         </div>
                     </div>
-                    <h2 className={`text-5xl sm:text-7xl font-black mb-6 drop-shadow-sm text-transparent bg-clip-text bg-gradient-to-r ${isRecruiterView
-                        ? 'from-white via-blue-100 to-white'
-                        : 'from-union-orange-400 via-yellow-200 to-union-orange-400'}`}>
-                        {formatCurrency(displayTotal)}
-                    </h2>
-                    {isRecruiterView && results.familyUtilityEarnings?.total3Years !== undefined && results.familyUtilityEarnings.total3Years > 0 && (
-                        <div className="flex justify-center mb-4">
-                            <span className="bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-[10px] uppercase font-black border border-white/20 tracking-tighter">
-                                Incluse provvigioni Sviluppo Rete principale
-                            </span>
-                        </div>
-                    )}
-                    <p className="text-sm font-medium leading-relaxed opacity-60 max-w-xl mx-auto">
-                        {isRecruiterView
-                            ? "I calcoli includono l'override diretto sui condomini (30€ OT + 3-4-6€ Rendita) e le commissioni di rete."
-                            : t('condo_results.total_desc')}
-                    </p>
+
+                    <div className="text-center group cursor-default">
+                        <p className="text-xs font-black uppercase tracking-[0.4em] opacity-40 mb-2 group-hover:tracking-[0.5em] transition-all duration-500">
+                            {isRecruiterView ? "Guadagno Totale Stimato" : t('condo_results.total_business_plan')}
+                        </p>
+                        <h2 className={`text-7xl sm:text-9xl font-black mb-8 tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.3)] ${isRecruiterView
+                            ? 'text-white'
+                            : 'text-transparent bg-clip-text bg-gradient-to-br from-union-orange-400 via-yellow-200 to-union-orange-600'}`}>
+                            {formatCurrency(displayTotal)}
+                        </h2>
+                        {isRecruiterView && (
+                            <div className="flex justify-center flex-wrap gap-2 mb-8">
+                                <span className="bg-emerald-500/20 text-emerald-400 backdrop-blur-md px-5 py-1.5 rounded-full text-[10px] uppercase font-black border border-emerald-500/30 tracking-wider">
+                                    Include Sviluppo Rete
+                                </span>
+                                <span className="bg-union-blue-500/20 text-blue-200 backdrop-blur-md px-5 py-1.5 rounded-full text-[10px] uppercase font-black border border-union-blue-500/30 tracking-wider">
+                                    Proiezione 36 Mesi
+                                </span>
+                            </div>
+                        )}
+                        <p className="text-base font-bold leading-relaxed opacity-50 max-w-2xl mx-auto uppercase tracking-wide">
+                            {isRecruiterView
+                                ? "Include override diretto amministratori e rendite ricorrenti del network partner."
+                                : t('condo_results.total_desc')}
+                        </p>
+                    </div>
                 </div>
             </div>
 
             {/* YEARLY BREAKDOWN CARDS */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Card
                     title={t('condo_results.y1_total')}
                     value={formatCurrency(displayY1)}
                     subValue={!isRecruiterView ? (
-                        <div className="flex flex-col gap-1.5 mt-2 pt-2 border-t border-slate-400/20 dark:border-white/10">
+                        <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-slate-200 dark:border-white/10">
                             <div className="flex justify-between items-center text-xs">
-                                <span className="opacity-70">{t('condo_results.ot_breakdown')}:</span>
-                                <span className="font-bold">{formatCurrency(results.year1.oneTimeBonus)}</span>
+                                <span className="opacity-50 uppercase tracking-widest text-[9px] font-black">{t('condo_results.ot_breakdown')}</span>
+                                <span className="font-black text-slate-900 dark:text-white">{formatCurrency(results.year1.oneTimeBonus)}</span>
                             </div>
                             <div className="flex justify-between items-center text-xs">
-                                <span className="opacity-70">{t('condo_results.rec_annual_breakdown')}:</span>
-                                <span className="font-bold">{formatCurrency(results.year1.recurringMonthly * 12)}</span>
-                            </div>
-                            <div className="flex justify-between items-center text-xs">
-                                <span className="opacity-70">{t('condo_results.rec_end_year')}:</span>
-                                <span className="font-bold">{formatCurrency(results.year1.recurringMonthly)}</span>
+                                <span className="opacity-50 uppercase tracking-widest text-[9px] font-black">{t('condo_results.rec_annual_breakdown')}</span>
+                                <span className="font-black text-slate-900 dark:text-white">{formatCurrency(results.year1.recurringMonthly * 12)}</span>
                             </div>
                         </div>
                     ) : (
-                        <div className="mt-2 pt-2 border-t border-blue-400/20 text-xs font-bold flex flex-col gap-2">
-                            <div className="flex justify-between items-end">
-                                <div className="flex flex-col">
-                                    <span className="text-blue-400 dark:text-blue-300 uppercase text-[10px] font-black tracking-wider">Una Tantum (30€/Condo)</span>
-                                    <span className="text-slate-900 dark:text-white text-lg">{formatCurrency(results.familyUtilityEarnings!.year1.oneTime - (results.familyUtilityEarnings!.year1.networkPart?.oneTime || 0))}</span>
-                                </div>
+                        <div className="mt-4 pt-4 border-t border-blue-500/20 text-xs font-bold flex flex-col gap-3">
+                            <div className="flex flex-col">
+                                <span className="text-blue-500 dark:text-blue-300 uppercase text-[9px] font-black tracking-[0.2em] mb-1 opacity-60">Una Tantum (30€/C)</span>
+                                <span className="text-slate-900 dark:text-white text-xl font-black">{formatCurrency(results.familyUtilityEarnings!.year1.oneTime - (results.familyUtilityEarnings!.year1.networkPart?.oneTime || 0))}</span>
                             </div>
-                            <div className="flex justify-between items-end">
-                                <div className="flex flex-col">
-                                    <span className="text-blue-400 dark:text-blue-300 uppercase text-[10px] font-black tracking-wider">Rendite (3€/Mese)</span>
-                                    <div className="flex items-baseline gap-2">
-                                        <span className="text-slate-900 dark:text-white text-lg">{formatCurrency((results.familyUtilityEarnings!.year1.recurring - (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0)))}</span>
-                                        <span className="text-xs text-blue-600 dark:text-blue-400 font-bold opacity-80">({formatCurrency((results.familyUtilityEarnings!.year1.recurring - (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0)) / 12)}/mese)</span>
-                                    </div>
+                            <div className="flex flex-col">
+                                <span className="text-blue-500 dark:text-blue-300 uppercase text-[9px] font-black tracking-[0.2em] mb-1 opacity-60">Rendite (3€/M)</span>
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-slate-900 dark:text-white text-xl font-black">{formatCurrency((results.familyUtilityEarnings!.year1.recurring - (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0)))}</span>
+                                    <span className="text-[10px] text-blue-500 dark:text-blue-400 font-bold opacity-60">({formatCurrency((results.familyUtilityEarnings!.year1.recurring - (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0)) / 12)}/mo)</span>
                                 </div>
                             </div>
                             {((results.familyUtilityEarnings!.year1.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0)) > 0 && (
-                                <div className="mt-2 pt-2 border-t border-purple-200 dark:border-purple-500/30 flex flex-col gap-1 bg-purple-50 dark:bg-purple-900/10 p-2 rounded-lg">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-purple-800 dark:text-purple-300">Guadagni Network</span>
-
-                                    {(results.familyUtilityEarnings!.year1.networkPart?.oneTime || 0) > 0 && (
-                                        <div className="flex justify-between text-xs text-purple-600 dark:text-purple-400 opacity-80">
-                                            <span>Una Tantum:</span>
-                                            <span>{formatCurrency(results.familyUtilityEarnings!.year1.networkPart?.oneTime)}</span>
-                                        </div>
-                                    )}
-
-                                    {(results.familyUtilityEarnings!.year1.networkPart?.recurring || 0) > 0 && (
-                                        <div className="flex justify-between items-center text-purple-700 dark:text-purple-200 my-0.5">
-                                            <span className="text-xs font-bold uppercase">Rendita:</span>
-                                            <div className="flex items-baseline gap-1">
-                                                <span className="text-lg font-black">{formatCurrency(results.familyUtilityEarnings!.year1.networkPart?.recurring)}</span>
-                                                <span className="text-[10px] opacity-70">({formatCurrency((results.familyUtilityEarnings!.year1.networkPart?.recurring || 0) / 12)}/mo)</span>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    <div className="flex justify-between text-[10px] text-purple-600 dark:text-purple-400 border-t border-purple-200 dark:border-purple-500/20 pt-1 mt-1">
-                                        <span>Totale extra:</span>
-                                        <span className="font-bold">{formatCurrency((results.familyUtilityEarnings!.year1.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0))}</span>
+                                <div className="mt-2 pt-3 border-t border-purple-500/20 flex flex-col gap-2 bg-purple-500/5 p-3 rounded-2xl">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-purple-500">Network Level 1</span>
+                                    <div className="flex justify-between text-[10px] text-slate-600 dark:text-purple-200">
+                                        <span>Totale Anno 1:</span>
+                                        <span className="font-black">{formatCurrency((results.familyUtilityEarnings!.year1.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0))}</span>
                                     </div>
                                 </div>
                             )}
                         </div>
                     )}
-                    colorClass={isRecruiterView ? 'bg-white dark:bg-white/5 border-blue-100 dark:border-blue-900/40 shadow-blue-500/10' : 'bg-white dark:bg-black/40 border-gray-100 dark:border-white/10'}
+                    colorClass="bg-white/40 dark:bg-black/40 border-white/40 dark:border-white/10"
                 />
+
                 <Card
                     title={t('condo_results.y2_total')}
                     value={formatCurrency(displayY2)}
                     subValue={!isRecruiterView ? (
-                        `${t('condo_results.rec_end_year')}: ${formatCurrency(results.year2.recurringMonthly)}`
+                        <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-slate-200 dark:border-white/10">
+                            <div className="flex justify-between items-center text-xs">
+                                <span className="opacity-50 uppercase tracking-widest text-[9px] font-black">Rendita Annuale:</span>
+                                <span className="font-black text-slate-900 dark:text-white">{formatCurrency(results.year2.recurringMonthly * 12)}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-xs">
+                                <span className="opacity-50 uppercase tracking-widest text-[9px] font-black">Rendita Finale Mensile:</span>
+                                <span className="font-black text-slate-900 dark:text-white">{formatCurrency(results.year2.recurringMonthly)}</span>
+                            </div>
+                        </div>
                     ) : (
-                        <div className="mt-2 pt-2 border-t border-blue-400/20 text-xs font-bold flex flex-col gap-2">
+                        <div className="mt-4 pt-4 border-t border-blue-500/20 text-xs font-bold flex flex-col gap-3">
                             {(results.familyUtilityEarnings!.year2.oneTime - (results.familyUtilityEarnings!.year2.networkPart?.oneTime || 0)) > 0 && (
-                                <div className="flex justify-between items-end">
-                                    <div className="flex flex-col">
-                                        <span className="text-blue-400 dark:text-blue-300 uppercase text-[10px] font-black tracking-wider">Una Tantum (Nuovi)</span>
-                                        <span className="text-slate-900 dark:text-white text-lg">{formatCurrency(results.familyUtilityEarnings!.year2.oneTime - (results.familyUtilityEarnings!.year2.networkPart?.oneTime || 0))}</span>
-                                    </div>
+                                <div className="flex flex-col">
+                                    <span className="text-blue-500 dark:text-blue-300 uppercase text-[9px] font-black tracking-[0.2em] mb-1 opacity-60">Una Tantum (Nuovi)</span>
+                                    <span className="text-slate-900 dark:text-white text-xl font-black">{formatCurrency(results.familyUtilityEarnings!.year2.oneTime - (results.familyUtilityEarnings!.year2.networkPart?.oneTime || 0))}</span>
                                 </div>
                             )}
-                            <div className="flex justify-between items-end">
-                                <div className="flex flex-col">
-                                    <span className="text-blue-400 dark:text-blue-300 uppercase text-[10px] font-black tracking-wider">Rendite (Fino a 4€/M)</span>
-                                    <div className="flex items-baseline gap-2">
-                                        <span className="text-slate-900 dark:text-white text-lg">{formatCurrency((results.familyUtilityEarnings!.year2.recurring - (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0)))}</span>
-                                        <span className="text-xs text-blue-600 dark:text-blue-400 font-bold opacity-80">({formatCurrency((results.familyUtilityEarnings!.year2.recurring - (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0)) / 12)}/mese)</span>
-                                    </div>
+                            <div className="flex flex-col">
+                                <span className="text-blue-500 dark:text-blue-300 uppercase text-[9px] font-black tracking-[0.2em] mb-1 opacity-60">Rendite (Fino a 4€/M)</span>
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-slate-900 dark:text-white text-xl font-black">{formatCurrency((results.familyUtilityEarnings!.year2.recurring - (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0)))}</span>
+                                    <span className="text-[10px] text-blue-500 dark:text-blue-400 font-bold opacity-60">({formatCurrency((results.familyUtilityEarnings!.year2.recurring - (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0)) / 12)}/mo)</span>
                                 </div>
                             </div>
                             {((results.familyUtilityEarnings!.year2.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0)) > 0 && (
-                                <div className="mt-2 pt-2 border-t border-purple-200 dark:border-purple-500/30 flex flex-col gap-1 bg-purple-50 dark:bg-purple-900/10 p-2 rounded-lg">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-purple-800 dark:text-purple-300">Guadagni Network</span>
-
-                                    {(results.familyUtilityEarnings!.year2.networkPart?.oneTime || 0) > 0 && (
-                                        <div className="flex justify-between text-xs text-purple-600 dark:text-purple-400 opacity-80">
-                                            <span>Una Tantum:</span>
-                                            <span>{formatCurrency(results.familyUtilityEarnings!.year2.networkPart?.oneTime)}</span>
-                                        </div>
-                                    )}
-
-                                    {(results.familyUtilityEarnings!.year2.networkPart?.recurring || 0) > 0 && (
-                                        <div className="flex justify-between items-center text-purple-700 dark:text-purple-200 my-0.5">
-                                            <span className="text-xs font-bold uppercase">Rendita:</span>
-                                            <div className="flex items-baseline gap-1">
-                                                <span className="text-lg font-black">{formatCurrency(results.familyUtilityEarnings!.year2.networkPart?.recurring)}</span>
-                                                <span className="text-[10px] opacity-70">({formatCurrency((results.familyUtilityEarnings!.year2.networkPart?.recurring || 0) / 12)}/mo)</span>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    <div className="flex justify-between text-[10px] text-purple-600 dark:text-purple-400 border-t border-purple-200 dark:border-purple-500/20 pt-1 mt-1">
-                                        <span>Totale extra:</span>
-                                        <span className="font-bold">{formatCurrency((results.familyUtilityEarnings!.year2.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0))}</span>
+                                <div className="mt-2 pt-3 border-t border-purple-500/20 flex flex-col gap-2 bg-purple-500/5 p-3 rounded-2xl">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-purple-500">Network Level 1</span>
+                                    <div className="flex justify-between text-[10px] text-slate-600 dark:text-purple-200">
+                                        <span>Totale Anno 2:</span>
+                                        <span className="font-black">{formatCurrency((results.familyUtilityEarnings!.year2.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0))}</span>
                                     </div>
                                 </div>
                             )}
                         </div>
                     )}
-                    colorClass={isRecruiterView ? 'bg-white dark:bg-white/5 border-blue-100 dark:border-blue-900/40 shadow-blue-500/10' : 'bg-white dark:bg-black/40 border-gray-100 dark:border-white/10'}
+                    colorClass="bg-white/40 dark:bg-black/40 border-white/40 dark:border-white/10"
                 />
-                <div className={`p-5 rounded-[2rem] border backdrop-blur-md shadow-xl transition-all duration-300 hover:-translate-y-1 ${isRecruiterView
-                    ? 'bg-gradient-to-br from-union-blue-600 to-union-blue-800 border-white/20 text-white'
-                    : 'bg-gradient-to-br from-union-blue-600 to-union-blue-800 border-white/20 text-white shadow-union-blue-500/30'}`}>
-                    <p className="text-[10px] font-bold opacity-80 uppercase tracking-widest mb-1">{t('condo_results.y3_total')}</p>
-                    <p className="text-3xl sm:text-5xl font-black mb-1">{formatCurrency(displayY3)}</p>
-                    {isRecruiterView ? (
-                        <div className="mt-2 pt-2 border-t border-white/20 text-xs font-bold flex flex-col gap-2">
+
+                <Card
+                    title={t('condo_results.y3_total')}
+                    value={formatCurrency(displayY3)}
+                    subValue={!isRecruiterView ? (
+                        <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-blue-200/40">
+                            <div className="flex justify-between items-center text-xs">
+                                <span className="opacity-60 uppercase tracking-widest text-[9px] font-black">Rendita Annuale:</span>
+                                <span className="font-black">{formatCurrency(results.year3.recurringMonthly * 12)}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-xs">
+                                <span className="opacity-60 uppercase tracking-widest text-[9px] font-black">Rendita Finale Mensile:</span>
+                                <span className="font-black">{formatCurrency(results.year3.recurringMonthly)}</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="mt-4 pt-4 border-t border-blue-400/20 text-xs font-bold flex flex-col gap-3">
                             {(results.familyUtilityEarnings!.year3.oneTime - (results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0)) > 0 && (
-                                <div className="flex justify-between items-end">
-                                    <div className="flex flex-col">
-                                        <span className="text-blue-100 uppercase text-[10px] font-black tracking-wider font-outline-sm">Una Tantum (Nuovi)</span>
-                                        <span className="text-xl">{formatCurrency(results.familyUtilityEarnings!.year3.oneTime - (results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0))}</span>
-                                    </div>
+                                <div className="flex flex-col">
+                                    <span className="text-blue-200 uppercase text-[9px] font-black tracking-[0.2em] mb-1 opacity-60">Una Tantum (Nuovi)</span>
+                                    <span className="text-white text-xl font-black">{formatCurrency(results.familyUtilityEarnings!.year3.oneTime - (results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0))}</span>
                                 </div>
                             )}
-                            <div className="flex justify-between items-end">
-                                <div className="flex flex-col">
-                                    <span className="text-blue-100 uppercase text-[10px] font-black tracking-wider">Rendite (Fino a 6€/M)</span>
-                                    <div className="flex items-baseline gap-2">
-                                        <span className="text-xl">{formatCurrency((results.familyUtilityEarnings!.year3.recurring - (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)))}</span>
-                                        <span className="text-xs text-blue-100 font-bold opacity-80">({formatCurrency((results.familyUtilityEarnings!.year3.recurring - (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)) / 12)}/mese)</span>
-                                    </div>
+                            <div className="flex flex-col">
+                                <span className="text-blue-200 uppercase text-[9px] font-black tracking-[0.2em] mb-1 opacity-60">Rendite (Fino a 6€/M)</span>
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-white text-xl font-black">{formatCurrency((results.familyUtilityEarnings!.year3.recurring - (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)))}</span>
+                                    <span className="text-[10px] text-blue-200 font-bold opacity-60">({formatCurrency((results.familyUtilityEarnings!.year3.recurring - (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)) / 12)}/mo)</span>
                                 </div>
                             </div>
                             {((results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)) > 0 && (
-                                <div className="mt-2 pt-2 border-t border-white/10 flex flex-col gap-1 bg-slate-900 p-2 rounded-lg shadow-sm border border-white/5">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-purple-300">Guadagni Network</span>
-
-                                    {(results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0) > 0 && (
-                                        <div className="flex justify-between text-xs text-purple-200 opacity-90">
-                                            <span>Una Tantum:</span>
-                                            <span>{formatCurrency(results.familyUtilityEarnings!.year3.networkPart?.oneTime)}</span>
-                                        </div>
-                                    )}
-
-                                    {(results.familyUtilityEarnings!.year3.networkPart?.recurring || 0) > 0 && (
-                                        <div className="flex justify-between items-center text-white my-0.5">
-                                            <span className="text-xs font-bold uppercase text-purple-300">Rendita:</span>
-                                            <div className="flex items-baseline gap-1">
-                                                <span className="text-lg font-black text-white">{formatCurrency(results.familyUtilityEarnings!.year3.networkPart?.recurring)}</span>
-                                                <span className="text-[10px] opacity-80 text-purple-200">({formatCurrency((results.familyUtilityEarnings!.year3.networkPart?.recurring || 0) / 12)}/mo)</span>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    <div className="flex justify-between text-[10px] text-purple-200 border-t border-white/10 pt-1 mt-1">
-                                        <span>Totale extra:</span>
-                                        <span className="font-bold">{formatCurrency((results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0))}</span>
+                                <div className="mt-2 pt-3 border-t border-white/10 flex flex-col gap-2 bg-slate-900/50 p-3 rounded-2xl border border-white/5">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-purple-300">Network Level 1</span>
+                                    <div className="flex justify-between text-[10px] text-purple-100/70">
+                                        <span>Totale Anno 3:</span>
+                                        <span className="font-black text-white">{formatCurrency((results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0))}</span>
                                     </div>
                                 </div>
                             )}
                         </div>
-                    ) : (
-                        <p className="text-xs opacity-80 font-medium mt-2">
-                            {`${t('condo_results.rec_end_year')}: ${formatCurrency(results.year3.recurringMonthly)}`}
-                        </p>
                     )}
-                </div>
+                    colorClass={isRecruiterView
+                        ? "bg-gradient-to-br from-union-blue-600 to-indigo-900 border-white/20 text-white shadow-[0_20px_50px_rgba(37,99,235,0.3)]"
+                        : "bg-gradient-to-br from-union-blue-600 to-union-blue-800 border-white/20 text-white shadow-[0_20px_50px_rgba(37,99,235,0.3)]"}
+                />
             </div>
 
-            {/* DETAILED TABLE (ONLY FOR ADMIN VIEW) */}
+            {/* DETAILED TABLE */}
             {!isRecruiterView && (
-                <div className="bg-white dark:bg-black/40 backdrop-blur-xl rounded-[2.5rem] shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-white/10 overflow-hidden p-1">
-                    <div className="p-6 border-b border-gray-100 dark:border-white/5">
-                        <h3 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-3">
-                            <span className="p-2 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-white/10 dark:to-white/5 text-gray-600 dark:text-gray-300 shadow-sm">📊</span>
-                            {t('condo_results.detail_title')}
+                <div className="bg-white/40 dark:bg-black/40 backdrop-blur-[40px] rounded-[3rem] shadow-[0_32px_80px_rgba(0,0,0,0.1)] border border-white/40 dark:border-white/10 overflow-hidden p-2">
+                    <div className="p-8 border-b border-white/20">
+                        <h3 className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-4 tracking-tighter">
+                            <div className="p-3 bg-slate-900 dark:bg-white dark:text-slate-900 text-white rounded-2xl shadow-xl">
+                                <TrendingUp size={24} />
+                            </div>
+                            Proiezioni Dettagliate
                         </h3>
                     </div>
-                    <div className="overflow-x-auto bg-gray-50/50 dark:bg-black/20 rounded-3xl m-2 border border-gray-200 dark:border-white/5">
+                    <div className="overflow-x-auto bg-white/20 dark:bg-black/20 rounded-[2.5rem] m-4 border border-white/20 shadow-inner">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-gray-50 dark:bg-white/5 text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 font-bold backdrop-blur-sm">
-                                    <th className="p-4 border-b border-gray-200 dark:border-white/10">{t('condo_results.col_period')}</th>
-                                    <th className="p-4 border-b border-gray-200 dark:border-white/10">{t('condo_results.col_active_units')}</th>
-                                    <th className="p-4 border-b border-gray-200 dark:border-white/10 text-right">Guadagno Una Tantum</th>
-                                    <th className="p-4 border-b border-gray-200 dark:border-white/10 text-right">{t('condo_results.rec_end_year')}</th>
-                                    <th className="p-4 border-b border-gray-200 dark:border-white/10 text-right bg-gray-50/80 dark:bg-white/5">{t('condo_results.col_annual_total')}</th>
+                                <tr className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-gray-400 border-b border-white/10">
+                                    <th className="p-6">Periodo</th>
+                                    <th className="p-6">Unità Attive</th>
+                                    <th className="p-6 text-right">Una Tantum</th>
+                                    <th className="p-6 text-right">Rendita Finale</th>
+                                    <th className="p-6 text-right bg-white/5 font-black text-slate-900 dark:text-white">Totale Annuo</th>
                                 </tr>
                             </thead>
-                            <tbody className="text-sm font-medium text-gray-700 dark:text-gray-200 divide-y divide-gray-200 dark:divide-white/5">
-                                <tr className="hover:bg-white dark:hover:bg-white/5 transition-colors">
-                                    <td className="p-4 font-bold text-union-blue-600 dark:text-union-blue-400">{t('condo_results.row_y1')}</td>
-                                    <td className="p-4">{results.year1.activeUnits}</td>
-                                    <td className="p-4 text-right text-emerald-600 dark:text-emerald-400 font-bold">{formatCurrency(results.year1.oneTimeBonus)}</td>
-                                    <td className="p-4 text-right text-union-orange-500 dark:text-union-orange-400 font-bold">{formatCurrency(results.year1.recurringMonthly)}</td>
-                                    <td className="p-4 text-right font-black text-gray-900 dark:text-white bg-gray-50/50 dark:bg-white/5">{formatCurrency(results.year1.totalAnnual)}</td>
+                            <tbody className="text-sm font-bold text-slate-700 dark:text-gray-200 divide-y divide-white/5">
+                                <tr className="hover:bg-white/30 dark:hover:bg-white/5 transition-all">
+                                    <td className="p-6 text-union-blue-600 dark:text-blue-400 font-black uppercase tracking-widest">{t('condo_results.row_y1')}</td>
+                                    <td className="p-6">{results.year1.activeUnits}</td>
+                                    <td className="p-6 text-right text-emerald-600 dark:text-emerald-400 font-black">{formatCurrency(results.year1.oneTimeBonus)}</td>
+                                    <td className="p-6 text-right text-union-blue-600 dark:text-blue-400 font-black">{formatCurrency(results.year1.recurringMonthly)}/mo</td>
+                                    <td className="p-6 text-right font-black text-slate-900 dark:text-white bg-white/5 text-lg">{formatCurrency(results.year1.totalAnnual)}</td>
                                 </tr>
-                                <tr className="hover:bg-white dark:hover:bg-white/5 transition-colors">
-                                    <td className="p-4 font-bold text-union-blue-600 dark:text-union-blue-400">{t('condo_results.row_y2')}</td>
-                                    <td className="p-4">{results.year2.activeUnits} <span className="text-xs text-green-500 ml-1 font-bold">(+{results.year2.activeUnits - results.year1.activeUnits})</span></td>
-                                    <td className="p-4 text-right text-emerald-600 dark:text-emerald-400 font-bold">{formatCurrency(results.year2.oneTimeBonus)}</td>
-                                    <td className="p-4 text-right text-union-orange-500 dark:text-union-orange-400 font-bold">{formatCurrency(results.year2.recurringMonthly)}</td>
-                                    <td className="p-4 text-right font-black text-gray-900 dark:text-white bg-gray-50/50 dark:bg-white/5">{formatCurrency(results.year2.totalAnnual)}</td>
+                                <tr className="hover:bg-white/30 dark:hover:bg-white/5 transition-all">
+                                    <td className="p-6 text-union-blue-600 dark:text-blue-400 font-black uppercase tracking-widest">{t('condo_results.row_y2')}</td>
+                                    <td className="p-6 font-black">{results.year2.activeUnits} <span className="text-[10px] text-green-500 ml-1">(+{results.year2.activeUnits - results.year1.activeUnits})</span></td>
+                                    <td className="p-6 text-right text-emerald-600 dark:text-emerald-400 font-black">{formatCurrency(results.year2.oneTimeBonus)}</td>
+                                    <td className="p-6 text-right text-union-blue-600 dark:text-blue-400 font-black">{formatCurrency(results.year2.recurringMonthly)}/mo</td>
+                                    <td className="p-6 text-right font-black text-slate-900 dark:text-white bg-white/5 text-lg">{formatCurrency(results.year2.totalAnnual)}</td>
                                 </tr>
-                                <tr className="hover:bg-white dark:hover:bg-white/5 transition-colors">
-                                    <td className="p-4 font-bold text-union-blue-600 dark:text-union-blue-400">{t('condo_results.row_y3')}</td>
-                                    <td className="p-4">{results.year3.activeUnits} <span className="text-xs text-green-500 ml-1 font-bold">(+{results.year3.activeUnits - results.year2.activeUnits})</span></td>
-                                    <td className="p-4 text-right text-emerald-600 dark:text-emerald-400 font-bold">{formatCurrency(results.year3.oneTimeBonus)}</td>
-                                    <td className="p-4 text-right text-union-orange-500 dark:text-union-orange-400 font-bold">{formatCurrency(results.year3.recurringMonthly)}</td>
-                                    <td className="p-4 text-right font-black text-gray-900 dark:text-white bg-gray-50/50 dark:bg-white/5">{formatCurrency(results.year3.totalAnnual)}</td>
+                                <tr className="hover:bg-white/30 dark:hover:bg-white/5 transition-all">
+                                    <td className="p-6 text-union-blue-600 dark:text-blue-400 font-black uppercase tracking-widest">{t('condo_results.row_y3')}</td>
+                                    <td className="p-6 font-black">{results.year3.activeUnits} <span className="text-[10px] text-green-500 ml-1">(+{results.year3.activeUnits - results.year2.activeUnits})</span></td>
+                                    <td className="p-6 text-right text-emerald-600 dark:text-emerald-400 font-black">{formatCurrency(results.year3.oneTimeBonus)}</td>
+                                    <td className="p-6 text-right text-union-blue-600 dark:text-blue-400 font-black">{formatCurrency(results.year3.recurringMonthly)}/mo</td>
+                                    <td className="p-6 text-right font-black text-slate-900 dark:text-white bg-white/5 text-lg">{formatCurrency(results.year3.totalAnnual)}</td>
                                 </tr>
-                                {/* NETWORK ROW (Simplified) */}
                                 {results.networkStats && results.networkStats.usersCount > 0 && (
-                                    <tr className="bg-purple-50/50 dark:bg-purple-900/10 border-t-2 border-purple-100 dark:border-purple-500/30">
-                                        <td className="p-4 font-bold text-purple-700 dark:text-purple-300 flex items-center gap-2">
-                                            <span className="text-lg">🟣</span> Network (Lv. 0)
+                                    <tr className="bg-purple-600/10 dark:bg-purple-900/20 border-t-2 border-purple-500/20">
+                                        <td className="p-6 font-black text-purple-600 dark:text-purple-300 flex items-center gap-3">
+                                            <Users size={18} /> NETWORK (FU)
                                         </td>
-                                        <td className="p-4 text-purple-600 dark:text-purple-300 font-bold">
-                                            {results.networkStats.usersCount} Utenti
+                                        <td className="p-6 text-purple-600 dark:text-purple-300 font-black">
+                                            {results.networkStats.usersCount} Famiglie
                                         </td>
-                                        <td className="p-4 text-right text-purple-600 dark:text-purple-300 font-bold">
+                                        <td className="p-6 text-right text-purple-600 dark:text-purple-300 font-black">
                                             +{formatCurrency(results.networkStats.oneTimeBonus)}
                                         </td>
-                                        <td className="p-4 text-right text-purple-600 dark:text-purple-300 font-bold">
-                                            +{formatCurrency(results.networkStats.recurringYear3)}
+                                        <td className="p-6 text-right text-purple-600 dark:text-purple-300 font-black">
+                                            +{formatCurrency(results.networkStats.recurringYear3)}/mo
                                         </td>
-                                        <td className="p-4 text-right font-black text-purple-900 dark:text-purple-100 bg-purple-100/50 dark:bg-purple-900/30">
-                                            +{formatCurrency(results.networkStats.totalAnnualYear1 + results.networkStats.totalAnnualYear2 + results.networkStats.totalAnnualYear3)} <span className="text-[10px] font-normal opacity-70 block sm:inline">(3 Anni)</span>
+                                        <td className="p-6 text-right font-black text-purple-900 dark:text-purple-100 bg-purple-600/10 text-xl">
+                                            +{formatCurrency(results.networkStats.totalAnnualYear1 + results.networkStats.totalAnnualYear2 + results.networkStats.totalAnnualYear3)}
+                                            <span className="text-[9px] font-black uppercase tracking-widest opacity-60 block">Totale 3 Anni</span>
                                         </td>
                                     </tr>
                                 )}
@@ -591,58 +475,49 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
 
             {/* EDIT DETAILS MODAL */}
             {isEditModalOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-6 shadow-2xl border border-gray-100 dark:border-white/10 animate-in zoom-in-95 duration-200">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Personalizza PDF</h3>
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
+                    <div className="bg-white/90 dark:bg-slate-900/90 w-full max-w-md rounded-[3rem] p-8 shadow-[0_45px_100px_rgba(0,0,0,0.5)] border border-white/40 dark:border-white/10 animate-in zoom-in-95 duration-300 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-union-blue-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
+
+                        <div className="flex justify-between items-center mb-8 relative z-10">
+                            <div>
+                                <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">Personalizza Report</h3>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Dati per esportazione PDF</p>
+                            </div>
                             <button
                                 onClick={() => setIsEditModalOpen(false)}
-                                className="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full text-gray-500 dark:text-gray-400"
+                                className="p-3 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 rounded-2xl text-slate-500 dark:text-gray-400 transition-colors"
                             >
                                 <X size={20} />
                             </button>
                         </div>
 
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Nome</label>
-                                <input
-                                    type="text"
-                                    value={consultantName}
-                                    onChange={(e) => setConsultantName(e.target.value)}
-                                    placeholder="Es. Mario"
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Cognome</label>
-                                <input
-                                    type="text"
-                                    value={consultantSurname}
-                                    onChange={(e) => setConsultantSurname(e.target.value)}
-                                    placeholder="Es. Rossi"
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Telefono</label>
-                                <input
-                                    type="tel"
-                                    value={consultantPhone}
-                                    onChange={(e) => setConsultantPhone(e.target.value)}
-                                    placeholder="Es. 333 1234567"
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-slate-900 dark:text-white"
-                                />
-                            </div>
+                        <div className="space-y-5 relative z-10">
+                            {[
+                                { label: 'Nome', value: consultantName, setter: setConsultantName, placeholder: 'Es. Mario', type: 'text' },
+                                { label: 'Cognome', value: consultantSurname, setter: setConsultantSurname, placeholder: 'Es. Rossi', type: 'text' },
+                                { label: 'Telefono', value: consultantPhone, setter: setConsultantPhone, placeholder: 'Es. 333 1234567', type: 'tel' }
+                            ].map((field) => (
+                                <div key={field.label}>
+                                    <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-gray-500 mb-2 ml-1">{field.label}</label>
+                                    <input
+                                        type={field.type}
+                                        value={field.value}
+                                        onChange={(e) => field.setter(e.target.value)}
+                                        placeholder={field.placeholder}
+                                        className="w-full px-5 py-4 rounded-2xl bg-white/50 dark:bg-black/40 border border-slate-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-union-blue-500/50 text-slate-900 dark:text-white font-bold transition-all placeholder:opacity-30"
+                                    />
+                                </div>
+                            ))}
                         </div>
 
-                        <div className="mt-8 flex gap-3">
+                        <div className="mt-10 flex gap-4 relative z-10">
                             <button
                                 onClick={() => setIsEditModalOpen(false)}
-                                className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+                                className="flex-1 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-xl transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3"
                             >
                                 <Save size={18} />
-                                Salva e Chiudi
+                                Salva Configurazione
                             </button>
                         </div>
                     </div>
