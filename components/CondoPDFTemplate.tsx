@@ -39,7 +39,7 @@ export const CondoPDFTemplate: React.FC<CondoPDFTemplateProps> = ({ results, con
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-100/40 rounded-full blur-[120px] pointer-events-none" />
 
             {/* HEADER */}
-            <div className="p-16 flex justify-between items-start border-b border-gray-200 bg-white/95 backdrop-blur-md">
+            <div className="p-16 flex justify-between items-start border-b border-gray-200 bg-white">
                 <div className="flex flex-col gap-6">
                     {/* CONSULTANT DETAILS (TOP LEFT) */}
                     {(consultantName || consultantSurname || consultantPhone) && (
@@ -73,16 +73,16 @@ export const CondoPDFTemplate: React.FC<CondoPDFTemplateProps> = ({ results, con
             </div>
 
             {/* BODY */}
-            <div className="p-16 flex-grow flex flex-col gap-12 relative z-10">
+            <div className="p-16 flex flex-col gap-12 relative z-10 w-full">
 
                 {/* HERO SECTION */}
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-[3rem] p-12 border border-blue-200 shadow-xl text-center relative overflow-hidden">
+                <div className="bg-slate-50 rounded-[3rem] p-12 border border-slate-200 shadow-lg text-center relative overflow-hidden">
                     <div className="relative z-10">
                         <h2 className="text-xl font-bold uppercase tracking-[0.3em] text-blue-700 mb-4">Valore Totale Business Plan (3 Anni)</h2>
-                        <div className="text-[8rem] leading-none font-black text-transparent bg-clip-text bg-gradient-to-b from-slate-900 to-slate-700 drop-shadow-sm mb-6">
+                        <div className="text-[7rem] leading-none font-black text-slate-900 mb-6 antialiased">
                             {formatCurrency(displayTotal)}
                         </div>
-                        <p className="text-2xl text-slate-600 max-w-4xl mx-auto opacity-90 leading-relaxed font-light">
+                        <p className="text-2xl text-slate-600 max-w-4xl mx-auto opacity-90 leading-relaxed font-medium">
                             Il piano include i guadagni derivanti dalla gestione delle utenze condominiali, le installazioni di efficientamento e le rendite ricorrenti.
                         </p>
                     </div>
@@ -196,7 +196,7 @@ export const CondoPDFTemplate: React.FC<CondoPDFTemplateProps> = ({ results, con
             </div>
 
             {/* FOOTER */}
-            <div className="p-12 text-center border-t border-gray-200 bg-gray-50 backdrop-blur-md">
+            <div className="p-12 text-center border-t border-gray-200 bg-gray-50">
                 <p className="text-gray-500 text-lg">Simulazione generata con Shary Simulator - Documento ad uso interno</p>
                 <p className="text-gray-400 text-sm mt-2">I valori sono stime basate sui dati inseriti e potrebbero variare.</p>
             </div>

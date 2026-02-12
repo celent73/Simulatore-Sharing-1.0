@@ -28,6 +28,7 @@ export type ModalKey =
     | 'ANALISI_UTENZE' // And any others
     | 'ANALISI_UTENZE_FOCUS'
     | 'FUEL_FOCUS'
+    | 'SIMULATOR_FOCUS'
     | 'TARGET_FOCUS'
     | 'SHARING_PARK_FOCUS'
     | null;

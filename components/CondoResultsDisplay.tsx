@@ -230,8 +230,8 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
         if (!pdfTemplateRef.current) return;
         setIsGeneratingPdf(true);
         try {
-            // Wait for render
-            await new Promise(resolve => setTimeout(resolve, 100));
+            // Wait for render (increased for reliability)
+            await new Promise(resolve => setTimeout(resolve, 500));
 
             const dataUrl = await toPng(pdfTemplateRef.current, {
                 quality: 1.0,
@@ -261,7 +261,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
     return (
         <div className="space-y-8 relative">
             {/* HIDDEN TEMPLATE FOR PDF GENERATION */}
-            <div style={{ position: 'absolute', top: '-10000px', left: '-10000px', pointerEvents: 'none' }}>
+            <div style={{ position: 'fixed', top: 0, left: 0, width: '1200px', height: 'auto', zIndex: -100, opacity: 0.01, pointerEvents: 'none' }}>
                 <div ref={pdfTemplateRef}>
                     <CondoPDFTemplate
                         results={results}

@@ -221,7 +221,9 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
     setIsExporting(true);
 
     try {
-      // 1. Generate Image from the Template
+      // 1. Generate Image from the Template (Wait for render)
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       // Scale up for better quality
       const dataUrl = await toPng(exportRef.current, { cacheBust: true, pixelRatio: 2 });
 
@@ -683,7 +685,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         )
       }
 
-      <div style={{ position: 'absolute', top: '-10000px', left: '-10000px' }}>
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '1200px', height: 'auto', zIndex: -100, opacity: 0.01, pointerEvents: 'none' }}>
         <div ref={exportRef}>
           <NetworkPDFTemplate
             planResult={planResult}

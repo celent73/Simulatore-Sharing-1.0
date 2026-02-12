@@ -52,7 +52,7 @@ export const NetworkPDFTemplate: React.FC<NetworkPDFTemplateProps> = ({
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-100/40 rounded-full blur-[120px] pointer-events-none" />
 
             {/* HEADER */}
-            <div className="p-16 flex justify-between items-start border-b border-gray-200 bg-white/95 backdrop-blur-md">
+            <div className="p-16 flex justify-between items-start border-b border-gray-200 bg-white">
                 <div className="flex flex-col gap-6">
                     {/* CONSULTANT DETAILS (TOP LEFT) */}
                     {(consultantName || consultantSurname || consultantPhone) && (

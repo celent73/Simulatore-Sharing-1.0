@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Calculator, Lightbulb, Users as UsersIcon } from 'lucide-react';
+import { X, Calculator, Lightbulb, Users as UsersIcon, Target, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import EarningsSimulator from './light/EarningsSimulator';
 import RoadToZero from './light/RoadToZero';
 import Community from './light/Community';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useModalDispatch } from '../contexts/ModalContext';
-import { Target } from 'lucide-react';
 
 interface LightSimulatorModalProps {
     isOpen: boolean;
@@ -145,6 +144,13 @@ const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClo
                                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{t('light_simulator.subtitle')}</p>
                             </div>
                             <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => openModal('SIMULATOR_FOCUS')}
+                                    className="flex items-center gap-2 px-4 py-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 rounded-full transition-all text-sm font-bold border border-purple-500/20 shadow-sm"
+                                >
+                                    <Sparkles size={18} className="animate-pulse" />
+                                    <span>Visionary Mode</span>
+                                </button>
                                 <button
                                     onClick={() => openModal('TARGET_FOCUS')}
                                     className="hidden sm:flex items-center gap-2 px-4 py-2 bg-union-green-500/10 hover:bg-union-green-500/20 text-union-green-600 dark:text-union-green-400 rounded-full transition-all text-sm font-bold border border-union-green-500/20"
