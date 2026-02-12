@@ -77,37 +77,37 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* DISPLAY SECTION (iOS Widget Style) */}
-                <div className="p-8 pb-12 relative">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="p-4 sm:p-8 sm:pb-12 relative">
+                    <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-12 items-center">
                         {/* OLD PRICE WIDGET */}
                         <div className="group relative">
-                            <div className="absolute -inset-1 bg-gradient-to-r from-white/0 to-white/0 rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                            <div className="relative bg-white/5 backdrop-blur-2xl border border-white/10 p-6 rounded-[2rem] flex flex-col items-center justify-center transition-all duration-500 opacity-40 hover:opacity-100">
-                                <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.3em] mb-3">{t('fuel_pitch.pump_price_label')}</span>
-                                <div className="text-4xl font-mono font-black text-white/50 line-through decoration-red-500/40 decoration-4">
-                                    {pricePerLiter.toFixed(2)} <span className="text-2xl">€/L</span>
+                            <div className="absolute -inset-1 bg-gradient-to-r from-white/0 to-white/0 rounded-[1.5rem] sm:rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                            <div className="relative bg-white/5 backdrop-blur-2xl border border-white/10 p-3 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] flex flex-col items-center justify-center transition-all duration-500 opacity-40 hover:opacity-100">
+                                <span className="text-white/30 text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-1 sm:mb-3 whitespace-nowrap">{t('fuel_pitch.pump_price_label')}</span>
+                                <div className="text-xl sm:text-4xl font-mono font-black text-white/50 line-through decoration-red-500/40 decoration-2 sm:decoration-4">
+                                    {pricePerLiter.toFixed(2)} <span className="text-xs sm:text-2xl">€/L</span>
                                 </div>
                             </div>
                         </div>
 
                         {/* NEW PRICE WIDGET - HIGHLIGHTED */}
-                        <div className="group relative transform scale-110">
-                            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-[2.5rem] blur opacity-75 animate-pulse"></div>
-                            <div className="relative bg-white/10 backdrop-blur-3xl border border-white/20 p-8 rounded-[2.5rem] shadow-[0_20px_40px_-10px_rgba(16,185,129,0.3)] flex flex-col items-center justify-center transition-all duration-500 overflow-hidden">
-                                <div className="absolute top-0 right-0 p-4">
-                                    <div className="bg-emerald-500/20 p-2 rounded-full backdrop-blur-md border border-emerald-500/30">
-                                        <TrendingDown size={18} className="text-emerald-400" />
+                        <div className="group relative transform sm:scale-110">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-[1.5rem] sm:rounded-[2.5rem] blur opacity-75 animate-pulse"></div>
+                            <div className="relative bg-white/10 backdrop-blur-3xl border border-white/20 p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] shadow-[0_10px_20px_-5px_rgba(16,185,129,0.3)] sm:shadow-[0_20px_40px_-10px_rgba(16,185,129,0.3)] flex flex-col items-center justify-center transition-all duration-500 overflow-hidden">
+                                <div className="absolute top-0 right-0 p-2 sm:p-4">
+                                    <div className="bg-emerald-500/20 p-1 sm:p-2 rounded-full backdrop-blur-md border border-emerald-500/30">
+                                        <TrendingDown size={14} className="text-emerald-400 sm:w-4 sm:h-4" />
                                     </div>
                                 </div>
-                                <span className="text-emerald-400 text-[11px] font-black uppercase tracking-[0.4em] mb-4 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]">{t('fuel_pitch.sharing_price_label')}</span>
-                                <div className="text-6xl font-mono font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-                                    {newPricePerLiter.toFixed(2)} <span className="text-3xl font-black text-emerald-400">€</span>
+                                <span className="text-emerald-400 text-[9px] sm:text-[11px] font-black uppercase tracking-[0.2em] sm:tracking-[0.4em] mb-1 sm:mb-4 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)] whitespace-nowrap">{t('fuel_pitch.sharing_price_label')}</span>
+                                <div className="text-3xl sm:text-6xl font-mono font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                                    {newPricePerLiter.toFixed(2)} <span className="text-xl sm:text-3xl font-black text-emerald-400">€</span>
                                 </div>
                             </div>
                         </div>
 
                         {/* DECORATIVE ARROW */}
-                        <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white/5 z-0 pointer-events-none">
+                        <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white/5 z-0 pointer-events-none">
                             <ArrowRight size={120} strokeWidth={8} />
                         </div>
                     </div>
@@ -167,64 +167,7 @@ const FuelPitchModal: React.FC<FuelPitchModalProps> = ({ isOpen, onClose }) => {
                         </div>
                     </div>
 
-                    {/* INPUTS ROW - FUEL DATA */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-800/80 p-5 rounded-2xl border border-white/5">
-                        {/* PRICE INPUT */}
-                        <div>
-                            <div className="flex justify-between items-center mb-2 ml-1">
-                                <span className="text-gray-500 text-xs font-bold uppercase">{t('fuel_pitch.fuel_price_label')}</span>
-                                <div className="flex items-center bg-slate-800 rounded-lg border border-slate-600 focus-within:border-union-blue-500 focus-within:ring-1 focus-within:ring-union-blue-500 transition-all">
-                                    <input
-                                        type="number"
-                                        min="1.00"
-                                        max="3.00"
-                                        step="0.001"
-                                        value={pricePerLiter}
-                                        onChange={(e) => setPricePerLiter(Number(e.target.value))}
-                                        className="w-20 bg-transparent text-white font-mono text-sm text-right px-2 py-1 outline-none"
-                                    />
-                                    <span className="text-gray-400 text-xs font-bold pr-2">€/L</span>
-                                </div>
-                            </div>
-                            <input
-                                type="range"
-                                min="1.40"
-                                max="2.20"
-                                step="0.01"
-                                value={pricePerLiter}
-                                onChange={(e) => setPricePerLiter(Number(e.target.value))}
-                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-union-blue-500"
-                            />
-                        </div>
 
-                        {/* TANK CAPACITY INPUT */}
-                        <div>
-                            <div className="flex justify-between items-center mb-2 ml-1">
-                                <span className="text-gray-500 text-xs font-bold uppercase">{t('fuel_pitch.tank_capacity_label')}</span>
-                                <div className="flex items-center bg-slate-800 rounded-lg border border-slate-600 focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 transition-all">
-                                    <input
-                                        type="number"
-                                        min="5"
-                                        max="150"
-                                        step="1"
-                                        value={tankCapacity}
-                                        onChange={(e) => setTankCapacity(Number(e.target.value))}
-                                        className="w-16 bg-transparent text-white font-mono text-sm text-right px-2 py-1 outline-none"
-                                    />
-                                    <span className="text-gray-400 text-xs font-bold pr-2">{t('fuel_pitch.liters')}</span>
-                                </div>
-                            </div>
-                            <input
-                                type="range"
-                                min="20"
-                                max="80"
-                                step="5"
-                                value={tankCapacity}
-                                onChange={(e) => setTankCapacity(Number(e.target.value))}
-                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-                            />
-                        </div>
-                    </div>
 
                     {/* OTHER SPENDING SECTION - PREMIUM GLASS CARD */}
                     <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-3xl border border-white/10 p-8 rounded-[2.5rem] shadow-xl space-y-8 relative overflow-hidden group">
