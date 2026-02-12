@@ -525,7 +525,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
               <div className="w-px bg-slate-300/50 mx-2 my-1"></div>
               <button
                 onClick={onReset}
-                className="p-3 bg-red-500 text-white rounded-xl shadow-lg shadow-red-500/20 hover:bg-red-600 hover:scale-105 active:scale-90 transition-all"
+                className="p-3 bg-[#FF3B30] text-white rounded-xl shadow-lg shadow-red-500/20 hover:bg-[#D72C21] hover:scale-105 active:scale-90 transition-all border border-red-400/20"
                 title="Reset"
               >
                 <RefreshCcw size={20} strokeWidth={3} />
@@ -650,7 +650,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
                 {inputs.directRecruits >= 3 && inputs.contractsPerUser >= 1 && inputs.indirectRecruits >= 3 && (
                   <button
                     onClick={() => onInputChange('bonus3x3Active', !inputs.bonus3x3Active)}
-                    className={`absolute -top-3 right-10 px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-tighter transition-all z-20 shadow-xl border-2 ${inputs.bonus3x3Active
+                    className={`absolute -top-3 right-4 px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-tighter transition-all z-20 shadow-xl border-2 ${inputs.bonus3x3Active
                       ? 'bg-orange-600 text-white border-white scale-110'
                       : 'bg-white text-orange-600 border-orange-100 animate-pulse-bonus'
                       }`}
