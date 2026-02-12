@@ -4,37 +4,27 @@ interface LegalFooterProps {
   onOpenLegal: (type: 'privacy' | 'terms' | 'cookie') => void;
 }
 
-export const LegalFooter: React.FC<LegalFooterProps> = ({ onOpenLegal }) => {
-  const currentYear = new Date().getFullYear();
-
+const LegalFooter: React.FC<LegalFooterProps> = ({ onOpenLegal }) => {
   return (
-    <footer className="w-full py-8 mt-12 border-t border-slate-700 bg-gradient-to-r from-slate-800 to-slate-900 text-slate-400 text-sm transition-colors duration-300">
-      <div className="container mx-auto px-4 text-center">
-        <p className="mb-4 text-xs uppercase tracking-widest opacity-70">
-          &copy; {currentYear} Sharing Simulator. Tutta la piattaforma è di proprietà e gestita da Sharing Simulator. Tutti i diritti riservati. <span className="ml-2 font-black text-union-orange-500">v1.1.98</span>
-        </p>
-
-        <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 mb-6">
-          <button onClick={() => onOpenLegal('privacy')} className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors underline decoration-dotted">
-            Privacy Policy
-          </button>
-          <button onClick={() => onOpenLegal('terms')} className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors underline decoration-dotted">
-            Termini e Condizioni
-          </button>
-          <button onClick={() => onOpenLegal('cookie')} className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors underline decoration-dotted">
-            Cookie Policy
-          </button>
+    <footer className="w-full py-12 px-6 bg-slate-900 border-t border-slate-800 flex flex-col items-center justify-center text-center">
+      <div className="max-w-4xl opacity-80">
+        <div className="flex flex-wrap justify-center gap-6 mb-6">
+          <button onClick={() => onOpenLegal('terms')} className="text-[10px] text-white/40 hover:text-white/70 uppercase tracking-widest font-bold transition-colors">Termini</button>
+          <button onClick={() => onOpenLegal('privacy')} className="text-[10px] text-white/40 hover:text-white/70 uppercase tracking-widest font-bold transition-colors">Privacy</button>
+          <button onClick={() => onOpenLegal('cookie')} className="text-[10px] text-white/40 hover:text-white/70 uppercase tracking-widest font-bold transition-colors">Cookie</button>
         </div>
-
-        <p>
-          DISCLAIMER: Applicazione indipendente a scopo puramente illustrativo ed educativo.
-          NON è un prodotto ufficiale di Union Energia S.r.l.
+        <p className="text-[10px] text-slate-400 font-medium leading-relaxed max-w-2xl mx-auto uppercase tracking-wider mb-4">
+          Tutti i diritti riservati © {new Date().getFullYear()} - Sharing Simulator v1.2.00
+        </p>
+        <p className="text-[10px] text-slate-500 font-medium max-w-2xl mx-auto italic">
           I risultati sono proiezioni matematiche e non costituiscono garanzia di guadagno.
         </p>
         <p className="mt-2 text-[8px] opacity-50 uppercase tracking-[0.2em] font-black">
-          v1.1.99 - Protetto da crittografia SSL a 256 bit 🔒
+          v1.2.00 - Protetto da crittografia SSL a 256 bit 🔒
         </p>
       </div>
     </footer>
   );
 };
+
+export default LegalFooter;
