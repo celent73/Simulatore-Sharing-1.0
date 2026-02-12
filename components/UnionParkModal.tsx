@@ -70,7 +70,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
 
     return (
         <div className="fixed inset-0 z-[400] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300 overflow-y-auto">
-            <div className="bg-white/90 backdrop-blur-2xl w-full h-auto sm:max-w-4xl sm:rounded-[3rem] shadow-2xl overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-500 border-t sm:border border-white/80 flex flex-col max-h-[95vh]">
+            <div className="bg-white/90 backdrop-blur-2xl w-full h-auto sm:w-[95vw] lg:w-[92vw] xl:max-w-[1600px] sm:rounded-[3rem] shadow-2xl overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-500 border-t sm:border border-white/80 flex flex-col max-h-[95vh]">
 
                 {/* HEADER MODALE PREMIUM */}
                 <div className="p-8 pb-4 flex justify-between items-start shrink-0">
@@ -80,7 +80,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
-                                <h2 className="text-3xl font-black text-slate-900 leading-none tracking-tighter">Sharing Park</h2>
+                                <h2 className="text-4xl md:text-5xl font-black text-slate-900 leading-none tracking-tighter">Sharing Park</h2>
                                 <SharyTrigger
                                     message="Benvenuto nello Sharing Park! Seleziona quanti pannelli vuoi (da 1 a 20). Ogni pannello ti garantisce un rendimento mensile passivo basato sul PUN. Usa il bottone 'Obiettivo Azzera Bolletta' per calcolare quanti te ne servono per coprire le tue spese!"
                                     messageDe="Willkommen im Sharing Park! Wähle, wie viele Paneele du möchtest (von 1 bis 20). Jedes Paneel garantiert dir ein passives monatliches Einkommen basierend auf dem PUN. Nutze den Button 'Ziel: Rechnung Null', um zu berechnen, wie viele du brauchst, um deine Ausgaben zu decken!"
@@ -115,28 +115,28 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
                                 <Wallet size={24} strokeWidth={2.5} />
                             </div>
-                            <h3 className="text-xl font-black text-slate-900 leading-none tracking-tighter">{t('union_park.zero_bill_title')}</h3>
+                            <h3 className="text-xl md:text-2xl font-black text-slate-900 leading-none tracking-tighter">{t('union_park.zero_bill_title')}</h3>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                             <div className="space-y-2">
-                                <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest block ml-1">{t('union_park.bill_label')}</label>
+                                <label className="text-xs md:text-base font-black text-slate-400 uppercase tracking-widest block ml-1">{t('union_park.bill_label')}</label>
                                 <div className="relative group">
                                     <input
                                         type="number"
                                         value={monthlyBill || ''}
                                         onChange={(e) => setMonthlyBill(parseFloat(e.target.value) || 0)}
                                         placeholder="0"
-                                        className="w-full px-6 py-4 rounded-2xl bg-white border border-slate-200 text-3xl font-black text-emerald-600 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none shadow-sm"
+                                        className="w-full px-6 py-6 md:py-8 rounded-2xl bg-white border border-slate-200 text-3xl md:text-5xl font-black text-emerald-600 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none shadow-sm"
                                     />
-                                    <span className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 font-bold">€</span>
+                                    <span className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-xl md:text-2xl">€</span>
                                 </div>
                             </div>
                             {monthlyBill > 0 && (
                                 <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 p-8 rounded-[2rem] text-white text-center shadow-2xl shadow-emerald-500/30 animate-in zoom-in-95 duration-500 relative overflow-hidden">
                                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/glass-pass.png')] opacity-10"></div>
                                     <div className="relative z-10">
-                                        <p className="text-[11px] font-black uppercase tracking-[0.2em] opacity-60 mb-1">{t('union_park.panels_needed_label')}</p>
-                                        <p className="text-6xl font-black tracking-tighter">{panelsNeeded}</p>
+                                        <p className="text-xs md:text-base font-black uppercase tracking-[0.2em] opacity-60 mb-1">{t('union_park.panels_needed_label')}</p>
+                                        <p className="text-6xl md:text-8xl font-black tracking-tighter">{panelsNeeded}</p>
                                         <button
                                             onClick={() => setPanels(panelsNeeded)}
                                             className="mt-3 px-6 py-2 bg-white/20 hover:bg-white text-emerald-700 rounded-full text-xs font-black uppercase tracking-widest transition-all"
@@ -156,13 +156,13 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             {/* Panels Selector */}
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center">
-                                    <label className="text-sm sm:text-base font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('union_park.panels_label')}</label>
+                                    <label className="text-base md:text-lg font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('union_park.panels_label')}</label>
                                     <div className="flex items-center gap-2">
                                         <input
                                             type="number"
                                             value={panels}
                                             onChange={(e) => setPanels(Math.max(1, parseInt(e.target.value) || 0))}
-                                            className="w-12 sm:w-16 bg-transparent text-right text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 outline-none"
+                                            className="w-12 sm:w-24 bg-transparent text-right text-xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400 outline-none"
                                         />
                                     </div>
                                 </div>
@@ -197,7 +197,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
 
                             {/* PUN Selector */}
                             <div className="space-y-4">
-                                <label className="text-sm sm:text-base font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">{t('union_park.pun_label')}</label>
+                                <label className="text-base md:text-lg font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider block">{t('union_park.pun_label')}</label>
 
                                 <div className="relative group">
                                     <input
@@ -205,9 +205,9 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                                         step="0.01"
                                         value={pun}
                                         onChange={(e) => setPun(parseFloat(e.target.value) || 0)}
-                                        className="w-full px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xl sm:text-2xl font-black text-emerald-600 focus:ring-2 focus:ring-emerald-500 transition-all outline-none"
+                                        className="w-full px-6 py-4 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xl sm:text-4xl font-black text-emerald-600 focus:ring-2 focus:ring-emerald-500 transition-all outline-none"
                                     />
-                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs sm:text-xs">€/kWh</div>
+                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs sm:text-lg">€/kWh</div>
                                 </div>
 
                                 <div className="flex gap-2">
@@ -229,8 +229,8 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             {/* Duration Selector */}
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
-                                    <label className="text-xs sm:text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('union_park.years_label')}</label>
-                                    <span className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">{simulationYears}</span>
+                                    <label className="text-sm md:text-xl font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('union_park.years_label')}</label>
+                                    <span className="text-xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400">{simulationYears}</span>
                                 </div>
                                 <input
                                     type="range"
@@ -258,8 +258,8 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                                     <p className="text-sm sm:text-lg font-black text-emerald-600 dark:text-emerald-400">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                 </div>
                                 <div className="bg-emerald-50 dark:bg-emerald-900/10 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/20">
-                                    <p className="text-[9px] sm:text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-0.5">{t('union_park.annual_yield')}</p>
-                                    <p className="text-sm sm:text-lg font-black text-emerald-600 dark:text-emerald-400">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                    <p className="text-xs md:text-lg font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-0.5">{t('union_park.annual_yield')}</p>
+                                    <p className="text-sm sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                 </div>
                             </div>
                         </div>
@@ -273,12 +273,12 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             <div>
                                 <div className="grid grid-cols-2 gap-4 mb-4">
                                     <div>
-                                        <p className="text-emerald-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">{t('union_park.monthly_yield')}</p>
+                                        <p className="text-emerald-400 text-xs md:text-sm font-bold uppercase tracking-widest mb-0.5">{t('union_park.monthly_yield')}</p>
                                         <p className="text-xl sm:text-2xl font-black text-white">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                     </div>
                                     <div>
-                                        <p className="text-emerald-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">{t('union_park.annual_yield')}</p>
-                                        <p className="text-xl sm:text-2xl font-black text-white">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                        <p className="text-emerald-400 text-xs md:text-lg font-bold uppercase tracking-widest mb-0.5">{t('union_park.annual_yield')}</p>
+                                        <p className="text-xl sm:text-4xl font-black text-white">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                     </div>
                                 </div>
 
@@ -297,10 +297,10 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
 
                             <div className="flex flex-col justify-center items-center md:items-end text-center md:text-right">
                                 <div className="p-4 sm:p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl">
-                                    <p className="text-emerald-200 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-1">{t('union_park.payback')}</p>
-                                    <p className="text-2xl sm:text-4xl font-black text-white leading-none">
-                                        {paybackYears} <span className="text-xs sm:text-lg font-medium opacity-70">anni</span>
-                                        {remainingMonths > 0 && <><br /><span className="text-lg sm:text-2xl">{remainingMonths}</span> <span className="text-xs sm:text-lg font-medium opacity-70">mesi</span></>}
+                                    <p className="text-emerald-200 text-xs md:text-xl font-bold uppercase tracking-widest mb-1">{t('union_park.payback')}</p>
+                                    <p className="text-2xl sm:text-6xl font-black text-white leading-none">
+                                        {paybackYears} <span className="text-xs sm:text-2xl font-medium opacity-70">anni</span>
+                                        {remainingMonths > 0 && <><br /><span className="text-lg sm:text-4xl">{remainingMonths}</span> <span className="text-xs sm:text-2xl font-medium opacity-70">mesi</span></>}
                                     </p>
                                 </div>
                                 <div className="mt-4 flex items-start gap-2 max-w-[200px] sm:max-w-xs">

@@ -241,10 +241,9 @@ const CashbackModal = ({ isOpen, onClose, inputs, onInputChange, onReset, txt, p
   );
 };
 
-const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset, viewMode, txt }: any) => {
+const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset, viewMode, txt, setUnionParkOpen }: any) => {
   if (!isOpen) return null;
   const [activeTab, setActiveTab] = useState<'my' | 'private' | 'business'>('my');
-  const [unionParkOpen, setUnionParkOpen] = useState(false);
   const isClientMode = viewMode === 'client';
   const multiplier = 1;
   return (
@@ -350,20 +349,6 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
                     </div>
                   </div>
                 </div>
-
-                <UnionParkModal
-                  isOpen={unionParkOpen}
-                  onClose={() => setUnionParkOpen(false)}
-                  initialPanels={inputs.unionParkPanels}
-                  initialPun={inputs.unionParkPun}
-                  initialDuration={inputs.unionParkDuration}
-                  onConfirm={(panels, pun, duration) => {
-                    onInputChange('unionParkPanels', panels);
-                    onInputChange('unionParkPun', pun);
-                    onInputChange('unionParkDuration', duration);
-                    setUnionParkOpen(false);
-                  }}
-                />
               </div>
             )}
             {activeTab === 'private' && (
@@ -412,7 +397,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
   onOpenCashbackDetailed // NEW PROP DESTRUCTURED
 }) => {
   const { t, language } = useLanguage();
-  const [modalOpen, setModalOpen] = useState<'none' | 'cashback' | 'cashback-detailed' | 'personal' | 'visualizer' | 'analisi'>('none');
+  const [modalOpen, setModalOpen] = useState<'none' | 'cashback' | 'cashback-detailed' | 'personal' | 'visualizer' | 'analisi' | 'unionpark'>('none');
   const lang = (language === 'it' || language === 'de') ? language : 'en';
   const txt = uiTexts[lang];
 
@@ -465,7 +450,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
         {viewMode !== 'client' && (
           <button
             onClick={() => setModalOpen('visualizer')}
-            className="w-full py-6 rounded-[2.5rem] bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-2xl relative overflow-hidden group transition-all hover:scale-[1.01] active:scale-95 border border-white/10"
+            className="w-full py-6 md:py-10 rounded-[2.5rem] bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-2xl relative overflow-hidden group transition-all hover:scale-[1.01] active:scale-95 border border-white/10"
           >
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/glass-pass.png')] opacity-20"></div>
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-blue-500/30 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
@@ -693,7 +678,21 @@ const InputPanel: React.FC<InputPanelProps> = ({
       />
       {/* CashbackDetailedModal RIMOSSO DA QUI e SPOSTATO IN APP.TSX */}
 
-      <PersonalClientsModal isOpen={modalOpen === 'personal'} onClose={() => setModalOpen('none')} inputs={inputs} onInputChange={onInputChange} onReset={onResetPersonalClients} viewMode={viewMode} txt={txt} />
+      <PersonalClientsModal isOpen={modalOpen === 'personal'} onClose={() => setModalOpen('none')} inputs={inputs} onInputChange={onInputChange} onReset={onResetPersonalClients} viewMode={viewMode} txt={txt} setUnionParkOpen={(v: boolean) => setModalOpen(v ? 'unionpark' : 'none')} />
+
+      <UnionParkModal
+        isOpen={modalOpen === 'unionpark'}
+        onClose={() => setModalOpen('none')}
+        initialPanels={inputs.unionParkPanels}
+        initialPun={inputs.unionParkPun}
+        initialDuration={inputs.unionParkDuration}
+        onConfirm={(panels, pun, duration) => {
+          onInputChange('unionParkPanels', panels);
+          onInputChange('unionParkPun', pun);
+          onInputChange('unionParkDuration', duration);
+          setModalOpen('none');
+        }}
+      />
 
       {/* MODAL VISUALIZER */}
       <NetworkVisualizerModal

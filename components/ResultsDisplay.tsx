@@ -86,7 +86,7 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, suffix, variant
   }
 
   return (
-    <div className={`p-6 rounded-[2.5rem] transition-all duration-300 ease-in-out flex flex-col items-start justify-between h-full hover:-translate-y-1 relative overflow-hidden ${styles.container}`}>
+    <div className={`p-4 sm:p-6 rounded-[2.5rem] transition-all duration-300 ease-in-out flex flex-col items-start justify-between h-full hover:-translate-y-1 relative overflow-hidden ${styles.container}`}>
       {showBadge && (
         <div className="absolute top-4 right-4 z-20">
           <div className="bg-amber-400 text-white p-2 rounded-full shadow-lg animate-pulse">
@@ -94,17 +94,22 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, suffix, variant
           </div>
         </div>
       )}
-      <div className="flex items-center gap-3 mb-4">
+      <div className="flex items-center gap-3 mb-2 sm:mb-4">
         {icon && (
-          <div className={`p-2.5 rounded-2xl ${styles.iconBg} ${styles.iconColor} shadow-sm`}>
+          <div className={`p-2 rounded-2xl ${styles.iconBg} ${styles.iconColor} shadow-sm`}>
             {icon}
           </div>
         )}
-        <h4 className={`${styles.title} text-[12px] md:text-[10px]`}>{title}</h4>
+        <h4 className={`${styles.title} text-[11px] md:text-[10px]`}>{title}</h4>
       </div>
-      <div className="mt-auto w-full space-y-2">
-        <div className={`text-3xl lg:text-4xl font-black tracking-tighter ${styles.value} leading-none`}>{value}</div>
-        {suffix && <div className="transition-all">{suffix}</div>}
+      <div className="mt-auto w-full">
+        <div className="flex flex-col gap-2">
+          {/* Row 1: Value + Suffix inline */}
+          <div className="flex items-baseline gap-2 flex-wrap">
+            <div className={`text-2xl sm:text-3xl lg:text-4xl font-black tracking-tighter ${styles.value} leading-none transition-all`}>{value}</div>
+            {suffix && <div className="transition-all">{suffix}</div>}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -214,7 +219,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         totalOneTime={oneTimeBonusWithoutCashback + (isAnnual ? 0 : monthlyCashback)}
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
         <SummaryCard
           title={cashbackPeriod === 'annual' ? "Bonus Una Tantum" : t('results.one_time')}
           value={formatValueWithSuffix(totalOneTimeBonus).value}
@@ -226,12 +231,14 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           title={t('results.rec_y1') + recTitleSuffix}
           value={formatValueWithSuffix(displayMonthlyRec1).value}
           suffix={
-            <div className="flex flex-col items-start gap-1">
-              <span className="text-[11px] md:text-[10px] font-black text-slate-400 tracking-tighter uppercase">/ Mese</span>
-              <div className="text-[13px] md:text-[11px] font-black bg-white/60 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
-                ANNO: {formatCurrency(displayMonthlyRec1 * 12).replace(",00", "")}{parkSuffix}
+            <>
+              <span className="text-[10px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
+              <div className="w-full mt-2">
+                <div className="inline-block text-[11px] sm:text-[12px] font-black bg-white/60 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
+                  ANNO: {formatCurrency(displayMonthlyRec1 * 12).replace(",00", "")}{parkSuffix}
+                </div>
               </div>
-            </div>
+            </>
           }
           variant="glass"
           icon={<FireIcon className="text-orange-500 w-6 h-6" />}
@@ -240,12 +247,14 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           title={t('results.rec_y2') + recTitleSuffix}
           value={formatValueWithSuffix(displayMonthlyRec2).value}
           suffix={
-            <div className="flex flex-col items-start gap-1">
-              <span className="text-[11px] md:text-[10px] font-black text-slate-400 tracking-tighter uppercase">/ Mese</span>
-              <div className="text-[13px] md:text-[11px] font-black bg-white/60 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
-                ANNO: {formatCurrency(displayMonthlyRec2 * 12).replace(",00", "")}{parkSuffix}
+            <>
+              <span className="text-[10px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
+              <div className="w-full mt-2">
+                <div className="inline-block text-[11px] sm:text-[12px] font-black bg-white/60 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
+                  ANNO: {formatCurrency(displayMonthlyRec2 * 12).replace(",00", "")}{parkSuffix}
+                </div>
               </div>
-            </div>
+            </>
           }
           variant="glass"
           icon={<BoltIcon className="text-orange-500 w-6 h-6" />}
@@ -254,12 +263,14 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           title={t('results.rec_y3') + recTitleSuffix}
           value={formatValueWithSuffix(displayMonthlyRec3).value}
           suffix={
-            <div className="flex flex-col items-start gap-1">
-              <span className="text-[11px] md:text-[10px] font-black text-orange-950/60 tracking-tighter uppercase">/ Mese</span>
-              <div className="text-[13px] md:text-[11px] font-black bg-white/80 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-white/50 dark:border-white/10 text-slate-900 whitespace-nowrap shadow-sm backdrop-blur-sm">
-                ANNO: {formatCurrency(displayMonthlyRec3 * 12).replace(",00", "")}{parkSuffix}
+            <>
+              <span className="text-[10px] sm:text-[11px] font-black text-orange-950/60 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
+              <div className="w-full mt-2">
+                <div className="inline-block text-[11px] sm:text-[12px] font-black bg-white/80 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-white/50 dark:border-white/10 text-slate-900 whitespace-nowrap shadow-sm backdrop-blur-sm">
+                  ANNO: {formatCurrency(displayMonthlyRec3 * 12).replace(",00", "")}{parkSuffix}
+                </div>
               </div>
-            </div>
+            </>
           }
           variant="gradient-orange"
           icon={<StarIcon className="text-orange-600 w-6 h-6" />}
