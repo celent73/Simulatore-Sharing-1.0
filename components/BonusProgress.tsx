@@ -40,7 +40,7 @@ interface BonusCardProps {
   target: number;
   current: number;
   t: any;
-  managerTitle?: string;
+  managerTitleKey?: string;
   monthlyBonus: number;
   isActive: boolean;
   onToggle: () => void;
@@ -54,13 +54,15 @@ const BonusCard: React.FC<BonusCardProps> = ({
   target,
   current,
   t,
-  managerTitle,
+  managerTitleKey,
   monthlyBonus,
   isActive,
   onToggle
 }) => {
+  const { language } = useLanguage();
   const remaining = target - current;
   const isCompleted = remaining <= 0;
+  const locale = language === 'it' ? 'it-IT' : (language === 'de' ? 'de-DE' : 'en-US');
 
   return (
     <div className={`
@@ -75,14 +77,14 @@ const BonusCard: React.FC<BonusCardProps> = ({
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <h4 className="font-black text-gray-900 text-sm tracking-tight">{level} {levelNum}</h4>
-              {isCompleted && managerTitle && (
+              {isCompleted && managerTitleKey && (
                 <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-100 text-amber-700 border-2 border-amber-200 uppercase tracking-tighter shadow-sm">
-                  {managerTitle}
+                  {t(managerTitleKey)}
                 </span>
               )}
               {isCompleted && (
                 <div className="flex items-center gap-2 ml-auto">
-                  <span className="text-[10px] text-gray-400 font-black uppercase tracking-widest">Attiva</span>
+                  <span className="text-[10px] text-gray-400 font-black uppercase tracking-widest">{t('focus_mode.active')}</span>
                   <button
                     onClick={onToggle}
                     className={`relative inline-flex h-6 w-10 items-center rounded-full transition-colors shadow-inner ${isActive ? 'bg-blue-600' : 'bg-slate-300'}`}
@@ -101,11 +103,11 @@ const BonusCard: React.FC<BonusCardProps> = ({
       <ProgressBar current={current} target={target} isCompleted={isCompleted} />
 
       <div className="text-[10px] text-slate-500 mt-3 font-black uppercase tracking-widest flex justify-between items-center">
-        <span>Fatti: <span className="text-gray-900">{current.toLocaleString('it-IT')}</span></span>
-        {!isCompleted && <span>Mancano: <span className="text-red-500 animate-pulse">{remaining.toLocaleString('it-IT')}</span></span>}
+        <span>{t('bonus.card_done')}: <span className="text-gray-900">{current.toLocaleString(locale)}</span></span>
+        {!isCompleted && <span>{t('bonus.card_remaining_prefix')}: <span className="text-red-500 animate-pulse">{remaining.toLocaleString(locale)}</span></span>}
         {isCompleted && isActive && (
           <span className="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100">
-            +€{monthlyBonus.toLocaleString('it-IT')}/mese
+            +€{monthlyBonus.toLocaleString(locale)}{t('results.per_month')}
           </span>
         )}
       </div>
@@ -123,9 +125,9 @@ const BonusProgress: React.FC<BonusProgressProps> = ({ totalContracts, onBonusCh
   });
 
   const milestones = [
-    { target: 600, amount: "+300€/mese", icon: <MedalIcon />, levelNum: 600, managerTitle: "Pro Manager", monthlyBonus: 300 },
-    { target: 1500, amount: "+1000€/mese", icon: <TrophyIcon />, levelNum: 1500, managerTitle: "Regional Manager", monthlyBonus: 1000 },
-    { target: 5000, amount: "+3000€/mese", icon: <CrownIcon />, levelNum: 5000, managerTitle: "National Manager", monthlyBonus: 3000 },
+    { target: 600, amount: `+300€${t('results.per_month')}`, icon: <MedalIcon />, levelNum: 600, managerTitleKey: "bonus.role_pro", monthlyBonus: 300 },
+    { target: 1500, amount: `+1000€${t('results.per_month')}`, icon: <TrophyIcon />, levelNum: 1500, managerTitleKey: "bonus.role_reg", monthlyBonus: 1000 },
+    { target: 5000, amount: `+3000€${t('results.per_month')}`, icon: <CrownIcon />, levelNum: 5000, managerTitleKey: "bonus.role_nat", monthlyBonus: 3000 },
   ];
 
   React.useEffect(() => {
@@ -138,6 +140,7 @@ const BonusProgress: React.FC<BonusProgressProps> = ({ totalContracts, onBonusCh
       }
     });
     if (onBonusChange) onBonusChange(highestBonus);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalContracts, activeBonuses, onBonusChange]);
 
   const handleToggle = (levelNum: number) => {
@@ -166,7 +169,7 @@ const BonusProgress: React.FC<BonusProgressProps> = ({ totalContracts, onBonusCh
               level={t('bonus.level')}
               levelNum={milestone.levelNum}
               bonusAmount={milestone.amount}
-              managerTitle={milestone.managerTitle}
+              managerTitleKey={milestone.managerTitleKey}
               t={t}
               monthlyBonus={milestone.monthlyBonus}
               isActive={activeBonuses[milestone.levelNum]}

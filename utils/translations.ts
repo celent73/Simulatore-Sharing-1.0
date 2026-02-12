@@ -537,8 +537,12 @@ export const translations = {
       level: "Livello",
       card_completed: "OBIETTIVO RAGGIUNTO! 🎉",
       card_unlocked: "Congratulazioni! Bonus sbloccato.",
-      card_remaining_prefix: "Mancano",
-      card_remaining_suffix: "contratti."
+      card_done: "FATTI",
+      card_remaining_prefix: "MANCANO",
+      card_remaining_suffix: "contratti.",
+      role_pro: "Pro Manager",
+      role_reg: "Regional Manager",
+      role_nat: "National Manager"
     },
     chart: {
       evolution: "Evoluzione Guadagni",
@@ -1245,8 +1249,12 @@ export const translations = {
       level: "Level",
       card_completed: "ZIEL ERREICHT! 🎉",
       card_unlocked: "Glückwunsch! Bonus freigeschaltet.",
-      card_remaining_prefix: "Es fehlen",
-      card_remaining_suffix: "Verträge."
+      card_done: "ERLEDIGT",
+      card_remaining_prefix: "ES FEHLEN",
+      card_remaining_suffix: "Verträge.",
+      role_pro: "Pro Manager",
+      role_reg: "Regional Manager",
+      role_nat: "National Manager"
     },
     chart: {
       evolution: "Einkommensentwicklung",
@@ -2301,10 +2309,14 @@ export const translations = {
       completed: "🚀 Incredible! You reached the highest level!",
       title: "Additional Bonuses",
       level: "Level",
+      card_done: "DONE",
+      card_remaining_prefix: "MISSING",
+      card_remaining_suffix: "contracts.",
       card_completed: "GOAL REACHED! 🎉",
       card_unlocked: "Congrats! Bonus unlocked.",
-      card_remaining_prefix: "Missing",
-      card_remaining_suffix: "contracts."
+      role_pro: "Pro Manager",
+      role_reg: "Regional Manager",
+      role_nat: "National Manager"
     },
     chart: {
       evolution: "Income Evolution",
