@@ -55,6 +55,7 @@ import BottomDock from './components/BottomDock'; // NEW IMPORT // NEW IMPORT
 
 import { ModalProvider, useModalDispatch } from './contexts/ModalContext';
 import ModalManager from './components/ModalManager';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 
 // --- SHARY ASSISTANT IMPORTS ---
 import { SharyProvider, useShary } from './contexts/SharyContext';
@@ -96,7 +97,7 @@ const initialCondoInputs: CondoInput = {
 
 const AppContent = () => {
   const { openModal, closeModal } = useModalDispatch();
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkMode, toggleTheme } = useTheme();
   const [isStandalone, setIsStandalone] = useState(false);
 
   const [canInstall, setCanInstall] = useState(false); // New state to track if install is possible
@@ -340,7 +341,7 @@ const AppContent = () => {
     openModal('LEGAL', { type, mode: 'view' });
   };
 
-  useEffect(() => { if (isDarkMode) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); }, [isDarkMode]);
+  // Theme effect is now handled inside ThemeProvider
 
   useEffect(() => {
     const checkStandalone = () => {
@@ -458,7 +459,7 @@ const AppContent = () => {
   const handleResetPersonalClients = () => { setInputs({ ...inputs, personalClientsGreen: 0, personalClientsLight: 0, personalClientsBusinessGreen: 0, personalClientsBusinessLight: 0, myPersonalUnitsGreen: 0, myPersonalUnitsLight: 0, unionParkPanels: 0 }); };
   const handleCondoReset = () => setCondoInputs({ ...initialCondoInputs });
   const handleApplyTarget = (updates: Partial<PlanInput>) => setInputs({ ...inputs, ...updates });
-  const toggleTheme = () => setIsDarkMode(!isDarkMode);
+
   const toggleLanguage = () => {
     if (language === 'it') setLanguage('de');
     else if (language === 'de') setLanguage('en');
@@ -556,7 +557,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.2.13
+        v1.2.14
       </div>
 
 
@@ -582,7 +583,7 @@ const AppContent = () => {
                 <h1 onClick={handleTitleClick} className="text-2xl sm:text-4xl font-extrabold text-white drop-shadow-sm select-none cursor-pointer active:scale-95 transition-transform flex items-center gap-3 flex-wrap justify-center md:justify-start">
                   {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
                   <span className="text-white">Sharing</span>
-                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.12</span>
+                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.14</span>
                   <span className="text-union-orange-400">Simulator</span>
                   {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-union-orange-400" /></span>}
                 </h1>
@@ -881,8 +882,10 @@ const App = () => {
     <LanguageProvider>
       <SharyProvider>
         <ModalProvider>
-          <AppContent />
-          <ModalManager />
+          <ThemeProvider>
+            <AppContent />
+            <ModalManager />
+          </ThemeProvider>
         </ModalProvider>
       </SharyProvider>
     </LanguageProvider>
