@@ -100,13 +100,13 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, suffix, variant
             {icon}
           </div>
         )}
-        <h4 className={`${styles.title} text-[11px] md:text-[10px]`}>{title}</h4>
+        <h4 className={`${styles.title} text-[12px] md:text-[10px]`}>{title}</h4>
       </div>
       <div className="mt-auto w-full">
         <div className="flex flex-col gap-2">
           {/* Row 1: Value + Suffix inline */}
           <div className="flex items-baseline gap-2 flex-wrap">
-            <div className={`text-2xl sm:text-3xl lg:text-4xl font-black tracking-tighter ${styles.value} leading-none transition-all`}>{value}</div>
+            <div className={`text-3xl sm:text-3xl lg:text-4xl font-black tracking-tighter ${styles.value} leading-none transition-all`}>{value}</div>
             {suffix && <div className="transition-all">{suffix}</div>}
           </div>
         </div>
@@ -232,9 +232,9 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           value={formatValueWithSuffix(displayMonthlyRec1).value}
           suffix={
             <>
-              <span className="text-[10px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
+              <span className="text-[12px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
               <div className="w-full mt-2">
-                <div className="inline-block text-[11px] sm:text-[12px] font-black bg-white/60 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
+                <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/60 dark:bg-black/20 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
                   ANNO: {formatCurrency(displayMonthlyRec1 * 12).replace(",00", "")}{parkSuffix}
                 </div>
               </div>
@@ -248,9 +248,9 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           value={formatValueWithSuffix(displayMonthlyRec2).value}
           suffix={
             <>
-              <span className="text-[10px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
+              <span className="text-[12px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
               <div className="w-full mt-2">
-                <div className="inline-block text-[11px] sm:text-[12px] font-black bg-white/60 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
+                <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/60 dark:bg-black/20 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
                   ANNO: {formatCurrency(displayMonthlyRec2 * 12).replace(",00", "")}{parkSuffix}
                 </div>
               </div>
@@ -264,9 +264,9 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           value={formatValueWithSuffix(displayMonthlyRec3).value}
           suffix={
             <>
-              <span className="text-[10px] sm:text-[11px] font-black text-orange-950/60 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
+              <span className="text-[12px] sm:text-[11px] font-black text-orange-950/60 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
               <div className="w-full mt-2">
-                <div className="inline-block text-[11px] sm:text-[12px] font-black bg-white/80 dark:bg-black/20 px-2.5 py-1 rounded-lg border border-white/50 dark:border-white/10 text-slate-900 whitespace-nowrap shadow-sm backdrop-blur-sm">
+                <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/80 dark:bg-black/20 px-3 py-1.5 rounded-lg border border-white/50 dark:border-white/10 text-slate-900 whitespace-nowrap shadow-sm backdrop-blur-sm">
                   ANNO: {formatCurrency(displayMonthlyRec3 * 12).replace(",00", "")}{parkSuffix}
                 </div>
               </div>
