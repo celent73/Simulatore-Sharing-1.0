@@ -374,37 +374,36 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
-            <div ref={modalRef} className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl w-full md:max-w-3xl max-w-2xl overflow-hidden relative animate-in zoom-in-95 duration-300 border border-white/20 dark:border-gray-700 flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
+            <div ref={modalRef} className="bg-white/90 backdrop-blur-2xl rounded-t-[3rem] sm:rounded-[3rem] shadow-2xl w-full md:max-w-3xl max-w-2xl overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-500 border-t sm:border border-white/80 flex flex-col max-h-[95vh]">
 
-                {/* Header WOW */}
-                <div className="relative overflow-hidden p-3 pb-3 md:px-6 md:py-1 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 text-white shrink-0">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                    <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/30 rounded-full blur-2xl translate-y-1/3 -translate-x-1/3"></div>
-
+                {/* Header WOW PREMIUM */}
+                <div className="relative overflow-hidden p-8 pb-4 shrink-0">
                     <div className="relative z-10 flex justify-between items-start">
-                        <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1 shadow-lg md:hidden">
-                                <span>✨</span> {txt.premiumAnalysis}
+                        <div className="flex items-center gap-5">
+                            <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white rounded-[1.5rem] flex items-center justify-center shadow-xl shadow-indigo-500/20 ring-4 ring-white">
+                                <Calculator size={32} strokeWidth={2.5} />
                             </div>
-                            <div className="flex items-center gap-2">
-                                <h2 className="text-xl md:text-2xl lg:text-2xl font-black tracking-tight mb-0.5 drop-shadow-md leading-tight">{txt.title}</h2>
-                                <SharyTrigger
-                                    message="Ciao! Qui puoi analizzare il risparmio. Immetti 0.02 come lo spread di Union (se non ricordi, usa quello). Poi il PUN di mercato a circa 0.11 e le spese fisse Union a 11.50. Per il gas: Spread Union 0.12, PSV circa 0.33, Spese fisse 11.50. Ora se vuoi fare un confronto con un altro gestore clicca su confronta con altro e immetti i dati dell'altro gestore, in basso troverai il resoconto!"
-                                    messageDe="Hallo! Hier kannst du die Ersparnis analysieren. Gib 0,02 als Union-Spread ein (wenn du dich nicht erinnerst, nimm diesen). Dann den Markt-PUN mit ca. 0,11 und die Union-Fixkosten mit 11,50. Für Gas: Union-Spread 0,12, PSV ca. 0,33, Fixkosten 11,50. Wenn du einen Vergleich mit einem anderen Anbieter machen möchtest, klicke auf 'Mit anderem vergleichen' und gib die Daten des anderen Anbieters ein. Unten findest du die Zusammenfassung!"
-                                    messageEn="Hello! Here you can analyze the savings. Enter 0.02 as the Union spread (if you don't remember, use that). Then the market PUN at about 0.11 and Union fixed costs at 11.50. For gas: Union Spread 0.12, PSV about 0.33, Fixed costs 11.50. Now if you want to make a comparison with another provider click on compare with other and enter the data of the other provider, at the bottom you will find the report!"
-                                />
+                            <div>
+                                <h2 className="text-3xl font-black text-slate-900 leading-none tracking-tighter">{txt.title}</h2>
+                                <div className="mt-1 flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                                    <p className="text-xs font-black text-indigo-600/70 uppercase tracking-widest">{txt.premiumAnalysis}</p>
+                                    <SharyTrigger
+                                        message="Ciao! Qui puoi analizzare il risparmio. Immetti 0.02 come lo spread di Union (se non ricordi, usa quello). Poi il PUN di mercato a circa 0.11 e le spese fisse Union a 11.50. Per il gas: Spread Union 0.12, PSV circa 0.33, Spese fisse 11.50. Ora se vuoi fare un confronto con un altro gestore clicca su confronta con altro e immetti i dati dell'altro gestore, in basso troverai il resoconto!"
+                                        messageDe="Hallo! Hier kannst du die Ersparnis analysieren. Gib 0,02 als Union-Spread ein (wenn du dich nicht erinnerst, nimm diesen). Dann den Markt-PUN mit ca. 0,11 und die Union-Fixkosten mit 11,50. Für Gas: Union-Spread 0,12, PSV ca. 0,33, Fixkosten 11,50. Wenn du einen Vergleich mit einem anderen Anbieter machen möchtest, klicke auf 'Mit anderem vergleichen' und gib die Daten des anderen Anbieters ein. Unten findest du die Zusammenfassung!"
+                                        messageEn="Hello! Here you can analyze the savings. Enter 0.02 as the Union spread (if you don't remember, use that). Then the market PUN at about 0.11 and Union fixed costs at 11.50. For gas: Union Spread 0.12, PSV about 0.33, Fixed costs 11.50. Now if you want to make a comparison with another provider click on compare with other and enter the data of the other provider, at the bottom you will find the report!"
+                                    />
+                                </div>
                             </div>
-                            <p className="text-indigo-100 font-medium text-xs md:text-lg opacity-90 hidden">{txt.subtitle}</p>
                         </div>
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setIsFocusModeOpen(true)}
-                                className="flex items-center gap-2 px-3 md:px-4 py-2 md:py-3 bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-400/30 rounded-2xl text-indigo-300 text-xs font-black uppercase tracking-wider transition-all shadow-lg"
+                                className="w-12 h-12 flex items-center justify-center bg-indigo-50 text-indigo-500 rounded-2xl border border-indigo-100/50 hover:bg-indigo-500 hover:text-white transition-all active:scale-95 shadow-sm"
                                 title="Focus Mode"
                             >
-                                <Zap size={16} fill="currentColor" />
-                                <span className="hidden sm:inline">Focus</span>
+                                <Zap size={22} fill="currentColor" strokeWidth={0} />
                             </button>
                             <button
                                 onClick={() => {
@@ -412,24 +411,12 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                     setIsComparisonMode(newVal);
                                     onInputChange('isComparisonMode' as any, newVal ? 1 : 0);
                                 }}
-                                className={`h-12 px-4 md:px-6 rounded-2xl transition-all border shadow-lg flex items-center gap-3 font-black text-xs md:text-sm tracking-tighter uppercase ${isComparisonMode ? 'bg-orange-500 text-white border-white/20' : 'bg-white/90 text-indigo-600 border-white/50 hover:bg-white active:scale-95'}`}
-                                title={isComparisonMode ? (txt as any).deactivateComparison : (txt as any).activateComparison}
+                                className={`h-12 px-6 rounded-2xl transition-all border font-black text-xs tracking-widest uppercase flex items-center gap-3 shadow-md active:scale-95 ${isComparisonMode ? 'bg-orange-600 text-white border-orange-500' : 'bg-slate-100 text-slate-600 border-slate-200'}`}
                             >
-                                <RefreshCcw size={20} className={`${isComparisonMode ? 'animate-spin-slow' : 'transition-transform duration-500'}`} />
-                                <span className="whitespace-nowrap hidden sm:block">
-                                    {isComparisonMode ? (txt as any).modeConfronto : (txt as any).activateComparison}
-                                </span>
+                                <RefreshCcw size={18} className={`${isComparisonMode ? 'animate-spin-slow' : ''}`} />
+                                <span className="hidden sm:inline">{isComparisonMode ? (txt as any).modeConfronto : (txt as any).activateComparison}</span>
                             </button>
-                            <button
-                                onClick={handleReset}
-                                className="p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 shadow-lg group"
-                                title={txt.reset}
-                            >
-                                <RotateCcw size={24} className="group-hover:-rotate-180 transition-transform duration-500" />
-                            </button>
-                            <button onClick={onClose} className="p-3 bg-white/20 hover:bg-white/30 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 shadow-lg hover:rotate-90 duration-300">
-                                <X size={24} />
-                            </button>
+                            <button onClick={onClose} className="w-12 h-12 flex items-center justify-center bg-slate-100 text-slate-400 rounded-2xl border border-slate-200/50 hover:bg-slate-200 hover:text-slate-900 transition-all active:scale-95"><X size={24} strokeWidth={3} /></button>
                         </div>
                     </div>
                 </div>
