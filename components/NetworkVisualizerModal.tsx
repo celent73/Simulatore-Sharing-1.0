@@ -150,6 +150,27 @@ const styles = `
     animation: flowline 3s linear infinite;
     filter: drop-shadow(0 0 4px rgba(147, 51, 234, 0.5));
   }
+
+  /* SHIMMER EFFECT */
+  @keyframes shimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(200%) rotate(45deg); }
+  }
+  .shimmer-effect::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent
+    );
+    animation: shimmer 5s infinite;
+  }
 `;
 
 // --- TRADUZIONI ---
@@ -594,13 +615,14 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
 
         {/* --- HUD --- */}
         <DraggableBox className="absolute top-auto bottom-48 left-2 md:top-36 md:bottom-auto md:left-8 z-[60] pointer-events-auto animate-in slide-in-from-left-10 duration-700">
-          <div className="bg-gray-900/40 backdrop-blur-xl p-4 md:p-5 rounded-[2rem] border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col gap-4 w-[200px] md:w-72 relative overflow-hidden group hover:bg-gray-900/60 transition-colors transform scale-75 md:scale-100 origin-top-left">
+          <div className="bg-gray-950/40 backdrop-blur-2xl p-4 md:p-5 rounded-[2.5rem] border-2 border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col gap-4 w-[220px] md:w-80 relative overflow-hidden group hover:bg-gray-900/60 transition-all duration-500 transform scale-75 md:scale-100 origin-top-left ring-1 ring-white/5 shimmer-effect">
 
             {/* HUD Glow Effect */}
-            <div className="absolute -top-10 -right-10 w-20 h-20 bg-blue-500/20 blur-xl group-hover:bg-blue-500/30 transition-all"></div>
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 blur-[50px] group-hover:bg-blue-500/20 transition-all duration-700"></div>
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-500/10 blur-[50px] group-hover:bg-purple-500/20 transition-all duration-700"></div>
 
             <div className="flex items-center gap-3 relative z-10">
-              <div className="p-2.5 bg-gradient-to-br from-blue-500/20 to-indigo-600/20 rounded-2xl text-blue-400 border border-blue-500/30 shadow-inner">
+              <div className="p-3 bg-gradient-to-br from-blue-500/20 to-indigo-600/30 rounded-2xl text-blue-400 border border-blue-500/20 shadow-[inset_0_0_15px_rgba(59,130,246,0.2)] group-hover:scale-105 transition-transform">
                 <Users size={20} />
               </div>
               <div>
@@ -613,13 +635,28 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
 
             {/* --- GETTONE UNA TANTUM --- */}
             <div className="flex items-center gap-3 relative z-10">
-              <div className="p-2.5 bg-gradient-to-br from-yellow-500/20 to-orange-600/20 rounded-2xl text-yellow-400 border border-yellow-500/30 shadow-inner">
+              <div className="p-3 bg-gradient-to-br from-yellow-500/20 to-orange-600/30 rounded-2xl text-yellow-500 border border-yellow-500/20 shadow-[inset_0_0_15px_rgba(234,179,8,0.2)] group-hover:scale-105 transition-transform relative">
                 <Zap size={20} />
+                {isBonus3x3Active && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-ping"></div>
+                )}
               </div>
-              <div>
-                <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-0.5">Gettone Una Tantum</p>
-                <div className="flex items-baseline gap-1">
-                  <p className="text-2xl font-black text-yellow-400 leading-none tracking-tight">{formatCurrency(totalOneTimeBonus)}</p>
+              <div className="flex-1">
+                <div className="flex justify-between items-start">
+                  <p className="text-[10px] uppercase font-black text-gray-500 tracking-[0.15em] mb-0.5">Gettone Una Tantum</p>
+                  {isBonus3x3Active && (
+                    <span className="text-[9px] font-black text-yellow-400 animate-pulse bg-yellow-400/10 px-2 py-0.5 rounded-full border border-yellow-400/20">BONUS WIN!</span>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <p className="text-3xl font-black text-white leading-tight tracking-tighter drop-shadow-[0_0_10px_rgba(234,179,8,0.3)]">
+                    {formatCurrency(totalOneTimeBonus)}
+                  </p>
+                  {isBonus3x3Active && (
+                    <p className="text-[10px] font-black text-yellow-400 flex items-center gap-1 mt-0.5 animate-in slide-in-from-left-2">
+                      <Star size={10} fill="currentColor" /> Include € 150,00 Bonus 3x3
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -627,14 +664,14 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
             <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full"></div>
 
             <div className="flex items-center gap-3 relative z-10">
-              <div className="p-2.5 bg-gradient-to-br from-emerald-500/20 to-green-600/20 rounded-2xl text-emerald-400 border border-emerald-500/30 shadow-inner">
+              <div className="p-3 bg-gradient-to-br from-emerald-500/20 to-green-600/30 rounded-2xl text-emerald-400 border border-emerald-500/20 shadow-[inset_0_0_15px_rgba(16,185,129,0.2)] group-hover:scale-105 transition-transform">
                 <Wallet size={20} />
               </div>
               <div>
-                <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-0.5">{txt.hud.potentialIncome}</p>
+                <p className="text-[10px] uppercase font-black text-gray-500 tracking-[0.15em] mb-0.5">{txt.hud.potentialIncome}</p>
                 <div className="flex items-baseline gap-1">
-                  <p className="text-2xl font-black text-emerald-400 leading-none tracking-tight">{formatCurrency(totalRecurringYear1)}</p>
-                  <span className="text-[10px] text-emerald-400/60 font-bold">/mo</span>
+                  <p className="text-3xl font-black text-emerald-400 leading-none tracking-tighter drop-shadow-[0_0_10px_rgba(16,185,129,0.3)]">{formatCurrency(totalRecurringYear1)}</p>
+                  <span className="text-[10px] text-emerald-400/60 font-black tracking-tighter uppercase">/mo</span>
                 </div>
               </div>
             </div>
