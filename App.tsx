@@ -29,6 +29,7 @@ import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 
 
+
 import { Presentation, Fuel, Share2, Compass, Sparkles } from 'lucide-react'; // NEW ICON Import
 
 // --- IMPORTAZIONI LEGALI E UI ---
@@ -51,7 +52,8 @@ import BackgroundMesh from './components/BackgroundMesh';
 
 import HeaderMenu from './components/HeaderMenu';
 import { DesktopHeaderNav } from './components/DesktopHeaderNav'; // Import Navigation
-import BottomDock from './components/BottomDock'; // NEW IMPORT // NEW IMPORT
+import BottomDock from './components/BottomDock';
+import PaletteSelector from './components/PaletteSelector';
 
 import { ModalProvider, useModalDispatch } from './contexts/ModalContext';
 import ModalManager from './components/ModalManager';
@@ -521,15 +523,6 @@ const AppContent = () => {
           onOpenFocus: handleOpenFocusFromPresentation,
           initialPage: returnToPresentationPage || 1
         });
-        // NON resettiamo subito a null qui perché serve passarlo come prop
-        // Lo faremo quando la modale si chiude o quando si riapre (managed by props update)
-        // Ma per il flusso attuale, resettiamo SOLO se la modale è gestita per "dimenticare" dopo l'apertura
-        // In questo caso, `initialPage` userà il valore corrente.
-        // Possiamo resettare dopo un tick o lasciarlo persistente finché non si chiude la modale?
-        // Meglio resettare quando la modale viene chiusa esplicitamente dall'utente, ma App non lo sa facilmente.
-        // Resettiamo a null qui? NO, altrimenti initialPage torna default.
-        // Possiamo resettarlo quando si apre focus di nuovo?
-        // Facciamo così: lo lasciamo settato, tanto viene usato solo se isPresentationOpen diventa true.
       }
     }
   };
@@ -557,7 +550,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.2.24
+        v1.2.25
       </div>
 
 
@@ -574,18 +567,18 @@ const AppContent = () => {
         {/* Custom Styles Injection */}
 
 
-        <header className="flex flex-col gap-4 mb-4 sm:mb-8 rounded-[2.5rem] p-6 border border-white/10 shadow-[0_32px_80px_0_rgba(0,0,0,0.8)] backdrop-blur-[64px] transition-all duration-500 relative z-50 overflow-hidden" style={{ background: 'rgba(0, 0, 0, 0.85)' }}>
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/[0.05] pointer-events-none" />
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none" />
+        <header className="flex flex-col gap-4 mb-4 sm:mb-8 rounded-[2.5rem] p-6 border border-white/10 shadow-[0_32px_80px_0_rgba(0,0,0,0.8)] backdrop-blur-[64px] transition-all duration-500 relative z-50 bg-header-dynamic" style={{ background: 'var(--header-bg)' }}>
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/[0.05] pointer-events-none rounded-[2.5rem]" />
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none rounded-[2.5rem]" />
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
             <div className="w-full md:w-auto flex justify-center md:justify-start">
               <div className="flex items-center gap-3">
                 <h1 onClick={handleTitleClick} className="text-2xl sm:text-4xl font-extrabold text-white drop-shadow-sm select-none cursor-pointer active:scale-95 transition-transform flex items-center gap-3 flex-wrap justify-center md:justify-start">
                   {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
                   <span className="text-white">Sharing</span>
-                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.24</span>
-                  <span className="text-union-orange-400">Simulator</span>
-                  {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-union-orange-400" /></span>}
+                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.26</span>
+                  <span className="text-main-accent">Simulator</span>
+                  {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-main-accent" /></span>}
                 </h1>
                 {isCreatorMode && <span className="hidden sm:inline-flex bg-white/20 backdrop-blur-md text-white border border-white/40 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm uppercase tracking-wider">Creator Mode</span>}
                 {/* Logo removed as per user request */}
@@ -604,6 +597,7 @@ const AppContent = () => {
             <div className="flex flex-wrap items-center justify-center gap-2 mt-2 md:mt-0">
               {/* BUTTONS ROW - REORGANIZED */}
 
+              <PaletteSelector />
               {/* 1. THEME TOGGLE */}
               <button
                 onClick={toggleTheme}
@@ -792,6 +786,8 @@ const AppContent = () => {
                 const touchEndY = e.changedTouches[0].clientY;
                 // @ts-ignore
                 const diffX = window.touchStartX - touchEndX;
+                // @ts-ignore
+                const touchEndY2 = e.changedTouches[0].clientY;
                 // @ts-ignore
                 const diffY = window.touchStartY - touchEndY;
                 // @ts-ignore

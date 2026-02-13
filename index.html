@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Simulatore">
 
-  <title>Simulatore Sharing v1.2.24</title>
+  <title>Simulatore Sharing v1.2.26</title>
 
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="/logo_new.png">
@@ -143,6 +143,78 @@
     html.dark ::-webkit-scrollbar-thumb:hover,
     html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
       background: #cbd5e1;
+    }
+
+    /* --- DYNAMIC THEMES --- */
+    :root {
+      --accent-main: #f97316;
+      --accent-glow: rgba(249, 115, 22, 0.4);
+      --accent-hover: #ea580c;
+      --header-bg: rgba(0, 0, 0, 0.85);
+      --footer-bg: #0f172a;
+      /* bg-slate-900 */
+    }
+
+    /* 1. ORIGINAL (Galaxy Black) */
+    .theme-original {
+      --accent-main: #f97316;
+      --accent-glow: rgba(249, 115, 22, 0.4);
+      --header-bg: rgba(0, 0, 0, 0.85);
+      --footer-bg: #0f172a;
+    }
+
+    /* 2. TITAN GREY */
+    .theme-titan {
+      --accent-main: #94a3b8;
+      --accent-glow: rgba(148, 163, 184, 0.4);
+      --header-bg: rgba(30, 41, 59, 0.95);
+      /* Deep Titan */
+      --footer-bg: #0f172a;
+    }
+
+    /* 3. NIGHT BLUE */
+    .theme-night-blue {
+      --accent-main: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.4);
+      --header-bg: rgba(15, 23, 42, 0.95);
+      /* Midnight Blue */
+      --footer-bg: #020617;
+      /* Brighter Contrast for footer */
+    }
+
+    /* 4. UNION ORANGE */
+    .theme-union-orange {
+      --accent-main: #f97316;
+      --accent-glow: rgba(249, 115, 22, 0.4);
+      --header-bg: rgba(43, 15, 7, 0.95);
+      /* Extremely Dark Burnt Orange */
+      --footer-bg: #1c0a02;
+      /* Almost Black Orange */
+    }
+
+    /* Utility classes using variables */
+    .bg-main-accent {
+      background-color: var(--accent-main);
+    }
+
+    .text-main-accent {
+      color: var(--accent-main);
+    }
+
+    .border-main-accent {
+      border-color: var(--accent-main);
+    }
+
+    .shadow-main-accent {
+      box-shadow: 0 10px 15px -3px var(--accent-glow), 0 4px 6px -4px var(--accent-glow) !important;
+    }
+
+    .bg-header-dynamic {
+      background-color: var(--header-bg) !important;
+    }
+
+    .bg-footer-dynamic {
+      background-color: var(--footer-bg) !important;
     }
 
     /* Firefox Support */

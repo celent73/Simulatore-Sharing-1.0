@@ -142,7 +142,7 @@ const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClo
                                     {t('light_simulator.title')}
                                 </h2>
                                 <p className="text-[10px] sm:text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mt-1 opacity-70">
-                                    {t('light_simulator.subtitle')}
+                                    {t('light_simulator.subtitle')} v1.2.26
                                 </p>
                             </div>
                             <div className="flex items-center gap-2 sm:gap-4">

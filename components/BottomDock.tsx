@@ -62,8 +62,8 @@ const BottomDock: React.FC<BottomDockProps> = ({
     return (
         <div className={`fixed bottom-4 left-4 right-4 z-[100] flex justify-center md:hidden transition-all duration-500 ease-in-out ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-[200%] opacity-0 pointer-events-none'}`}>
             <div
-                className="flex items-center justify-between w-full max-w-md md:max-w-2xl px-4 py-4 backdrop-blur-[64px] border border-white/10 shadow-[0_45px_100px_0_rgba(0,0,0,0.8)] rounded-[2.5rem] transition-all duration-300 relative overflow-hidden"
-                style={{ background: 'rgba(10, 10, 12, 0.92)' }}
+                className="flex items-center justify-between w-full max-w-md md:max-w-2xl px-4 py-4 backdrop-blur-[64px] border border-white/10 shadow-[0_45px_100px_0_rgba(0,0,0,0.8)] rounded-[2.5rem] transition-all duration-300 relative overflow-hidden bg-header-dynamic"
+                style={{ background: 'var(--header-bg)' }}
             >
                 <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none" />
