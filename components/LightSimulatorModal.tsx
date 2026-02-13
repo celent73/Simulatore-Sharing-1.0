@@ -133,36 +133,31 @@ const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClo
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="relative w-full h-full sm:h-auto sm:max-w-4xl bg-white dark:bg-slate-950 sm:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col sm:max-h-[90vh]"
+                        className="relative w-full h-full sm:h-auto sm:max-w-4xl bg-white/80 dark:bg-slate-950/80 backdrop-blur-3xl sm:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col sm:max-h-[90vh] border border-white/50 dark:border-white/10"
                     >
-                        {/* Header */}
-                        <div className="p-6 border-b border-gray-100 dark:border-white/10 flex items-center justify-between bg-white dark:bg-slate-950 sticky top-0 z-10">
+                        {/* Header Premium */}
+                        <div className="p-6 sm:p-8 border-b border-gray-100/50 dark:border-white/5 flex items-center justify-between bg-white/50 dark:bg-slate-950/50 backdrop-blur-md sticky top-0 z-20">
                             <div>
-                                <h2 className="text-2xl font-black text-union-green-600 dark:text-union-green-400 leading-tight">
+                                <h2 className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-union-green-600 to-cyan-600 dark:from-union-green-400 dark:to-cyan-400 bg-clip-text text-transparent leading-tight tracking-tighter">
                                     {t('light_simulator.title')}
                                 </h2>
-                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{t('light_simulator.subtitle')}</p>
+                                <p className="text-[10px] sm:text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mt-1 opacity-70">
+                                    {t('light_simulator.subtitle')}
+                                </p>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 sm:gap-4">
                                 <button
                                     onClick={() => openModal('SIMULATOR_FOCUS')}
-                                    className="flex items-center gap-2 px-4 py-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 rounded-full transition-all text-sm font-bold border border-purple-500/20 shadow-sm"
+                                    className="group relative flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-500/10 to-indigo-500/10 hover:from-purple-500/20 hover:to-indigo-500/20 text-purple-600 dark:text-purple-400 rounded-full transition-all text-xs font-black uppercase tracking-wider border border-purple-500/20 shadow-lg shadow-purple-500/10 hover:shadow-purple-500/20"
                                 >
-                                    <Sparkles size={18} className="animate-pulse" />
+                                    <Sparkles size={16} className="animate-pulse" />
                                     <span>Visionary Mode</span>
                                 </button>
                                 <button
-                                    onClick={() => openModal('TARGET_FOCUS')}
-                                    className="hidden sm:flex items-center gap-2 px-4 py-2 bg-union-green-500/10 hover:bg-union-green-500/20 text-union-green-600 dark:text-union-green-400 rounded-full transition-all text-sm font-bold border border-union-green-500/20"
-                                >
-                                    <Target size={18} />
-                                    <span>{t('app.calc_target')}</span>
-                                </button>
-                                <button
                                     onClick={onClose}
-                                    className="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full transition-colors text-gray-500"
+                                    className="w-10 h-10 flex items-center justify-center bg-gray-100/50 dark:bg-white/5 hover:bg-gray-200/50 dark:hover:bg-white/10 rounded-2xl transition-all text-gray-500 dark:text-gray-400 group active:scale-90"
                                 >
-                                    <X size={24} />
+                                    <X size={20} strokeWidth={3} className="group-hover:rotate-90 transition-transform duration-300" />
                                 </button>
                             </div>
                         </div>
@@ -215,9 +210,9 @@ const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClo
                             </AnimatePresence>
                         </div>
 
-                        {/* Tabs Navigation */}
-                        <div className="p-4 bg-white dark:bg-slate-950 border-t border-gray-100 dark:border-white/10">
-                            <div className="flex items-center justify-around gap-1">
+                        {/* Tabs Navigation Premium */}
+                        <div className="p-4 sm:p-6 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md border-t border-gray-100/50 dark:border-white/5">
+                            <div className="flex items-center justify-around gap-2 bg-gray-100/50 dark:bg-white/5 p-1.5 rounded-[2rem] max-w-md mx-auto relative shadow-inner">
                                 {tabs.map((tab) => {
                                     const Icon = tab.icon;
                                     const isActive = activeTab === tab.id;
@@ -225,22 +220,28 @@ const LightSimulatorModal: React.FC<LightSimulatorModalProps> = ({ isOpen, onClo
                                         <button
                                             key={tab.id}
                                             onClick={() => setActiveTab(tab.id)}
-                                            className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all min-w-[70px] ${isActive
-                                                ? 'text-union-green-600 bg-union-green-50'
-                                                : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                                            className={`relative flex items-center justify-center gap-2 py-3 px-6 rounded-2xl transition-all duration-300 flex-1 ${isActive
+                                                ? 'text-union-green-600 dark:text-union-green-400 bg-white dark:bg-slate-800 shadow-lg shadow-union-green-500/10'
+                                                : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'
                                                 }`}
                                         >
-                                            <Icon size={20} className={isActive ? 'animate-bounce-subtle' : ''} />
-                                            <span className="text-[10px] font-bold uppercase tracking-tighter">{tab.label}</span>
+                                            <Icon size={18} className={isActive ? 'scale-110' : 'scale-90 opacity-60'} />
+                                            <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider">{tab.label}</span>
+                                            {isActive && (
+                                                <motion.div
+                                                    layoutId="activeTabGlow"
+                                                    className="absolute inset-0 rounded-2xl border-2 border-union-green-500/20 pointer-events-none"
+                                                />
+                                            )}
                                         </button>
                                     );
                                 })}
                             </div>
                         </div>
                     </motion.div>
-                </div>
+                </div >
             )}
-        </AnimatePresence>
+        </AnimatePresence >
     );
 };
 

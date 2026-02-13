@@ -257,158 +257,114 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
     if (!isOpen) return null;
 
     return (
-        <div ref={modalRef} className="fixed inset-0 z-[100000] flex items-center justify-center p-0 sm:p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="share-modal-content bg-white/90 dark:bg-gray-900/90 backdrop-blur-2xl w-full h-full sm:h-auto sm:max-w-[90vw] xl:max-w-7xl sm:rounded-[2rem] shadow-2xl flex flex-col max-h-[100vh] sm:max-h-[90vh] overflow-hidden border border-purple-500/20">
+        <div ref={modalRef} className="fixed inset-0 z-[100000] flex items-center justify-center p-0 sm:p-2 bg-black/50 backdrop-blur-md animate-in fade-in duration-300">
+            <div className="share-modal-content bg-white/80 dark:bg-gray-950/80 backdrop-blur-[50px] w-full h-full sm:h-auto sm:max-w-[90vw] xl:max-w-7xl sm:rounded-[3.5rem] shadow-2xl flex flex-col max-h-[100vh] sm:max-h-[92vh] overflow-hidden border border-white/40 dark:border-white/10">
 
                 {/* Header */}
                 {/* Header - MIDNIGHT GLASS STYLE */}
-                <div className="p-1 sm:px-6 sm:py-4 lg:py-1 bg-gradient-to-br from-gray-900/90 via-gray-900/80 to-indigo-950/90 text-white shrink-0 relative overflow-hidden flex flex-col gap-4 lg:gap-1 backdrop-blur-xl border-b border-white/5">
-                    {/* Background patterns - Subtle & Deep */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] -mr-20 -mt-20 pointer-events-none"></div>
-                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-[80px] -ml-10 -mb-10 pointer-events-none"></div>
-
-                    <div className="flex justify-between items-center mb-1 sm:mb-1 lg:mb-0 relative z-10">
-                        <div className="flex items-center gap-2">
-                            <div className="p-1 sm:p-2 bg-white/20 rounded-xl backdrop-blur-md">
-                                <ShoppingBag size={18} className="text-purple-100 sm:w-6 sm:h-6" />
+                <div className="p-3 sm:px-10 sm:py-6 bg-white/40 dark:bg-gray-900/40 backdrop-blur-3xl text-slate-900 dark:text-white shrink-0 relative overflow-hidden flex flex-col gap-4 border-b border-gray-200/30 dark:border-white/5">
+                    {/* Background decorations - Minimized */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none"></div>
+                    <div className="flex justify-between items-center relative z-10">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 flex items-center justify-center bg-blue-500/10 dark:bg-blue-400/20 text-blue-600 dark:text-blue-400 rounded-2xl shadow-inner">
+                                <Sparkles size={20} className="animate-pulse" />
                             </div>
-                            <h2 className="text-lg sm:text-lg font-black tracking-tight uppercase">
-                                {t('cashback_detailed.title')}
-                            </h2>
+                            <div>
+                                <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-slate-900 dark:text-white leading-none">
+                                    {t('cashback_detailed.title')}
+                                </h1>
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-gray-500 mt-2">Professional calculation tools</p>
+                            </div>
                             <SharyTrigger
                                 message="Inserisci per ogni categoria l'importo di spesa e poi seleziona il brand che vuoi. Nota immediatamente la percentuale di cashback! E se vuoi, imposta in alto un importo di bolletta e osserva come diminuisce con il cashback, buon divertimento!"
                                 messageDe="Gib für jede Kategorie den Ausgabenbetrag ein und wähle dann die gewünschte Marke. Beachte sofort den Cashback-Prozentsatz! Und wenn du willst, gib oben einen Rechnungsbetrag ein und beobachte, wie er durch das Cashback sinkt. Viel Spaß!"
                                 messageEn="Enter the spending amount for each category and then select the brand you want. Notice the cashback percentage immediately! And if you want, set a bill amount at the top and watch how it decreases with cashback, have fun!"
                             />
                         </div>
+                        <div className="flex items-center gap-3">
+                            {/* "DON'T LOSE THEM" BADGE - PROMINENT */}
+                            <motion.div
+                                initial={{ x: 20, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                className="hidden md:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-full font-black text-[10px] uppercase tracking-widest shadow-lg animate-bounce"
+                            >
+                                <Sparkles size={14} className="animate-pulse" />
+                                {t('cashback_detailed.dont_lose') || 'Non Perderli!'}
+                            </motion.div>
 
-                        <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setIsFocusModeOpen(true)}
-                                className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full font-bold text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(168,85,247,0.4)] hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] hover:scale-105 active:scale-95 transition-all border border-white/20"
+                                className="px-5 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-full font-black text-[10px] uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
                             >
                                 <Eye size={14} />
-                                <span className="hidden lg:inline">Focus Mode</span>
-                                <Sparkles size={12} className="text-yellow-300 animate-pulse" />
+                                <span className="hidden lg:inline">{t('cashback_detailed.focus_mode') || 'Focus Mode'}</span>
                             </button>
 
-                            <button onClick={onClose} className="p-1 sm:p-1.5 hover:bg-white/10 rounded-full transition-colors">
-                                <X size={20} className="sm:w-5 sm:h-5" />
+                            <button onClick={onClose} className="p-3 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 rounded-full transition-all text-slate-400">
+                                <X size={24} />
                             </button>
                         </div>
                     </div>
-
-                    {/* DESKTOP LAYOUT: Side-by-Side Header */}
-                    <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-2 relative z-10 px-1 sm:px-0">
-
-                        {/* LEFT COLUMN: Total Spend & Monthly Return */}
-                        <div className="grid grid-cols-2 gap-3 flex-1">
-                            {/* Total Spend - Dark Glass */}
-                            <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-3 lg:p-1 flex flex-col justify-center border border-white/10 shadow-lg">
-                                <p className="text-[10px] sm:text-xs lg:text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1 lg:mb-0">{t('cashback_detailed.total_spend')}</p>
-                                <p className="text-2xl sm:text-3xl lg:text-xl font-black text-white tracking-tight drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                                    € {totalSpend.toLocaleString(language === 'it' ? 'it-IT' : (language === 'de' ? 'de-DE' : 'en-US'), { maximumFractionDigits: 0 })}
-                                </p>
+                    <div className="flex flex-col xl:flex-row gap-4 relative z-10">
+                        {/* Totals Section */}
+                        <div className="grid grid-cols-2 gap-4 shrink-0 xl:w-[450px]">
+                            <div className="bg-gray-100/60 dark:bg-white/5 backdrop-blur-xl rounded-[1.8rem] p-4 border border-gray-200/50 dark:border-white/5">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">{t('cashback_detailed.total_spend')}</p>
+                                <p className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">€ {totalSpend.toLocaleString(lang, { maximumFractionDigits: 0 })}</p>
                             </div>
-
-                            {/* Monthly Return - NEON MIDNIGHT WOW EFFECT */}
-                            <div className="relative group overflow-hidden bg-white/5 backdrop-blur-xl rounded-2xl p-2 sm:p-3 lg:p-1 shadow-[0_0_50px_rgba(168,85,247,0.15)] border border-purple-500/20 transform hover:scale-[1.02] transition-transform duration-300 flex flex-col justify-center">
-                                {/* Beams of light effect - Subtle Cold Scan */}
-                                <div className="absolute top-0 -left-[100%] w-[50%] h-full bg-gradient-to-r from-transparent via-purple-500/10 to-transparent skew-x-12 animate-[shimmer_3s_infinite]" />
-
-                                <div className="flex items-center justify-between mb-0 relative z-10">
-                                    <p className="text-[10px] sm:text-xs lg:text-[10px] font-black uppercase tracking-widest text-purple-400 flex items-center gap-2 drop-shadow-[0_0_5px_rgba(168,85,247,0.5)]">
-                                        {t('cashback_detailed.monthly_return')}
-                                    </p>
-                                    <span className="bg-fuchsia-600 text-white text-[9px] sm:text-[10px] lg:text-[9px] px-2 py-0.5 rounded-full font-black animate-pulse shadow-[0_0_15px_rgba(232,121,249,0.5)] border border-fuchsia-400/50">
-                                        {t('cashback_detailed.dont_lose')}
-                                    </span>
+                            <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[1.8rem] p-4 shadow-xl shadow-indigo-500/20">
+                                <div className="flex justify-between items-start mb-1">
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-white/70">{t('cashback_detailed.monthly_return')}</p>
+                                    <span className="sm:hidden text-[8px] px-2 py-0.5 bg-white/20 text-white rounded-full font-black uppercase tracking-tighter">{t('cashback_detailed.dont_lose')}</span>
                                 </div>
-
-                                <div className="relative z-10 flex flex-col">
-                                    <p className="text-4xl sm:text-6xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 via-purple-400 to-cyan-400 tracking-tighter drop-shadow-[0_0_15px_rgba(168,85,247,0.5)] animate-[pulse_3s_ease-in-out_infinite]">
-                                        € {totalCashback.toLocaleString(language === 'it' ? 'it-IT' : (language === 'de' ? 'de-DE' : 'en-US'), { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                    </p>
-                                </div>
+                                <p className="text-2xl sm:text-4xl font-black text-white tracking-tighter drop-shadow-md">€ {totalCashback.toLocaleString(lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                             </div>
                         </div>
-                    </div>
 
-                    {/* BILL ERASER SECTION - Dark Glass */}
-                    {/* RIGHT COLUMN: Bill Eraser (Compact vertical on desktop) */}
-                    <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-3 sm:p-4 lg:p-2 border border-white/10 shadow-xl flex-1 flex flex-col justify-center">
-                        <div className="flex flex-col gap-4 lg:gap-1">
-                            {/* Label header */}
-                            <div className="flex justify-between items-center">
-                                <div className="text-xs sm:text-sm font-bold text-white/90 uppercase tracking-widest flex items-center gap-2">
-                                    <div className="p-1.5 bg-white/20 rounded-lg">
-                                        <Calculator size={14} className="text-white" />
-                                    </div>
-                                    {t('cashback_detailed.estimated_bill')}
+                        {/* Bill Section - Now horizontal and slim */}
+                        <div className="flex-1 bg-gray-100/60 dark:bg-white/5 backdrop-blur-xl rounded-[1.8rem] p-4 sm:px-6 border border-gray-200/50 dark:border-white/5 flex flex-col sm:flex-row items-center gap-4">
+                            <div className="flex items-center gap-3 shrink-0">
+                                <div className="p-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl shadow-lg">
+                                    <Calculator size={16} />
                                 </div>
-
-                                {/* Edit Hint */}
-                                <span className="text-[10px] text-gray-400 bg-white/5 px-2 py-1 rounded-full border border-white/10 hover:bg-white/10 transition-colors cursor-pointer">
-                                    {t('cashback_detailed.edit_amount')}
-                                </span>
+                                <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.15em]">{t('cashback_detailed.estimated_bill')}</span>
                             </div>
 
-                            {/* Main Interaction Row */}
-                            <div className="flex items-stretch gap-4">
-                                {/* Input Field - VERY VISIBLE NOW */}
-                                <div className="flex-1 relative group bg-white/5 hover:bg-white/10 focus-within:bg-white rounded-2xl border-2 border-white/30 focus-within:border-white focus-within:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300">
-                                    <div className="absolute top-2 left-3 text-[10px] font-bold text-purple-200 group-focus-within:text-purple-600 uppercase tracking-wider transition-colors">
-                                        {t('cashback_detailed.insert_here')}
-                                    </div>
-                                    <div className="flex items-center h-full px-3 pt-4 pb-1">
-                                        <span className="text-xl sm:text-2xl font-black text-white group-focus-within:text-purple-700 mr-2 transition-colors">€</span>
-                                        <input
-                                            type="number"
-                                            value={targetBill || ''}
-                                            onChange={(e) => setTargetBill(Math.max(0, parseFloat(e.target.value) || 0))}
-                                            onFocus={(e) => e.target.select()}
-                                            placeholder="0"
-                                            className="w-full bg-transparent text-2xl sm:text-3xl font-black text-white group-focus-within:text-purple-900 outline-none placeholder:text-white/20 group-focus-within:placeholder:text-gray-300 transition-colors"
-                                        />
-                                    </div>
-                                    <div
-                                        onClick={() => setTargetBill(0)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-white/10 group-focus-within:bg-purple-100 rounded-xl text-white group-focus-within:text-purple-600 transition-colors cursor-pointer hover:bg-white/20 active:scale-95 translation-all"
-                                    >
+                            <div className="flex-1 flex items-stretch gap-3 w-full">
+                                <div className="relative flex-1 bg-white dark:bg-slate-900 rounded-2xl border border-transparent focus-within:border-blue-500/50 overflow-hidden shadow-inner flex items-center px-4 py-2">
+                                    <span className="text-lg font-black text-slate-300 mr-2">€</span>
+                                    <input
+                                        type="number"
+                                        value={targetBill || ''}
+                                        onChange={(e) => setTargetBill(Math.max(0, parseFloat(e.target.value) || 0))}
+                                        onFocus={(e) => e.target.select()}
+                                        placeholder="0"
+                                        className="w-full bg-transparent text-lg font-black text-slate-900 dark:text-white outline-none"
+                                    />
+                                    <button onClick={() => setTargetBill(0)} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
                                         <RotateCw size={16} />
-                                    </div>
+                                    </button>
                                 </div>
 
-                                {/* Result Box */}
-                                <div className="flex-1 bg-gradient-to-br from-gray-900 to-black rounded-2xl p-3 border border-white/10 flex flex-col justify-center items-end shadow-inner relative overflow-hidden group/result">
-                                    <div className="absolute inset-0 bg-purple-500/10 opacity-0 group-hover/result:opacity-100 transition-opacity" />
-                                    <p className={`text-[10px] font-bold uppercase tracking-widest relative z-10 ${extraProfit > 0 ? 'text-green-400' : 'text-gray-400'}`}>
+                                <div className={`flex-[1.5] rounded-2xl px-6 py-2 flex items-center justify-between shadow-xl transition-all duration-500 transform hover:scale-[1.02] ${extraProfit > 0 ? 'bg-green-500 shadow-green-500/30' : 'bg-slate-900 dark:bg-white shadow-slate-900/30 dark:shadow-white/10'}`}>
+                                    <span className={`text-[10px] font-black uppercase tracking-widest ${extraProfit > 0 ? 'text-white/80' : 'text-slate-500'}`}>
                                         {extraProfit > 0 ? t('cashback_detailed.profit') : t('cashback_detailed.pay_only')}
-                                    </p>
-                                    <div className="flex items-baseline gap-1 relative z-10">
-                                        <p className={`text-2xl sm:text-4xl font-black tracking-tight ${extraProfit > 0 ? 'text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,0.5)]' : (remainingToPay === 0 ? 'text-green-400' : 'text-white')}`}>
-                                            {extraProfit > 0 ? '+' : ''}€{extraProfit > 0 ? extraProfit.toFixed(0) : remainingToPay.toFixed(0)}
+                                    </span>
+                                    <div className="flex items-center gap-2">
+                                        <p className={`text-xl sm:text-2xl font-black tracking-tighter ${extraProfit > 0 || remainingToPay === 0 ? 'text-white' : 'text-white dark:text-slate-900'}`}>
+                                            €{extraProfit > 0 ? extraProfit.toFixed(0) : remainingToPay.toFixed(0)}
                                         </p>
-                                        {/* Savings badge */}
                                         {totalCashback > 0 && remainingToPay > 0 && (
-                                            <span className="text-[10px] px-1.5 py-0.5 bg-green-500/20 text-green-400 rounded-md font-bold mb-1">
-                                                -{Math.min(100, percentageCovered).toFixed(0)}%
-                                            </span>
-                                        )}
-                                        {extraProfit > 0 && (
-                                            <span className="text-[10px] px-1.5 py-0.5 bg-green-500/20 text-green-400 rounded-md font-bold mb-1 animate-pulse">
-                                                EXTRA!
-                                            </span>
+                                            <span className="text-[10px] px-2 py-1 bg-white/20 text-white rounded-full font-black border border-white/20 backdrop-blur-md">-{Math.min(100, percentageCovered).toFixed(0)}%</span>
                                         )}
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Progress Bar */}
-                            <div className="h-2 bg-black/20 rounded-full overflow-hidden">
-                                <div
-                                    className={`h-full transition-all duration-700 ease-out shadow-[0_0_10px_rgba(255,255,255,0.5)] ${percentageCovered >= 100 ? 'bg-green-400' : 'bg-white'}`}
-                                    style={{ width: `${Math.min(100, percentageCovered)}%` }}
+                            <div className="hidden sm:block w-24 h-1.5 bg-gray-200 dark:bg-white/5 rounded-full overflow-hidden p-[1px]">
+                                <motion.div
+                                    animate={{ width: `${Math.min(100, percentageCovered)}%` }}
+                                    className={`h-full rounded-full ${percentageCovered >= 100 ? 'bg-white' : 'bg-blue-500'}`}
                                 />
                             </div>
                         </div>
@@ -416,83 +372,66 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                 </div>
 
 
-                {/* Content - Scrollable List (GRID ON DESKTOP) */}
-                <div className="flex-1 overflow-y-auto p-3 sm:p-6 bg-gray-50/20 dark:bg-gray-950/20 backdrop-blur-md custom-scrollbar">
-                    <div className="space-y-3 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-4">
+                <div className="flex-1 overflow-y-auto p-4 sm:p-10 bg-gray-50/10 dark:bg-gray-950/20 backdrop-blur-md custom-scrollbar">
+                    <div className="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-6">
                         {categories.map((cat) => (
-                            <div key={cat.id} className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl p-2 rounded-2xl sm:rounded-2xl shadow-sm border border-gray-100/20 dark:border-white/5 transition-all group hover:border-purple-200/50 h-full flex flex-col justify-center">
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
-
-                                    {/* LEFT SECTION: Icon + Name (Desktop) / TOP ROW (Mobile) */}
-                                    <div className="flex items-center justify-between sm:justify-start sm:w-[35%] shrink-0">
-                                        <div className="flex items-center gap-3 flex-1">
-                                            <div className={`w-12 h-12 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-sm ${cat.isExtra ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/40' : 'bg-gradient-to-br from-purple-100 to-indigo-100 text-purple-600 dark:from-purple-900/40 dark:to-indigo-900/40'}`}>
-                                                {React.cloneElement(getIcon(cat.icon), { size: 24, className: "sm:w-6 sm:h-6" })}
+                            <div key={cat.id} className="bg-white dark:bg-slate-900/40 p-5 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-white/5 transition-all group hover:shadow-2xl hover:shadow-blue-500/10 h-full flex flex-col justify-center">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-10">
+                                    {/* LEFT SECTION: Icon + Name */}
+                                    <div className="flex items-center justify-between sm:justify-start sm:w-[38%] shrink-0">
+                                        <div className="flex items-center gap-4 flex-1">
+                                            <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-inner ${cat.isExtra ? 'bg-orange-500/10 text-orange-600' : 'bg-blue-500/10 text-blue-600 dark:text-blue-400'}`}>
+                                                {React.cloneElement(getIcon(cat.icon), { size: 28 })}
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <h3 className="font-black text-base sm:text-base text-gray-900 dark:text-white truncate uppercase sm:normal-case tracking-tight">{cat.name}</h3>
-                                                <p className="block sm:block text-[10px] sm:text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{cat.isExtra ? 'Promozione' : 'Budget Famiglia'}</p>
+                                                <h3 className="font-black text-lg text-slate-900 dark:text-white truncate tracking-tighter uppercase leading-tight">{cat.name}</h3>
+                                                <p className="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest mt-1">{cat.isExtra ? 'Promozione' : 'Budget Famiglia'}</p>
                                             </div>
                                         </div>
-
                                         {/* Mobile Result (Hidden sm) */}
-                                        <div className="text-right sm:hidden relative flex flex-col items-end">
-                                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Cashback</span>
+                                        <div className="text-right sm:hidden">
+                                            <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest block mb-1">Cashback</span>
                                             <AnimatePresence mode="wait">
                                                 <motion.p
-                                                    key={cat.percentage + (cat.brand || '')} // Trigger on update
-                                                    className={`font-black text-xl ${cat.amount > 0 && cat.percentage > 0 ? 'text-transparent bg-clip-text bg-gradient-to-b from-yellow-400 to-yellow-600 drop-shadow-[0_2px_4px_rgba(234,179,8,0.4)]' : 'text-gray-900 dark:text-white'}`}
-                                                    initial={{ scale: 1 }}
-                                                    animate={cat.amount > 0 && cat.percentage > 0 ? {
-                                                        scale: [1, 1.5, 1],
-                                                        textShadow: ["0 0 0px rgba(234,179,8,0)", "0 0 20px rgba(234,179,8,1)", "0 0 10px rgba(234,179,8,0.5)"]
-                                                    } : {}}
-                                                    transition={{ duration: 0.5, type: "spring", stiffness: 300 }}
+                                                    key={cat.percentage + (cat.brand || '')}
+                                                    className={`font-black text-3xl ${cat.amount > 0 && cat.percentage > 0 ? 'text-blue-500 animate-pulse' : 'text-slate-900 dark:text-white'}`}
+                                                    initial={{ scale: 0.8, opacity: 0 }}
+                                                    animate={{ scale: 1, opacity: 1 }}
+                                                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                                 >
-                                                    € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(language === 'it' ? 'it-IT' : (language === 'de' ? 'de-DE' : 'en-US'), { maximumFractionDigits: 0 })}
+                                                    € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(lang, { maximumFractionDigits: 0 })}
                                                 </motion.p>
                                             </AnimatePresence>
-                                            {/* Mobile Sparkles */}
-                                            {(cat.amount * cat.percentage / 100) > 0 && (
-                                                <motion.div
-                                                    className="absolute -top-1 -right-2 text-yellow-500 text-xs"
-                                                    initial={{ opacity: 0, scale: 0 }}
-                                                    animate={{ opacity: [0, 1, 0], scale: [0, 1.5, 0], rotate: [0, 90, 180] }}
-                                                    transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
-                                                >
-                                                    ✨
-                                                </motion.div>
-                                            )}
                                         </div>
                                     </div>
 
-                                    {/* RIGHT SECTION: Inputs Grid (Desktop) / BOTTOM ROW (Mobile) */}
-                                    <div className="grid grid-cols-12 sm:flex-1 items-center gap-2">
+                                    {/* RIGHT SECTION: Inputs Grid */}
+                                    <div className="grid grid-cols-12 sm:flex-1 items-center gap-4">
 
-                                        {/* Amount Input */}
-                                        <div className="col-span-4 sm:flex-1 relative">
-                                            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs sm:text-xs">€</div>
+                                        {/* Amount Input - iOS Pill */}
+                                        <div className="col-span-5 sm:flex-1 relative">
+                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 font-black text-sm">€</div>
                                             <input
                                                 type="number"
                                                 value={cat.amount || ''}
                                                 onChange={(e) => handleUpdate(cat.id, 'amount', parseFloat(e.target.value) || 0)}
                                                 onFocus={(e) => e.target.select()}
                                                 placeholder="0"
-                                                className="w-full pl-7 pr-2 py-3 sm:py-1.5 bg-gray-50 dark:bg-gray-800/80 rounded-xl sm:rounded-lg text-right font-black text-base sm:text-sm text-gray-900 dark:text-white border border-gray-100 dark:border-white/10 outline-none transition-all shadow-inner focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
+                                                className="w-full pl-8 pr-4 py-4 bg-gray-50 dark:bg-white/5 rounded-full text-right font-black text-lg text-slate-900 dark:text-white border-2 border-transparent focus:border-blue-500/50 outline-none transition-all shadow-inner"
                                             />
                                         </div>
 
-                                        {/* Brand Dropdown */}
-                                        <div className="col-span-4 sm:flex-[1.8] relative group/select">
+                                        {/* Brand Dropdown - iOS Select */}
+                                        <div className="col-span-12 sm:col-span-4 sm:flex-[1.8] relative group/select">
                                             <select
                                                 value={cat.brand}
                                                 onChange={(e) => handleUpdate(cat.id, 'brand', e.target.value)}
-                                                className={`w-full py-3 sm:py-1.5 px-2 sm:px-2 appearance-none rounded-xl sm:rounded-lg text-[10px] sm:text-xs font-black tracking-wide uppercase border outline-none cursor-pointer text-center truncate transition-all duration-300
-                                                ${cat.brand
-                                                        ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.4)]'
-                                                        : 'bg-gray-50 dark:bg-gray-800/80 text-gray-800 dark:text-gray-200 border-gray-100 dark:border-white/10 shadow-inner'
+                                                className={`w-full py-4 px-6 rounded-full text-[10px] sm:text-xs font-black tracking-widest uppercase border-2 outline-none cursor-pointer text-center appearance-none truncate transition-all duration-300
+                                            ${cat.brand
+                                                        ? 'bg-blue-500/10 text-blue-600 border-blue-500/30'
+                                                        : 'bg-gray-50 dark:bg-white/5 text-slate-400 border-transparent shadow-inner'
                                                     }
-                                                focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20`}
+                                            focus:border-blue-500/50`}
                                             >
                                                 <option value="">{t('cashback_detailed.select_brand')}</option>
                                                 {BRANDS_DATA
@@ -505,17 +444,12 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                                     ))
                                                 }
                                             </select>
-
-                                            {/* Animated Halo Ring (Extra visual) */}
-                                            {cat.brand && (
-                                                <div className="absolute inset-0 rounded-xl sm:rounded-lg border-2 border-purple-400/30 animate-pulse pointer-events-none" />
-                                            )}
                                         </div>
 
                                         {/* Percentage Input */}
-                                        <div className="col-span-4 sm:flex-[1] relative">
+                                        <div className="col-span-3 sm:flex-[1] relative">
                                             {cat.fixedAmount !== undefined ? (
-                                                <div className="w-full py-3 sm:py-1.5 text-right font-black text-sm sm:text-sm text-purple-600 dark:text-purple-400 flex items-center justify-end">
+                                                <div className="w-full py-4 text-right font-black text-base text-blue-500 flex items-center justify-end px-2">
                                                     €{cat.fixedAmount.toFixed(0)}
                                                 </div>
                                             ) : (
@@ -526,53 +460,26 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                                         onChange={(e) => handleUpdate(cat.id, 'percentage', parseFloat(e.target.value) || 0)}
                                                         onFocus={(e) => e.target.select()}
                                                         placeholder="0"
-                                                        className="w-full pr-5 sm:pr-6 py-2 sm:py-1.5 bg-transparent text-right font-black text-sm sm:text-sm text-purple-600 dark:text-purple-400 border-b border-purple-100 dark:border-purple-900/50 outline-none focus:border-purple-500 transition-colors"
+                                                        className="w-full pr-8 py-3 bg-transparent text-right font-black text-base text-blue-500 border-b-2 border-blue-500/20 outline-none focus:border-blue-500 transition-colors"
                                                         step="0.1"
                                                     />
-                                                    <span className="absolute right-0 top-1/2 -translate-y-1/2 text-xs sm:text-xs text-purple-400 font-bold pointer-events-none">%</span>
-
-                                                    {/* POP EFFECT FOR PERCENTAGE */}
-                                                    {cat.percentage > 0 && (
-                                                        <motion.div
-                                                            key={`pop-${cat.percentage}`}
-                                                            className="absolute inset-0 pointer-events-none border border-yellow-400/50 rounded-lg"
-                                                            initial={{ opacity: 0, scale: 1.5 }}
-                                                            animate={{ opacity: [0, 1, 0], scale: [1.5, 1, 1.2] }}
-                                                            transition={{ duration: 0.5 }}
-                                                        />
-                                                    )}
+                                                    <span className="absolute right-0 top-1/2 -translate-y-1/2 text-sm text-blue-400 font-bold pointer-events-none">%</span>
                                                 </div>
                                             )}
                                         </div>
 
-                                        {/* Desktop Result (Visible sm only) - GAME STYLE */}
-                                        <div className="hidden sm:block sm:w-32 text-right shrink-0 relative">
+                                        {/* Desktop Result - WOW iOS */}
+                                        <div className="hidden sm:block sm:w-36 text-right shrink-0">
                                             <AnimatePresence mode="wait">
-                                                <motion.div
-                                                    key={`res-${cat.id}-${cat.percentage}`}
-                                                    className="relative inline-block"
-                                                    initial={{ scale: 1 }}
-                                                    animate={cat.amount > 0 && cat.percentage > 0 ? { scale: [1, 1.2, 1] } : {}}
-                                                    transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                                                <motion.p
+                                                    key={`res-${cat.id}-${cat.percentage}-${cat.amount}`}
+                                                    className={`font-black text-4xl tracking-tighter transition-colors duration-300 ${cat.amount > 0 && cat.percentage > 0 ? 'text-blue-500 drop-shadow-sm animate-pulse' : 'text-slate-200 dark:text-slate-800'}`}
+                                                    initial={{ scale: 0.9, opacity: 0.5 }}
+                                                    animate={{ scale: 1, opacity: 1 }}
+                                                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
                                                 >
-                                                    <motion.p
-                                                        className={`font-black text-lg sm:text-3xl truncate transition-colors duration-300 ${cat.amount > 0 && cat.percentage > 0 ? 'text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-600 drop-shadow-[0_2px_4px_rgba(234,179,8,0.4)]' : 'text-gray-900 dark:text-white'}`}
-                                                    >
-                                                        € {cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(language === 'it' ? 'it-IT' : (language === 'de' ? 'de-DE' : 'en-US'), { maximumFractionDigits: 0 })}
-                                                    </motion.p>
-
-                                                    {/* Gold Sparkles if > 0 */}
-                                                    {(cat.amount * cat.percentage / 100) > 0 && (
-                                                        <motion.div
-                                                            className="absolute -top-2 -right-4 text-yellow-500"
-                                                            initial={{ opacity: 0, y: 10 }}
-                                                            animate={{ opacity: [0, 1, 0], y: -20 }}
-                                                            transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
-                                                        >
-                                                            ✨
-                                                        </motion.div>
-                                                    )}
-                                                </motion.div>
+                                                    €{cat.fixedAmount !== undefined ? (cat.brand ? cat.fixedAmount.toFixed(0) : '0') : (cat.amount * cat.percentage / 100).toLocaleString(lang, { maximumFractionDigits: 0 })}
+                                                </motion.p>
                                             </AnimatePresence>
                                         </div>
                                     </div>
@@ -582,25 +489,23 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                     </div>
                 </div>
 
-                {/* Footer - COMPACT */}
-                <div className="p-3 sm:p-6 border-t border-gray-100/20 dark:border-white/5 bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl z-10 safe-area-bottom pb-4 sm:pb-8 flex flex-row items-center gap-3 sm:gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+                <div className="p-6 sm:px-12 sm:py-10 border-t border-gray-100/50 dark:border-white/5 bg-white/40 dark:bg-gray-900/40 backdrop-blur-3xl z-10 safe-area-bottom flex flex-row items-center gap-6 shadow-[0_-15px_40px_rgba(0,0,0,0.05)]">
                     <button
                         onClick={handleReset}
-                        className="flex items-center gap-2 px-4 py-3 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-xl transition-all shadow-sm font-bold border border-red-100 active:scale-95 group"
+                        className="flex items-center gap-3 px-6 py-4 bg-gray-100 dark:bg-white/5 text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-full transition-all shadow-sm font-black border border-transparent active:scale-95 group"
                     >
-                        <RotateCcw size={18} />
-                        <span className="text-[10px] sm:text-xs uppercase font-black">{t('cashback_detailed.reset')}</span>
+                        <RotateCcw size={20} />
+                        <span className="text-[10px] uppercase tracking-widest">{t('cashback_detailed.reset')}</span>
                     </button>
 
                     <button
                         onClick={() => onConfirm(totalSpend, totalCashback, categories)}
-                        className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-black py-3 sm:py-5 rounded-xl sm:rounded-2xl shadow-xl hover:shadow-purple-500/40 active:scale-[0.98] transition-all text-base sm:text-2xl uppercase tracking-widest flex items-center justify-center gap-2 relative overflow-hidden group"
+                        className="flex-1 bg-blue-500 text-white font-black py-4 sm:py-6 rounded-full shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-[1.02] active:scale-[0.98] transition-all text-lg sm:text-2xl uppercase tracking-[0.2em] flex items-center justify-center gap-3 relative overflow-hidden group"
                     >
-                        {/* Button Shine Effect */}
-                        <div className="absolute inset-0 bg-white/20 skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-
+                        {/* Apple-style shine */}
+                        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
                         {t('cashback_detailed.confirm')}
-                        <Check size={20} className="sm:w-6 sm:h-6" />
+                        <Check size={24} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                 </div>
             </div >
