@@ -296,16 +296,17 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
 
     return (
         <div
-            className="fixed inset-0 z-[100001] bg-black text-white flex flex-col overflow-hidden font-sans"
+            className="fixed inset-0 z-[100001] bg-black text-white flex flex-col overflow-hidden font-sans selection:bg-purple-500/30"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
         >
-            {/* AMBIENT BACKGROUND */}
+            {/* AMBIENT BACKGROUND - DEEP & SUBTLE */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-20%] left-[-20%] w-[70vw] h-[70vw] bg-purple-900/20 rounded-full blur-[120px] animate-[pulse_8s_infinite]" />
-                <div className="absolute bottom-[-20%] right-[-20%] w-[60vw] h-[60vw] bg-indigo-900/20 rounded-full blur-[100px] animate-[pulse_10s_infinite_reverse]" />
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
+                <div className="absolute top-[-20%] left-[-20%] w-[80vw] h-[80vw] bg-purple-900/10 rounded-full blur-[150px] animate-[pulse_10s_infinite]" />
+                <div className="absolute bottom-[-20%] right-[-20%] w-[70vw] h-[70vw] bg-indigo-900/10 rounded-full blur-[150px] animate-[pulse_12s_infinite_reverse]" />
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15] mix-blend-overlay" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black pointer-events-none" />
             </div>
 
             {/* TUTORIAL OVERLAY */}
@@ -315,7 +316,7 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100002] pointer-events-none flex items-center justify-center bg-black/40 backdrop-blur-[2px]"
+                        className="fixed inset-0 z-[100002] pointer-events-none flex items-center justify-center bg-black/60 backdrop-blur-sm"
                     >
                         <div className="flex flex-col items-center">
                             <motion.div
@@ -327,7 +328,7 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                             <motion.p
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="mt-4 text-white font-bold text-lg bg-black/50 px-4 py-2 rounded-full"
+                                className="mt-4 text-white font-bold text-lg bg-zinc-900/80 border border-white/10 px-6 py-3 rounded-full backdrop-blur-md shadow-2xl"
                             >
                                 {getLabel('focus.swipe_hint')}
                             </motion.p>
@@ -340,12 +341,15 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
             <div className="relative z-50 flex items-center justify-between p-6">
                 <button
                     onClick={step === 'category' ? onClose : handleBack}
-                    className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition-colors backdrop-blur-md"
+                    className="p-3 bg-zinc-800/40 hover:bg-zinc-700/60 rounded-full transition-all backdrop-blur-xl border border-white/5 active:scale-95 group"
                 >
-                    {step === 'category' ? <X size={24} /> : <ChevronLeft size={24} />}
+                    {step === 'category' ?
+                        <X size={20} className="text-white/70 group-hover:text-white transition-colors" /> :
+                        <ChevronLeft size={20} className="text-white/70 group-hover:text-white transition-colors" />
+                    }
                 </button>
 
-                <div className="text-sm font-bold tracking-[0.2em] text-white/50 uppercase">
+                <div className="text-[10px] font-bold tracking-[0.3em] text-white/30 uppercase">
                     Focus Mode
                 </div>
 
@@ -353,37 +357,37 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
             </div>
 
             {/* CONTENT AREA */}
-            <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 sm:p-12 w-full max-w-7xl mx-auto h-full overflow-hidden">
+            <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 sm:p-8 w-full max-w-7xl mx-auto h-full overflow-hidden">
                 <AnimatePresence mode="wait">
 
                     {/* STEP 1: CATEGORY SELECTION */}
                     {step === 'category' && (
                         <motion.div
                             key="step-category"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
-                            transition={{ duration: 0.4 }}
-                            className="w-full h-full flex flex-col items-center"
+                            initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+                            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                            exit={{ opacity: 0, scale: 1.05, filter: "blur(20px)" }}
+                            transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+                            className="w-full h-full flex flex-col items-center justify-center"
                         >
-                            <h2 className="text-3xl sm:text-5xl font-black mb-8 sm:mb-12 text-center text-transparent bg-clip-text bg-gradient-to-br from-white to-white/60">
-                                {getLabel('cashback_detailed.select_category') || "Scegli una Categoria"}
+                            <h2 className="text-2xl sm:text-4xl font-bold mb-8 sm:mb-12 text-center text-white tracking-tight drop-shadow-lg">
+                                {getLabel('cashback_detailed.select_category') || "Select Category"}
                             </h2>
 
-                            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 w-full overflow-y-auto pb-10 custom-scrollbar pr-2">
+                            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 w-full max-w-5xl overflow-y-auto pb-24 custom-scrollbar px-2">
                                 {AVAILABLE_CATEGORIES.map((cat, idx) => (
                                     <motion.button
                                         key={cat}
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: idx * 0.05 }}
+                                        transition={{ delay: idx * 0.04, ease: "easeOut" }}
                                         onClick={() => handleCategorySelect(cat)}
-                                        className="group relative aspect-square bg-white/5 hover:bg-white/15 border border-white/10 hover:border-purple-500/50 rounded-3xl flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] hover:-translate-y-1"
+                                        className="group relative aspect-square bg-zinc-900/40 hover:bg-zinc-800/60 border border-white/5 hover:border-white/20 rounded-[2rem] flex flex-col items-center justify-center gap-4 transition-all duration-300 backdrop-blur-md shadow-lg hover:shadow-purple-900/20"
                                     >
-                                        <div className="p-4 bg-white/5 rounded-2xl group-hover:scale-110 transition-transform duration-300 group-hover:bg-purple-500/20 group-hover:text-purple-300">
-                                            {React.cloneElement(getIcon(getCategoryIconName(cat)), { size: 32 })}
+                                        <div className="p-4 bg-white/5 rounded-2xl group-hover:scale-110 transition-transform duration-300 group-hover:bg-white/10 text-white/70 group-hover:text-white shadow-inner">
+                                            {React.cloneElement(getIcon(getCategoryIconName(cat)), { size: 28, strokeWidth: 1.5 })}
                                         </div>
-                                        <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-white/70 group-hover:text-white transition-colors">
+                                        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white/50 group-hover:text-white transition-colors max-w-[80%] text-center leading-tight">
                                             {getLabel(`cashback_detailed.cat.${cat}`) || cat}
                                         </span>
                                     </motion.button>
@@ -396,53 +400,55 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                     {step === 'brand' && selectedCategory && (
                         <motion.div
                             key="step-brand"
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -50, filter: "blur(10px)" }}
-                            transition={{ duration: 0.4 }}
-                            className="w-full max-w-4xl flex flex-col h-full"
+                            initial={{ opacity: 0, x: 20, filter: "blur(5px)" }}
+                            animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                            exit={{ opacity: 0, x: -20, filter: "blur(10px)" }}
+                            transition={{ duration: 0.4, ease: "circOut" }}
+                            className="w-full max-w-3xl flex flex-col h-full"
                         >
                             <div className="flex-shrink-0 mb-6 sm:mb-8">
-                                <h2 className="text-2xl sm:text-4xl font-black mb-4 flex items-center flex-wrap gap-2 sm:gap-4">
-                                    <span className="text-purple-400">{getLabel(`cashback_detailed.cat.${selectedCategory}`) || selectedCategory}</span>
-                                    <span className="text-white/30 hidden sm:inline">/</span>
-                                    <span className="text-white">{getLabel('cashback_detailed.select_brand') || "Seleziona Brand"}</span>
+                                <h2 className="text-xl sm:text-3xl font-bold mb-6 flex items-center flex-wrap gap-2 sm:gap-3 px-1">
+                                    <span className="text-white/40 font-medium">{getLabel(`cashback_detailed.cat.${selectedCategory}`) || selectedCategory}</span>
+                                    <span className="text-white/20 text-sm">/</span>
+                                    <span className="text-white tracking-tight">{getLabel('cashback_detailed.select_brand') || "Select Brand"}</span>
                                 </h2>
 
-                                {/* Search Bar */}
+                                {/* Search Bar - iOS Style */}
                                 <div className="relative group">
-                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-purple-400 transition-colors" />
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <Search className="h-5 w-5 text-white/30 group-focus-within:text-white/80 transition-colors" />
+                                    </div>
                                     <input
                                         type="text"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        placeholder="Cerca brand..."
-                                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-xl text-white placeholder-white/20 focus:outline-none focus:bg-white/10 focus:border-purple-500/50 transition-all"
+                                        placeholder={getLabel('cashback_detailed.select_brand') + "..."}
+                                        className="block w-full pl-11 pr-4 py-4 bg-zinc-900/60 border border-white/5 rounded-2xl text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-white/10 focus:bg-zinc-800/80 transition-all backdrop-blur-xl text-lg shadow-inner"
                                         autoFocus
                                     />
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 overflow-y-auto pb-10 custom-scrollbar pr-2 flex-grow content-start">
+                            <div className="grid grid-cols-1 gap-2 overflow-y-auto pb-24 custom-scrollbar pr-1 flex-grow content-start">
                                 {filteredBrands.length > 0 ? (
                                     filteredBrands.map((brand, idx) => (
                                         <motion.button
                                             key={brand.name}
-                                            initial={{ opacity: 0, scale: 0.95 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            transition={{ delay: idx * 0.03 }}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: idx * 0.02 }}
                                             onClick={() => handleBrandSelect(brand)}
-                                            className="flex items-center justify-between p-4 bg-white/5 hover:bg-white/15 border border-white/5 hover:border-white/20 rounded-2xl group transition-all"
+                                            className="flex items-center justify-between p-4 bg-zinc-900/30 hover:bg-zinc-800/50 border border-white/5 hover:border-white/10 rounded-2xl group transition-all backdrop-blur-sm active:scale-[0.99]"
                                         >
-                                            <span className="font-bold text-lg text-white/90 group-hover:text-white text-left">{brand.name}</span>
-                                            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-purple-500 group-hover:text-white transition-colors">
-                                                <ArrowRight size={16} />
+                                            <span className="font-semibold text-lg text-white/80 group-hover:text-white text-left pl-2">{brand.name}</span>
+                                            <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 text-white/30 group-hover:text-white transition-colors">
+                                                <ArrowRight size={14} />
                                             </div>
                                         </motion.button>
                                     ))
                                 ) : (
-                                    <div className="col-span-full text-center text-white/40 py-10 italic">
-                                        Nessun brand trovato
+                                    <div className="col-span-full text-center text-white/20 py-12 italic font-light">
+                                        No brands found
                                     </div>
                                 )}
                             </div>
@@ -453,25 +459,25 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                     {step === 'reveal' && selectedBrand && (
                         <motion.div
                             key="step-reveal"
-                            initial={{ opacity: 0, scale: 0.5 }}
+                            initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.5 }}
-                            transition={{ duration: 0.5, type: "spring" }}
-                            className="flex flex-col items-center justify-center text-center relative w-full h-full"
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.5, type: "spring", bounce: 0.3 }}
+                            className="flex flex-col items-center justify-center text-center relative w-full h-full max-w-lg mx-auto"
                         >
                             {/* WRAPPER FOR CAPTURE */}
-                            <div ref={reportRef} className="flex flex-col items-center justify-center p-8 rounded-[3rem] transition-colors relative">
-                                {/* Background Explosion Effect */}
-                                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                                    <div className="absolute w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] animate-pulse" />
-                                    <div className="absolute w-[300px] h-[300px] bg-yellow-500/10 rounded-full blur-[80px]" />
+                            <div ref={reportRef} className="flex flex-col items-center justify-center p-8 rounded-[3rem] transition-colors relative w-full">
+                                {/* Background Explosion Effect (Subtle) */}
+                                <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-40">
+                                    <div className="absolute w-[300px] h-[300px] bg-purple-600/20 rounded-full blur-[80px]" />
+                                    <div className="absolute w-[200px] h-[200px] bg-indigo-500/10 rounded-full blur-[60px]" />
                                 </div>
 
                                 <motion.div
                                     initial={{ y: 20, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 0.2 }}
-                                    className="mb-4 text-purple-300 text-xl sm:text-2xl font-bold uppercase tracking-widest relative z-10"
+                                    transition={{ delay: 0.1 }}
+                                    className="mb-8 text-white font-black text-3xl sm:text-5xl uppercase tracking-wider relative z-10 drop-shadow-2xl"
                                 >
                                     {selectedBrand.name}
                                 </motion.div>
@@ -480,129 +486,123 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.3 }}
-                                    className="relative z-20 mb-32 sm:mb-16 w-full max-w-[200px]"
+                                    transition={{ delay: 0.2 }}
+                                    className="relative z-20 mb-12 w-full"
                                 >
-                                    <label className="block text-xs font-bold text-purple-200 uppercase tracking-widest mb-2 opacity-70">
-                                        {getLabel('cashback_detailed.insert_spending') || "Inserisci Spesa"}
-                                    </label>
-                                    <div className="relative group">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-white/50 group-focus-within:text-purple-400 transition-colors">€</span>
+                                    <div className="relative group max-w-[220px] mx-auto">
+                                        {/* Euro Symbol */}
+                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
+                                            <span className="text-5xl font-light text-white/80">€</span>
+                                        </div>
                                         <input
                                             type="number"
                                             value={spendingAmount}
                                             onChange={(e) => setSpendingAmount(e.target.value)}
                                             placeholder="0"
-                                            className="w-full bg-white/10 border-2 border-white/10 rounded-2xl py-3 pl-10 pr-4 text-3xl font-black text-center text-white placeholder-white/20 focus:outline-none focus:bg-white/20 focus:border-purple-500 transition-all"
+                                            className="w-full bg-zinc-900/50 border border-white/10 rounded-[2.5rem] py-8 pl-16 pr-4 text-5xl font-medium text-center text-white placeholder-white/10 focus:outline-none focus:bg-zinc-800/60 focus:border-white/30 transition-all backdrop-blur-xl shadow-2xl"
                                             autoFocus
                                         />
+                                        <div className="text-center mt-4 text-white/40 text-xs font-bold uppercase tracking-[0.2em]">
+                                            {getLabel('cashback_detailed.insert_spending')}
+                                        </div>
                                     </div>
                                 </motion.div>
 
-                                <div className="relative z-10">
+                                <div className="relative z-10 w-full min-h-[220px] flex flex-col items-center justify-center">
                                     {parsedAmount > 0 ? (
                                         <div className="flex flex-col items-center">
                                             <motion.div
-                                                className="text-[15vw] sm:text-[120px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-yellow-100 to-yellow-600 drop-shadow-[0_0_60px_rgba(234,179,8,0.5)]"
-                                                initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)" }}
+                                                className="relative flex items-center justify-center gap-4"
+                                                initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
                                                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                                                 key="cashback-amount"
                                             >
-                                                € {cashbackReturn.toLocaleString(language === 'de' ? 'de-DE' : 'it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                {/* Stylized Star */}
+                                                <motion.div
+                                                    initial={{ rotate: -180, scale: 0 }}
+                                                    animate={{ rotate: 12, scale: 1 }}
+                                                    transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
+                                                >
+                                                    <Sparkles size={56} className="text-yellow-400 fill-yellow-400 drop-shadow-[0_0_25px_rgba(250,204,21,0.6)]" />
+                                                </motion.div>
+
+                                                <div className="text-[5rem] sm:text-[7rem] font-bold leading-none tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/70 drop-shadow-[0_0_40px_rgba(255,255,255,0.4)]">
+                                                    € {cashbackReturn.toLocaleString(language === 'de' ? 'de-DE' : 'it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </div>
                                             </motion.div>
 
                                             {/* PROVIDER PROVOCATION BUTTON */}
                                             <motion.div
-                                                initial={{ opacity: 0, y: 20 }}
+                                                initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
-                                                transition={{ delay: 0.6 }}
-                                                className="mt-8 flex flex-col items-center"
+                                                transition={{ delay: 0.4 }}
+                                                className="mt-10 flex flex-col items-center"
                                             >
                                                 <motion.div
-                                                    animate={{
-                                                        scale: [1, 1.05, 1],
-                                                        boxShadow: [
-                                                            "0 0 20px rgba(168,85,247,0.2)",
-                                                            "0 0 40px rgba(168,85,247,0.5)",
-                                                            "0 0 20px rgba(168,85,247,0.2)"
-                                                        ]
-                                                    }}
-                                                    transition={{ repeat: Infinity, duration: 3 }}
-                                                    className="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 px-8 py-4 rounded-[2rem] border-2 border-white/20 backdrop-blur-xl shadow-2xl relative overflow-hidden group"
+                                                    animate={{ scale: [1, 1.02, 1], boxShadow: ["0 0 0 rgba(234,179,8,0)", "0 0 20px rgba(234,179,8,0.3)", "0 0 0 rgba(234,179,8,0)"] }}
+                                                    transition={{ duration: 2, repeat: Infinity }}
+                                                    className="px-8 py-4 rounded-full border border-yellow-500/30 bg-yellow-900/10 backdrop-blur-md shadow-lg flex items-center gap-3 relative overflow-hidden group"
                                                 >
-                                                    <div className="absolute inset-0 bg-white/10 group-hover:bg-white/20 transition-colors" />
-                                                    <div className="flex items-center gap-3 relative z-10">
-                                                        <span className="text-xl sm:text-2xl font-black text-white tracking-tight uppercase">
-                                                            {getLabel('focus.provider_question')}
-                                                        </span>
-                                                        <Sparkles size={24} className="text-yellow-400 animate-pulse" />
-                                                    </div>
+                                                    <div className="absolute inset-0 bg-yellow-500/5 group-hover:bg-yellow-500/10 transition-colors" />
+                                                    <span className="text-sm sm:text-base font-black text-yellow-100 tracking-[0.2em] uppercase drop-shadow-md relative z-10">
+                                                        {getLabel('focus.provider_question')}
+                                                    </span>
                                                 </motion.div>
                                             </motion.div>
                                         </div>
                                     ) : (
                                         <motion.div
-                                            className="text-[20vw] sm:text-[180px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-gray-400 drop-shadow-[0_0_60px_rgba(255,255,255,0.3)]"
-                                            initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)" }}
-                                            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                                            transition={{ duration: 0.8, ease: "easeOut" }}
+                                            className="text-[5rem] sm:text-[8rem] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-zinc-700 to-zinc-800 opacity-50"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.5 }}
                                         >
                                             {selectedBrand?.percentage}%
                                         </motion.div>
                                     )}
-
-                                    {/* Sparkles Overlay */}
-                                    <motion.div
-                                        className="absolute -top-24 -right-2 sm:-top-32 sm:-right-12 text-yellow-400"
-                                        initial={{ scale: 0, rotate: 0 }}
-                                        animate={{ scale: 1.5, rotate: 180 }}
-                                        transition={{ delay: 0.5, duration: 0.5 }}
-                                    >
-                                        <Sparkles size={60} className="sm:w-20 sm:h-20" />
-                                    </motion.div>
                                 </div>
                             </div>
 
                             <motion.div
-                                className="mt-4 text-gray-400 text-lg sm:text-xl font-medium relative z-20"
+                                className="mt-8 text-white/40 text-sm font-medium tracking-wide uppercase relative z-20"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                transition={{ delay: 0.8 }}
+                                transition={{ delay: 0.5 }}
                             >
                                 {parsedAmount > 0 ?
                                     (getLabel('cashback_detailed.return') + ` (${selectedBrand.percentage}%)`) :
-                                    (getLabel('cashback_detailed.return') || "Ritorno Cashback")
+                                    ""
                                 }
                             </motion.div>
 
                             {/* ACTION BUTTONS */}
                             <motion.div
-                                className="mt-12 flex flex-col sm:flex-row gap-4 relative z-20 w-full sm:w-auto px-6"
-                                initial={{ opacity: 0, y: 30 }}
+                                className="mt-12 flex flex-col sm:flex-row gap-3 relative z-20 w-full max-w-sm px-4"
+                                initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 1 }}
+                                transition={{ delay: 0.6 }}
                             >
-                                <div className="flex gap-4 w-full">
+                                <div className="flex gap-3 w-full">
                                     <button
                                         onClick={handleShare}
-                                        className="flex-1 sm:flex-none px-6 py-4 bg-purple-600/20 hover:bg-purple-600/40 rounded-2xl text-purple-300 font-bold backdrop-blur-md transition-all text-center flex items-center justify-center gap-2 border border-purple-500/20"
+                                        className="flex-1 px-6 py-4 bg-zinc-800/50 hover:bg-zinc-700/60 rounded-2xl text-white font-semibold backdrop-blur-xl transition-all flex items-center justify-center border border-white/5 hover:border-white/10 active:scale-95"
                                         title="Condividi"
                                     >
-                                        <Share2 size={24} />
+                                        <Share2 size={20} />
                                     </button>
                                     <button
                                         onClick={handleBack}
-                                        className="flex-1 px-8 py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-white font-bold backdrop-blur-md transition-all text-center"
+                                        className="flex-[2] px-6 py-4 bg-zinc-800/50 hover:bg-zinc-700/60 rounded-2xl text-white/90 font-semibold backdrop-blur-xl transition-all border border-white/5 hover:border-white/10 active:scale-95 text-sm uppercase tracking-wide"
                                     >
-                                        {getLabel('common.back') || "Indietro"}
+                                        {getLabel('common.back') || "Back"}
                                     </button>
                                 </div>
                                 <button
                                     onClick={handleConfirm}
-                                    className="w-full sm:w-auto px-10 py-4 bg-white text-black rounded-2xl font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(255,255,255,0.4)] flex items-center justify-center gap-2 group text-center"
+                                    className="w-full px-8 py-4 bg-white text-black rounded-2xl font-bold text-lg hover:bg-gray-100 active:scale-95 transition-all shadow-[0_0_20px_rgba(255,255,255,0.15)] flex items-center justify-center gap-2"
                                 >
-                                    <Check size={24} className="group-hover:scale-110 transition-transform" />
-                                    {getLabel('common.select') || "SELEZIONA"}
+                                    <Check size={20} className="stroke-[3px]" />
+                                    {getLabel('common.select') || "SELECT"}
                                 </button>
                             </motion.div>
 
