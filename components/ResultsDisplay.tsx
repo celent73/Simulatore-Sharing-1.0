@@ -52,32 +52,32 @@ const StarIcon = ({ className = "w-6 h-6" }: { className?: string }) => (<svg xm
 
 const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, suffix, variant = 'glass', icon, showBadge }) => {
   let styles = {
-    container: 'bg-white/70 backdrop-blur-xl border-2 border-slate-200/50 shadow-sm hover:shadow-md hover:border-slate-300/80',
-    title: 'text-gray-500 uppercase tracking-widest text-[10px] font-extrabold',
-    value: 'text-gray-900',
-    iconBg: 'bg-slate-100',
-    iconColor: 'text-gray-600'
+    container: 'bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border-2 border-slate-200/50 dark:border-white/10 shadow-sm hover:shadow-md hover:border-slate-300/80 dark:hover:border-white/20',
+    title: 'text-gray-500 dark:text-slate-500 uppercase tracking-widest text-[10px] font-extrabold',
+    value: 'text-gray-900 dark:text-white',
+    iconBg: 'bg-slate-100 dark:bg-slate-800',
+    iconColor: 'text-gray-600 dark:text-slate-400'
   };
 
   switch (variant) {
     case 'gradient-blue':
       styles = {
         ...styles,
-        container: 'bg-blue-50/80 backdrop-blur-2xl border-2 border-blue-300/60 shadow-md hover:shadow-lg hover:border-blue-400/80',
-        title: 'text-blue-700/80',
-        value: 'text-blue-800',
-        iconBg: 'bg-blue-100',
-        iconColor: 'text-blue-700'
+        container: 'bg-blue-50/80 dark:bg-blue-900/40 backdrop-blur-2xl border-2 border-blue-300/60 dark:border-blue-500/30 shadow-md hover:shadow-lg hover:border-blue-400/80 dark:hover:border-blue-400/50',
+        title: 'text-blue-700/80 dark:text-blue-300/80',
+        value: 'text-blue-800 dark:text-blue-100',
+        iconBg: 'bg-blue-100 dark:bg-blue-900/60',
+        iconColor: 'text-blue-700 dark:text-blue-300'
       };
       break;
     case 'gradient-orange':
       styles = {
         ...styles,
-        container: 'bg-orange-50/80 backdrop-blur-2xl border-2 border-orange-300/60 shadow-md hover:shadow-lg hover:border-orange-400/80',
-        title: 'text-orange-700/80',
-        value: 'text-orange-800',
-        iconBg: 'bg-orange-100',
-        iconColor: 'text-orange-700'
+        container: 'bg-orange-50/80 dark:bg-orange-900/40 backdrop-blur-2xl border-2 border-orange-300/60 dark:border-orange-500/30 shadow-md hover:shadow-lg hover:border-orange-400/80 dark:hover:border-orange-400/50',
+        title: 'text-orange-700/80 dark:text-orange-300/80',
+        value: 'text-orange-800 dark:text-orange-100',
+        iconBg: 'bg-orange-100 dark:bg-orange-900/60',
+        iconColor: 'text-orange-700 dark:text-orange-300'
       };
       break;
     case 'glass':
@@ -266,14 +266,14 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
             <>
               <span className="text-[12px] sm:text-[11px] font-black text-orange-950/60 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
               <div className="w-full mt-2">
-                <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/80 dark:bg-black/20 px-3 py-1.5 rounded-lg border border-white/50 dark:border-white/10 text-slate-900 whitespace-nowrap shadow-sm backdrop-blur-sm">
+                <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/80 dark:bg-orange-900/20 px-3 py-1.5 rounded-lg border border-white/50 dark:border-orange-500/20 text-slate-900 dark:text-orange-200 whitespace-nowrap shadow-sm backdrop-blur-sm">
                   ANNO: {formatCurrency(displayMonthlyRec3 * 12).replace(",00", "")}{parkSuffix}
                 </div>
               </div>
             </>
           }
           variant="gradient-orange"
-          icon={<StarIcon className="text-orange-600 w-6 h-6" />}
+          icon={<StarIcon className="text-orange-600 dark:text-orange-400 w-6 h-6" />}
         />
         <SummaryCard
           title={t('results.total_users')}
@@ -303,31 +303,31 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
       <div className={`
         ${isFullScreen
-          ? 'fixed inset-0 z-[10000] p-4 flex flex-col gap-4 overflow-hidden bg-[#F2F2F7]'
+          ? 'fixed inset-0 z-[10000] p-4 flex flex-col gap-4 overflow-hidden bg-[#F2F2F7] dark:bg-[#050505]'
           : 'relative transition-all duration-500 ease-in-out'
         }
       `}>
         <div className={`
-          bg-white shadow-xl border-2 border-slate-100
+          bg-white dark:bg-slate-900 shadow-xl border-2 border-slate-100 dark:border-white/10
           ${isFullScreen
             ? 'flex-1 rounded-[3rem] overflow-hidden flex flex-col p-8'
             : 'p-8 rounded-[3rem]'
           }
         `}>
           <div className="flex justify-between items-center mb-8 shrink-0">
-            <h2 className={`font-black text-gray-900 flex items-center gap-4 ${isFullScreen ? 'text-4xl' : 'text-2xl'} tracking-tight`}>
-              <div className="p-3 rounded-2xl bg-blue-50 text-blue-600 shadow-sm">📊</div>
+            <h2 className={`font-black text-gray-900 dark:text-white flex items-center gap-4 ${isFullScreen ? 'text-4xl' : 'text-2xl'} tracking-tight`}>
+              <div className="p-3 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 shadow-sm">📊</div>
               {t('results.table_title')}
               {isFullScreen && (
                 <div className="flex items-center gap-2 ml-4">
-                  <span className="text-orange-600 text-[10px] bg-orange-50 px-3 py-1 rounded-full font-black uppercase tracking-widest border border-orange-200">Network Focus</span>
+                  <span className="text-orange-600 dark:text-orange-400 text-[10px] bg-orange-50 dark:bg-orange-900/30 px-3 py-1 rounded-full font-black uppercase tracking-widest border border-orange-200 dark:border-orange-500/30">Network Focus</span>
                   {isClientMode ? (
-                    <span className="text-emerald-600 text-[10px] bg-emerald-50 px-3 py-1 rounded-full font-black uppercase tracking-widest border border-emerald-200 flex items-center gap-1">
+                    <span className="text-emerald-600 dark:text-emerald-400 text-[10px] bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1 rounded-full font-black uppercase tracking-widest border border-emerald-200 dark:border-emerald-500/30 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                       Cliente
                     </span>
                   ) : (
-                    <span className="text-blue-600 text-[10px] bg-blue-50 px-3 py-1 rounded-full font-black uppercase tracking-widest border border-blue-200 flex items-center gap-1">
+                    <span className="text-blue-600 dark:text-blue-400 text-[10px] bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full font-black uppercase tracking-widest border border-blue-200 dark:border-blue-500/30 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
                       Partner Sharing
                     </span>
@@ -338,7 +338,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
             <div className="flex items-center gap-3">
               <button
                 onClick={onToggleFullScreen}
-                className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all"
+                className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all"
               >
                 {isFullScreen ? t('results.exit_fullscreen') : t('results.enter_fullscreen')}
               </button>
@@ -353,35 +353,35 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
             </div>
           </div>
 
-          <div className={`rounded-[2.5rem] border-2 border-slate-100 bg-[#F2F2F7] p-2 ${isFullScreen ? 'flex-1 overflow-auto' : 'overflow-x-auto'}`}>
-            <table ref={tableRef} className="min-w-full divide-y divide-slate-100 bg-white/70 backdrop-blur-xl rounded-[2rem] overflow-hidden">
+          <div className={`rounded-[2.5rem] border-2 border-slate-100 dark:border-white/5 bg-[#F2F2F7] dark:bg-slate-950 p-2 ${isFullScreen ? 'flex-1 overflow-auto' : 'overflow-x-auto'}`}>
+            <table ref={tableRef} className="min-w-full divide-y divide-slate-100 dark:divide-white/5 bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl rounded-[2rem] overflow-hidden">
               <thead>
-                <tr className="bg-white/40">
-                  <th className="px-6 py-5 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">{t('results.col_level')}</th>
-                  <th className="px-6 py-5 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">{t('results.col_users')}</th>
-                  <th className="px-6 py-5 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 text-center">{t('results.col_token')}</th>
-                  <th className="px-6 py-5 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">{t('results.col_rec_1')}</th>
-                  <th className="px-6 py-5 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">{t('results.col_rec_2')}</th>
-                  <th className="px-6 py-5 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">{t('results.col_rec_3')}</th>
+                <tr className="bg-white/40 dark:bg-slate-800/40">
+                  <th className="px-6 py-5 text-left text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest border-b border-slate-50 dark:border-white/5">{t('results.col_level')}</th>
+                  <th className="px-6 py-5 text-left text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest border-b border-slate-50 dark:border-white/5">{t('results.col_users')}</th>
+                  <th className="px-6 py-5 text-left text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest border-b border-slate-50 dark:border-white/5 text-center">{t('results.col_token')}</th>
+                  <th className="px-6 py-5 text-left text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest border-b border-slate-50 dark:border-white/5">{t('results.col_rec_1')}</th>
+                  <th className="px-6 py-5 text-left text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest border-b border-slate-50 dark:border-white/5">{t('results.col_rec_2')}</th>
+                  <th className="px-6 py-5 text-left text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest border-b border-slate-50 dark:border-white/5">{t('results.col_rec_3')}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-slate-50 dark:divide-white/5">
                 {planResult.levelData.map((row) => (
-                  <tr key={row.level} className="hover:bg-slate-50/50 transition-colors">
-                    <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-slate-900">{getLevelLabel(row.level)}</td>
-                    <td className="px-6 py-5 whitespace-nowrap text-sm text-slate-700 font-mono font-bold">{row.users.toLocaleString('it-IT')}</td>
-                    <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-slate-900 text-center">{formatCurrency(row.oneTimeBonus)}</td>
+                  <tr key={row.level} className="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors">
+                    <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-slate-900 dark:text-white">{getLevelLabel(row.level)}</td>
+                    <td className="px-6 py-5 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 font-mono font-bold">{row.users.toLocaleString('it-IT')}</td>
+                    <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-slate-900 dark:text-white text-center">{formatCurrency(row.oneTimeBonus)}</td>
                     <td className="px-6 py-5 whitespace-nowrap">
-                      <div className="text-sm font-black text-slate-900">{formatCurrency(row.recurringYear1)}</div>
-                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Anno: {formatCurrency(row.recurringYear1 * 12).replace(",00", "")}</div>
+                      <div className="text-sm font-black text-slate-900 dark:text-white">{formatCurrency(row.recurringYear1)}</div>
+                      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tighter">Anno: {formatCurrency(row.recurringYear1 * 12).replace(",00", "")}</div>
                     </td>
                     <td className="px-6 py-5 whitespace-nowrap">
-                      <div className="text-sm font-black text-slate-900">{formatCurrency(row.recurringYear2)}</div>
-                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Anno: {formatCurrency(row.recurringYear2 * 12).replace(",00", "")}</div>
+                      <div className="text-sm font-black text-slate-900 dark:text-white">{formatCurrency(row.recurringYear2)}</div>
+                      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tighter">Anno: {formatCurrency(row.recurringYear2 * 12).replace(",00", "")}</div>
                     </td>
                     <td className="px-6 py-5 whitespace-nowrap">
-                      <div className="text-sm font-black text-slate-900">{formatCurrency(row.recurringYear3)}</div>
-                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Anno: {formatCurrency(row.recurringYear3 * 12).replace(",00", "")}</div>
+                      <div className="text-sm font-black text-slate-900 dark:text-white">{formatCurrency(row.recurringYear3)}</div>
+                      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tighter">Anno: {formatCurrency(row.recurringYear3 * 12).replace(",00", "")}</div>
                     </td>
                   </tr>
                 ))}
@@ -422,15 +422,15 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                   </tr>
                 )}
               </tbody>
-              <tfoot className="bg-white border-t-2 border-slate-100">
+              <tfoot className="bg-white dark:bg-slate-900 border-t-2 border-slate-100 dark:border-white/10">
                 <tr className="font-black">
-                  <td className="px-6 py-8 text-sm uppercase tracking-widest text-slate-900">
+                  <td className="px-6 py-8 text-sm uppercase tracking-widest text-slate-900 dark:text-white">
                     <div className="flex flex-col gap-4">
                       <span>{t('results.total')}</span>
                       <div className="flex gap-2">
                         <button
                           onClick={() => setIsEditModalOpen(true)}
-                          className="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2 rounded-xl transition-all flex items-center gap-2"
+                          className="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 px-3 py-2 rounded-xl transition-all flex items-center gap-2"
                         >
                           <Edit3 size={14} />
                           <span className="text-[9px] font-black uppercase tracking-tighter">Personalizza</span>
@@ -438,18 +438,18 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                         <button
                           onClick={handleExportPDF}
                           disabled={isExporting}
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-blue-200"
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-blue-200 dark:shadow-blue-900/40"
                         >
                           <Download size={14} />
                           <span className="text-[9px] font-black uppercase tracking-tighter">PDF</span>
                         </button>
                       </div>
                       <div className="flex items-center gap-2">
-                        <label className="text-[9px] uppercase font-black text-slate-400 tracking-tighter">Proiezione:</label>
+                        <label className="text-[9px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-tighter">Proiezione:</label>
                         <select
                           value={projectionYears}
                           onChange={(e) => setProjectionYears(Number(e.target.value))}
-                          className="bg-slate-50 border border-slate-200 text-[10px] font-black rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer"
+                          className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-[10px] font-black rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer text-slate-900 dark:text-white"
                         >
                           <option value={1}>1 Anno</option>
                           <option value={2}>2 Anni</option>
@@ -459,24 +459,24 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-8 text-sm text-slate-900 font-mono align-top">{totalUsers.toLocaleString('it-IT')}</td>
-                  <td className="px-6 py-8 text-2xl text-emerald-600 font-black text-center align-top">{formatCurrency(totalOneTimeBonus)}</td>
+                  <td className="px-6 py-8 text-sm text-slate-900 dark:text-white font-mono align-top">{totalUsers.toLocaleString('it-IT')}</td>
+                  <td className="px-6 py-8 text-2xl text-emerald-600 dark:text-emerald-400 font-black text-center align-top">{formatCurrency(totalOneTimeBonus)}</td>
                   <td className="px-6 py-8 align-top">
-                    <div className="text-2xl text-orange-600 drop-shadow-sm">{formatCurrency(displayMonthlyRec1)}</div>
-                    <div className="text-[10px] font-black text-slate-400 mt-2 uppercase tracking-tighter">
-                      {projectionYears} {projectionYears > 1 ? 'Anni' : 'Anno'}: <span className="text-slate-900">{formatCurrency(displayMonthlyRec1 * 12 * projectionYears)}</span>
+                    <div className="text-2xl text-orange-600 dark:text-orange-400 drop-shadow-sm">{formatCurrency(displayMonthlyRec1)}</div>
+                    <div className="text-[10px] font-black text-slate-400 dark:text-slate-500 mt-2 uppercase tracking-tighter">
+                      {projectionYears} {projectionYears > 1 ? 'Anni' : 'Anno'}: <span className="text-slate-900 dark:text-white">{formatCurrency(displayMonthlyRec1 * 12 * projectionYears)}</span>
                     </div>
                   </td>
                   <td className="px-6 py-8 align-top">
-                    <div className="text-2xl text-orange-600 drop-shadow-sm">{formatCurrency(displayMonthlyRec2)}</div>
-                    <div className="text-[10px] font-black text-slate-400 mt-2 uppercase tracking-tighter">
-                      {projectionYears} {projectionYears > 1 ? 'Anni' : 'Anno'}: <span className="text-slate-900">{formatCurrency(displayMonthlyRec2 * 12 * projectionYears)}</span>
+                    <div className="text-2xl text-orange-600 dark:text-orange-400 drop-shadow-sm">{formatCurrency(displayMonthlyRec2)}</div>
+                    <div className="text-[10px] font-black text-slate-400 dark:text-slate-500 mt-2 uppercase tracking-tighter">
+                      {projectionYears} {projectionYears > 1 ? 'Anni' : 'Anno'}: <span className="text-slate-900 dark:text-white">{formatCurrency(displayMonthlyRec2 * 12 * projectionYears)}</span>
                     </div>
                   </td>
                   <td className="px-6 py-8 align-top">
-                    <div className="text-2xl text-orange-600 drop-shadow-sm">{formatCurrency(displayMonthlyRec3)}</div>
-                    <div className="text-[10px] font-black text-slate-400 mt-2 uppercase tracking-tighter">
-                      {projectionYears} {projectionYears > 1 ? 'Anni' : 'Anno'}: <span className="text-slate-900">{formatCurrency(displayMonthlyRec3 * 12 * projectionYears)}</span>
+                    <div className="text-2xl text-orange-600 dark:text-orange-400 drop-shadow-sm">{formatCurrency(displayMonthlyRec3)}</div>
+                    <div className="text-[10px] font-black text-slate-400 dark:text-slate-500 mt-2 uppercase tracking-tighter">
+                      {projectionYears} {projectionYears > 1 ? 'Anni' : 'Anno'}: <span className="text-slate-900 dark:text-white">{formatCurrency(displayMonthlyRec3 * 12 * projectionYears)}</span>
                     </div>
                   </td>
                 </tr>
@@ -487,7 +487,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
         {/* CONTROLS SECTION - REDESIGNED for Focus Mode */}
         {isFullScreen && onInputChange && (
-          <div className="bg-white rounded-[2.5rem] shadow-xl border-2 border-slate-100 p-8 shrink-0">
+          <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-xl border-2 border-slate-100 dark:border-white/10 p-8 shrink-0">
             <div className="flex gap-6 items-center">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 flex-1">
                 <div className="transform origin-center"><CustomSlider label={t('input.direct_recruits')} value={inputs.directRecruits} onChange={(v: number) => onInputChange('directRecruits', v)} min={0} max={20} icon={User} colorBase="orange" showButtons={true} /></div>
@@ -498,11 +498,11 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
               {/* Bonus 3x3 Toggle */}
               {inputs.directRecruits >= 3 && inputs.contractsPerUser >= 1 && inputs.indirectRecruits >= 3 && (
-                <div className="flex flex-col items-center justify-center p-4 rounded-3xl bg-orange-50 border-2 border-orange-100 shrink-0 animate-in zoom-in duration-300">
-                  <span className="text-[9px] font-black text-orange-600 uppercase tracking-widest mb-2 whitespace-nowrap italic">In 60 giorni</span>
+                <div className="flex flex-col items-center justify-center p-4 rounded-3xl bg-orange-50 dark:bg-orange-900/30 border-2 border-orange-100 dark:border-orange-500/30 shrink-0 animate-in zoom-in duration-300">
+                  <span className="text-[9px] font-black text-orange-600 dark:text-orange-400 uppercase tracking-widest mb-2 whitespace-nowrap italic">In 60 giorni</span>
                   <button
                     onClick={() => onInputChange('bonus3x3Active', inputs.bonus3x3Active ? 0 : 1)}
-                    className={`w-14 h-7 rounded-full transition-all relative ${inputs.bonus3x3Active ? 'bg-orange-500' : 'bg-slate-200'}`}
+                    className={`w-14 h-7 rounded-full transition-all relative ${inputs.bonus3x3Active ? 'bg-orange-500' : 'bg-slate-200 dark:bg-slate-700'}`}
                   >
                     <div className={`absolute top-1 w-5 h-5 rounded-full bg-white transition-all ${inputs.bonus3x3Active ? 'left-8 shadow-md' : 'left-1'}`} />
                   </button>
@@ -511,7 +511,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
               <button
                 onClick={handleReset}
-                className="flex flex-col items-center justify-center w-20 h-20 rounded-3xl bg-red-50 text-red-500 hover:bg-red-100 transition-all border-2 border-red-50 shrink-0 shadow-sm"
+                className="flex flex-col items-center justify-center w-20 h-20 rounded-3xl bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 transition-all border-2 border-red-50 dark:border-red-500/30 shrink-0 shadow-sm"
                 title="Azzera tutto"
               >
                 <RotateCcw className="w-7 h-7 mb-1" />
@@ -529,18 +529,18 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         />
       )}
 
-      <div className="bg-white rounded-[3rem] shadow-xl border-2 border-slate-100 overflow-hidden mt-8 p-8">
+      <div className="bg-white dark:bg-slate-900 shadow-xl border-2 border-slate-100 dark:border-white/10 overflow-hidden mt-8 p-8 rounded-[3rem]">
         <GrowthChart data={monthlyData} />
       </div>
 
       {!showWowFeatures ? (
         <div className="py-16 flex flex-col items-center justify-center text-center">
-          <button onClick={() => setShowWowFeatures(true)} className="px-10 py-5 bg-white text-gray-900 rounded-full text-xl font-black shadow-xl hover:shadow-2xl hover:scale-105 transition-all border-2 border-slate-100 animate-bounce">
+          <button onClick={() => setShowWowFeatures(true)} className="px-10 py-5 bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-full text-xl font-black shadow-xl hover:shadow-2xl hover:scale-105 transition-all border-2 border-slate-100 dark:border-white/10 animate-bounce">
             ✨ {t('results.wow_reveal')}
           </button>
         </div>
       ) : (
-        <div className="animate-in slide-in-from-bottom-10 duration-700 space-y-12 p-8 rounded-[3rem] bg-slate-50 border-2 border-slate-100">
+        <div className="animate-in slide-in-from-bottom-10 duration-700 space-y-12 p-8 rounded-[3rem] bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-white/10">
           <div id="live-battle"><LiveBattleMode planResult={planResult} /></div>
           <div id="quick-pitch"><QuickPitchMode planResult={planResult} realizationMonths={inputs.realizationTimeMonths} /></div>
           <div id="scenario-comparator"><ScenarioComparator baseInputs={inputs} /></div>
@@ -564,7 +564,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
             { id: 'pension-calculator', name: 'Calcolatore Pensione', icon: '👴' },
           ]} />
 
-          <button onClick={() => setShowWowFeatures(false)} className="mx-auto block px-10 py-5 bg-white text-gray-900 rounded-full font-black shadow-lg hover:shadow-xl transition-all border-2 border-slate-100">
+          <button onClick={() => setShowWowFeatures(false)} className="mx-auto block px-10 py-5 bg-white dark:bg-slate-800 text-gray-900 dark:text-white rounded-full font-black shadow-lg hover:shadow-xl transition-all border-2 border-slate-100 dark:border-white/10">
             {t('results.wow_hide')}
           </button>
         </div>
@@ -588,13 +588,13 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
       {/* EDIT DETAILS MODAL */}
       {isEditModalOpen && (
-        <div className="fixed inset-0 z-[10001] flex items-center justify-center p-4 bg-black/40 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl border-2 border-slate-50 animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-[10001] flex items-center justify-center p-4 bg-black/40 dark:bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl border-2 border-slate-50 dark:border-white/10 animate-in zoom-in-95 duration-200">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight">Personalizza PDF</h3>
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Personalizza PDF</h3>
               <button
                 onClick={() => setIsEditModalOpen(false)}
-                className="p-2 hover:bg-slate-100 rounded-full text-slate-400 transition-colors"
+                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full text-slate-400 transition-colors"
               >
                 <X size={24} />
               </button>
@@ -602,33 +602,33 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
             <div className="space-y-5">
               <div>
-                <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Nome</label>
+                <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 ml-1">Nome</label>
                 <input
                   type="text"
                   value={consultantName}
                   onChange={(e) => setConsultantName(e.target.value)}
                   placeholder="Es. Mario"
-                  className="w-full px-5 py-4 rounded-2xl bg-slate-50 border-2 border-slate-100 focus:outline-none focus:border-blue-500 transition-colors text-slate-900 font-bold"
+                  className="w-full px-5 py-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border-2 border-slate-100 dark:border-white/5 focus:outline-none focus:border-blue-500 transition-colors text-slate-900 dark:text-white font-bold"
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Cognome</label>
+                <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 ml-1">Cognome</label>
                 <input
                   type="text"
                   value={consultantSurname}
                   onChange={(e) => setConsultantSurname(e.target.value)}
                   placeholder="Es. Rossi"
-                  className="w-full px-5 py-4 rounded-2xl bg-slate-50 border-2 border-slate-100 focus:outline-none focus:border-blue-500 transition-colors text-slate-900 font-bold"
+                  className="w-full px-5 py-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border-2 border-slate-100 dark:border-white/5 focus:outline-none focus:border-blue-500 transition-colors text-slate-900 dark:text-white font-bold"
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Telefono</label>
+                <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-2 ml-1">Telefono</label>
                 <input
                   type="tel"
                   value={consultantPhone}
                   onChange={(e) => setConsultantPhone(e.target.value)}
                   placeholder="Es. 333 1234567"
-                  className="w-full px-5 py-4 rounded-2xl bg-slate-50 border-2 border-slate-100 focus:outline-none focus:border-blue-500 transition-colors text-slate-900 font-bold"
+                  className="w-full px-5 py-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border-2 border-slate-100 dark:border-white/5 focus:outline-none focus:border-blue-500 transition-colors text-slate-900 dark:text-white font-bold"
                 />
               </div>
             </div>
@@ -636,7 +636,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
             <div className="mt-10">
               <button
                 onClick={() => setIsEditModalOpen(false)}
-                className="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black transition-all flex items-center justify-center gap-3 shadow-xl shadow-blue-200"
+                className="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black transition-all flex items-center justify-center gap-3 shadow-xl shadow-blue-200 dark:shadow-blue-900/40"
               >
                 <Save size={20} />
                 SALVA E CHIUDI

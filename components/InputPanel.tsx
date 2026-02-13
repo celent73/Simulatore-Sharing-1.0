@@ -171,26 +171,26 @@ const CashbackModal = ({ isOpen, onClose, inputs, onInputChange, onReset, txt, p
   const saving = period === 'annual' ? monthlySaving * 12 : monthlySaving;
   const returnLabel = period === 'annual' ? "Tuo Ritorno Annuale" : txt.monthlyReturn;
   return (
-    <div className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white/90 backdrop-blur-2xl rounded-t-[3rem] sm:rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-500 max-h-[90vh] flex flex-col border-t sm:border border-white/80">
+    <div className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="bg-white/90 dark:bg-slate-950/90 backdrop-blur-2xl rounded-t-[3rem] sm:rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-500 max-h-[90vh] flex flex-col border-t sm:border border-white/80 dark:border-white/5">
 
         {/* HEADER MODALE PREMIUM */}
         <div className="p-8 pb-4 flex justify-between items-start shrink-0">
           <div className="flex items-center gap-5">
-            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-700 text-white rounded-[1.5rem] flex items-center justify-center shadow-xl shadow-purple-500/20 ring-4 ring-white">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-700 text-white rounded-[1.5rem] flex items-center justify-center shadow-xl shadow-purple-500/20 ring-4 ring-white dark:ring-white/10">
               <ShoppingBag size={32} strokeWidth={2.5} />
             </div>
             <div>
-              <h3 className="text-2xl font-black text-slate-900 leading-none tracking-tighter">{txt.cashbackTitle}</h3>
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white leading-none tracking-tighter">{txt.cashbackTitle}</h3>
               <div className="mt-1 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-purple-500"></span>
-                <p className="text-xs font-black text-purple-600/70 uppercase tracking-widest">{txt.savings}</p>
+                <p className="text-xs font-black text-purple-600/70 dark:text-purple-400 uppercase tracking-widest">{txt.savings}</p>
               </div>
             </div>
           </div>
           <div className="flex gap-2">
-            <button onClick={onReset} className="w-12 h-12 flex items-center justify-center bg-red-50 text-red-500 rounded-2xl border border-red-100/50 hover:bg-red-500 hover:text-white transition-all active:scale-95" title="Azzera"><RotateCcw size={22} /></button>
-            <button onClick={onClose} className="w-12 h-12 flex items-center justify-center bg-slate-100 text-slate-400 rounded-2xl border border-slate-200/50 hover:bg-slate-200 hover:text-slate-900 transition-all active:scale-95"><X size={22} strokeWidth={3} /></button>
+            <button onClick={onReset} className="w-12 h-12 flex items-center justify-center bg-red-50 dark:bg-red-900/20 text-red-500 rounded-2xl border border-red-100/50 dark:border-red-900/50 hover:bg-red-500 hover:text-white transition-all active:scale-95" title="Azzera"><RotateCcw size={22} /></button>
+            <button onClick={onClose} className="w-12 h-12 flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 rounded-2xl border border-slate-200/50 dark:border-white/5 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"><X size={22} strokeWidth={3} /></button>
           </div>
         </div>
 
@@ -213,10 +213,10 @@ const CashbackModal = ({ isOpen, onClose, inputs, onInputChange, onReset, txt, p
         {/* SLIDERS E AZIONI */}
         <div className="px-8 pb-8 overflow-y-auto custom-scrollbar flex-1 space-y-6">
           <div className="animate-in fade-in slide-in-from-right-4 duration-500 space-y-6 pt-2">
-            <div className="bg-white/50 border-2 border-white rounded-[2.5rem] p-2 shadow-xl shadow-purple-100/30">
+            <div className="bg-white/50 dark:bg-white/5 border-2 border-white dark:border-white/10 rounded-[2.5rem] p-2 shadow-xl shadow-purple-100/30 dark:shadow-none">
               <CustomSlider label={txt.monthlySpend} value={inputs.cashbackSpending} onChange={(v: number) => onInputChange('cashbackSpending', v)} min={0} max={50000} step={50} colorBase="purple" icon={ShoppingBag} />
             </div>
-            <div className="bg-white/50 border-2 border-white rounded-[2.5rem] p-2 shadow-xl shadow-purple-100/30">
+            <div className="bg-white/50 dark:bg-white/5 border-2 border-white dark:border-white/10 rounded-[2.5rem] p-2 shadow-xl shadow-purple-100/30 dark:shadow-none">
               <CustomSlider label={txt.cashbackPercent} value={inputs.cashbackPercentage} onChange={(v: number) => onInputChange('cashbackPercentage', v)} min={0} max={20} step={0.5} colorBase="purple" icon={PenSquare} />
             </div>
 
@@ -247,26 +247,26 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
   const isClientMode = viewMode === 'client';
   const multiplier = 1;
   return (
-    <div className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white/90 backdrop-blur-2xl rounded-t-[3rem] sm:rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-500 max-h-[95vh] flex flex-col border-t sm:border border-white/80">
+    <div className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="bg-white/90 dark:bg-slate-950/90 backdrop-blur-2xl rounded-t-[3rem] sm:rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-500 max-h-[95vh] flex flex-col border-t sm:border border-white/80 dark:border-white/5">
 
         {/* HEADER MODALE PREMIUM */}
         <div className="p-8 pb-4 flex justify-between items-start shrink-0">
           <div className="flex items-center gap-5">
-            <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white rounded-[1.5rem] flex items-center justify-center shadow-xl shadow-emerald-500/20 ring-4 ring-white">
+            <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white rounded-[1.5rem] flex items-center justify-center shadow-xl shadow-emerald-500/20 ring-4 ring-white dark:ring-white/10">
               <Briefcase size={32} strokeWidth={2.5} />
             </div>
             <div>
-              <h3 className="text-2xl font-black text-slate-900 leading-none tracking-tighter">{txt.personalTitle}</h3>
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white leading-none tracking-tighter">{txt.personalTitle}</h3>
               <div className="mt-1 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                <p className="text-xs font-black text-emerald-600/70 uppercase tracking-widest">{txt.yourWork}</p>
+                <p className="text-xs font-black text-emerald-600/70 dark:text-emerald-400 uppercase tracking-widest">{txt.yourWork}</p>
               </div>
             </div>
           </div>
           <div className="flex gap-2">
-            <button onClick={onReset} className="w-12 h-12 flex items-center justify-center bg-red-50 text-red-500 rounded-2xl border border-red-100/50 hover:bg-red-500 hover:text-white transition-all active:scale-95" title="Svuota"><Trash2 size={22} /></button>
-            <button onClick={onClose} className="w-12 h-12 flex items-center justify-center bg-slate-100 text-slate-400 rounded-2xl border border-slate-200/50 hover:bg-slate-200 hover:text-slate-900 transition-all active:scale-95"><X size={22} strokeWidth={3} /></button>
+            <button onClick={onReset} className="w-12 h-12 flex items-center justify-center bg-red-50 dark:bg-red-900/20 text-red-500 rounded-2xl border border-red-100/50 dark:border-red-900/50 hover:bg-red-500 hover:text-white transition-all active:scale-95" title="Svuota"><Trash2 size={22} /></button>
+            <button onClick={onClose} className="w-12 h-12 flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 rounded-2xl border border-slate-200/50 dark:border-white/5 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"><X size={22} strokeWidth={3} /></button>
           </div>
         </div>
 
@@ -279,14 +279,14 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
 
         {/* TAB SYSTEM PREMIUM */}
         <div className="px-8 mb-8 shrink-0">
-          <div className="flex bg-slate-100 p-1.5 rounded-[1.5rem] border border-slate-200/50 shadow-inner-white">
+          <div className="flex bg-slate-100 dark:bg-slate-900 p-1.5 rounded-[1.5rem] border border-slate-200/50 dark:border-white/5 shadow-inner-white dark:shadow-none">
             {['my', 'private', 'business'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
                 className={`flex-1 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-all duration-500 ${activeTab === tab
-                  ? 'bg-white text-slate-900 shadow-md ring-1 ring-slate-200/50'
-                  : 'text-slate-400 hover:text-slate-600'}`}
+                  ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-md ring-1 ring-slate-200/50 dark:ring-white/10'
+                  : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
               >
                 {tab === 'my' ? txt.myUnits : tab === 'private' ? txt.private : txt.business}
               </button>
@@ -299,11 +299,11 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
           <div className="animate-in fade-in slide-in-from-right-4 duration-500">
             {activeTab === 'my' && (
               <div className="space-y-6">
-                <div className="bg-white/50 border-2 border-white rounded-[2.5rem] p-2 shadow-xl shadow-orange-100/30">
+                <div className="bg-white/50 dark:bg-white/5 border-2 border-white dark:border-white/10 rounded-[2.5rem] p-2 shadow-xl shadow-orange-100/30 dark:shadow-none">
                   <CustomSlider label={`${txt.myUnitsGreen} (+${50 * multiplier}€)`} value={inputs.myPersonalUnitsGreen} onChange={(v: number) => onInputChange('myPersonalUnitsGreen', v)} min={0} max={100} colorBase="orange" icon={Home} suffix="" />
                   <div className="px-4 pb-4">
-                    <div className="bg-orange-600/10 border border-orange-100 rounded-xl py-2 text-center">
-                      <p className="text-[11px] text-orange-600 font-black uppercase tracking-widest">{txt.baseRent}: {(1.00 * multiplier).toFixed(2)}€/mese</p>
+                    <div className="bg-orange-600/10 dark:bg-orange-500/20 border border-orange-100 dark:border-orange-500/30 rounded-xl py-2 text-center">
+                      <p className="text-[11px] text-orange-600 dark:text-orange-400 font-black uppercase tracking-widest">{txt.baseRent}: {(1.00 * multiplier).toFixed(2)}€/mese</p>
                     </div>
                   </div>
                 </div>
@@ -370,7 +370,7 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
         <div className="p-8 pt-0 mt-auto shrink-0">
           <button
             onClick={onClose}
-            className="w-full py-6 bg-slate-900 text-white rounded-[1.5rem] font-black text-xl uppercase tracking-tighter hover:bg-black transition-all shadow-2xl active:scale-95"
+            className="w-full py-6 bg-slate-900 dark:bg-white dark:text-slate-900 text-white rounded-[1.5rem] font-black text-xl uppercase tracking-tighter hover:bg-black dark:hover:bg-slate-100 transition-all shadow-2xl active:scale-95"
           >
             {txt.confirm}
           </button>
@@ -473,7 +473,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
         )}
 
         {/* CONTENITORE PRINCIPALE INPUT */}
-        <div className="bg-white/70 backdrop-blur-3xl rounded-[3rem] shadow-2xl border border-white/80 flex-grow flex flex-col p-4 sm:p-8 overflow-hidden relative z-10">
+        <div className="bg-white/70 dark:bg-slate-900/80 backdrop-blur-3xl rounded-[3rem] shadow-2xl border border-white/80 dark:border-white/10 flex-grow flex flex-col p-4 sm:p-8 overflow-hidden relative z-10 transition-colors duration-300">
 
           {/* HEADER PREMIUM */}
           <div className="flex justify-between items-start mb-10 shrink-0">
@@ -482,9 +482,9 @@ const InputPanel: React.FC<InputPanelProps> = ({
                 <Heart size={32} fill="currentColor" strokeWidth={0} />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-slate-900 leading-[0.9] tracking-tighter">
+                <h2 className="text-2xl font-black text-slate-900 dark:text-white leading-[0.9] tracking-tighter transition-colors">
                   {txt.paramsTitle}<br />
-                  <span className="text-union-blue-600 font-extrabold text-base tracking-tight opacity-90">{txt.paramsSubtitle}</span>
+                  <span className="text-union-blue-600 dark:text-union-blue-400 font-extrabold text-base tracking-tight opacity-90">{txt.paramsSubtitle}</span>
                 </h2>
               </div>
             </div>
@@ -492,7 +492,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
             {/* RESET BUTTON ONLY */}
             <button
               onClick={onReset}
-              className="w-14 h-14 flex items-center justify-center bg-[#FF3B30] text-white rounded-[1.25rem] shadow-xl shadow-red-500/30 hover:bg-[#D72C21] hover:scale-110 active:scale-90 transition-all border-2 border-white ring-4 ring-red-50"
+              className="w-14 h-14 flex items-center justify-center bg-[#FF3B30] text-white rounded-[1.25rem] shadow-xl shadow-red-500/30 hover:bg-[#D72C21] hover:scale-110 active:scale-90 transition-all border-2 border-white dark:border-white/10 ring-4 ring-red-50 dark:ring-red-900/20"
               title="Reset"
             >
               <RefreshCcw size={24} strokeWidth={3} />
@@ -533,7 +533,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
               {/* BUTTON CASHBACK */}
               <button
                 onClick={() => setModalOpen('cashback')}
-                className="w-full flex items-center justify-between p-6 rounded-[2.5rem] bg-gradient-to-br from-purple-50/50 via-white to-purple-50/30 border-2 border-white shadow-xl hover:shadow-purple-200/50 hover:-translate-y-1 transition-all group relative overflow-hidden"
+                className="w-full flex items-center justify-between p-6 rounded-[2.5rem] bg-gradient-to-br from-purple-50/50 via-white to-purple-50/30 dark:from-indigo-900/40 dark:via-slate-800/60 dark:to-purple-900/40 border-2 border-white dark:border-white/10 shadow-xl hover:shadow-purple-200/50 dark:hover:shadow-purple-900/30 hover:-translate-y-1 transition-all group relative overflow-hidden"
               >
                 <div className="flex items-center gap-6 relative z-10">
                   <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-purple-500 to-purple-700 text-white shadow-lg shadow-purple-500/30 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 ring-4 ring-white">
@@ -541,30 +541,30 @@ const InputPanel: React.FC<InputPanelProps> = ({
                   </div>
                   <div className="text-left">
                     <div className="flex items-center gap-3 mb-1">
-                      <p className="text-[11px] font-black uppercase tracking-[0.15em] text-purple-600/60">{txt.savings}</p>
+                      <p className="text-[11px] font-black uppercase tracking-[0.15em] text-purple-600/60 transition-colors dark:text-purple-400/60">{txt.savings}</p>
 
                       {/* TOGGLE MESE/ANNO PREMIUM */}
                       <div
                         onClick={(e) => { e.stopPropagation(); setCashbackPeriod(prev => prev === 'monthly' ? 'annual' : 'monthly'); }}
-                        className="flex bg-slate-100 rounded-lg p-0.5 cursor-pointer border border-slate-200/50"
+                        className="flex bg-slate-100 dark:bg-slate-700 rounded-lg p-0.5 cursor-pointer border border-slate-200/50 dark:border-white/5"
                       >
-                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-md transition-all ${cashbackPeriod === 'monthly' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-500'}`}>{t('input.month').toUpperCase()}</span>
-                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-md transition-all ${cashbackPeriod === 'annual' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-500'}`}>{t('input.year').toUpperCase()}</span>
+                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-md transition-all ${cashbackPeriod === 'monthly' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-500 dark:text-slate-400'}`}>{t('input.month').toUpperCase()}</span>
+                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-md transition-all ${cashbackPeriod === 'annual' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-500 dark:text-slate-400'}`}>{t('input.year').toUpperCase()}</span>
                       </div>
                     </div>
 
-                    <p className="text-2xl font-black text-slate-900 leading-tight tracking-tighter">{txt.cashbackTitle}</p>
+                    <p className="text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tighter transition-colors">{txt.cashbackTitle}</p>
 
-                    <div className="mt-2 inline-flex items-center gap-2 bg-purple-600/10 border border-purple-200/50 px-3 py-1 rounded-xl">
+                    <div className="mt-2 inline-flex items-center gap-2 bg-purple-600/10 dark:bg-purple-500/20 border border-purple-200/50 dark:border-purple-500/30 px-3 py-1 rounded-xl">
                       <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
-                      <p className="text-[13px] font-black text-purple-700">
+                      <p className="text-[13px] font-black text-purple-700 dark:text-purple-300">
                         +€{(((inputs.cashbackSpending * inputs.cashbackPercentage) / 100) * (cashbackPeriod === 'annual' ? 12 : 1)).toFixed(2)}
                         <span className="opacity-60 font-bold ml-1">{cashbackPeriod === 'annual' ? 'Extra/Anno' : 'Extra/Mese'}</span>
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-purple-600 group-hover:text-white transition-all shadow-sm border border-slate-100 shrink-0">
+                <div className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-700/50 flex items-center justify-center text-slate-300 dark:text-slate-500 group-hover:bg-purple-600 group-hover:text-white transition-all shadow-sm border border-slate-100 dark:border-white/5 shrink-0">
                   <ChevronRight size={20} strokeWidth={3} />
                 </div>
               </button>
@@ -572,91 +572,91 @@ const InputPanel: React.FC<InputPanelProps> = ({
               {/* BUTTON CLIENTI */}
               <button
                 onClick={() => setModalOpen('personal')}
-                className="w-full flex items-center justify-between p-6 rounded-[2.5rem] bg-gradient-to-br from-emerald-50/50 via-white to-emerald-50/30 border-2 border-white shadow-xl hover:shadow-emerald-200/50 hover:-translate-y-1 transition-all group relative overflow-hidden"
+                className="w-full flex items-center justify-between p-6 rounded-[2.5rem] bg-gradient-to-br from-emerald-50/50 via-white to-emerald-50/30 dark:from-slate-900/40 dark:via-slate-800/60 dark:to-slate-900/40 border-2 border-white dark:border-white/10 shadow-xl hover:shadow-emerald-200/50 dark:hover:shadow-emerald-900/30 hover:-translate-y-1 transition-all group relative overflow-hidden"
               >
                 <div className="flex items-center gap-6 relative z-10">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-lg shadow-emerald-500/30 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 ring-4 ring-white">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-lg shadow-emerald-500/30 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500 ring-4 ring-white dark:ring-white/10">
                     <Briefcase size={30} strokeWidth={2.5} />
                   </div>
                   <div className="text-left">
-                    <p className="text-[11px] font-black uppercase tracking-[0.15em] text-emerald-600/60 mb-1">{txt.yourWork}</p>
-                    <p className="text-2xl font-black text-slate-900 leading-tight tracking-tighter">{txt.personalTitle}</p>
+                    <p className="text-[11px] font-black uppercase tracking-[0.15em] text-emerald-600/60 transition-colors dark:text-emerald-400/60 mb-1">{txt.yourWork}</p>
+                    <p className="text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tighter transition-colors">{txt.personalTitle}</p>
 
-                    <div className="mt-2 inline-flex items-center gap-2 bg-emerald-600/10 border border-emerald-200/50 px-3 py-1 rounded-xl">
+                    <div className="mt-2 inline-flex items-center gap-2 bg-emerald-600/10 dark:bg-emerald-500/20 border border-emerald-200/50 dark:border-emerald-500/30 px-3 py-1 rounded-xl">
                       <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                      <p className="text-[13px] font-black text-emerald-700">
+                      <p className="text-[13px] font-black text-emerald-700 dark:text-emerald-300">
                         Configura il tuo lavoro <span className="opacity-60 font-bold ml-1">diretto</span>
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-slate-100 shrink-0">
+                <div className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-700/50 flex items-center justify-center text-slate-300 dark:text-slate-500 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm border border-slate-100 dark:border-white/5 shrink-0">
                   <ChevronRight size={20} strokeWidth={3} />
                 </div>
               </button>
             </div>
-
-            <div className="h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-white/10 to-transparent my-6 w-full mx-auto shrink-0"></div>
-
-            {/* SLIDERS NETWORK PREMIUM */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-[12px] font-black text-slate-400 uppercase tracking-[0.2em] pl-2">Configurazione Rete</h3>
-                <SharyTrigger
-                  message="Qui definisci la tua struttura. Seleziona quanti collaboratori diretti porti, quanti ne porteranno loro (Indiretti) e fino a che livello di profondità vuoi calcolare. Ricorda: più è profonda la rete, più guadagni dalle royalty!"
-                  messageDe="Hier definierst du deine Struktur. Wähle aus, wie viele direkte Mitarbeiter du mitbringst, wie viele sie mitbringen (indirekt) und bis zu welcher Tiefe du berechnen möchtest. Denke daran: Je tiefer das Netzwerk, desto mehr verdienst du an Lizenzgebühren!"
-                  messageEn="Here you define your structure. Select how many direct collaborators you bring, how many they will bring (Indirect) and up to which depth level you want to calculate. Remember: the deeper the network, the more you earn from royalties!"
-                  highlightId="slider_direct"
-                />
-              </div>
-
-              <div className="relative group/slider">
-                <CustomSlider label={t('input.direct_recruits')} value={inputs.directRecruits} onChange={(v: number) => onInputChange('directRecruits', v)} min={0} max={20} icon={User} colorBase="orange" id="slider_direct" />
-
-                {inputs.directRecruits >= 3 && inputs.contractsPerUser >= 1 && inputs.indirectRecruits >= 3 && (
-                  <button
-                    onClick={() => onInputChange('bonus3x3Active', !inputs.bonus3x3Active)}
-                    className={`absolute -top-3 right-4 px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-tighter transition-all z-20 shadow-xl border-2 ${inputs.bonus3x3Active
-                      ? 'bg-orange-600 text-white border-white scale-110'
-                      : 'bg-white text-orange-600 border-orange-100 animate-pulse-bonus'
-                      }`}
-                  >
-                    {inputs.bonus3x3Active ? '✅ 3x3 Attivo' : '🔥 In 60 Giorni?'}
-                  </button>
-                )}
-              </div>
-              <CustomSlider label={txt.contractsLabel} value={inputs.contractsPerUser} onChange={(v: number) => onInputChange('contractsPerUser', v)} min={0} max={2} icon={FileText} colorBase="cyan" id="slider_contracts" />
-              <CustomSlider label={t('input.indirect_recruits')} value={inputs.indirectRecruits} onChange={(v: number) => onInputChange('indirectRecruits', v)} min={0} max={10} icon={PenSquare} colorBase="blue" id="slider_indirect" />
-              <CustomSlider label={txt.depthLabel} value={inputs.networkDepth} onChange={(v: number) => onInputChange('networkDepth', v)} min={1} max={5} icon={Heart} colorBase="green" id="slider_depth" />
-            </div>
           </div>
 
-          {/* BOX TEMPO VETRATA */}
-          <div className="mt-8 pt-8 border-t-2 border-slate-100 shrink-0">
-            <div className="bg-gradient-to-br from-red-50/50 to-white/5 rounded-[2.5rem] p-2 border-2 border-white shadow-xl relative overflow-hidden group hover:shadow-red-200/50 transition-all duration-500">
-              <div className="absolute -right-8 -top-8 text-red-500/05 opacity-[0.03] group-hover:rotate-45 group-hover:scale-125 transition-all duration-1000">
-                <Clock size={180} strokeWidth={1} />
-              </div>
-              <CustomSlider
-                label={t('input.time')}
-                value={inputs.realizationTimeMonths}
-                onChange={(v: number) => onInputChange('realizationTimeMonths', v)}
-                min={1}
-                max={120}
-                suffix={` ${txt.months}`}
-                icon={Clock}
-                colorBase="red"
-                showButtons={true}
-                id="slider_time"
+          <div className="h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-white/10 to-transparent my-6 w-full mx-auto shrink-0"></div>
+
+          {/* SLIDERS NETWORK PREMIUM */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] pl-2 transition-colors">Configurazione Rete</h3>
+              <SharyTrigger
+                message="Qui definisci la tua struttura. Seleziona quanti collaboratori diretti porti, quanti ne porteranno loro (Indiretti) e fino a che livello di profondità vuoi calcolare. Ricorda: più è profonda la rete, più guadagni dalle royalty!"
+                messageDe="Hier definierst du deine Struktur. Wähle aus, wie viele direkte Mitarbeiter du mitbringst, wie viele sie mitbringen (indirekt) und bis zu welcher Tiefe du berechnen möchtest. Denke daran: Je tiefer das Netzwerk, desto mehr verdienst du an Lizenzgebühren!"
+                messageEn="Here you define your structure. Select how many direct collaborators you bring, how many they will bring (Indirect) and up to which depth level you want to calculate. Remember: the deeper the network, the more you earn from royalties!"
+                highlightId="slider_direct"
               />
-              <div className="absolute top-4 right-6">
-                <SharyTrigger
-                  message="Il fattore tempo è cruciale. Sposta questo cursore per vedere come cresce la tua rendita nel corso dei mesi. Solitamente una rete solida si costruisce in 12-24 mesi."
-                  messageDe="Der Zeitfaktor ist entscheidend. Verschiebe diesen Schieberegler, um zu sehen, wie dein Einkommen im Laufe der Monate wächst. Ein solides Netzwerk wird normalerweise in 12-24 Monaten aufgebaut."
-                  messageEn="The time factor is crucial. Move this slider to see how your income grows over the months. Usually a solid network is built in 12-24 months."
-                  highlightId="slider_time"
-                />
-              </div>
+            </div>
+
+            <div className="relative group/slider">
+              <CustomSlider label={t('input.direct_recruits')} value={inputs.directRecruits} onChange={(v: number) => onInputChange('directRecruits', v)} min={0} max={20} icon={User} colorBase="orange" id="slider_direct" />
+
+              {inputs.directRecruits >= 3 && inputs.contractsPerUser >= 1 && inputs.indirectRecruits >= 3 && (
+                <button
+                  onClick={() => onInputChange('bonus3x3Active', !inputs.bonus3x3Active)}
+                  className={`absolute -top-3 right-4 px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-tighter transition-all z-20 shadow-xl border-2 ${inputs.bonus3x3Active
+                    ? 'bg-orange-600 text-white border-white scale-110'
+                    : 'bg-white text-orange-600 border-orange-100 animate-pulse-bonus'
+                    }`}
+                >
+                  {inputs.bonus3x3Active ? '✅ 3x3 Attivo' : '🔥 In 60 Giorni?'}
+                </button>
+              )}
+            </div>
+            <CustomSlider label={txt.contractsLabel} value={inputs.contractsPerUser} onChange={(v: number) => onInputChange('contractsPerUser', v)} min={0} max={2} icon={FileText} colorBase="cyan" id="slider_contracts" />
+            <CustomSlider label={t('input.indirect_recruits')} value={inputs.indirectRecruits} onChange={(v: number) => onInputChange('indirectRecruits', v)} min={0} max={10} icon={PenSquare} colorBase="blue" id="slider_indirect" />
+            <CustomSlider label={txt.depthLabel} value={inputs.networkDepth} onChange={(v: number) => onInputChange('networkDepth', v)} min={1} max={5} icon={Heart} colorBase="green" id="slider_depth" />
+          </div>
+        </div>
+
+        {/* BOX TEMPO VETRATA */}
+        <div className="mt-8 pt-8 border-t-2 border-slate-100 dark:border-white/5 shrink-0 transition-colors">
+          <div className="bg-gradient-to-br from-red-50/50 to-white/5 dark:from-slate-800/40 dark:to-slate-900/40 rounded-[2.5rem] p-2 border-2 border-white dark:border-white/10 shadow-xl relative overflow-hidden group hover:shadow-red-200/50 dark:hover:shadow-red-900/30 transition-all duration-500">
+            <div className="absolute -right-8 -top-8 text-red-500/05 opacity-[0.03] group-hover:rotate-45 group-hover:scale-125 transition-all duration-1000">
+              <Clock size={180} strokeWidth={1} />
+            </div>
+            <CustomSlider
+              label={t('input.time')}
+              value={inputs.realizationTimeMonths}
+              onChange={(v: number) => onInputChange('realizationTimeMonths', v)}
+              min={1}
+              max={120}
+              suffix={` ${txt.months}`}
+              icon={Clock}
+              colorBase="red"
+              showButtons={true}
+              id="slider_time"
+            />
+            <div className="absolute top-4 right-6">
+              <SharyTrigger
+                message="Il fattore tempo è cruciale. Sposta questo cursore per vedere come cresce la tua rendita nel corso dei mesi. Solitamente una rete solida si costruisce in 12-24 mesi."
+                messageDe="Der Zeitfaktor ist entscheidend. Verschiebe diesen Schieberegler, um zu sehen, wie dein Einkommen im Laufe der Monate wächst. Ein solides Netzwerk wird normalerweise in 12-24 Monaten aufgebaut."
+                messageEn="The time factor is crucial. Move this slider to see how your income grows over the months. Usually a solid network is built in 12-24 months."
+                highlightId="slider_time"
+              />
             </div>
           </div>
         </div>
@@ -676,9 +676,17 @@ const InputPanel: React.FC<InputPanelProps> = ({
         period={cashbackPeriod}
         OpenDetailed={onOpenCashbackDetailed}
       />
-      {/* CashbackDetailedModal RIMOSSO DA QUI e SPOSTATO IN APP.TSX */}
 
-      <PersonalClientsModal isOpen={modalOpen === 'personal'} onClose={() => setModalOpen('none')} inputs={inputs} onInputChange={onInputChange} onReset={onResetPersonalClients} viewMode={viewMode} txt={txt} setUnionParkOpen={(v: boolean) => setModalOpen(v ? 'unionpark' : 'none')} />
+      <PersonalClientsModal
+        isOpen={modalOpen === 'personal'}
+        onClose={() => setModalOpen('none')}
+        inputs={inputs}
+        onInputChange={onInputChange}
+        onReset={onResetPersonalClients}
+        viewMode={viewMode}
+        txt={txt}
+        setUnionParkOpen={(v: boolean) => setModalOpen(v ? 'unionpark' : 'none')}
+      />
 
       <UnionParkModal
         isOpen={modalOpen === 'unionpark'}

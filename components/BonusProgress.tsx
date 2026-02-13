@@ -23,9 +23,9 @@ const ProgressBar = ({ current, target, isCompleted }: { current: number; target
   const percentage = Math.min(100, Math.max(0, (current / target) * 100));
 
   return (
-    <div className="w-full h-3 bg-slate-200/50 rounded-full mt-3 overflow-hidden shadow-inner border border-slate-300/30">
+    <div className="w-full h-3 bg-slate-200/50 dark:bg-slate-800/50 rounded-full mt-3 overflow-hidden shadow-inner border border-slate-300/30 dark:border-white/5">
       <div
-        className={`h-full rounded-full transition-all duration-1000 ease-out shadow-sm ${isCompleted ? 'bg-emerald-500' : 'bg-blue-600'}`}
+        className={`h-full rounded-full transition-all duration-1000 ease-out shadow-sm ${isCompleted ? 'bg-emerald-500 dark:bg-emerald-600' : 'bg-blue-600 dark:bg-blue-500'}`}
         style={{ width: `${percentage}%` }}
       />
     </div>
@@ -66,31 +66,31 @@ const BonusCard: React.FC<BonusCardProps> = ({
 
   return (
     <div className={`
-        relative p-6 rounded-[2rem] border-2 transition-all duration-300 backdrop-blur-xl
+        relative p-4 sm:p-6 rounded-[2rem] border-2 transition-all duration-300 backdrop-blur-xl
         ${isCompleted
-        ? 'bg-amber-50/60 border-amber-200/80 shadow-md scale-[1.02]'
-        : 'bg-white/70 border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300/80'}
+        ? 'bg-amber-50/60 dark:bg-amber-900/30 border-amber-200/80 dark:border-amber-500/30 shadow-md scale-[1.01]'
+        : 'bg-white/70 dark:bg-slate-900/60 border-slate-200/60 dark:border-white/10 shadow-sm hover:shadow-md hover:border-slate-300/80 dark:hover:border-white/20'}
     `}>
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center flex-1">
           <div className="p-2 bg-white/50 rounded-xl shadow-sm mr-2">{icon}</div>
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h4 className="font-black text-gray-900 text-sm tracking-tight">{level} {levelNum}</h4>
+              <h4 className="font-black text-gray-900 dark:text-white text-sm tracking-tight">{level} {levelNum}</h4>
               {isCompleted && managerTitleKey && (
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-100 text-amber-700 border-2 border-amber-200 uppercase tracking-tighter shadow-sm">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 border-2 border-amber-200 dark:border-amber-500/30 uppercase tracking-tighter shadow-sm">
                   {t(managerTitleKey)}
                 </span>
               )}
               {isCompleted && (
-                <div className="flex items-center gap-2 ml-auto">
-                  <span className="text-[10px] text-gray-400 font-black uppercase tracking-widest">{t('focus_mode.active')}</span>
+                <div className="flex flex-col items-center gap-1 ml-auto bg-white/40 dark:bg-black/20 p-2 rounded-2xl border border-slate-200/50 dark:border-white/5 shadow-inner">
+                  <span className="text-[9px] text-gray-500 dark:text-slate-400 font-black uppercase tracking-widest">{t('focus_mode.active')}</span>
                   <button
                     onClick={onToggle}
-                    className={`relative inline-flex h-6 w-10 items-center rounded-full transition-colors shadow-inner ${isActive ? 'bg-blue-600' : 'bg-slate-300'}`}
+                    className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 shadow-md ${isActive ? 'bg-blue-600 ring-2 ring-blue-500/20' : 'bg-slate-300 dark:bg-slate-700'}`}
                     role="switch"
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-transform ${isActive ? 'translate-x-5' : 'translate-x-1'}`} />
+                    <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-transform ${isActive ? 'translate-x-6' : 'translate-x-1'}`} />
                   </button>
                 </div>
               )}
@@ -102,11 +102,11 @@ const BonusCard: React.FC<BonusCardProps> = ({
 
       <ProgressBar current={current} target={target} isCompleted={isCompleted} />
 
-      <div className="text-[10px] text-slate-500 mt-3 font-black uppercase tracking-widest flex justify-between items-center">
-        <span>{t('bonus.card_done')}: <span className="text-gray-900">{current.toLocaleString(locale)}</span></span>
-        {!isCompleted && <span>{t('bonus.card_remaining_prefix')}: <span className="text-red-500 animate-pulse">{remaining.toLocaleString(locale)}</span></span>}
+      <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-3 font-black uppercase tracking-widest flex justify-between items-center">
+        <span>{t('bonus.card_done')}: <span className="text-gray-900 dark:text-white">{current.toLocaleString(locale)}</span></span>
+        {!isCompleted && <span>{t('bonus.card_remaining_prefix')}: <span className="text-red-500 dark:text-red-400 animate-pulse">{remaining.toLocaleString(locale)}</span></span>}
         {isCompleted && isActive && (
-          <span className="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-100">
+          <span className="text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-lg border border-emerald-100 dark:border-emerald-500/30">
             +€{monthlyBonus.toLocaleString(locale)}{t('results.per_month')}
           </span>
         )}
@@ -152,10 +152,10 @@ const BonusProgress: React.FC<BonusProgressProps> = ({ totalContracts, onBonusCh
 
   return (
     <div className="space-y-6">
-      <div className="bg-white/70 backdrop-blur-2xl p-8 rounded-[3rem] shadow-xl border-2 border-slate-100 relative">
-        <div className="flex items-center gap-3 mb-8">
-          <div className="p-3 bg-red-50 text-red-500 rounded-2xl shadow-sm">🎯</div>
-          <h2 className="text-2xl font-black text-gray-900 tracking-tight">{t('bonus.title')}</h2>
+      <div className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl px-3 py-8 sm:p-8 rounded-[3rem] shadow-xl border-2 border-slate-100 dark:border-white/10 relative">
+        <div className="flex items-center gap-3 mb-8 px-2 sm:px-0">
+          <div className="p-3 bg-red-50 dark:bg-red-900/30 text-red-500 dark:text-red-400 rounded-2xl shadow-sm">🎯</div>
+          <h2 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">{t('bonus.title')}</h2>
           <SharyTrigger message="..." />
         </div>
 
