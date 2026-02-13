@@ -547,7 +547,7 @@ const AppContent = () => {
       : '-30px 0 80px -5px rgba(1, 33, 105, 0.9), 30px 0 80px -5px rgba(200, 16, 46, 0.9), 0 0 50px -10px rgba(255, 255, 255, 0.8)');
 
   return (
-    <div className={`min-h-screen bg-white dark:bg-[#050505] text-gray-800 dark:text-gray-200 transition-colors duration-300 relative flex flex-col overflow-x-hidden`}>
+    <div className={`min-h-screen bg-white dark:bg-black text-gray-800 dark:text-gray-200 transition-colors duration-300 relative flex flex-col overflow-x-hidden`}>
       <BackgroundMesh />
 
       {/* SHARY UI */}
@@ -557,7 +557,7 @@ const AppContent = () => {
 
       {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.2.15
+        v1.2.16
       </div>
 
 
@@ -583,7 +583,7 @@ const AppContent = () => {
                 <h1 onClick={handleTitleClick} className="text-2xl sm:text-4xl font-extrabold text-white drop-shadow-sm select-none cursor-pointer active:scale-95 transition-transform flex items-center gap-3 flex-wrap justify-center md:justify-start">
                   {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
                   <span className="text-white">Sharing</span>
-                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.15</span>
+                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.16</span>
                   <span className="text-union-orange-400">Simulator</span>
                   {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-union-orange-400" /></span>}
                 </h1>

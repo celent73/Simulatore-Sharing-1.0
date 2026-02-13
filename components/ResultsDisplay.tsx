@@ -303,7 +303,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
       <div className={`
         ${isFullScreen
-          ? 'fixed inset-0 z-[10000] p-4 flex flex-col gap-4 overflow-hidden bg-[#F2F2F7] dark:bg-[#050505]'
+          ? 'fixed inset-0 z-[10000] p-4 flex flex-col gap-4 overflow-hidden bg-[#F2F2F7] dark:bg-black'
           : 'relative transition-all duration-500 ease-in-out'
         }
       `}>
