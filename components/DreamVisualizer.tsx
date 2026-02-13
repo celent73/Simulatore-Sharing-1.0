@@ -1,5 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { MonthlyGrowthData } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -91,6 +92,7 @@ const DreamVisualizer: React.FC<DreamVisualizerProps> = ({ monthlyData }) => {
     }
   }, [monthlyData, selectedDream, language]);
 
+
   const handleAddDream = () => {
     if (!newDreamTitle || !newDreamCost) return;
 
@@ -115,202 +117,195 @@ const DreamVisualizer: React.FC<DreamVisualizerProps> = ({ monthlyData }) => {
     setNewDreamCost('');
   };
 
-  const scrollToParams = () => {
-    const element = document.getElementById('input-panel');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+
 
   return (
-    <div className="bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl rounded-3xl shadow-lg border border-white/40 dark:border-gray-700/50 p-6 sm:p-8 overflow-hidden relative">
+    <>
+      <div className="bg-black/40 backdrop-blur-2xl rounded-[3rem] shadow-2xl border border-white/10 p-8 overflow-hidden relative group/container hover:shadow-[0_0_50px_rgba(0,0,0,0.5)] transition-all duration-500">
 
-      {/* Header with + Button */}
-      <div className="flex items-center justify-between mb-6 relative z-10">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl shadow-lg text-2xl text-white">
-            🌠
+        {/* Ambient Light */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-900/20 rounded-full blur-[100px] pointer-events-none translate-y-1/3 -translate-x-1/3" />
+
+        {/* Header with + Button */}
+        <div className="flex items-center justify-between mb-8 relative z-10">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 flex items-center justify-center bg-white/5 rounded-2xl border border-white/10 shadow-lg text-3xl text-white backdrop-blur-md">
+              🌠
+            </div>
+            <div>
+              <h2 className="text-2xl font-black text-white tracking-tight">{t('dreams.title')}</h2>
+              <p className="text-sm font-medium text-slate-400">{t('dreams.subtitle')}</p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('dreams.title')}</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{t('dreams.subtitle')}</p>
-          </div>
+
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-all font-bold text-xs uppercase tracking-widest border border-white/10 hover:border-white/20 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-95"
+          >
+            <span className="text-lg leading-none text-emerald-400">+</span> <span className="hidden sm:inline">{t('dreams.add_btn')}</span>
+          </button>
         </div>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-union-blue-50 dark:bg-union-blue-900/30 hover:bg-union-blue-100 dark:hover:bg-union-blue-800/50 text-union-blue-600 dark:text-union-blue-400 rounded-xl transition-all font-bold text-sm border border-union-blue-200 dark:border-union-blue-700/50 shadow-sm"
-        >
-          <span className="text-lg leading-none">+</span> <span className="hidden sm:inline">{t('dreams.add_btn')}</span>
-        </button>
-      </div>
+        {/* Dream Selector */}
+        <div className="flex gap-4 overflow-x-auto pb-6 mb-2 relative z-10 touch-pan-x custom-scrollbar snap-x">
+          {allDreams.map(dream => (
+            <button
+              key={dream.id}
+              onClick={() => setSelectedDreamId(dream.id)}
+              className={`
+                  snap-start flex flex-col items-center justify-center p-4 rounded-[2rem] min-w-[120px] min-h-[160px] border transition-all duration-300 outline-none relative overflow-hidden group
+                  ${selectedDream.id === dream.id
+                  ? `bg-white/10 border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.1)] scale-105 z-10`
+                  : 'bg-white/5 border-transparent hover:bg-white/10 hover:scale-105 opacity-60 hover:opacity-100'}
+               `}
+            >
+              <div className={`absolute inset-0 bg-gradient-to-br ${dream.gradient} opacity-20`} />
+              <span className="text-4xl mb-3 filter drop-shadow-lg relative z-10 transform group-hover:scale-110 transition-transform duration-300">{dream.icon}</span>
+              <span className={`text-xs font-black whitespace-nowrap mb-1 relative z-10 text-white tracking-tight`}>
+                {dream.title}
+              </span>
+              <span className={`text-[10px] font-bold relative z-10 text-slate-400 group-hover:text-white transition-colors`}>
+                €{new Intl.NumberFormat('it-IT', { notation: "compact" }).format(dream.cost)}
+              </span>
 
-      {/* Dream Selector */}
-      <div className="flex gap-3 overflow-x-auto pb-4 mb-6 relative z-10 touch-pan-x custom-scrollbar">
-        {allDreams.map(dream => (
-          <button
-            key={dream.id}
-            onClick={() => setSelectedDreamId(dream.id)}
-            className={`
-                flex flex-col items-center justify-center p-3 rounded-2xl min-w-[100px] min-h-[140px] border transition-all duration-300 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-union-blue-400 relative overflow-hidden
-                ${selectedDream.id === dream.id
-                ? `bg-gradient-to-br ${dream.gradient} border-transparent shadow-lg scale-105 z-10 text-white`
-                : 'bg-white/40 dark:bg-gray-800/40 border-transparent hover:bg-white/60 dark:hover:bg-gray-700/60 hover:scale-105 text-gray-600 dark:text-gray-400'}
-             `}
-          >
-            <span className="text-3xl mb-3 filter drop-shadow-sm relative z-10">{dream.icon}</span>
-            <span className={`text-xs font-bold whitespace-nowrap mb-1 relative z-10`}>
-              {dream.title}
-            </span>
-            <span className={`text-[10px] font-medium relative z-10 ${selectedDream.id === dream.id ? 'text-white/90' : 'text-gray-500'}`}>
-              €{new Intl.NumberFormat('it-IT', { notation: "compact" }).format(dream.cost)}
-            </span>
-          </button>
-        ))}
-      </div>
+              {selectedDream.id === dream.id && (
+                <div className="absolute bottom-2 w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_white]" />
+              )}
+            </button>
+          ))}
+        </div>
 
-      {/* Result Main Card */}
-      <div className={`
-            relative rounded-3xl p-6 sm:p-10 text-white overflow-hidden shadow-2xl transition-all duration-500 group
-            min-h-[300px] flex flex-col justify-center
-            bg-gradient-to-br ${selectedDream.gradient}
-       `}>
+        {/* Result Main Card - Standard View */}
+        <div className={`
+              relative rounded-[2.5rem] p-8 sm:p-12 text-white overflow-hidden shadow-2xl transition-all duration-700 group
+              min-h-[350px] flex flex-col justify-between border border-white/10
+              bg-gradient-to-br ${selectedDream.gradient}
+         `}>
+          {/* Background Overlay */}
+          <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
 
-        {/* Real Image Background (Simulated AI) */}
-        {selectedDream.id === 'maldive' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1473116763249-56381a3ec4a1?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-40 transition-opacity duration-1000"></div>}
-        {selectedDream.id === 'iphone' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1592750475338-74b7b2191b79?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-40 transition-opacity duration-1000"></div>}
-        {selectedDream.id === 'rolex' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-40 transition-opacity duration-1000"></div>}
-        {selectedDream.id === 'car' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-40 transition-opacity duration-1000"></div>}
-        {selectedDream.id === 'house' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-40 transition-opacity duration-1000"></div>}
-        {selectedDream.id === 'freedom' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-40 transition-opacity duration-1000"></div>}
+          {/* Real Image Background (Simulated AI) */}
+          {selectedDream.id === 'maldive' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1473116763249-56381a3ec4a1?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-50 transition-opacity duration-1000 group-hover:scale-105 transform"></div>}
+          {selectedDream.id === 'iphone' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1592750475338-74b7b2191b79?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-50 transition-opacity duration-1000 group-hover:scale-105 transform"></div>}
+          {selectedDream.id === 'rolex' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-50 transition-opacity duration-1000 group-hover:scale-105 transform"></div>}
+          {selectedDream.id === 'car' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-50 transition-opacity duration-1000 group-hover:scale-105 transform"></div>}
+          {selectedDream.id === 'house' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-50 transition-opacity duration-1000 group-hover:scale-105 transform"></div>}
+          {selectedDream.id === 'freedom' && <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay opacity-50 transition-opacity duration-1000 group-hover:scale-105 transform"></div>}
 
-        {/* Abstract Background Shapes as fallback or overlay */}
-        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none mix-blend-soft-light"></div>
-        <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-black/30 rounded-full blur-3xl pointer-events-none mix-blend-multiply"></div>
+          {/* Vignette */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex justify-between items-start">
+              <div>
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[10px] font-black uppercase tracking-widest shadow-sm mb-4">
+                  <span className="animate-pulse text-emerald-400">●</span> AI Vision
+                </div>
+                <h3 className="text-4xl sm:text-6xl font-black drop-shadow-2xl tracking-tighter mb-2">
+                  {selectedDream.title}
+                </h3>
+                <p className="text-white/80 font-bold text-xl drop-shadow-lg flex items-baseline gap-2">
+                  Valore: <span className="text-3xl text-white tracking-tight">€{selectedDream.cost.toLocaleString('it-IT')}</span>
+                </p>
+              </div>
 
-          {/* Left: Target Info */}
-          <div className="text-center md:text-left w-full">
-            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-xs font-bold uppercase tracking-wider shadow-sm animate-pulse">
-                <span>🤖</span> AI Vision
+            </div>
+
+            <div className="mt-8">
+              {prediction?.reached ? (
+                <div className="bg-black/40 backdrop-blur-xl p-6 rounded-3xl border border-white/10 flex items-center justify-between gap-6">
+                  <div>
+                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{t('dreams.will_be_yours')}</p>
+                    <div className="text-3xl sm:text-4xl font-black tracking-tighter text-white drop-shadow-lg">
+                      {prediction.dateString}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-1">Tra</div>
+                    <div className="text-2xl font-black text-white">{t('dreams.in_months').replace('months', `${prediction.month}`)}</div>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-black/40 backdrop-blur-xl p-6 rounded-3xl border border-white/10">
+                  <p className="text-white font-bold text-lg mb-1">{t('dreams.wip')}</p>
+                  <p className="text-sm text-slate-400">{t('dreams.wip_desc')}</p>
+                </div>
+              )}
+
+              {/* Progress Bar */}
+              <div className="mt-6">
+                <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-white/80 mb-2">
+                  <span>Prossimità Obiettivo</span>
+                  <span>{prediction?.progress.toFixed(0)}%</span>
+                </div>
+                <div className="h-4 bg-white/10 rounded-full overflow-hidden backdrop-blur-md shadow-inner border border-white/5">
+                  <div
+                    className={`h-full ${prediction?.reached ? 'bg-emerald-500' : 'bg-white'} shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-1000 ease-out relative`}
+                    style={{ width: `${prediction?.progress}%` }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full animate-shimmer" style={{ backgroundSize: '200% 100%' }}></div>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <h3 className="text-3xl sm:text-5xl font-black flex items-center justify-center md:justify-start gap-3 mb-2 drop-shadow-lg tracking-tight">
-              {selectedDream.title}
-            </h3>
-            <p className="text-white/90 font-medium text-xl drop-shadow-md">
-              {t('dreams.value_label')}: <span className="font-bold text-white text-2xl">€{selectedDream.cost.toLocaleString('it-IT')}</span>
-            </p>
-          </div>
-
-          {/* Right: Prediction Result */}
-          <div className="text-center md:text-right bg-black/30 p-6 rounded-3xl backdrop-blur-md border border-white/20 min-w-[220px] shadow-xl transform transition-transform hover:scale-105">
-            {prediction?.reached ? (
-              <>
-                <p className="text-white/80 text-xs font-bold uppercase tracking-wider mb-2">{t('dreams.will_be_yours')}</p>
-                <div className="text-3xl sm:text-4xl font-black tracking-tight text-white drop-shadow-xl mb-2">
-                  {prediction.dateString}
-                </div>
-                <div className="inline-flex items-center gap-1 text-sm font-bold bg-white text-gray-900 px-4 py-1.5 rounded-full shadow-lg">
-                  <span>⏳</span> {t('dreams.in_months').replace('months', `${prediction.month}`)}
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="text-white/90 font-bold text-lg mb-1">{t('dreams.wip')}</p>
-                <p className="text-sm opacity-70 leading-tight block max-w-[180px] mx-auto">
-                  {t('dreams.wip_desc')}
-                </p>
-              </>
-            )}
           </div>
         </div>
 
-        {/* Progress Bar Area */}
-        <div className="mt-10 relative z-10">
-          <div className="flex justify-between text-xs font-bold uppercase tracking-wider opacity-90 mb-2">
-            <span>{t('dreams.progress')}</span>
-            <span>{prediction?.progress.toFixed(0)}%</span>
-          </div>
-          <div className="h-6 bg-black/30 rounded-full overflow-hidden backdrop-blur-md shadow-inner border border-white/20">
-            <div
-              className={`h-full ${prediction?.reached ? 'bg-emerald-400' : 'bg-white'} shadow-[0_0_20px_rgba(255,255,255,0.6)] transition-all duration-1000 ease-out relative`}
-              style={{ width: `${prediction?.progress}%` }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent w-full h-full animate-shimmer" style={{ backgroundSize: '200% 100%' }}></div>
-            </div>
-          </div>
-          {!prediction?.reached && (
-            <p className="text-center text-xs mt-3 text-white/80 font-bold bg-black/20 py-1 px-3 rounded-full inline-block mx-auto backdrop-blur-sm">
-              Accumulato finora: €{monthlyData[monthlyData.length - 1]?.cumulativeEarnings.toLocaleString('it-IT') || 0}
-            </p>
-          )}
-        </div>
+
       </div>
 
-      {/* Floating Action Button */}
-      <button
-        onClick={scrollToParams}
-        className="absolute bottom-4 right-4 z-20 p-2.5 bg-union-orange-500 text-white rounded-full shadow-lg hover:bg-union-orange-600 transition-transform hover:scale-110 focus:outline-none border-2 border-white/20"
-        title="Modifica Parametri"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-        </svg>
-      </button>
+
 
       {/* Add Dream Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 w-full max-w-sm shadow-2xl border border-white/20 animate-in zoom-in-95 relative">
+      {isModalOpen && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[10005] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
+          <div className="bg-[#1c1c1e] text-white rounded-[2.5rem] p-8 w-full max-w-sm shadow-2xl border border-white/10 animate-in zoom-in-95 relative">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-2"
+              className="absolute top-6 right-6 text-gray-400 hover:text-white p-2 transition-colors bg-white/5 rounded-full"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 bg-union-blue-50 dark:bg-union-blue-900/30 rounded-xl">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-4 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg">
                 <span className="text-2xl">✨</span>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h3 className="text-xl font-black text-white tracking-tight">
                 {t('dreams.modal_title')}
               </h3>
             </div>
 
-            <div className="space-y-5">
+            <div className="space-y-6">
               <div>
-                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">{t('dreams.input_name')}</label>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">{t('dreams.input_name')}</label>
                 <input
                   type="text"
                   placeholder="Es. Ristrutturazione Bagno"
                   value={newDreamTitle}
                   onChange={(e) => setNewDreamTitle(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-union-blue-500 outline-none transition-all dark:text-white font-medium"
+                  className="w-full px-5 py-4 rounded-xl bg-black/50 border border-white/10 focus:border-indigo-500 outline-none transition-all text-white font-bold placeholder:text-slate-600"
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">{t('dreams.input_cost')}</label>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">{t('dreams.input_cost')}</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <span className="text-gray-500 font-bold">€</span>
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                    <span className="text-slate-400 font-bold">€</span>
                   </div>
                   <input
                     type="number"
                     placeholder="Es. 15000"
                     value={newDreamCost}
                     onChange={(e) => setNewDreamCost(e.target.value)}
-                    className="w-full px-4 py-3 pl-8 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-union-blue-500 outline-none transition-all dark:text-white font-medium"
+                    className="w-full px-5 py-4 pl-8 rounded-xl bg-black/50 border border-white/10 focus:border-indigo-500 outline-none transition-all text-white font-bold placeholder:text-slate-600"
                   />
                 </div>
                 {/* FLUID SLIDER */}
-                <div className="mt-4 px-1">
+                <div className="mt-6 px-1">
                   <input
                     type="range"
                     min="0"
@@ -318,9 +313,9 @@ const DreamVisualizer: React.FC<DreamVisualizerProps> = ({ monthlyData }) => {
                     step="500"
                     value={Number(newDreamCost) > 150000 ? 150000 : (Number(newDreamCost) || 0)}
                     onChange={(e) => setNewDreamCost(e.target.value)}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-600 accent-union-blue-500 hover:accent-union-blue-400 transition-all"
+                    className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500 hover:accent-indigo-400 transition-all"
                   />
-                  <div className="flex justify-between text-[10px] uppercase tracking-wider text-gray-400 mt-2 font-bold">
+                  <div className="flex justify-between text-[9px] uppercase tracking-wider text-slate-500 mt-2 font-black">
                     <span>0 €</span>
                     <span>75k €</span>
                     <span>150k+ €</span>
@@ -331,15 +326,16 @@ const DreamVisualizer: React.FC<DreamVisualizerProps> = ({ monthlyData }) => {
               <button
                 onClick={handleAddDream}
                 disabled={!newDreamTitle || !newDreamCost}
-                className="w-full mt-2 bg-gradient-to-r from-union-blue-500 to-union-blue-600 hover:from-union-blue-600 hover:to-union-blue-700 text-white font-bold py-3.5 rounded-xl hover:shadow-lg shadow-union-blue-500/20 hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100"
+                className="w-full mt-4 bg-white text-black hover:bg-slate-200 font-black py-4 rounded-xl shadow-lg hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100 uppercase tracking-widest text-xs"
               >
                 {t('dreams.confirm_btn')}
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
-    </div>
+    </>
   );
 };
 

@@ -4,11 +4,11 @@ import GrowthChart from './GrowthChart';
 import BonusProgress from './BonusProgress';
 import DreamVisualizer from './DreamVisualizer';
 import FreedomCalculator from './FreedomCalculator';
-import PensionCalculator from './PensionCalculator';
+
 import AssetComparator from './AssetComparator';
 import TimeMultiplier from './TimeMultiplier';
-import InactionCost from './InactionCost';
-import ZeroCostGoal from './ZeroCostGoal';
+
+
 import GoldenNoCard from './GoldenNoCard';
 
 import ScenarioComparator from './ScenarioComparator';
@@ -17,10 +17,9 @@ import QuickNavigation from './QuickNavigation';
 import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import { useLanguage } from '../contexts/LanguageContext';
-import { FileDown, Edit3, X, Save, Loader2, Download, User, FileText, Heart, PenSquare, RotateCcw } from 'lucide-react';
+import { FileDown, Edit3, X, Save, Loader2, Download, User, FileText, Heart, PenSquare, RotateCcw, ArrowRight } from 'lucide-react';
 import { NetworkPDFTemplate } from './NetworkPDFTemplate';
 import ProjectionModal from './ProjectionModal';
-import LiveBattleMode from './LiveBattleMode';
 import AICoach from './AICoach';
 import SharyTrigger from './SharyTrigger';
 import { CustomSlider } from './CustomSlider';
@@ -120,6 +119,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   const tableRef = useRef<HTMLTableElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [showWowFeatures, setShowWowFeatures] = useState(false);
+  const [wowMode, setWowMode] = useState<'list' | 'menu' | 'single'>('list');
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const [managerBonus, setManagerBonus] = useState(0);
   const [projectionYears, setProjectionYears] = useState(1);
   const [isProjectionModalOpen, setIsProjectionModalOpen] = useState(false);
@@ -128,6 +129,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   const [consultantSurname, setConsultantSurname] = useState('');
   const [consultantPhone, setConsultantPhone] = useState('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [showWowMenu, setShowWowMenu] = useState(false);
 
   const handleReset = () => {
     if (onInputChange) {
@@ -209,7 +211,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   };
 
   return (
-    <div className="space-y-10 relative">
+    <div id="results-summary" className="space-y-10 relative">
       <ProjectionModal
         isOpen={isProjectionModalOpen}
         onClose={() => setIsProjectionModalOpen(false)}
@@ -534,37 +536,114 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
       </div>
 
       {!showWowFeatures ? (
-        <div className="py-16 flex flex-col items-center justify-center text-center">
-          <button onClick={() => setShowWowFeatures(true)} className="px-10 py-5 bg-white dark:bg-slate-900 text-gray-900 dark:text-white rounded-full text-xl font-black shadow-xl hover:shadow-2xl hover:scale-105 transition-all border-2 border-slate-100 dark:border-white/10 animate-bounce">
-            ✨ {t('results.wow_reveal')}
-          </button>
+        <div className="py-16 flex flex-col items-center justify-center text-center space-y-8">
+          {/* Dual Trigger - iOS Style */}
+          <div className="p-2 bg-black/40 backdrop-blur-2xl rounded-[2.5rem] border border-white/10 shadow-2xl flex flex-col sm:flex-row gap-2 max-w-2xl mx-auto animate-in fade-in zoom-in duration-500">
+
+            {/* Option 1: Reveal All */}
+            <button
+              onClick={() => setShowWowFeatures(true)}
+              className="group relative px-8 py-5 rounded-[2rem] bg-white text-black overflow-hidden transition-all hover:scale-[1.02] active:scale-95 flex-1 flex items-center justify-center gap-3 shadow-lg"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent translate-x-[-100%] group-hover:animate-shine" />
+              <span className="text-2xl animate-pulse">✨</span>
+              <div className="text-left">
+                <span className="block text-xs font-black uppercase tracking-widest opacity-60">Esperienza Completa</span>
+                <span className="block text-lg font-black tracking-tight">Sblocca Tutto</span>
+              </div>
+            </button>
+
+            {/* Option 2: Choose Card */}
+            <button
+              onClick={() => setShowWowMenu(!showWowMenu)}
+              className="group px-8 py-5 rounded-[2rem] bg-white/10 text-white hover:bg-white/20 backdrop-blur-md border border-white/5 transition-all hover:scale-[1.02] active:scale-95 flex-1 flex items-center justify-center gap-3"
+            >
+              <span className="text-2xl">📱</span>
+              <div className="text-left">
+                <span className="block text-xs font-black uppercase tracking-widest opacity-60">Navigazione Rapida</span>
+                <span className="block text-lg font-black tracking-tight">{showWowMenu ? 'Chiudi Menù' : 'Scegli Card'}</span>
+              </div>
+            </button>
+          </div>
+
+          {/* Quick Menu Grid */}
+          {showWowMenu && (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto animate-in slide-in-from-top-4 fade-in duration-300">
+              {[
+                { id: 'quick-pitch', icon: '⚡', label: 'Pitch Veloce', color: 'bg-blue-500' },
+                { id: 'scenario-comparator', icon: '🎯', label: 'Scenari', color: 'bg-purple-500' },
+                { id: 'dream-visualizer', icon: '💭', label: 'Sogni', color: 'bg-pink-500' },
+                { id: 'freedom-calculator', icon: '🗽', label: 'Libertà', color: 'bg-orange-500' },
+                { id: 'asset-comparator', icon: '🏦', label: 'Asset', color: 'bg-emerald-500' },
+                { id: 'time-multiplier', icon: '⏳', label: 'Tempo', color: 'bg-indigo-500' },
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setShowWowFeatures(true);
+                    setShowWowMenu(false);
+                    // Allow time for render
+                    setTimeout(() => {
+                      const el = document.getElementById(item.id);
+                      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
+                  }}
+                  className="p-4 rounded-3xl bg-black/20 backdrop-blur-xl border border-white/10 hover:bg-white/10 transition-all flex flex-col items-center gap-2 group"
+                >
+                  <div className={`w-10 h-10 rounded-full ${item.color}/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform`}>
+                    {item.icon}
+                  </div>
+                  <span className="text-xs font-bold text-white uppercase tracking-wide">{item.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+
         </div>
       ) : (
-        <div className="animate-in slide-in-from-bottom-10 duration-700 space-y-12 p-8 rounded-[3rem] bg-slate-50 dark:bg-slate-900 border-2 border-slate-100 dark:border-white/10">
-          <div id="live-battle"><LiveBattleMode planResult={planResult} /></div>
-          <div id="quick-pitch"><QuickPitchMode planResult={planResult} realizationMonths={inputs.realizationTimeMonths} /></div>
-          <div id="scenario-comparator"><ScenarioComparator baseInputs={inputs} /></div>
-          <ZeroCostGoal recurringIncome={totalRecurringYear1} averageEarningsPerUser={avgEarningsPerUser} monthlyCashback={monthlyCashback} />
-          <div id="dream-visualizer"><DreamVisualizer monthlyData={monthlyData} /></div>
-          <div id="freedom-calculator"><FreedomCalculator monthlyData={monthlyData} /></div>
-          <div id="pension-calculator"><PensionCalculator recurringIncome={totalRecurringYear3} /></div>
-          <div id="asset-comparator"><AssetComparator recurringIncome={totalRecurringYear3} /></div>
-          <div id="golden-no"><GoldenNoCard totalEarningsYear1={totalEarningsYear1} directRecruits={directRecruits} /></div>
-          <div id="time-multiplier"><TimeMultiplier totalUsers={totalUsers} /></div>
-          <div id="inaction-cost"><InactionCost monthlyData={monthlyData} /></div>
+        <div className="animate-in slide-in-from-bottom-10 duration-700 space-y-12 p-8 rounded-[3rem] bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl relative overflow-hidden">
+          {/* Ambient Background for Wow Section */}
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none" />
 
-          <AICoach planResult={planResult} inputs={inputs} />
+          {/* Wrapper for cards with close button */}
+          {(() => {
+            const WowCardWrapper = ({ children, id }: { children: React.ReactNode, id: string }) => (
+              <div id={id} className="relative z-10 group/card">
+                <button
+                  onClick={() => {
+                    setShowWowFeatures(false);
+                    setShowWowMenu(false);
+                    window.scrollTo({ top: document.getElementById('results-summary')?.offsetTop || 0, behavior: 'smooth' });
+                  }}
+                  className="absolute -top-4 -right-4 z-50 p-3 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-xl transition-all hover:scale-110 active:scale-95 md:opacity-0 md:group-hover/card:opacity-100"
+                  title="Chiudi e torna al menù"
+                >
+                  <X size={20} />
+                </button>
+                {children}
+              </div>
+            );
 
-          <QuickNavigation sections={[
-            { id: 'live-battle', name: 'Battle Mode', icon: '⚔️' },
-            { id: 'quick-pitch', name: 'Pitch Veloce', icon: '⚡' },
-            { id: 'scenario-comparator', name: 'Confronto Scenari', icon: '🎯' },
-            { id: 'dream-visualizer', name: 'Visualizzatore Sogni', icon: '💭' },
-            { id: 'freedom-calculator', name: 'Calcolatore Libertà', icon: '🗽' },
-            { id: 'pension-calculator', name: 'Calcolatore Pensione', icon: '👴' },
-          ]} />
+            return (
+              <>
+                <WowCardWrapper id="quick-pitch"><QuickPitchMode planResult={planResult} realizationMonths={inputs.realizationTimeMonths} /></WowCardWrapper>
+                <WowCardWrapper id="scenario-comparator"><ScenarioComparator baseInputs={inputs} /></WowCardWrapper>
+                <WowCardWrapper id="dream-visualizer"><DreamVisualizer monthlyData={monthlyData} /></WowCardWrapper>
+                <WowCardWrapper id="freedom-calculator"><FreedomCalculator monthlyData={monthlyData} /></WowCardWrapper>
+                <WowCardWrapper id="asset-comparator"><AssetComparator recurringIncome={totalRecurringYear3} /></WowCardWrapper>
+                <WowCardWrapper id="golden-no"><GoldenNoCard totalEarningsYear1={totalEarningsYear1} directRecruits={directRecruits} /></WowCardWrapper>
+                <WowCardWrapper id="time-multiplier"><TimeMultiplier totalUsers={totalUsers} /></WowCardWrapper>
+                <div className="relative z-10"><AICoach planResult={planResult} inputs={inputs} /></div>
 
-          <button onClick={() => setShowWowFeatures(false)} className="mx-auto block px-10 py-5 bg-white dark:bg-slate-800 text-gray-900 dark:text-white rounded-full font-black shadow-lg hover:shadow-xl transition-all border-2 border-slate-100 dark:border-white/10">
+              </>
+            );
+          })()}
+
+          <button
+            onClick={() => setShowWowFeatures(false)}
+            className="mx-auto block px-10 py-4 bg-white/5 hover:bg-white/10 text-white rounded-full font-bold uppercase tracking-widest backdrop-blur-md border border-white/10 transition-all hover:scale-105 active:scale-95 shadow-lg relative z-10"
+          >
             {t('results.wow_hide')}
           </button>
         </div>
