@@ -576,7 +576,7 @@ const AppContent = () => {
                 <h1 onClick={handleTitleClick} className="text-2xl sm:text-4xl font-extrabold text-white drop-shadow-sm select-none cursor-pointer active:scale-95 transition-transform flex items-center gap-3 flex-wrap justify-center md:justify-start">
                   {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
                   <span className="text-white">Sharing</span>
-                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.27</span>
+                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.28</span>
                   <span className="text-main-accent">Simulator</span>
                   {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-main-accent" /></span>}
                 </h1>

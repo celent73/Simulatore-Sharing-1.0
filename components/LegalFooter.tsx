@@ -14,13 +14,13 @@ const LegalFooter: React.FC<LegalFooterProps> = ({ onOpenLegal }) => {
           <button onClick={() => onOpenLegal('cookie')} className="text-[10px] text-white/40 hover:text-white/70 uppercase tracking-widest font-bold transition-colors">Cookie</button>
         </div>
         <p className="text-[10px] text-slate-400 font-medium leading-relaxed max-w-2xl mx-auto uppercase tracking-wider mb-4">
-          Tutti i diritti riservati © {new Date().getFullYear()} - Sharing Simulator v1.2.27
+          Tutti i diritti riservati © {new Date().getFullYear()} - Sharing Simulator v1.2.28
         </p>
         <p className="text-[10px] text-slate-500 font-medium max-w-2xl mx-auto italic">
           I risultati sono proiezioni matematiche e non costituiscono garanzia di guadagno.
         </p>
         <p className="mt-2 text-[8px] opacity-50 uppercase tracking-[0.2em] font-black">
-          v1.2.27 - Protetto da crittografia SSL a 256 bit 🔒
+          v1.2.28 - Protetto da crittografia SSL a 256 bit 🔒
         </p>
       </div>
     </footer>
