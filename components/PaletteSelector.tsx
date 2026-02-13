@@ -35,7 +35,7 @@ const PaletteSelector: React.FC = () => {
                             initial={{ opacity: 0, scale: 0.9, y: 10 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                            className="absolute top-full mt-3 right-0 bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-2xl border border-gray-100 dark:border-white/10 z-[101] flex flex-col gap-2 min-w-[160px]"
+                            className="absolute top-full mt-4 left-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 rounded-3xl p-3 shadow-2xl border border-gray-100 dark:border-white/10 z-[101] flex flex-col gap-2 min-w-[160px]"
                         >
                             {PALETTES.map((p) => (
                                 <button
