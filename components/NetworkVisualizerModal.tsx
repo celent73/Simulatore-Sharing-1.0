@@ -59,7 +59,7 @@ const styles = `
     background-size: 50px 50px;
     transform: perspective(500px) rotateX(60deg);
     animation: grid-move 20s linear infinite;
-    opacity: 0.2;
+    opacity: 0.1;
     z-index: 0;
     mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
   }
@@ -531,8 +531,8 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
       <div id="network-modal" className="fixed inset-0 z-[150] flex items-center justify-center bg-black animate-in fade-in duration-500 overflow-hidden" onClick={() => { }}>
 
         {/* --- GALAXY BACKGROUND LAYERS --- */}
-        {/* 1. Deep Space Gradient */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-950 via-[#0a0a1a] to-black z-0"></div>
+        {/* 1. Deep Space Gradient - Pure OLED Dark */}
+        <div className="absolute inset-0 bg-black z-0"></div>
 
         {/* 2. Stars Grid/Image */}
         <div className="absolute inset-0 z-0">
@@ -543,9 +543,12 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-150 contrast-150 mix-blend-overlay"></div>
         </div>
 
-        {/* 3. Nebula Glows */}
-        <div className="absolute top-[-20%] left-[-20%] w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-[150px] animate-pulse"></div>
-        <div className="absolute bottom-[-20%] right-[-20%] w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[130px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+        {/* 3. Nebula Glows - Subtler for v1.2.16 */}
+        <div className="absolute top-[-20%] left-[-20%] w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[160px] animate-pulse"></div>
+        <div className="absolute bottom-[-20%] right-[-20%] w-[600px] h-[600px] bg-purple-700/10 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+
+        {/* 4. Vignette for Focus */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.7)_100%)] pointer-events-none z-[5]" />
 
         {/* 4. 3D GRID FLOOR */}
         <div className="perspective-grid pointer-events-none"></div>
@@ -556,7 +559,7 @@ export const NetworkVisualizerModal: React.FC<NetworkVisualizerModalProps> = ({ 
           <div className="pointer-events-auto">
             <div className="flex items-center gap-2 mb-1">
               <span className="px-2 py-0.5 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-300 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">Interactive 3D</span>
-              <span className="px-2 py-0.5 rounded-full bg-white/10 border border-white/20 text-white/60 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">v1.1.93</span>
+              <span className="px-2 py-0.5 rounded-full bg-white/10 border border-white/20 text-white/60 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">v1.2.16</span>
             </div>
             <h2 className="text-3xl md:text-5xl font-black text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] tracking-tight">
               {txt.title}

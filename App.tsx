@@ -471,9 +471,7 @@ const AppContent = () => {
     setViewMode(mode);
   };
 
-  const handleCashbackDetailedConfirm = (spend: number, cashback: number, details: any[]) => {
-    // Calculate the effective percentage to ensure derived calculations are correct
-    // If spend is 0 but we have fixed cashback, we set spend = cashback and percentage = 100
+  const updateCashbackState = (spend: number, cashback: number, details: any[]) => {
     let finalSpend = spend;
     let finalPercentage = spend > 0 ? (cashback / spend) * 100 : 0;
 
@@ -484,9 +482,11 @@ const AppContent = () => {
 
     handleInputChange('cashbackSpending', finalSpend);
     handleInputChange('cashbackPercentage', finalPercentage);
-    // Use type assertion if needed as cashbackDetails might not be in PlanInput definition yet strictly
-    // but based on usage it seems it is.
     handleInputChange('cashbackDetails' as any, details);
+  };
+
+  const handleCashbackDetailedConfirm = (spend: number, cashback: number, details: any[]) => {
+    updateCashbackState(spend, cashback, details);
     closeModal();
   };
 
@@ -574,7 +574,7 @@ const AppContent = () => {
         {/* Custom Styles Injection */}
 
 
-        <header className="flex flex-col gap-4 mb-4 sm:mb-8 rounded-[2.5rem] p-6 border border-white/10 shadow-[0_32px_80px_0_rgba(0,0,0,0.7)] backdrop-blur-[64px] transition-all duration-500 relative z-50 overflow-hidden" style={{ background: 'rgba(10, 10, 12, 0.88)' }}>
+        <header className="flex flex-col gap-4 mb-4 sm:mb-8 rounded-[2.5rem] p-6 border border-white/10 shadow-[0_32px_80px_0_rgba(0,0,0,0.8)] backdrop-blur-[64px] transition-all duration-500 relative z-50 overflow-hidden" style={{ background: 'rgba(0, 0, 0, 0.85)' }}>
           <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/[0.05] pointer-events-none" />
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none" />
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
@@ -639,7 +639,8 @@ const AppContent = () => {
               {/* 4. MENU (SECONDARY ITEMS) */}
               <HeaderMenu
                 onOpenPresentation={() => openModal('BUSINESS_PRESENTATION', {
-                  onOpenCashback: () => openModal('CASHBACK_DETAILED', { initialDetails: (inputs as any).cashbackDetails, onConfirm: handleCashbackDetailedConfirm }),
+                  cashbackDetails: (inputs as any).cashbackDetails,
+                  onCashbackConfirm: updateCashbackState,
                   onOpenFocus: handleOpenFocusFromPresentation,
                   initialPage: returnToPresentationPage || 1
                 })}

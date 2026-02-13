@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Simulatore">
 
-  <title>Simulatore Sharing v1.1.30</title>
+  <title>Simulatore Sharing v1.2.20</title>
 
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="/logo_new.png">
@@ -106,34 +106,53 @@
     }
 
     /* Custom Scrollbar - Adaptive */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+    ::-webkit-scrollbar,
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
     }
 
-    ::-webkit-scrollbar-track {
-      background: #e2e8f0;
+    ::-webkit-scrollbar-track,
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f8fafc;
     }
 
-    html.dark ::-webkit-scrollbar-track {
-      background: #0f172a;
+    html.dark ::-webkit-scrollbar-track,
+    html.dark .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0a0a0a;
     }
 
-    ::-webkit-scrollbar-thumb {
-      background: #94a3b8;
-      border-radius: 4px;
-    }
-
-    html.dark ::-webkit-scrollbar-thumb {
-      background: #334155;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
+    ::-webkit-scrollbar-thumb,
+    .custom-scrollbar::-webkit-scrollbar-thumb {
       background: #64748b;
+      border-radius: 6px;
+      border: 3px solid #f8fafc;
     }
 
-    html.dark ::-webkit-scrollbar-thumb:hover {
+    html.dark ::-webkit-scrollbar-thumb,
+    html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border: 3px solid #0a0a0a;
+    }
+
+    ::-webkit-scrollbar-thumb:hover,
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
       background: #475569;
+    }
+
+    html.dark ::-webkit-scrollbar-thumb:hover,
+    html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #cbd5e1;
+    }
+
+    /* Firefox Support */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #64748b #f8fafc;
+    }
+
+    html.dark * {
+      scrollbar-color: #94a3b8 #0a0a0a;
     }
   </style>
 

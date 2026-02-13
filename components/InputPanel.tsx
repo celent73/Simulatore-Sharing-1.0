@@ -171,8 +171,8 @@ const CashbackModal = ({ isOpen, onClose, inputs, onInputChange, onReset, txt, p
   const saving = period === 'annual' ? monthlySaving * 12 : monthlySaving;
   const returnLabel = period === 'annual' ? "Tuo Ritorno Annuale" : txt.monthlyReturn;
   return (
-    <div className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white/90 dark:bg-slate-950/90 backdrop-blur-2xl rounded-t-[3rem] sm:rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-500 max-h-[90vh] flex flex-col border-t sm:border border-white/80 dark:border-white/5">
+    <div className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="bg-white/90 dark:bg-black/80 backdrop-blur-2xl rounded-t-[3rem] sm:rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-500 max-h-[90vh] flex flex-col border-t sm:border border-white/80 dark:border-white/5">
 
         {/* HEADER MODALE PREMIUM */}
         <div className="p-8 pb-4 flex justify-between items-start shrink-0">
@@ -247,8 +247,8 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
   const isClientMode = viewMode === 'client';
   const multiplier = 1;
   return (
-    <div className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white/90 dark:bg-slate-950/90 backdrop-blur-2xl rounded-t-[3rem] sm:rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-500 max-h-[95vh] flex flex-col border-t sm:border border-white/80 dark:border-white/5">
+    <div className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="bg-white/90 dark:bg-black/80 backdrop-blur-2xl rounded-t-[3rem] sm:rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-500 max-h-[95vh] flex flex-col border-t sm:border border-white/80 dark:border-white/5">
 
         {/* HEADER MODALE PREMIUM */}
         <div className="p-8 pb-4 flex justify-between items-start shrink-0">
@@ -455,17 +455,17 @@ const InputPanel: React.FC<InputPanelProps> = ({
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/glass-pass.png')] opacity-20"></div>
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-blue-500/30 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-            <div className="relative z-10 flex items-center justify-between px-8">
-              <div className="flex items-center gap-5">
-                <div className="w-14 h-14 bg-white/10 rounded-2xl backdrop-blur-xl border border-white/20 flex items-center justify-center text-cyan-400 shadow-lg group-hover:rotate-6 transition-transform">
-                  <Network size={32} strokeWidth={2.5} />
-                </div>
-                <div className="text-left">
-                  <p className="text-[11px] font-black text-cyan-400 uppercase tracking-[0.2em] mb-0.5">{txt.exclusive}</p>
-                  <p className="text-2xl font-black text-white leading-none tracking-tighter">{txt.viewStructure}</p>
-                </div>
+            <div className="relative z-10 flex items-center px-8">
+              <div className="w-14 h-14 bg-white/10 rounded-2xl backdrop-blur-xl border border-white/20 flex items-center justify-center text-cyan-400 shadow-lg group-hover:rotate-6 transition-transform shrink-0">
+                <Network size={32} strokeWidth={2.5} />
               </div>
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/50 group-hover:bg-cyan-500 group-hover:text-white transition-all">
+
+              <div className="flex-grow text-center -mt-2">
+                <p className="text-[11px] font-black text-cyan-400 uppercase tracking-[0.2em] mb-0.5">{txt.exclusive}</p>
+                <p className="text-2xl font-black text-white leading-none tracking-tighter">{txt.viewStructure}</p>
+              </div>
+
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/50 group-hover:bg-cyan-500 group-hover:text-white transition-all shrink-0">
                 <ChevronRight size={20} strokeWidth={3} />
               </div>
             </div>
@@ -473,7 +473,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
         )}
 
         {/* CONTENITORE PRINCIPALE INPUT */}
-        <div className="bg-white/70 dark:bg-slate-900/80 backdrop-blur-3xl rounded-[3rem] shadow-2xl border border-white/80 dark:border-white/10 flex-grow flex flex-col p-4 sm:p-8 overflow-hidden relative z-10 transition-colors duration-300">
+        <div className="bg-white/70 dark:bg-black/30 backdrop-blur-3xl rounded-[3rem] shadow-2xl border border-white/80 dark:border-white/10 flex-grow flex flex-col p-4 sm:p-8 overflow-hidden relative z-10 transition-colors duration-300">
 
           {/* HEADER PREMIUM */}
           <div className="flex justify-between items-start mb-10 shrink-0">
@@ -499,7 +499,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
             </button>
           </div>
 
-          <div className="flex-grow overflow-y-auto pr-1 custom-scrollbar space-y-4">
+          <div className="flex-grow overflow-y-auto pr-3 custom-scrollbar min-h-0 space-y-4">
 
 
 
@@ -595,68 +595,68 @@ const InputPanel: React.FC<InputPanelProps> = ({
                 </div>
               </button>
             </div>
-          </div>
 
-          <div className="h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-white/10 to-transparent my-6 w-full mx-auto shrink-0"></div>
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-white/10 to-transparent my-6 w-full mx-auto shrink-0"></div>
 
-          {/* SLIDERS NETWORK PREMIUM */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] pl-2 transition-colors">Configurazione Rete</h3>
-              <SharyTrigger
-                message="Qui definisci la tua struttura. Seleziona quanti collaboratori diretti porti, quanti ne porteranno loro (Indiretti) e fino a che livello di profondità vuoi calcolare. Ricorda: più è profonda la rete, più guadagni dalle royalty!"
-                messageDe="Hier definierst du deine Struktur. Wähle aus, wie viele direkte Mitarbeiter du mitbringst, wie viele sie mitbringen (indirekt) und bis zu welcher Tiefe du berechnen möchtest. Denke daran: Je tiefer das Netzwerk, desto mehr verdienst du an Lizenzgebühren!"
-                messageEn="Here you define your structure. Select how many direct collaborators you bring, how many they will bring (Indirect) and up to which depth level you want to calculate. Remember: the deeper the network, the more you earn from royalties!"
-                highlightId="slider_direct"
-              />
-            </div>
+            {/* SLIDERS NETWORK PREMIUM */}
+            <div className="space-y-4 pb-4">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] pl-2 transition-colors">Configurazione Rete</h3>
+                <SharyTrigger
+                  message="Qui definisci la tua struttura. Seleziona quanti collaboratori diretti porti, quanti ne porteranno loro (Indiretti) e fino a che livello di profondità vuoi calcolare. Ricorda: più è profonda la rete, più guadagni dalle royalty!"
+                  messageDe="Hier definierst du deine Struktur. Wähle aus, wie viele direkte Mitarbeiter du mitbringst, wie viele sie mitbringen (indirekt) und bis zu welcher Tiefe du berechnen möchtest. Denke daran: Je tiefer das Netzwerk, desto mehr verdienst du an Lizenzgebühren!"
+                  messageEn="Here you define your structure. Select how many direct collaborators you bring, how many they will bring (Indirect) and up to which depth level you want to calculate. Remember: the deeper the network, the more you earn from royalties!"
+                  highlightId="slider_direct"
+                />
+              </div>
 
-            <div className="relative group/slider">
-              <CustomSlider label={t('input.direct_recruits')} value={inputs.directRecruits} onChange={(v: number) => onInputChange('directRecruits', v)} min={0} max={20} icon={User} colorBase="orange" id="slider_direct" />
+              <div className="relative group/slider">
+                <CustomSlider label={t('input.direct_recruits')} value={inputs.directRecruits} onChange={(v: number) => onInputChange('directRecruits', v)} min={0} max={20} icon={User} colorBase="orange" id="slider_direct" />
 
-              {inputs.directRecruits >= 3 && inputs.contractsPerUser >= 1 && inputs.indirectRecruits >= 3 && (
-                <button
-                  onClick={() => onInputChange('bonus3x3Active', !inputs.bonus3x3Active)}
-                  className={`absolute -top-3 right-4 px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-tighter transition-all z-20 shadow-xl border-2 ${inputs.bonus3x3Active
-                    ? 'bg-orange-600 text-white border-white scale-110'
-                    : 'bg-white text-orange-600 border-orange-100 animate-pulse-bonus'
-                    }`}
-                >
-                  {inputs.bonus3x3Active ? '✅ 3x3 Attivo' : '🔥 In 60 Giorni?'}
-                </button>
-              )}
-            </div>
-            <CustomSlider label={txt.contractsLabel} value={inputs.contractsPerUser} onChange={(v: number) => onInputChange('contractsPerUser', v)} min={0} max={2} icon={FileText} colorBase="cyan" id="slider_contracts" />
-            <CustomSlider label={t('input.indirect_recruits')} value={inputs.indirectRecruits} onChange={(v: number) => onInputChange('indirectRecruits', v)} min={0} max={10} icon={PenSquare} colorBase="blue" id="slider_indirect" />
-            <CustomSlider label={txt.depthLabel} value={inputs.networkDepth} onChange={(v: number) => onInputChange('networkDepth', v)} min={1} max={5} icon={Heart} colorBase="green" id="slider_depth" />
-          </div>
-        </div>
+                {inputs.directRecruits >= 3 && inputs.contractsPerUser >= 1 && inputs.indirectRecruits >= 3 && (
+                  <button
+                    onClick={() => onInputChange('bonus3x3Active', !inputs.bonus3x3Active)}
+                    className={`absolute -top-3 right-4 px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-tighter transition-all z-20 shadow-xl border-2 ${inputs.bonus3x3Active
+                      ? 'bg-orange-600 text-white border-white scale-110'
+                      : 'bg-white text-orange-600 border-orange-100 animate-pulse-bonus'
+                      }`}
+                  >
+                    {inputs.bonus3x3Active ? '✅ 3x3 Attivo' : '🔥 In 60 Giorni?'}
+                  </button>
+                )}
+              </div>
+              <CustomSlider label={txt.contractsLabel} value={inputs.contractsPerUser} onChange={(v: number) => onInputChange('contractsPerUser', v)} min={0} max={2} icon={FileText} colorBase="cyan" id="slider_contracts" />
+              <CustomSlider label={t('input.indirect_recruits')} value={inputs.indirectRecruits} onChange={(v: number) => onInputChange('indirectRecruits', v)} min={0} max={10} icon={PenSquare} colorBase="blue" id="slider_indirect" />
+              <CustomSlider label={txt.depthLabel} value={inputs.networkDepth} onChange={(v: number) => onInputChange('networkDepth', v)} min={1} max={5} icon={Heart} colorBase="green" id="slider_depth" />
 
-        {/* BOX TEMPO VETRATA */}
-        <div className="mt-8 pt-8 border-t-2 border-slate-100 dark:border-white/5 shrink-0 transition-colors">
-          <div className="bg-gradient-to-br from-red-50/50 to-white/5 dark:from-slate-800/40 dark:to-slate-900/40 rounded-[2.5rem] p-2 border-2 border-white dark:border-white/10 shadow-xl relative overflow-hidden group hover:shadow-red-200/50 dark:hover:shadow-red-900/30 transition-all duration-500">
-            <div className="absolute -right-8 -top-8 text-red-500/05 opacity-[0.03] group-hover:rotate-45 group-hover:scale-125 transition-all duration-1000">
-              <Clock size={180} strokeWidth={1} />
-            </div>
-            <CustomSlider
-              label={t('input.time')}
-              value={inputs.realizationTimeMonths}
-              onChange={(v: number) => onInputChange('realizationTimeMonths', v)}
-              min={1}
-              max={120}
-              suffix={` ${txt.months}`}
-              icon={Clock}
-              colorBase="red"
-              showButtons={true}
-              id="slider_time"
-            />
-            <div className="absolute top-4 right-6">
-              <SharyTrigger
-                message="Il fattore tempo è cruciale. Sposta questo cursore per vedere come cresce la tua rendita nel corso dei mesi. Solitamente una rete solida si costruisce in 12-24 mesi."
-                messageDe="Der Zeitfaktor ist entscheidend. Verschiebe diesen Schieberegler, um zu sehen, wie dein Einkommen im Laufe der Monate wächst. Ein solides Netzwerk wird normalerweise in 12-24 Monaten aufgebaut."
-                messageEn="The time factor is crucial. Move this slider to see how your income grows over the months. Usually a solid network is built in 12-24 months."
-                highlightId="slider_time"
-              />
+              {/* BOX TEMPO INTEGRATED */}
+              <div className="mt-8 pt-6 border-t border-slate-100 dark:border-white/10 transition-colors">
+                <div className="bg-gradient-to-br from-red-50/50 to-white/5 dark:from-slate-800/40 dark:to-slate-900/40 rounded-[2.5rem] p-2 border-2 border-white dark:border-white/10 shadow-xl relative overflow-hidden group hover:shadow-red-200/50 dark:hover:shadow-red-900/30 transition-all duration-500">
+                  <div className="absolute -right-8 -top-8 text-red-500/05 opacity-[0.03] group-hover:rotate-45 group-hover:scale-125 transition-all duration-1000">
+                    <Clock size={180} strokeWidth={1} />
+                  </div>
+                  <CustomSlider
+                    label={t('input.time')}
+                    value={inputs.realizationTimeMonths}
+                    onChange={(v: number) => onInputChange('realizationTimeMonths', v)}
+                    min={1}
+                    max={120}
+                    suffix={` ${txt.months}`}
+                    icon={Clock}
+                    colorBase="red"
+                    showButtons={true}
+                    id="slider_time"
+                  />
+                  <div className="absolute top-4 right-6">
+                    <SharyTrigger
+                      message="Il fattore tempo è cruciale. Sposta questo cursore per vedere come cresce la tua rendita nel corso dei mesi. Solitamente una rete solida si costruisce in 12-24 mesi."
+                      messageDe="Der Zeitfaktor ist entscheidend. Verschiebe diesen Schieberegler, um zu sehen, wie dein Einkommen im Laufe der Monate wächst. Ein solides Netzwerk wird normalerweise in 12-24 Monaten aufgebaut."
+                      messageEn="The time factor is crucial. Move this slider to see how your income grows over the months. Usually a solid network is built in 12-24 months."
+                      highlightId="slider_time"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

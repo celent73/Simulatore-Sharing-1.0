@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 // Remove static import to prevent startup lockdown
 // import * as pdfjsLib from 'pdfjs-dist';
+import { CashbackDetailedModal } from './CashbackDetailedModal';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Worker will be set dynamically
 
@@ -9,13 +11,25 @@ import { X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 interface BusinessPresentationModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onOpenCashback: () => void;
+    onOpenCashback?: () => void; // Keeping for compatibility but will use local if possible
     onOpenFocus: (page: number) => void;
-    initialPage?: number; // NEW PROP
+    initialPage?: number;
+    cashbackDetails?: any[];
+    onCashbackConfirm?: (spend: number, cashback: number, details: any[]) => void;
 }
 
-export const BusinessPresentationModal: React.FC<BusinessPresentationModalProps> = ({ isOpen, onClose, onOpenCashback, onOpenFocus, initialPage = 1 }) => {
+export const BusinessPresentationModal: React.FC<BusinessPresentationModalProps> = ({
+    isOpen,
+    onClose,
+    onOpenCashback,
+    onOpenFocus,
+    initialPage = 1,
+    cashbackDetails = [],
+    onCashbackConfirm
+}) => {
+    const { t } = useLanguage();
     const [page, setPage] = useState(initialPage);
+    const [isCashbackLocalOpen, setIsCashbackLocalOpen] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
     const [pdfDoc, setPdfDoc] = useState<any>(null); // Use any for dynamic type
     const [isLoading, setIsLoading] = useState(true);
@@ -160,7 +174,7 @@ export const BusinessPresentationModal: React.FC<BusinessPresentationModalProps>
                         {/* PULSANTE CASHBACK SU PAGINA 7 */}
                         {page === 7 && (
                             <button
-                                onClick={onOpenCashback}
+                                onClick={() => setIsCashbackLocalOpen(true)}
                                 className="mr-2 px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-lg animate-pulse"
                             >
                                 💰 Calcola Cashback
@@ -222,6 +236,19 @@ export const BusinessPresentationModal: React.FC<BusinessPresentationModalProps>
                         className={`shadow-2xl transition-opacity duration-200 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
                     />
                 </div>
+
+                {/* LOCAL CASHBACK OVERLAY */}
+                <CashbackDetailedModal
+                    isOpen={isCashbackLocalOpen}
+                    onClose={() => setIsCashbackLocalOpen(false)}
+                    initialDetails={cashbackDetails}
+                    onConfirm={(spend, cashback, details) => {
+                        if (onCashbackConfirm) {
+                            onCashbackConfirm(spend, cashback, details);
+                        }
+                        setIsCashbackLocalOpen(false);
+                    }}
+                />
             </div>
         </div>
     );
