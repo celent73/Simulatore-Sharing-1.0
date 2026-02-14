@@ -486,6 +486,22 @@ const InputPanel: React.FC<InputPanelProps> = ({
                   {txt.paramsTitle}<br />
                   <span className="text-union-blue-600 dark:text-union-blue-400 font-extrabold text-base tracking-tight opacity-90">{txt.paramsSubtitle}</span>
                 </h2>
+
+                {/* FAMILY PRO BADGE */}
+                {(
+                  (inputs.directRecruits >= 3 && inputs.contractsPerUser >= 1 && inputs.indirectRecruits >= 3) ||
+                  (inputs.personalClientsGreen + inputs.personalClientsLight + inputs.personalClientsBusinessGreen + inputs.personalClientsBusinessLight) >= 10
+                ) && (
+                    <div className="mt-2 inline-flex items-center gap-2 bg-gradient-to-r from-purple-900 to-indigo-900 px-3 py-1.5 rounded-full border border-purple-500/30 shadow-[0_0_15px_rgba(147,51,234,0.3)] animate-in fade-in zoom-in duration-500">
+                      <div className="relative flex items-center justify-center">
+                        <div className="absolute inset-0 bg-purple-500 rounded-full animate-ping opacity-75"></div>
+                        <div className="relative bg-purple-500 rounded-full p-1">
+                          <Heart size={10} className="text-white fill-white" />
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-black text-purple-100 uppercase tracking-widest leading-none">FAMILY PRO</span>
+                    </div>
+                  )}
               </div>
             </div>
 

@@ -262,9 +262,20 @@ export const FuelFocusMode: React.FC<FuelFocusModeProps> = ({ isOpen, onClose })
                                 </div>
                             </div>
 
+                            <div className="mt-8 grid grid-cols-2 gap-4 w-full">
+                                <div className="bg-white/5 p-4 rounded-3xl border border-white/5 backdrop-blur-md">
+                                    <span className="text-[10px] font-black text-white/30 uppercase block mb-1">{t('fuel_focus.monthly_saving')}</span>
+                                    <span className="text-xl sm:text-2xl font-bold text-white">€ {totalSavings.toFixed(2)}</span>
+                                </div>
+                                <div className="bg-gradient-to-br from-emerald-600/20 to-emerald-900/20 p-4 rounded-3xl border border-emerald-500/20 backdrop-blur-md">
+                                    <span className="text-[10px] font-black text-emerald-300/50 uppercase block mb-1">{t('fuel_focus.annual_saving')}</span>
+                                    <span className="text-xl sm:text-2xl font-bold text-emerald-400">€ {(totalSavings * 12).toFixed(2)}</span>
+                                </div>
+                            </div>
+
                             <button
                                 onClick={() => setStep('reveal')}
-                                className="mt-12 w-full max-w-xs py-6 bg-emerald-500 text-white rounded-2xl font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_-10px_rgba(16,185,129,0.4)] flex items-center justify-center gap-3"
+                                className="mt-8 w-full max-w-xs py-6 bg-emerald-500 text-white rounded-2xl font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_-10px_rgba(16,185,129,0.4)] flex items-center justify-center gap-3"
                             >
                                 {t('fuel_focus.reveal_btn')} <Sparkles size={24} />
                             </button>
@@ -320,19 +331,14 @@ export const FuelFocusMode: React.FC<FuelFocusModeProps> = ({ isOpen, onClose })
                                 </div>
 
                                 <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.8 }}
-                                    className="mt-12 grid grid-cols-2 gap-4 w-full"
+                                    className="mt-12 text-center"
                                 >
-                                    <div className="bg-white/5 p-6 rounded-3xl border border-white/5 backdrop-blur-md">
-                                        <span className="text-[10px] font-black text-white/30 uppercase block mb-1">{t('fuel_focus.monthly_saving')}</span>
-                                        <span className="text-2xl font-bold text-white">€ {totalSavings.toFixed(2)}</span>
-                                    </div>
-                                    <div className="bg-gradient-to-br from-emerald-600/20 to-emerald-900/20 p-6 rounded-3xl border border-emerald-500/20 backdrop-blur-md">
-                                        <span className="text-[10px] font-black text-emerald-300/50 uppercase block mb-1">{t('fuel_focus.annual_saving')}</span>
-                                        <span className="text-2xl font-bold text-emerald-400">€ {(totalSavings * 12).toFixed(2)}</span>
-                                    </div>
+                                    <p className="text-xl sm:text-2xl font-black text-white uppercase tracking-wider drop-shadow-lg">
+                                        Con il tuo gestore è possibile?
+                                    </p>
                                 </motion.div>
                             </div>
 

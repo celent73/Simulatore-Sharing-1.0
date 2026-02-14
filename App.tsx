@@ -548,9 +548,8 @@ const AppContent = () => {
 
 
 
-      {/* Indicatore Versione per Diagnostica Cache */}
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.2.33
+        v1.2.34
       </div>
 
 
@@ -577,7 +576,7 @@ const AppContent = () => {
                   {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
                   <span className="text-white">Sharing</span>
                   <span className="text-main-accent -ml-2">Simulator</span>
-                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.33</span>
+                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.34</span>
                   {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-main-accent" /></span>}
                 </h1>
                 {isCreatorMode && <span className="hidden sm:inline-flex bg-white/20 backdrop-blur-md text-white border border-white/40 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm uppercase tracking-wider">Creator Mode</span>}

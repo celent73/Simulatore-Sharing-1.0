@@ -466,18 +466,18 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                             className="flex flex-col items-center justify-center text-center relative w-full h-full max-w-lg mx-auto"
                         >
                             {/* WRAPPER FOR CAPTURE */}
-                            <div ref={reportRef} className="flex flex-col items-center justify-center p-8 rounded-[3rem] transition-colors relative w-full">
+                            <div ref={reportRef} className="flex flex-col items-center justify-center p-6 sm:p-10 rounded-[3rem] transition-colors relative w-full overflow-visible">
                                 {/* Background Explosion Effect (Subtle) */}
                                 <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-40">
-                                    <div className="absolute w-[300px] h-[300px] bg-purple-600/20 rounded-full blur-[80px]" />
-                                    <div className="absolute w-[200px] h-[200px] bg-indigo-500/10 rounded-full blur-[60px]" />
+                                    <div className="absolute w-[250px] h-[250px] bg-purple-600/20 rounded-full blur-[80px]" />
+                                    <div className="absolute w-[150px] h-[150px] bg-indigo-500/10 rounded-full blur-[60px]" />
                                 </div>
 
                                 <motion.div
                                     initial={{ y: 20, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.1 }}
-                                    className="mb-8 text-white font-black text-3xl sm:text-5xl uppercase tracking-wider relative z-10 drop-shadow-2xl"
+                                    className="mb-8 text-white font-black text-4xl sm:text-6xl uppercase tracking-wider relative z-20 drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] w-full text-center px-2 leading-tight"
                                 >
                                     {selectedBrand.name}
                                 </motion.div>
@@ -487,32 +487,29 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 }}
-                                    className="relative z-20 mb-12 w-full"
+                                    className="relative z-30 mb-10 w-full flex justify-center"
                                 >
-                                    <div className="relative group max-w-[220px] mx-auto">
-                                        {/* Euro Symbol */}
-                                        <div className="absolute left-6 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
-                                            <span className="text-5xl font-light text-white/80">€</span>
-                                        </div>
+                                    <div className="flex items-center justify-center gap-1 bg-zinc-900/60 border border-white/10 rounded-[2.5rem] py-6 px-10 backdrop-blur-xl shadow-2xl min-w-[200px] max-w-[300px]">
+                                        <span className="text-5xl sm:text-6xl font-light text-white/50 mb-1">€</span>
                                         <input
                                             type="number"
                                             value={spendingAmount}
                                             onChange={(e) => setSpendingAmount(e.target.value)}
                                             placeholder="0"
-                                            className="w-full bg-zinc-900/50 border border-white/10 rounded-[2.5rem] py-8 pl-16 pr-4 text-5xl font-medium text-center text-white placeholder-white/10 focus:outline-none focus:bg-zinc-800/60 focus:border-white/30 transition-all backdrop-blur-xl shadow-2xl"
+                                            className="bg-transparent w-[140px] text-5xl sm:text-6xl font-bold text-white placeholder-white/10 focus:outline-none text-left leading-none"
                                             autoFocus
                                         />
-                                        <div className="text-center mt-4 text-white/40 text-xs font-bold uppercase tracking-[0.2em]">
-                                            {getLabel('cashback_detailed.insert_spending')}
-                                        </div>
+                                    </div>
+                                    <div className="absolute -bottom-8 left-0 right-0 text-center text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em]">
+                                        {getLabel('cashback_detailed.insert_spending')}
                                     </div>
                                 </motion.div>
 
-                                <div className="relative z-10 w-full min-h-[220px] flex flex-col items-center justify-center">
+                                <div className="relative z-10 w-full min-h-[180px] flex flex-col items-center justify-center">
                                     {parsedAmount > 0 ? (
                                         <div className="flex flex-col items-center">
                                             <motion.div
-                                                className="relative flex items-center justify-center gap-4"
+                                                className="relative flex items-center justify-center gap-2 sm:gap-4"
                                                 initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
                                                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                                                 key="cashback-amount"
@@ -523,10 +520,10 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                                     animate={{ rotate: 12, scale: 1 }}
                                                     transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
                                                 >
-                                                    <Sparkles size={56} className="text-yellow-400 fill-yellow-400 drop-shadow-[0_0_25px_rgba(250,204,21,0.6)]" />
+                                                    <Sparkles size={48} className="text-yellow-400 fill-yellow-400 drop-shadow-[0_0_25px_rgba(250,204,21,0.6)]" />
                                                 </motion.div>
 
-                                                <div className="text-[5rem] sm:text-[7rem] font-bold leading-none tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/70 drop-shadow-[0_0_40px_rgba(255,255,255,0.4)]">
+                                                <div className="text-6xl sm:text-8xl font-black leading-none tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 drop-shadow-[0_0_30px_rgba(255,255,255,0.3)] pb-2 pr-2">
                                                     € {cashbackReturn.toLocaleString(language === 'de' ? 'de-DE' : 'it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 </div>
                                             </motion.div>
@@ -536,7 +533,7 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ delay: 0.4 }}
-                                                className="mt-10 flex flex-col items-center"
+                                                className="mt-8 flex flex-col items-center"
                                             >
                                                 <motion.div
                                                     animate={{ scale: [1, 1.02, 1], boxShadow: ["0 0 0 rgba(234,179,8,0)", "0 0 20px rgba(234,179,8,0.3)", "0 0 0 rgba(234,179,8,0)"] }}
