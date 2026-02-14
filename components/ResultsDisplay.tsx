@@ -179,15 +179,18 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
   }
 
   // LOGICA FAMILY PRO
-  const personalContractsCount = (inputs.personalClientsGreen || 0) +
+  const personalDirectContractsCount = (inputs.personalClientsGreen || 0) +
     (inputs.personalClientsLight || 0) +
     (inputs.personalClientsBusinessGreen || 0) +
     (inputs.personalClientsBusinessLight || 0) +
     (inputs.myPersonalUnitsGreen || 0) +
     (inputs.myPersonalUnitsLight || 0);
 
+  const networkDirectContractsCount = (inputs.directRecruits || 0) * (inputs.contractsPerUser || 0);
+  const totalFamilyProContracts = personalDirectContractsCount + networkDirectContractsCount;
+
   const isSprinter = inputs.directRecruits >= 3 && inputs.indirectRecruits >= 3;
-  const isBuilder = personalContractsCount >= 10;
+  const isBuilder = totalFamilyProContracts >= 10;
   const isFamilyPro = isSprinter || isBuilder;
 
   const handleExportPDF = useCallback(async () => {
