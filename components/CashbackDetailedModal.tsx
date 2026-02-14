@@ -492,9 +492,9 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                 <div className="p-6 sm:px-12 sm:py-10 border-t border-gray-100/50 dark:border-white/5 bg-white/40 dark:bg-gray-900/40 backdrop-blur-3xl z-10 safe-area-bottom flex flex-row items-center gap-6 shadow-[0_-15px_40px_rgba(0,0,0,0.05)]">
                     <button
                         onClick={handleReset}
-                        className="flex items-center gap-3 px-6 py-4 bg-gray-100 dark:bg-white/5 text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-full transition-all shadow-sm font-black border border-transparent active:scale-95 group"
+                        className="flex items-center gap-3 px-6 py-4 bg-red-500 text-white rounded-full transition-all shadow-lg shadow-red-500/30 hover:bg-red-600 hover:scale-105 active:scale-95 font-black border border-red-400 group"
                     >
-                        <RotateCcw size={20} />
+                        <RotateCcw size={20} className="group-hover:-rotate-180 transition-transform duration-500" />
                         <span className="text-[10px] uppercase tracking-widest">{t('cashback_detailed.reset')}</span>
                     </button>
 

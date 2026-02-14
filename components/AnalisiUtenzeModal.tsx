@@ -380,12 +380,12 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                 {/* Header WOW PREMIUM */}
                 <div className="relative overflow-hidden p-8 pb-4 shrink-0">
                     <div className="relative z-10 flex justify-between items-start">
-                        <div className="flex items-center gap-5">
-                            <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white rounded-[1.5rem] flex items-center justify-center shadow-xl shadow-indigo-500/20 ring-4 ring-white">
+                        <div className="flex items-center gap-3 sm:gap-5">
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white rounded-[1.5rem] flex items-center justify-center shadow-xl shadow-indigo-500/20 ring-4 ring-white">
                                 <Calculator size={32} strokeWidth={2.5} />
                             </div>
                             <div>
-                                <h2 className="text-3xl font-black text-slate-900 leading-none tracking-tighter">{txt.title}</h2>
+                                <h2 className="text-xl sm:text-3xl font-black text-slate-900 leading-none tracking-tighter">{txt.title}</h2>
                                 <div className="mt-1 flex items-center gap-2">
                                     <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
                                     <p className="text-xs font-black text-indigo-600/70 uppercase tracking-widest">{txt.premiumAnalysis}</p>
@@ -397,17 +397,17 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                 </div>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 sm:gap-2">
                             <button
                                 onClick={handleReset}
-                                className="w-12 h-12 flex items-center justify-center bg-red-50 text-red-500 rounded-2xl border border-red-100/50 hover:bg-red-500 hover:text-white transition-all active:scale-95 shadow-sm"
+                                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-red-50 text-red-500 rounded-2xl border border-red-100/50 hover:bg-red-500 hover:text-white transition-all active:scale-95 shadow-sm"
                                 title={txt.reset}
                             >
                                 <RotateCcw size={22} strokeWidth={2.5} />
                             </button>
                             <button
                                 onClick={() => setIsFocusModeOpen(true)}
-                                className="w-12 h-12 flex items-center justify-center bg-indigo-50 text-indigo-500 rounded-2xl border border-indigo-100/50 hover:bg-indigo-500 hover:text-white transition-all active:scale-95 shadow-sm"
+                                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-indigo-50 text-indigo-500 rounded-2xl border border-indigo-100/50 hover:bg-indigo-500 hover:text-white transition-all active:scale-95 shadow-sm"
                                 title="Focus Mode"
                             >
                                 <Zap size={22} fill="currentColor" strokeWidth={0} />
@@ -418,12 +418,12 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                                     setIsComparisonMode(newVal);
                                     onInputChange('isComparisonMode' as any, newVal ? 1 : 0);
                                 }}
-                                className={`h-12 px-6 rounded-2xl transition-all border font-black text-xs tracking-widest uppercase flex items-center gap-3 shadow-md active:scale-95 ${isComparisonMode ? 'bg-orange-600 text-white border-orange-500' : 'bg-slate-100 text-slate-600 border-slate-200'}`}
+                                className={`h-10 sm:h-12 px-3 sm:px-6 rounded-2xl transition-all border font-black text-[10px] sm:text-xs tracking-widest uppercase flex items-center gap-3 shadow-md active:scale-95 ${isComparisonMode ? 'bg-orange-600 text-white border-orange-500' : 'bg-slate-100 text-slate-600 border-slate-200'}`}
                             >
                                 <RefreshCcw size={18} className={`${isComparisonMode ? 'animate-spin-slow' : ''}`} />
                                 <span className="hidden sm:inline">{isComparisonMode ? (txt as any).modeConfronto : (txt as any).activateComparison}</span>
                             </button>
-                            <button onClick={onClose} className="w-12 h-12 flex items-center justify-center bg-slate-100 text-slate-400 rounded-2xl border border-slate-200/50 hover:bg-slate-200 hover:text-slate-900 transition-all active:scale-95"><X size={24} strokeWidth={3} /></button>
+                            <button onClick={onClose} className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-slate-100 text-slate-400 rounded-2xl border border-slate-200/50 hover:bg-slate-200 hover:text-slate-900 transition-all active:scale-95"><X size={20} className="sm:w-6 sm:h-6" strokeWidth={3} /></button>
                         </div>
                     </div>
                 </div>
