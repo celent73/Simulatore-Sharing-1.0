@@ -194,7 +194,7 @@ export const AnalisiUtenzeFocusMode: React.FC<AnalisiUtenzeFocusModeProps> = ({ 
             </div>
 
             {/* Header */}
-            <div className="relative z-50 flex items-center justify-between p-6">
+            <div className="relative z-50 flex items-center justify-between p-6 pt-14 sm:pt-6">
                 <button
                     onClick={step === 'utility' ? onClose : handleBack}
                     className="p-3 bg-white/10 hover:bg-white/20 rounded-full transition-colors backdrop-blur-md"
