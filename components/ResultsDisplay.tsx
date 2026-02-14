@@ -178,6 +178,18 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
     return level;
   }
 
+  // LOGICA FAMILY PRO
+  const personalContractsCount = (inputs.personalClientsGreen || 0) +
+    (inputs.personalClientsLight || 0) +
+    (inputs.personalClientsBusinessGreen || 0) +
+    (inputs.personalClientsBusinessLight || 0) +
+    (inputs.myPersonalUnitsGreen || 0) +
+    (inputs.myPersonalUnitsLight || 0);
+
+  const isSprinter = inputs.directRecruits >= 3 && inputs.indirectRecruits >= 3;
+  const isBuilder = personalContractsCount >= 10;
+  const isFamilyPro = isSprinter || isBuilder;
+
   const handleExportPDF = useCallback(async () => {
     if (exportRef.current === null) return;
     setIsExporting(true);
@@ -370,7 +382,16 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
               <tbody className="divide-y divide-slate-50 dark:divide-white/5">
                 {planResult.levelData.map((row) => (
                   <tr key={row.level} className="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors">
-                    <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-slate-900 dark:text-white">{getLevelLabel(row.level)}</td>
+                    <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-slate-900 dark:text-white">
+                      <div className="flex items-center gap-2">
+                        {getLevelLabel(row.level)}
+                        {row.level === 0 && isFamilyPro && (
+                          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-black bg-gradient-to-r from-amber-200 to-yellow-400 text-amber-900 uppercase tracking-tighter border border-amber-300 shadow-sm">
+                            FAMILY PRO 👑
+                          </span>
+                        )}
+                      </div>
+                    </td>
                     <td className="px-6 py-5 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300 font-mono font-bold">{row.users.toLocaleString('it-IT')}</td>
                     <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-slate-900 dark:text-white text-center">{formatCurrency(row.oneTimeBonus)}</td>
                     <td className="px-6 py-5 whitespace-nowrap">
