@@ -220,7 +220,7 @@ export const AnalisiUtenzeFocusMode: React.FC<AnalisiUtenzeFocusModeProps> = ({ 
             </div>
 
             {/* Main Content */}
-            <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-6 sm:p-12 w-full max-w-7xl mx-auto h-full overflow-hidden">
+            <div className="relative z-10 flex-1 flex flex-col items-center justify-start md:justify-center p-6 sm:p-12 w-full max-w-7xl mx-auto h-full overflow-y-auto custom-scrollbar">
                 <AnimatePresence mode="wait">
                     {/* STEP 1: SELECT UTILITY */}
                     {step === 'utility' && (

@@ -191,7 +191,7 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
     const txt = texts[language as keyof typeof texts] || texts.en;
 
     // Use a helper to safely get values from inputs prop (which might be undefined initially)
-    const getVal = (v: any) => v !== undefined ? v.toString().replace('.', ',') : '';
+    const getVal = (v: any) => (v !== undefined && v !== 0 && v !== '0') ? v.toString().replace('.', ',') : '';
 
     const [electricityPrice, setElectricityPrice] = useState<string>(getVal(inputs.electricityPrice));
     const [punValue, setPunValue] = useState<string>(getVal(inputs.punValue));
@@ -276,14 +276,14 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
     };
 
     const handleReset = () => {
-        setElectricityPrice(''); syncInput('electricityPrice', '0');
-        setPunValue(''); syncInput('punValue', '0');
-        setElectricityConsumption(''); syncInput('electricityConsumption', '0');
-        setElectricityFixed(''); syncInput('electricityFixed', '0');
-        setGasPrice(''); syncInput('gasPrice', '0');
-        setPsvValue(''); syncInput('psvValue', '0');
-        setGasConsumption(''); syncInput('gasConsumption', '0');
-        setGasFixed(''); syncInput('gasFixed', '0');
+        setElectricityPrice(''); syncInput('electricityPrice', '');
+        setPunValue(''); syncInput('punValue', '');
+        setElectricityConsumption(''); syncInput('electricityConsumption', '');
+        setElectricityFixed(''); syncInput('electricityFixed', '');
+        setGasPrice(''); syncInput('gasPrice', '');
+        setPsvValue(''); syncInput('psvValue', '');
+        setGasConsumption(''); syncInput('gasConsumption', '');
+        setGasFixed(''); syncInput('gasFixed', '');
         onInputChange('cashbackSpending', 0);
         onInputChange('cashbackPercentage', 0);
         setIncludeSpread(true); onInputChange('includeSpread' as any, 1);
@@ -398,6 +398,13 @@ export const AnalisiUtenzeModal: React.FC<AnalisiUtenzeModalProps> = ({ isOpen, 
                             </div>
                         </div>
                         <div className="flex items-center gap-2">
+                            <button
+                                onClick={handleReset}
+                                className="w-12 h-12 flex items-center justify-center bg-red-50 text-red-500 rounded-2xl border border-red-100/50 hover:bg-red-500 hover:text-white transition-all active:scale-95 shadow-sm"
+                                title={txt.reset}
+                            >
+                                <RotateCcw size={22} strokeWidth={2.5} />
+                            </button>
                             <button
                                 onClick={() => setIsFocusModeOpen(true)}
                                 className="w-12 h-12 flex items-center justify-center bg-indigo-50 text-indigo-500 rounded-2xl border border-indigo-100/50 hover:bg-indigo-500 hover:text-white transition-all active:scale-95 shadow-sm"

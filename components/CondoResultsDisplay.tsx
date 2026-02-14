@@ -127,14 +127,52 @@ const RecruiterCard = ({ fullResults }: { fullResults: CondoSimulationResult }) 
     );
 };
 
-const Card = ({ title, value, subValue, colorClass }: any) => (
-    <div className={`p-6 rounded-[2.5rem] border backdrop-blur-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] transition-all duration-500 hover:-translate-y-2 group relative overflow-hidden ${colorClass}`}>
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-        <p className="text-[10px] font-black opacity-40 uppercase tracking-[0.2em] mb-3">{title}</p>
-        <p className="text-4xl sm:text-5xl font-black mb-2 text-slate-900 dark:text-white tracking-tighter leading-none">{value}</p>
-        {subValue && <div className="text-xs font-bold mt-4 leading-relaxed">{subValue}</div>}
-    </div>
-);
+interface CardProps {
+    title: string;
+    value: string;
+    subValue: React.ReactNode;
+    variant?: 'glass' | 'gradient-blue' | 'gradient-orange';
+    colorClass?: string;
+}
+
+const Card: React.FC<CardProps> = ({ title, value, subValue, variant = 'glass', colorClass }: CardProps) => {
+    let styles = {
+        container: 'bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border-2 border-slate-200/50 dark:border-white/10 shadow-sm hover:shadow-md hover:border-slate-300/80 dark:hover:border-white/20',
+        title: 'text-gray-500 dark:text-slate-500 opacity-60',
+        value: 'text-gray-900 dark:text-white',
+        border: 'border-slate-200 dark:border-white/10'
+    };
+
+    switch (variant) {
+        case 'gradient-blue':
+            styles = {
+                container: 'bg-blue-50/80 dark:bg-blue-900/40 backdrop-blur-2xl border-2 border-blue-300/60 dark:border-blue-500/30 shadow-md hover:shadow-lg hover:border-blue-400/80 dark:hover:border-blue-400/50',
+                title: 'text-blue-700/80 dark:text-blue-300/80',
+                value: 'text-blue-800 dark:text-blue-100',
+                border: 'border-blue-200/60 dark:border-blue-500/30'
+            };
+            break;
+        case 'gradient-orange':
+            styles = {
+                container: 'bg-orange-50/80 dark:bg-orange-900/40 backdrop-blur-2xl border-2 border-orange-300/60 dark:border-orange-500/30 shadow-md hover:shadow-lg hover:border-orange-400/80 dark:hover:border-orange-400/50',
+                title: 'text-orange-700/80 dark:text-orange-300/80',
+                value: 'text-orange-800 dark:text-orange-100',
+                border: 'border-orange-200/60 dark:border-orange-500/30'
+            };
+            break;
+        case 'glass':
+        default:
+            break;
+    }
+
+    return (
+        <div className={`p-6 rounded-[2.5rem] transition-all duration-300 ease-in-out flex flex-col items-start justify-between h-full hover:-translate-y-1 relative overflow-hidden ${styles.container} ${colorClass || ''}`}>
+            <p className={`text-[10px] font-black uppercase tracking-[0.2em] mb-3 ${styles.title}`}>{title}</p>
+            <p className={`text-4xl sm:text-5xl font-black mb-2 tracking-tighter leading-none ${styles.value}`}>{value}</p>
+            {subValue && <div className="text-xs font-bold mt-4 w-full">{subValue}</div>}
+        </div>
+    );
+};
 
 const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) => {
     const { t } = useLanguage();
@@ -354,31 +392,31 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                     subValue={!isRecruiterView ? (
                         <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-blue-200/40">
                             <div className="flex justify-between items-center text-xs">
-                                <span className="opacity-60 uppercase tracking-widest text-[9px] font-black">Rendita Annuale:</span>
-                                <span className="font-black">{formatCurrency(results.year3.recurringMonthly * 12)}</span>
+                                <span className="opacity-60 uppercase tracking-widest text-[9px] font-black text-blue-800 dark:text-blue-200">Rendita Annuale:</span>
+                                <span className="font-black text-blue-900 dark:text-blue-100">{formatCurrency(results.year3.recurringMonthly * 12)}</span>
                             </div>
                             <div className="flex justify-between items-center text-xs">
-                                <span className="opacity-60 uppercase tracking-widest text-[9px] font-black">Rendita Finale Mensile:</span>
-                                <span className="font-black">{formatCurrency(results.year3.recurringMonthly)}</span>
+                                <span className="opacity-60 uppercase tracking-widest text-[9px] font-black text-blue-800 dark:text-blue-200">Rendita Finale Mensile:</span>
+                                <span className="font-black text-blue-900 dark:text-blue-100">{formatCurrency(results.year3.recurringMonthly)}</span>
                             </div>
                         </div>
                     ) : (
                         <div className="mt-4 pt-4 border-t border-blue-400/20 text-xs font-bold flex flex-col gap-3">
                             {(results.familyUtilityEarnings!.year3.oneTime - (results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0)) > 0 && (
                                 <div className="flex flex-col">
-                                    <span className="text-blue-200 uppercase text-[9px] font-black tracking-[0.2em] mb-1 opacity-60">Una Tantum (Nuovi)</span>
-                                    <span className="text-white text-xl font-black">{formatCurrency(results.familyUtilityEarnings!.year3.oneTime - (results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0))}</span>
+                                    <span className="text-blue-700 dark:text-blue-300 uppercase text-[9px] font-black tracking-[0.2em] mb-1 opacity-60">Una Tantum (Nuovi)</span>
+                                    <span className="text-blue-900 dark:text-white text-xl font-black">{formatCurrency(results.familyUtilityEarnings!.year3.oneTime - (results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0))}</span>
                                 </div>
                             )}
                             <div className="flex flex-col">
-                                <span className="text-blue-200 uppercase text-[9px] font-black tracking-[0.2em] mb-1 opacity-60">Rendite (Fino a 6€/M)</span>
+                                <span className="text-blue-700 dark:text-blue-300 uppercase text-[9px] font-black tracking-[0.2em] mb-1 opacity-60">Rendite (Fino a 6€/M)</span>
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-white text-xl font-black">{formatCurrency((results.familyUtilityEarnings!.year3.recurring - (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)))}</span>
-                                    <span className="text-[10px] text-blue-200 font-bold opacity-60">({formatCurrency((results.familyUtilityEarnings!.year3.recurring - (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)) / 12)}/mo)</span>
+                                    <span className="text-blue-900 dark:text-white text-xl font-black">{formatCurrency((results.familyUtilityEarnings!.year3.recurring - (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)))}</span>
+                                    <span className="text-[10px] text-blue-600 dark:text-blue-300 font-bold opacity-60">({formatCurrency((results.familyUtilityEarnings!.year3.recurring - (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)) / 12)}/mo)</span>
                                 </div>
                             </div>
                             {((results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0)) > 0 && (
-                                <div className="mt-2 pt-3 border-t border-white/10 flex flex-col gap-2 bg-slate-900/50 p-3 rounded-2xl border border-white/5">
+                                <div className="mt-2 pt-3 border-t border-white/10 flex flex-col gap-2 bg-slate-900/50 p-3 rounded-2xl">
                                     <span className="text-[9px] font-black uppercase tracking-[0.2em] text-purple-300">Network Level 1</span>
                                     <div className="flex justify-between text-[10px] text-purple-100/70">
                                         <span>Totale Anno 3:</span>
@@ -388,9 +426,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                             )}
                         </div>
                     )}
-                    colorClass={isRecruiterView
-                        ? "bg-gradient-to-br from-union-blue-600 to-indigo-900 border-white/20 text-white shadow-[0_20px_50px_rgba(37,99,235,0.3)]"
-                        : "bg-gradient-to-br from-union-blue-600 to-union-blue-800 border-white/20 text-white shadow-[0_20px_50px_rgba(37,99,235,0.3)]"}
+                    variant="gradient-blue"
                 />
             </div>
 

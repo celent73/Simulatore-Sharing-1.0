@@ -388,7 +388,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                     <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-slate-900 dark:text-white">
                       <div className="flex items-center gap-2">
                         {getLevelLabel(row.level)}
-                        {row.level === 0 && isFamilyPro && (
+                        {row.level === 0 && isFamilyPro && !isClientMode && (
                           <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-black bg-gradient-to-r from-amber-200 to-yellow-400 text-amber-900 uppercase tracking-tighter border border-amber-300 shadow-sm">
                             FAMILY PRO 👑
                           </span>
