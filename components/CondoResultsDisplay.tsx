@@ -239,24 +239,24 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
             </div>
 
             {/* MAIN HEADER */}
-            <div className={`rounded-[3rem] p-10 shadow-[0_45px_100px_rgba(0,0,0,0.2)] relative overflow-hidden border transition-all duration-700 ${isRecruiterView
+            <div className={`rounded-[3rem] p-10 shadow-[0_45px_100px_rgba(0,0,0,0.5)] relative overflow-hidden border transition-all duration-700 ${isRecruiterView
                 ? 'bg-gradient-to-br from-union-blue-600 via-union-blue-800 to-indigo-950 border-white/20 text-white'
-                : 'bg-slate-900/90 dark:bg-black/60 backdrop-blur-[40px] text-white border-white/10'}`}>
+                : 'bg-black/85 backdrop-blur-[50px] text-white border-white/10'}`}>
 
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.15),transparent)] pointer-events-none" />
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-union-blue-500/10 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.05),transparent)] pointer-events-none" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-union-blue-500/5 rounded-full blur-[120px] -mr-48 -mt-48 pointer-events-none"></div>
 
                 <div className="relative z-10">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-10">
                         <div className="flex-1 text-left">
-                            <span className="inline-block px-4 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[10px] font-black uppercase tracking-[0.3em] mb-4">
+                            <span className="inline-block px-4 py-1 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-[10px] font-black uppercase tracking-[0.3em] mb-4 text-slate-300">
                                 {isRecruiterView ? "Executive Summary" : "Condo Business Plan"}
                             </span>
                         </div>
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => setIsEditModalOpen(true)}
-                                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-[11px] font-black uppercase tracking-wider transition-all hover:scale-105 active:scale-95"
+                                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 text-[11px] font-black uppercase tracking-wider transition-all hover:scale-105 active:scale-95 text-slate-300"
                             >
                                 <Edit3 size={16} />
                                 Personalizza
@@ -264,7 +264,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                             <button
                                 onClick={handleExportPDF}
                                 disabled={isGeneratingPdf}
-                                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white text-slate-900 hover:bg-white/90 shadow-xl shadow-white/10 text-[11px] font-black uppercase tracking-wider transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+                                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white text-slate-900 hover:bg-white/90 shadow-xl shadow-white/5 text-[11px] font-black uppercase tracking-wider transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
                             >
                                 {isGeneratingPdf ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
                                 {isGeneratingPdf ? 'Esportazione...' : 'Crea Report PDF'}
@@ -273,12 +273,12 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                     </div>
 
                     <div className="text-center group cursor-default">
-                        <p className="text-xs font-black uppercase tracking-[0.4em] opacity-40 mb-2 group-hover:tracking-[0.5em] transition-all duration-500">
+                        <p className="text-xs font-black uppercase tracking-[0.4em] opacity-40 mb-2 group-hover:tracking-[0.5em] transition-all duration-500 text-slate-400">
                             {isRecruiterView ? "Guadagno Totale Stimato" : t('condo_results.total_business_plan')}
                         </p>
-                        <h2 className={`text-7xl sm:text-9xl font-black mb-8 tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.3)] ${isRecruiterView
+                        <h2 className={`text-7xl sm:text-9xl font-black mb-8 tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] ${isRecruiterView
                             ? 'text-white'
-                            : 'text-transparent bg-clip-text bg-gradient-to-br from-union-orange-400 via-yellow-200 to-union-orange-600'}`}>
+                            : 'text-transparent bg-clip-text bg-gradient-to-br from-yellow-200 via-amber-300 to-orange-400'}`}>
                             {formatCurrency(displayTotal)}
                         </h2>
                         {isRecruiterView && (
@@ -291,7 +291,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                 </span>
                             </div>
                         )}
-                        <p className="text-base font-bold leading-relaxed opacity-50 max-w-2xl mx-auto uppercase tracking-wide">
+                        <p className="text-base font-bold leading-relaxed opacity-50 max-w-2xl mx-auto uppercase tracking-wide text-slate-400">
                             {isRecruiterView
                                 ? "Include override diretto amministratori e rendite ricorrenti del network partner."
                                 : t('condo_results.total_desc')}
@@ -306,7 +306,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                     title={t('condo_results.y1_total')}
                     value={formatCurrency(displayY1)}
                     subValue={!isRecruiterView ? (
-                        <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-slate-200 dark:border-white/10">
+                        <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-slate-200/50 dark:border-white/10">
                             <div className="flex justify-between items-center text-xs">
                                 <span className="opacity-50 uppercase tracking-widest text-[9px] font-black">{t('condo_results.ot_breakdown')}</span>
                                 <span className="font-black text-slate-900 dark:text-white">{formatCurrency(results.year1.oneTimeBonus)}</span>
@@ -340,14 +340,14 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                             )}
                         </div>
                     )}
-                    colorClass="bg-white/40 dark:bg-black/40 border-white/40 dark:border-white/10"
+                    colorClass="bg-white/80 dark:bg-white/5 border-2 border-slate-200/60 dark:border-white/10 shadow-lg hover:shadow-xl"
                 />
 
                 <Card
                     title={t('condo_results.y2_total')}
                     value={formatCurrency(displayY2)}
                     subValue={!isRecruiterView ? (
-                        <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-slate-200 dark:border-white/10">
+                        <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-slate-200/50 dark:border-white/10">
                             <div className="flex justify-between items-center text-xs">
                                 <span className="opacity-50 uppercase tracking-widest text-[9px] font-black">Rendita Annuale:</span>
                                 <span className="font-black text-slate-900 dark:text-white">{formatCurrency(results.year2.recurringMonthly * 12)}</span>
@@ -383,7 +383,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                             )}
                         </div>
                     )}
-                    colorClass="bg-white/40 dark:bg-black/40 border-white/40 dark:border-white/10"
+                    colorClass="bg-white/80 dark:bg-white/5 border-2 border-slate-200/60 dark:border-white/10 shadow-lg hover:shadow-xl"
                 />
 
                 <Card
