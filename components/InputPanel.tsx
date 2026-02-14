@@ -487,10 +487,10 @@ const InputPanel: React.FC<InputPanelProps> = ({
                   <span className="text-union-blue-600 dark:text-union-blue-400 font-extrabold text-base tracking-tight opacity-90">{txt.paramsSubtitle}</span>
                 </h2>
 
-                {/* FAMILY PRO BADGE */}
-                {(
+                {/* FAMILY PRO BADGE - VISIBLE ONLY IN PARTNER MODE */}
+                {viewMode !== 'client' && (
                   (inputs.directRecruits >= 3 && inputs.contractsPerUser >= 1 && inputs.indirectRecruits >= 3) ||
-                  (inputs.personalClientsGreen + inputs.personalClientsLight + inputs.personalClientsBusinessGreen + inputs.personalClientsBusinessLight) >= 10
+                  (inputs.personalClientsGreen + inputs.personalClientsLight + inputs.personalClientsBusinessGreen + inputs.personalClientsBusinessLight + inputs.myPersonalUnitsGreen + inputs.myPersonalUnitsLight) >= 10
                 ) && (
                     <div className="mt-2 inline-flex items-center gap-2 bg-gradient-to-r from-purple-900 to-indigo-900 px-3 py-1.5 rounded-full border border-purple-500/30 shadow-[0_0_15px_rgba(147,51,234,0.3)] animate-in fade-in zoom-in duration-500">
                       <div className="relative flex items-center justify-center">

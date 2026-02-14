@@ -20,7 +20,7 @@ const LegalFooter: React.FC<LegalFooterProps> = ({ onOpenLegal }) => {
           I risultati sono proiezioni matematiche e non costituiscono garanzia di guadagno.
         </p>
         <p className="mt-2 text-[8px] opacity-50 uppercase tracking-[0.2em] font-black">
-          v1.2.34 - Protetto da crittografia SSL a 256 bit 🔒
+          v1.2.35 - Protetto da crittografia SSL a 256 bit 🔒
         </p>
       </div>
     </footer>
