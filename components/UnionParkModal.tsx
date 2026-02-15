@@ -162,7 +162,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                                             type="number"
                                             value={panels}
                                             onChange={(e) => setPanels(Math.max(1, parseInt(e.target.value) || 0))}
-                                            className="w-12 sm:w-24 bg-transparent text-right text-xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400 outline-none"
+                                            className="w-16 sm:w-32 bg-transparent text-right text-2xl sm:text-5xl font-black text-emerald-600 dark:text-emerald-400 outline-none"
                                         />
                                     </div>
                                 </div>
@@ -205,7 +205,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                                         step="0.01"
                                         value={pun}
                                         onChange={(e) => setPun(parseFloat(e.target.value) || 0)}
-                                        className="w-full px-6 py-4 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xl sm:text-4xl font-black text-emerald-600 focus:ring-2 focus:ring-emerald-500 transition-all outline-none"
+                                        className="w-full px-6 py-5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-2xl sm:text-5xl font-black text-emerald-600 focus:ring-2 focus:ring-emerald-500 transition-all outline-none"
                                     />
                                     <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs sm:text-lg">€/kWh</div>
                                 </div>
@@ -229,8 +229,8 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             {/* Duration Selector */}
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
-                                    <label className="text-sm md:text-xl font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('union_park.years_label')}</label>
-                                    <span className="text-xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400">{simulationYears}</span>
+                                    <label className="text-sm md:text-lg font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('union_park.years_label')}</label>
+                                    <span className="text-4xl sm:text-7xl font-black text-emerald-600 dark:text-emerald-400">{simulationYears}</span>
                                 </div>
                                 <input
                                     type="range"
@@ -250,16 +250,16 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             {/* Summary Mini Cards */}
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <div className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50">
-                                    <p className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-tight mb-0.5">{t('union_park.purchase_cost')}</p>
-                                    <p className="text-sm sm:text-lg font-black text-gray-900 dark:text-white">€ {purchaseCostValue.toLocaleString('it-IT', { maximumFractionDigits: 2 })}</p>
+                                    <p className="text-sm sm:text-base font-bold text-gray-400 uppercase tracking-widest leading-tight mb-2">{t('union_park.purchase_cost')}</p>
+                                    <p className="text-3xl sm:text-5xl font-black text-gray-900 dark:text-white">€ {purchaseCostValue.toLocaleString('it-IT', { maximumFractionDigits: 2 })}</p>
                                 </div>
                                 <div className="bg-emerald-50 dark:bg-emerald-900/10 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/20">
-                                    <p className="text-[9px] sm:text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-0.5">{t('union_park.monthly_yield')}</p>
-                                    <p className="text-sm sm:text-lg font-black text-emerald-600 dark:text-emerald-400">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                    <p className="text-sm sm:text-base font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-2">{t('union_park.monthly_yield')}</p>
+                                    <p className="text-3xl sm:text-5xl font-black text-emerald-600 dark:text-emerald-400">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                 </div>
                                 <div className="bg-emerald-50 dark:bg-emerald-900/10 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/20">
-                                    <p className="text-xs md:text-lg font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-0.5">{t('union_park.annual_yield')}</p>
-                                    <p className="text-sm sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                    <p className="text-sm sm:text-base font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase tracking-widest leading-tight mb-2">{t('union_park.annual_yield')}</p>
+                                    <p className="text-3xl sm:text-5xl font-black text-emerald-600 dark:text-emerald-400">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                 </div>
                             </div>
                         </div>
@@ -274,23 +274,23 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                                 <div className="grid grid-cols-2 gap-4 mb-4">
                                     <div>
                                         <p className="text-emerald-400 text-xs md:text-sm font-bold uppercase tracking-widest mb-0.5">{t('union_park.monthly_yield')}</p>
-                                        <p className="text-xl sm:text-2xl font-black text-white">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                        <p className="text-2xl sm:text-3xl font-black text-white">€ {(annualYield / 12).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                     </div>
                                     <div>
                                         <p className="text-emerald-400 text-xs md:text-lg font-bold uppercase tracking-widest mb-0.5">{t('union_park.annual_yield')}</p>
-                                        <p className="text-xl sm:text-4xl font-black text-white">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                        <p className="text-2xl sm:text-5xl font-black text-white">€ {annualYield.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
                                     <div>
                                         <p className="text-emerald-400/70 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-0.5">{t('union_park.total_yield', { years: simulationYears })}</p>
-                                        <p className="text-xl sm:text-2xl font-black text-white">€ {totalYieldLongTerm.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                        <p className="text-2xl sm:text-4xl font-black text-white">€ {totalYieldLongTerm.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                                     </div>
                                     <div className="h-px bg-white/10 w-full"></div>
                                     <div className="flex items-baseline gap-2">
                                         <p className="text-emerald-400/70 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">{t('union_park.roi')}</p>
-                                        <p className="text-2xl sm:text-4xl font-black text-emerald-400">{roiTotal.toFixed(0)}%</p>
+                                        <p className="text-3xl sm:text-5xl font-black text-emerald-400">{roiTotal.toFixed(0)}%</p>
                                     </div>
                                 </div>
                             </div>
@@ -298,7 +298,7 @@ export const UnionParkModal: React.FC<UnionParkModalProps> = ({
                             <div className="flex flex-col justify-center items-center md:items-end text-center md:text-right">
                                 <div className="p-4 sm:p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl">
                                     <p className="text-emerald-200 text-xs md:text-xl font-bold uppercase tracking-widest mb-1">{t('union_park.payback')}</p>
-                                    <p className="text-2xl sm:text-6xl font-black text-white leading-none">
+                                    <p className="text-3xl sm:text-7xl font-black text-white leading-none">
                                         {paybackYears} <span className="text-xs sm:text-2xl font-medium opacity-70">anni</span>
                                         {remainingMonths > 0 && <><br /><span className="text-lg sm:text-4xl">{remainingMonths}</span> <span className="text-xs sm:text-2xl font-medium opacity-70">mesi</span></>}
                                     </p>
