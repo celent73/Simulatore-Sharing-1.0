@@ -308,12 +308,16 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                     subValue={!isRecruiterView ? (
                         <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-slate-200/50 dark:border-white/10">
                             <div className="flex justify-between items-center text-xs">
-                                <span className="opacity-50 uppercase tracking-widest text-[9px] font-black">{t('condo_results.ot_breakdown')}</span>
+                                <span className="opacity-50 uppercase tracking-widest text-[10px] font-black">{t('condo_results.ot_breakdown')}</span>
                                 <span className="font-black text-slate-900 dark:text-white">{formatCurrency(results.year1.oneTimeBonus)}</span>
                             </div>
                             <div className="flex justify-between items-center text-xs">
-                                <span className="opacity-50 uppercase tracking-widest text-[9px] font-black">{t('condo_results.rec_annual_breakdown')}</span>
+                                <span className="opacity-50 uppercase tracking-widest text-[10px] font-black">{t('condo_results.rec_annual_breakdown')}</span>
                                 <span className="font-black text-slate-900 dark:text-white">{formatCurrency(results.year1.recurringMonthly * 12)}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-xs">
+                                <span className="opacity-50 uppercase tracking-widest text-[10px] font-black">Rendita Finale Mensile:</span>
+                                <span className="font-black text-slate-900 dark:text-white">{formatCurrency(results.year1.recurringMonthly)}</span>
                             </div>
                         </div>
                     ) : (
@@ -349,11 +353,11 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                     subValue={!isRecruiterView ? (
                         <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-slate-200/50 dark:border-white/10">
                             <div className="flex justify-between items-center text-xs">
-                                <span className="opacity-50 uppercase tracking-widest text-[9px] font-black">Rendita Annuale:</span>
+                                <span className="opacity-50 uppercase tracking-widest text-[10px] font-black">Rendita Annuale:</span>
                                 <span className="font-black text-slate-900 dark:text-white">{formatCurrency(results.year2.recurringMonthly * 12)}</span>
                             </div>
                             <div className="flex justify-between items-center text-xs">
-                                <span className="opacity-50 uppercase tracking-widest text-[9px] font-black">Rendita Finale Mensile:</span>
+                                <span className="opacity-50 uppercase tracking-widest text-[10px] font-black">Rendita Finale Mensile:</span>
                                 <span className="font-black text-slate-900 dark:text-white">{formatCurrency(results.year2.recurringMonthly)}</span>
                             </div>
                         </div>
@@ -392,11 +396,11 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                     subValue={!isRecruiterView ? (
                         <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-blue-200/40">
                             <div className="flex justify-between items-center text-xs">
-                                <span className="opacity-60 uppercase tracking-widest text-[9px] font-black text-blue-800 dark:text-blue-200">Rendita Annuale:</span>
+                                <span className="opacity-60 uppercase tracking-widest text-[10px] font-black text-blue-800 dark:text-blue-200">Rendita Annuale:</span>
                                 <span className="font-black text-blue-900 dark:text-blue-100">{formatCurrency(results.year3.recurringMonthly * 12)}</span>
                             </div>
                             <div className="flex justify-between items-center text-xs">
-                                <span className="opacity-60 uppercase tracking-widest text-[9px] font-black text-blue-800 dark:text-blue-200">Rendita Finale Mensile:</span>
+                                <span className="opacity-60 uppercase tracking-widest text-[10px] font-black text-blue-800 dark:text-blue-200">Rendita Finale Mensile:</span>
                                 <span className="font-black text-blue-900 dark:text-blue-100">{formatCurrency(results.year3.recurringMonthly)}</span>
                             </div>
                         </div>
