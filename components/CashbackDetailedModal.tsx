@@ -417,7 +417,7 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                                 onChange={(e) => handleUpdate(cat.id, 'amount', parseFloat(e.target.value) || 0)}
                                                 onFocus={(e) => e.target.select()}
                                                 placeholder="0"
-                                                className="w-full pl-8 pr-4 py-4 bg-gray-50 dark:bg-white/5 rounded-full text-right font-black text-lg text-slate-900 dark:text-white border-2 border-transparent focus:border-blue-500/50 outline-none transition-all shadow-inner"
+                                                className="w-full pl-8 pr-4 py-4 bg-gray-50 dark:bg-white/5 rounded-full text-right font-black text-lg text-slate-900 dark:text-white border-2 border-slate-300 dark:border-white/20 focus:border-blue-500/50 outline-none transition-all shadow-inner"
                                             />
                                         </div>
 
@@ -427,9 +427,9 @@ export const CashbackDetailedModal: React.FC<CashbackDetailedModalProps> = ({
                                                 value={cat.brand}
                                                 onChange={(e) => handleUpdate(cat.id, 'brand', e.target.value)}
                                                 className={`w-full py-4 px-6 rounded-full text-[10px] sm:text-xs font-black tracking-widest uppercase border-2 outline-none cursor-pointer text-center appearance-none truncate transition-all duration-300
-                                            ${cat.brand
+                                                    ${cat.brand
                                                         ? 'bg-blue-500/10 text-blue-600 border-blue-500/30'
-                                                        : 'bg-gray-50 dark:bg-white/5 text-slate-400 border-transparent shadow-inner'
+                                                        : 'bg-gray-50 dark:bg-white/5 text-slate-400 border-slate-300 dark:border-white/20 shadow-inner'
                                                     }
                                             focus:border-blue-500/50`}
                                             >
