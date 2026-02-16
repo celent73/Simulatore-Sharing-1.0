@@ -80,6 +80,9 @@ const uiTexts = {
     months: "Mesi",
     viewStructure: "Visualizza Struttura",
     exclusive: "Esclusiva",
+    networkConfiguration: "Configurazione Rete",
+    configureWork: "Configura il tuo lavoro",
+    direct: "diretto",
     // NUOVE TRADUZIONI AGGIUNTE
     paramsTitle: "Parametri",
     paramsSubtitle: "Sviluppo Rete",
@@ -87,7 +90,11 @@ const uiTexts = {
     advancedCalculator: "Calcolatore Avanzato",
     configure: "Configura",
     parkToken: "Gettone",
-    panelsLabel: "Pannelli"
+    panelsLabel: "Pannelli",
+    extraMonth: "Extra/Mese",
+    extraYear: "Extra/Anno",
+    perMonth: "€/mese",
+    annualReturn: "Tuo Ritorno Annuale"
   },
   de: {
     savings: "Du sparst",
@@ -116,6 +123,9 @@ const uiTexts = {
     months: "Monate",
     viewStructure: "Struktur anzeigen",
     exclusive: "Exklusiv",
+    networkConfiguration: "Netzwerkkonfiguration",
+    configureWork: "Konfiguriere deine Arbeit",
+    direct: "direkt",
     // NUOVE TRADUZIONI AGGIUNTE
     paramsTitle: "Netzwerk",
     paramsSubtitle: "Parameter",
@@ -123,7 +133,11 @@ const uiTexts = {
     advancedCalculator: "Erweiterter Rechner",
     configure: "Konfigurieren",
     parkToken: "Bonus",
-    panelsLabel: "Paneele"
+    panelsLabel: "Paneele",
+    extraMonth: "Extra/Monat",
+    extraYear: "Extra/Jahr",
+    perMonth: "€/Monat",
+    annualReturn: "Deine jährliche Rückvergütung"
   },
   en: {
     savings: "You Save",
@@ -152,13 +166,20 @@ const uiTexts = {
     months: "Months",
     viewStructure: "View Structure",
     exclusive: "Exclusive",
+    networkConfiguration: "Network Configuration",
+    configureWork: "Configure your work",
+    direct: "direct",
     paramsTitle: "Network",
     paramsSubtitle: "Parameters",
     optimizedFor: "Optimized for tablet and PC/MAC",
     advancedCalculator: "Advanced Calculator",
     configure: "Configure",
     parkToken: "Token",
-    panelsLabel: "Panels"
+    panelsLabel: "Panels",
+    extraMonth: "Extra/Month",
+    extraYear: "Extra/Year",
+    perMonth: "€/month",
+    annualReturn: "Your Annual Return"
   }
 };
 
@@ -169,7 +190,7 @@ const CashbackModal = ({ isOpen, onClose, inputs, onInputChange, onReset, txt, p
   if (!isOpen) return null;
   const monthlySaving = (inputs.cashbackSpending * inputs.cashbackPercentage) / 100;
   const saving = period === 'annual' ? monthlySaving * 12 : monthlySaving;
-  const returnLabel = period === 'annual' ? "Tuo Ritorno Annuale" : txt.monthlyReturn;
+  const returnLabel = period === 'annual' ? txt.annualReturn : txt.monthlyReturn;
   return (
     <div className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="bg-white/90 dark:bg-black/80 backdrop-blur-2xl rounded-t-[3rem] sm:rounded-[3rem] shadow-2xl w-full max-w-lg overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-500 max-h-[90vh] flex flex-col border-t sm:border border-white/80 dark:border-white/5">
@@ -303,7 +324,7 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
                   <CustomSlider label={`${txt.myUnitsGreen} (+${50 * multiplier}€)`} value={inputs.myPersonalUnitsGreen} onChange={(v: number) => onInputChange('myPersonalUnitsGreen', v)} min={0} max={100} colorBase="orange" icon={Home} suffix="" />
                   <div className="px-4 pb-4">
                     <div className="bg-orange-600/10 dark:bg-orange-500/20 border border-orange-100 dark:border-orange-500/30 rounded-xl py-2 text-center">
-                      <p className="text-[11px] text-orange-600 dark:text-orange-400 font-black uppercase tracking-widest">{txt.baseRent}: {(1.00 * multiplier).toFixed(2)}€/mese</p>
+                      <p className="text-[11px] text-orange-600 dark:text-orange-400 font-black uppercase tracking-widest">{txt.baseRent}: {(1.00 * multiplier).toFixed(2)}{txt.perMonth}</p>
                     </div>
                   </div>
                 </div>
@@ -312,7 +333,7 @@ const PersonalClientsModal = ({ isOpen, onClose, inputs, onInputChange, onReset,
                   <CustomSlider label={`${txt.myUnitsLight} (+${25 * multiplier}€)`} value={inputs.myPersonalUnitsLight} onChange={(v: number) => onInputChange('myPersonalUnitsLight', v)} min={0} max={100} colorBase="yellow" icon={Zap} suffix="" />
                   <div className="px-4 pb-4">
                     <div className="bg-yellow-600/10 border border-yellow-100 rounded-xl py-2 text-center">
-                      <p className="text-[11px] text-yellow-600 font-black uppercase tracking-widest">{txt.baseRent}: {(0.50 * multiplier).toFixed(2)}€/mese</p>
+                      <p className="text-[11px] text-yellow-600 font-black uppercase tracking-widest">{txt.baseRent}: {(0.50 * multiplier).toFixed(2)}{txt.perMonth}</p>
                     </div>
                   </div>
                 </div>
@@ -575,7 +596,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
                       <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
                       <p className="text-[13px] font-black text-purple-700 dark:text-purple-300">
                         +€{(((inputs.cashbackSpending * inputs.cashbackPercentage) / 100) * (cashbackPeriod === 'annual' ? 12 : 1)).toFixed(2)}
-                        <span className="opacity-60 font-bold ml-1">{cashbackPeriod === 'annual' ? 'Extra/Anno' : 'Extra/Mese'}</span>
+                        <span className="opacity-60 font-bold ml-1">{cashbackPeriod === 'annual' ? txt.extraYear : txt.extraMonth}</span>
                       </p>
                     </div>
                   </div>
@@ -601,7 +622,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
                     <div className="mt-2 inline-flex items-center gap-2 bg-emerald-600/10 dark:bg-emerald-500/20 border border-emerald-200/50 dark:border-emerald-500/30 px-3 py-1 rounded-xl">
                       <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                       <p className="text-[13px] font-black text-emerald-700 dark:text-emerald-300">
-                        Configura il tuo lavoro <span className="opacity-60 font-bold ml-1">diretto</span>
+                        {txt.configureWork} <span className="opacity-60 font-bold ml-1">{txt.direct}</span>
                       </p>
                     </div>
                   </div>
@@ -617,7 +638,7 @@ const InputPanel: React.FC<InputPanelProps> = ({
             {/* SLIDERS NETWORK PREMIUM */}
             <div className="space-y-4 pb-4">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] pl-2 transition-colors">Configurazione Rete</h3>
+                <h3 className="text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] pl-2 transition-colors">{txt.networkConfiguration}</h3>
                 <SharyTrigger
                   message="Qui definisci la tua struttura. Seleziona quanti collaboratori diretti porti, quanti ne porteranno loro (Indiretti) e fino a che livello di profondità vuoi calcolare. Ricorda: più è profonda la rete, più guadagni dalle royalty!"
                   messageDe="Hier definierst du deine Struktur. Wähle aus, wie viele direkte Mitarbeiter du mitbringst, wie viele sie mitbringen (indirekt) und bis zu welcher Tiefe du berechnen möchtest. Denke daran: Je tiefer das Netzwerk, desto mehr verdienst du an Lizenzgebühren!"
