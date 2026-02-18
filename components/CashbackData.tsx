@@ -3,14 +3,14 @@ import { ShoppingBag, Car, ShoppingCart, Gift, Plane, Home, BookOpen, Coffee } f
 
 export const getIcon = (name: string) => {
     switch (name) {
-        case 'ShoppingBag': return <ShoppingBag size={ 20 } />;
-        case 'Car': return <Car size={ 20 } />;
-        case 'ShoppingCart': return <ShoppingCart size={ 20 } />;
-        case 'Gift': return <Gift size={ 20 } />;
-        case 'Plane': return <Plane size={ 20 } />;
-        case 'Home': return <Home size={ 20 } />;
-        case 'BookOpen': return <BookOpen size={ 20 } />;
-        default: return <Coffee size={ 20 } />;
+        case 'ShoppingBag': return <ShoppingBag size={20} />;
+        case 'Car': return <Car size={20} />;
+        case 'ShoppingCart': return <ShoppingCart size={20} />;
+        case 'Gift': return <Gift size={20} />;
+        case 'Plane': return <Plane size={20} />;
+        case 'Home': return <Home size={20} />;
+        case 'BookOpen': return <BookOpen size={20} />;
+        default: return <Coffee size={20} />;
     }
 };
 
@@ -165,6 +165,7 @@ export const BRANDS_DATA = [
 
     // ESEMPIO AFFILIAZIONI INTERNET
     { name: 'AliExpress', percentage: 6.92, categories: ['aff_int'] },
+    { name: 'SHEIN', percentage: 25.00, categories: ['aff_int'] },
     { name: 'Nespresso', percentage: 7.00, categories: ['aff_int'] },
     { name: 'Folletto', percentage: 6.00, categories: ['aff_int'] },
     { name: 'Avon', percentage: 7.00, categories: ['aff_int'] },
@@ -176,7 +177,8 @@ export const BRANDS_DATA = [
     { name: 'Axa', percentage: 12.00, categories: ['aff_int'] },
     { name: 'Veratour', percentage: 0, fixedAmount: 21, categories: ['aff_int'] },
     { name: 'Babbel', percentage: 0, fixedAmount: 60, categories: ['aff_int'] },
-    { name: 'Verymobile', percentage: 0, fixedAmount: 15, categories: ['aff_int'] },
+    { name: 'VERY MOBILE', percentage: 0, fixedAmount: 15, categories: ['aff_int'] },
+    { name: 'Kena Mobile', percentage: 0, fixedAmount: 34, categories: ['aff_int'] },
     { name: 'Bidoo', percentage: 0, fixedAmount: 5, categories: ['aff_int'] },
     { name: 'Uni salute', percentage: 0, fixedAmount: 26.93, categories: ['aff_int'] },
     { name: 'La Stampa', percentage: 0, fixedAmount: 12, categories: ['aff_int'] },
@@ -184,5 +186,5 @@ export const BRANDS_DATA = [
     { name: 'Allianz Assicurazioni', percentage: 0, fixedAmount: 13, categories: ['aff_int'] },
     { name: 'Telepass', percentage: 0, fixedAmount: 25, categories: ['aff_int'] },
     { name: 'Ho Mobile', percentage: 0, fixedAmount: 11, categories: ['aff_int'] },
-    { name: 'Lycamobile', percentage: 0, fixedAmount: 10, categories: ['aff_int'] }
+    { name: 'Lyca Mobile', percentage: 0, fixedAmount: 5, categories: ['aff_int'] }
 ].sort((a, b) => a.name.localeCompare(b.name));

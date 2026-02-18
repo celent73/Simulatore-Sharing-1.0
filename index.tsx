@@ -16,7 +16,10 @@ root.render(
 );
 
 // PWA Service Worker Registration with Cache Busting
-if ('serviceWorker' in navigator) {
+// Only register in production to avoid dev server conflicts (HMR, caching)
+const isDev = import.meta.env.DEV;
+
+if ('serviceWorker' in navigator && !isDev) {
   window.addEventListener('load', () => {
     // Unregister old workers first to be safe
     navigator.serviceWorker.getRegistrations().then(registrations => {
