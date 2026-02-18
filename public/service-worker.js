@@ -1,4 +1,4 @@
-const CACHE_NAME = 'union-sim-v1.1.6-FORCE-REFRESH-V2';
+const CACHE_NAME = 'union-sim-v1.2.48-FORCE-REFRESH';
 const urlsToCache = [
   '/',
   '/index.html',
