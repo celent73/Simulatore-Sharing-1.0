@@ -8,11 +8,15 @@ interface CondoPDFTemplateProps {
     consultantName?: string;
     consultantSurname?: string;
     consultantPhone?: string;
+    spreadLuce?: string;
+    spreadGas?: string;
+    marketingFees?: string;
 }
 
 const formatCurrency = (val: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val);
 
-export const CondoPDFTemplate: React.FC<CondoPDFTemplateProps> = ({ results, consultantName, consultantSurname, consultantPhone }) => {
+export const CondoPDFTemplate: React.FC<CondoPDFTemplateProps> = (props) => {
+    const { results, consultantName, consultantSurname, consultantPhone } = props;
     const isRecruiterView = !!results.familyUtilityEarnings;
     const displayTotal = isRecruiterView ? results.familyUtilityEarnings!.total3Years : results.total3Years;
 
@@ -71,6 +75,30 @@ export const CondoPDFTemplate: React.FC<CondoPDFTemplateProps> = ({ results, con
                     </div>
                 </div>
             </div>
+
+            {/* OFFER PARAMETERS SECTION (New) */}
+            {(props.spreadLuce || props.spreadGas || props.marketingFees) && (
+                <div className="px-16 py-6 bg-slate-50 border-b border-gray-200 flex gap-12">
+                    {props.spreadLuce && (
+                        <div>
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-1">Spread Luce</p>
+                            <p className="text-lg font-black text-slate-800">{props.spreadLuce}</p>
+                        </div>
+                    )}
+                    {props.spreadGas && (
+                        <div>
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-1">Spread Gas</p>
+                            <p className="text-lg font-black text-slate-800">{props.spreadGas}</p>
+                        </div>
+                    )}
+                    {props.marketingFees && (
+                        <div>
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-1">Oneri Comm.</p>
+                            <p className="text-lg font-black text-slate-800">{props.marketingFees}</p>
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* BODY */}
             <div className="p-16 flex flex-col gap-12 relative z-10 w-full">

@@ -190,6 +190,11 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
     const [consultantName, setConsultantName] = useState('');
     const [consultantSurname, setConsultantSurname] = useState('');
     const [consultantPhone, setConsultantPhone] = useState('');
+    // New Fields for PDF
+    const [spreadLuce, setSpreadLuce] = useState('');
+    const [spreadGas, setSpreadGas] = useState('');
+    const [marketingFees, setMarketingFees] = useState('');
+
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const handleExportPDF = async () => {
@@ -234,6 +239,9 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                         consultantName={consultantName}
                         consultantSurname={consultantSurname}
                         consultantPhone={consultantPhone}
+                        spreadLuce={spreadLuce}
+                        spreadGas={spreadGas}
+                        marketingFees={marketingFees}
                     />
                 </div>
             </div>
@@ -536,7 +544,10 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                             {[
                                 { label: 'Nome', value: consultantName, setter: setConsultantName, placeholder: 'Es. Mario', type: 'text' },
                                 { label: 'Cognome', value: consultantSurname, setter: setConsultantSurname, placeholder: 'Es. Rossi', type: 'text' },
-                                { label: 'Telefono', value: consultantPhone, setter: setConsultantPhone, placeholder: 'Es. 333 1234567', type: 'tel' }
+                                { label: 'Telefono', value: consultantPhone, setter: setConsultantPhone, placeholder: 'Es. 333 1234567', type: 'tel' },
+                                { label: 'Spread Luce', value: spreadLuce, setter: setSpreadLuce, placeholder: 'Es. 0.02 €/kWh', type: 'text' },
+                                { label: 'Spread Gas', value: spreadGas, setter: setSpreadGas, placeholder: 'Es. 0.10 €/Smc', type: 'text' },
+                                { label: 'Oneri Comm.', value: marketingFees, setter: setMarketingFees, placeholder: 'Es. 120€/anno', type: 'text' }
                             ].map((field) => (
                                 <div key={field.label}>
                                     <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-gray-500 mb-2 ml-1">{field.label}</label>
