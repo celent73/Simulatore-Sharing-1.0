@@ -34,7 +34,7 @@ import { Presentation, Fuel, Share2, Compass, Sparkles } from 'lucide-react'; //
 
 // --- IMPORTAZIONI LEGALI E UI ---
 import LegalFooter from './components/LegalFooter';
-const APP_VERSION = "1.2.48";
+const APP_VERSION = "1.2.49";
 
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 
@@ -137,6 +137,32 @@ const AppContent = () => {
       setTimeout(() => {
         openModal('BROADCAST');
       }, 2000); // 2 seconds delay
+    }
+
+    // FORCE CACHE CLEAR ON VERSION MISMATCH
+    const storedVersion = localStorage.getItem('app_version');
+    if (storedVersion !== APP_VERSION) {
+      console.log(`New version detected: ${APP_VERSION} (was ${storedVersion}). Clearing cache...`);
+      localStorage.setItem('app_version', APP_VERSION);
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+          for (let registration of registrations) {
+            registration.unregister();
+          }
+        });
+      }
+
+      caches.keys().then((names) => {
+        for (let name of names) {
+          caches.delete(name);
+        }
+      });
+
+      // Reload only if it's not a fresh install (to avoid infinite loops on first visit loops, though version check prevents it)
+      if (storedVersion) {
+        window.location.reload();
+      }
     }
   }, []);
 
