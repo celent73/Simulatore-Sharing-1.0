@@ -19,20 +19,13 @@ interface CommunityProps {
 const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
     const { t } = useLanguage();
     const { isActive: isSharyActive } = useShary(); // USIAMO SHARY HOOK
-    const [view, setView] = useState<'list' | 'tree'>('list');
     const [theme, setTheme] = useState<'glass' | 'dark' | 'minimal'>('glass');
     const [isProjection, setIsProjection] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isSharyTipOpen, setIsSharyTipOpen] = useState(false); // NEW STATE
     const profile = useProfileStore();
 
-    const levels = [
-        { id: 0, name: t('comm_sync.level_name', { n: 0 }), sub: t('comm_sync.level_sub_0'), condition: 0 },
-        { id: 1, name: t('comm_sync.level_name', { n: 1 }), sub: t('comm_sync.level_sub_n', { n: 1 }), condition: UNLOCK_CONDITIONS.LEVEL_1 },
-        { id: 2, name: t('comm_sync.level_name', { n: 2 }), sub: t('comm_sync.level_sub_n', { n: 2 }), condition: UNLOCK_CONDITIONS.LEVEL_2 },
-        { id: 3, name: t('comm_sync.level_name', { n: 3 }), sub: t('comm_sync.level_sub_n', { n: 3 }), condition: UNLOCK_CONDITIONS.LEVEL_3 },
-        { id: 4, name: t('comm_sync.level_name', { n: 4 }), sub: t('comm_sync.level_sub_n', { n: 4 }), condition: UNLOCK_CONDITIONS.LEVEL_4 },
-    ];
+
 
     const [isExporting, setIsExporting] = useState(false);
 
@@ -50,76 +43,66 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl p-6 sm:p-8 rounded-[3rem] border border-white/60 dark:border-white/10 shadow-xl relative overflow-hidden"
+                className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl p-6 sm:p-8 rounded-[3rem] border border-white/50 dark:border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.05)] relative overflow-hidden"
             >
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-union-green-500 text-white flex items-center justify-center shadow-lg shadow-union-green-500/30">
-                            <Users size={24} />
+                    <div className="flex items-center gap-5">
+                        <div className="w-14 h-14 rounded-[1.2rem] bg-gradient-to-br from-union-green-400 to-union-green-600 text-white flex items-center justify-center shadow-lg shadow-union-green-500/30">
+                            <Users size={26} />
                         </div>
                         <div>
-                            <h2 className="text-2xl sm:text-3xl font-black tracking-tighter">{t('comm_sync.title')}</h2>
-                            <p className="text-xs font-bold text-slate-500 dark:text-gray-400 mt-1 uppercase tracking-widest opacity-70">{t('comm_sync.subtitle')}</p>
+                            <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white">{t('comm_sync.title')}</h2>
+                            <p className="text-xs font-bold text-slate-500 dark:text-gray-400 mt-1 uppercase tracking-widest opacity-80">{t('comm_sync.subtitle')}</p>
                         </div>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-3">
                         {isSharyActive && (
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
                                 onClick={() => setIsSharyTipOpen(true)}
-                                className="flex items-center gap-2 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 px-4 py-2 rounded-2xl border border-cyan-500/20 shadow-sm transition-all text-xs font-black uppercase tracking-wider"
+                                className="flex items-center gap-2 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 px-5 py-2.5 rounded-full border border-cyan-500/20 shadow-sm transition-all text-xs font-black uppercase tracking-wider backdrop-blur-sm"
                             >
-                                <span className="text-sm">🤖</span>
+                                <span className="text-lg">🤖</span>
                                 <span>{t('comm_sync.tip_btn')}</span>
                             </motion.button>
                         )}
-
-                        <div className="flex bg-gray-200/50 dark:bg-black/30 p-1 rounded-2xl border border-white/10 shadow-inner no-export">
-                            <button
-                                onClick={() => setView('list')}
-                                className={`p-2.5 rounded-xl transition-all duration-300 ${view === 'list' ? 'bg-white dark:bg-slate-800 shadow-md text-union-green-600 dark:text-union-green-400' : 'text-gray-400 hover:text-gray-500'}`}
-                            >
-                                <List size={20} />
-                            </button>
-                            <button
-                                onClick={() => setView('tree')}
-                                className={`p-2.5 rounded-xl transition-all duration-300 ${view === 'tree' ? 'bg-white dark:bg-slate-800 shadow-md text-union-green-600 dark:text-union-green-400' : 'text-gray-400 hover:text-gray-500'}`}
-                            >
-                                <Network size={20} />
-                            </button>
-                        </div>
                     </div>
                 </div>
 
-                {/* Secondary Controls (Barra strumenti per Albero) */}
-                {view === 'tree' && (
-                    <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        className="flex flex-wrap items-center gap-3 mb-8 p-3 bg-gray-100/30 dark:bg-white/5 rounded-[2rem] border border-white/20 dark:border-white/5"
-                    >
-                        <div className="flex bg-white dark:bg-slate-800/50 p-1 rounded-xl shadow-sm no-export">
-                            <button onClick={() => setTheme('glass')} className={`p-2 rounded-lg transition-all ${theme === 'glass' ? 'bg-union-green-500 text-white shadow-md' : 'text-gray-400 hover:text-gray-600'}`} title="Tema Glass">
-                                <Palette size={16} />
+                {/* Secondary Controls (Barra strumenti per Albero) - Floating iOS Island Style */}
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="flex flex-wrap items-center justify-between gap-4 mb-8 p-2 pr-2 bg-white/40 dark:bg-white/5 rounded-full border border-white/40 dark:border-white/5 shadow-sm backdrop-blur-md"
+                >
+                    <div className="flex items-center gap-1 pl-2">
+                        <div className="flex bg-gray-100/80 dark:bg-black/20 p-1 rounded-full border border-white/20 shadow-inner">
+                            <button onClick={() => setTheme('glass')} className={`h-8 w-8 flex items-center justify-center rounded-full transition-all duration-300 ${theme === 'glass' ? 'bg-white text-union-green-600 shadow-sm scale-110' : 'text-gray-400 hover:text-gray-600'}`} title="Glass Mode">
+                                <div className="w-3 h-3 rounded-full bg-gradient-to-br from-blue-400 to-cyan-300"></div>
                             </button>
-                            <button onClick={() => setTheme('dark')} className={`p-2 rounded-lg transition-all ${theme === 'dark' ? 'bg-zinc-800 text-yellow-500 shadow-md' : 'text-gray-400 hover:text-gray-600'}`} title="Tema Dark Gold">
-                                <Palette size={16} />
+                            <button onClick={() => setTheme('dark')} className={`h-8 w-8 flex items-center justify-center rounded-full transition-all duration-300 ${theme === 'dark' ? 'bg-slate-800 text-yellow-500 shadow-sm scale-110' : 'text-gray-400 hover:text-gray-600'}`} title="Dark Mode">
+                                <div className="w-3 h-3 rounded-full bg-slate-900 border border-yellow-500/50"></div>
                             </button>
                         </div>
 
-                        <button
-                            onClick={() => setIsProjection(!isProjection)}
-                            className={`px-4 py-2 rounded-xl transition-all font-black text-[10px] uppercase tracking-wider flex items-center gap-2 no-export ${isProjection ? 'bg-union-green-600 text-white shadow-lg' : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-gray-400 border border-gray-100 dark:border-white/10 hover:bg-gray-50'}`}
-                        >
-                            {isProjection ? <EyeOff size={16} /> : <Eye size={16} />}
-                            <span>Crescita</span>
-                        </button>
+                        <div className="w-px h-6 bg-gray-300/50 mx-2"></div>
 
                         <button
+                            onClick={() => setIsProjection(!isProjection)}
+                            className={`px-5 py-2 rounded-full transition-all font-bold text-xs uppercase tracking-wide flex items-center gap-2 ${isProjection ? 'bg-union-green-500 text-white shadow-md' : 'bg-transparent text-slate-500 hover:bg-white/40'}`}
+                        >
+                            {isProjection ? <EyeOff size={14} /> : <Eye size={14} />}
+                            <span>{isProjection ? 'Reale' : 'Proiezione'}</span>
+                        </button>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <button
                             onClick={() => setIsSettingsOpen(true)}
-                            className="p-2 bg-white dark:bg-slate-800 text-gray-500 dark:text-gray-400 rounded-xl hover:bg-union-green-500 hover:text-white transition-all shadow-sm border border-gray-100 dark:border-white/10 no-export"
+                            className="p-2.5 bg-white/60 dark:bg-white/5 text-slate-500 dark:text-gray-300 rounded-full hover:bg-white hover:shadow-md transition-all border border-transparent hover:border-gray-100"
                         >
                             <Settings size={18} />
                         </button>
@@ -127,91 +110,51 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                         <button
                             onClick={handleExport}
                             disabled={isExporting}
-                            className={`ml-auto px-5 py-2.5 rounded-2xl transition-all font-black text-[10px] uppercase tracking-widest flex items-center gap-2 shadow-lg ${isExporting ? 'bg-gray-100 text-gray-400' : 'bg-gradient-to-r from-union-green-600 to-cyan-600 text-white hover:scale-105 active:scale-95'}`}
+                            className={`px-6 py-2.5 rounded-full transition-all font-black text-xs uppercase tracking-widest flex items-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 ${isExporting ? 'bg-gray-100 text-gray-400' : 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'}`}
                         >
-                            <Share2 size={16} className={isExporting ? 'animate-pulse' : ''} />
+                            <Share2 size={14} className={isExporting ? 'animate-pulse' : ''} />
                             <span>{isExporting ? '...' : 'Esporta'}</span>
                         </button>
-                    </motion.div>
-                )}
-
-                <AnimatePresence mode="wait">
-                    {view === 'list' ? (
-                        <motion.div
-                            key="list"
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 20 }}
-                            className="space-y-3"
-                        >
-                            {levels.map((lvl, i) => {
-                                const isUnlocked = personalUnits >= lvl.condition;
-                                return (
-                                    <motion.div
-                                        key={lvl.id}
-                                        initial={{ opacity: 0, x: -10 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: i * 0.1 }}
-                                        className={`p-5 rounded-[2rem] flex items-center justify-between transition-all duration-300 border-2 relative overflow-hidden ${isUnlocked
-                                            ? 'bg-white dark:bg-slate-900/60 border-union-green-500/20 shadow-xl shadow-union-green-500/5 hover:border-union-green-500/40'
-                                            : 'bg-gray-50/50 dark:bg-slate-950/30 border-gray-100 dark:border-white/5 opacity-60'}`}
-                                    >
-                                        <div className="flex items-center gap-5">
-                                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold transition-all ${isUnlocked ? 'bg-union-green-500 text-white shadow-lg shadow-union-green-500/30' : 'bg-gray-200 dark:bg-white/5 text-gray-400'}`}>
-                                                {isUnlocked ? <Unlock size={20} /> : <Lock size={20} />}
-                                            </div>
-                                            <div>
-                                                <p className={`text-sm font-black uppercase tracking-tighter ${isUnlocked ? 'text-slate-800 dark:text-white' : 'text-gray-400'}`}>{lvl.name}</p>
-                                                <p className="text-[10px] opacity-60 font-bold text-slate-500 dark:text-gray-400 uppercase tracking-widest mt-0.5">
-                                                    {lvl.sub}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        {isUnlocked ? (
-                                            <div className="flex items-center gap-2 text-union-green-600 dark:text-union-green-400 font-black text-[10px] uppercase tracking-widest bg-union-green-500/10 px-3 py-1.5 rounded-xl">
-                                                <CheckCircle2 size={14} />
-                                                {t('comm_sync.unlocked')}
-                                            </div>
-                                        ) : (
-                                            <div className="text-[10px] font-black text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-white/5 px-3 py-1.5 rounded-xl uppercase tracking-widest border border-gray-200/50">
-                                                {t('comm_sync.needs_units', { n: lvl.condition })}
-                                            </div>
-                                        )}
-                                    </motion.div>
-                                );
-                            })}
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key="tree"
-                            initial={{ opacity: 0, scale: 0.98 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.98 }}
-                            id="export-card-tree"
-                            className={`p-8 rounded-[3rem] shadow-2xl relative overflow-hidden ${theme === 'dark' ? 'bg-zinc-950 text-white' : 'bg-white text-slate-800 border border-gray-100'}`}
-                        >
-                            {theme === 'dark' && <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent pointer-events-none"></div>}
-
-                            <div className="flex justify-between items-start mb-10 no-export relative z-10">
-                                <div>
-                                    <h3 className={`text-xl font-black uppercase tracking-tighter ${theme === 'dark' ? 'text-yellow-500' : 'text-union-green-600'}`}>{t('comm_sync.visualizer_pro')}</h3>
-                                    <p className="text-xs font-bold opacity-50 mt-1">{t('comm_sync.visualizer_desc')}</p>
-                                </div>
-                                <div className="text-right">
-                                    <p className={`text-4xl font-black ${theme === 'dark' ? 'text-yellow-500' : 'text-union-green-600'}`}>{isProjection ? '20+' : '12'}</p>
-                                    <p className="text-[10px] opacity-40 uppercase font-black tracking-widest">{t('comm_sync.total_members')}</p>
-                                </div>
-                            </div>
-
-                            <div className="relative z-0">
-                                <CommunityTree theme={theme} isProjectionMode={isProjection} />
-                            </div>
-
-                            <BrandingOverlay />
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                    </div>
+                </motion.div>
             </motion.div>
+
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key="tree"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    id="export-card-tree"
+                    className={`p-1 pt-4 rounded-[2.5rem] relative overflow-hidden transition-colors duration-500 ${theme === 'dark' ? 'bg-zinc-950 text-white' : 'bg-white/40 text-slate-800'}`}
+                >
+                    {theme === 'dark' && <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-purple-500/5 pointer-events-none"></div>}
+
+                    <div className="flex justify-between items-start mb-6 px-6 no-export relative z-10">
+                        <div>
+                            <h3 className={`text-xl font-black uppercase tracking-tighter ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>{t('comm_sync.visualizer_pro')}</h3>
+                            <p className="text-xs font-bold opacity-50 mt-1 tracking-wide">{t('comm_sync.visualizer_desc')}</p>
+                        </div>
+                        <div className="text-right">
+                            <motion.p
+                                key={isProjection ? 'proj' : 'real'}
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className={`text-5xl font-black tracking-tighter ${theme === 'dark' ? 'text-transparent bg-clip-text bg-gradient-to-br from-yellow-400 to-amber-600' : 'text-transparent bg-clip-text bg-gradient-to-br from-union-green-600 to-emerald-800'}`}
+                            >
+                                {isProjection ? '20+' : '12'}
+                            </motion.p>
+                            <p className="text-[9px] opacity-40 uppercase font-black tracking-widest mt-1">{t('comm_sync.total_members')}</p>
+                        </div>
+                    </div>
+
+                    <div className="relative z-0">
+                        <CommunityTree theme={theme} isProjectionMode={isProjection} />
+                    </div>
+
+                    <BrandingOverlay />
+                </motion.div>
+            </AnimatePresence>
 
             {/* Shary Tip Modal Premium */}
             <AnimatePresence>
@@ -281,82 +224,84 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                 )}
             </AnimatePresence>
 
-            {isSettingsOpen && (
-                <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
-                    <motion.div
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        onClick={() => setIsSettingsOpen(false)}
-                        className="absolute inset-0 bg-slate-950/60 backdrop-blur-md"
-                    />
-                    <motion.div
-                        initial={{ scale: 0.9, opacity: 0, y: 30 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.9, opacity: 0, y: 30 }}
-                        className="relative bg-white dark:bg-slate-900 rounded-[3rem] p-8 w-full max-w-md shadow-2xl overflow-hidden border border-union-green-500/20"
-                    >
-                        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-union-green-500 to-cyan-600" />
-                        <div className="flex justify-between items-start mb-8">
-                            <div>
-                                <h2 className="text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tighter">{t('comm_sync.customize_brand')}</h2>
-                                <p className="text-xs opacity-60 font-bold italic text-slate-500 dark:text-gray-400 mt-1">{t('comm_sync.customize_desc')}</p>
-                            </div>
-                            <button onClick={() => setIsSettingsOpen(false)} className="p-2.5 bg-gray-100 dark:bg-white/5 rounded-2xl text-gray-400 hover:text-slate-900 dark:hover:text-white transition-all"><X size={20} /></button>
-                        </div>
-
-                        <div className="space-y-5">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase text-union-green-600 flex items-center gap-2 tracking-widest">
-                                    <User size={14} /> {t('comm_sync.full_name')}
-                                </label>
-                                <input
-                                    value={profile.name} onChange={(e) => profile.setProfile({ name: e.target.value })}
-                                    className="w-full bg-gray-100 dark:bg-white/5 border border-transparent rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:border-union-green-500 focus:bg-white dark:focus:bg-slate-800 transition-all text-slate-800 dark:text-white"
-                                    placeholder="Esempio: Marco Rossi"
-                                />
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase text-union-green-600 flex items-center gap-2 tracking-widest">
-                                        <Instagram size={14} /> Instagram
-                                    </label>
-                                    <input
-                                        value={profile.instagram} onChange={(e) => profile.setProfile({ instagram: e.target.value })}
-                                        className="w-full bg-gray-100 dark:bg-white/5 border border-transparent rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:border-union-green-500 focus:bg-white dark:focus:bg-slate-800 transition-all text-slate-800 dark:text-white"
-                                        placeholder="username"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase text-union-green-600 flex items-center gap-2 tracking-widest">
-                                        <Send size={14} /> Telegram
-                                    </label>
-                                    <input
-                                        value={profile.telegram} onChange={(e) => profile.setProfile({ telegram: e.target.value })}
-                                        className="w-full bg-gray-100 dark:bg-white/5 border border-transparent rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:border-union-green-500 focus:bg-white dark:focus:bg-slate-800 transition-all text-slate-800 dark:text-white"
-                                        placeholder="username"
-                                    />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase text-union-green-600 flex items-center gap-2 tracking-widest">
-                                    <Phone size={14} /> {t('comm_sync.phone')}
-                                </label>
-                                <input
-                                    value={profile.phone} onChange={(e) => profile.setProfile({ phone: e.target.value })}
-                                    className="w-full bg-gray-100 dark:bg-white/5 border border-transparent rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:border-union-green-500 focus:bg-white dark:focus:bg-slate-800 transition-all text-slate-800 dark:text-white"
-                                    placeholder="+39 333..."
-                                />
-                            </div>
-                        </div>
-
-                        <button
+            {
+                isSettingsOpen && (
+                    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                             onClick={() => setIsSettingsOpen(false)}
-                            className="w-full mt-10 bg-slate-900 dark:bg-white dark:text-slate-900 text-white rounded-2xl py-4 font-black flex items-center justify-center gap-3 hover:bg-union-green-600 dark:hover:bg-union-green-500 dark:hover:text-white transition-all shadow-xl active:scale-95"
+                            className="absolute inset-0 bg-slate-950/60 backdrop-blur-md"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                            className="relative bg-white dark:bg-slate-900 rounded-[3rem] p-8 w-full max-w-md shadow-2xl overflow-hidden border border-union-green-500/20"
                         >
-                            <Save size={20} /> {t('comm_sync.save_close')}
-                        </button>
-                    </motion.div>
-                </div>
-            )}
+                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-union-green-500 to-cyan-600" />
+                            <div className="flex justify-between items-start mb-8">
+                                <div>
+                                    <h2 className="text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tighter">{t('comm_sync.customize_brand')}</h2>
+                                    <p className="text-xs opacity-60 font-bold italic text-slate-500 dark:text-gray-400 mt-1">{t('comm_sync.customize_desc')}</p>
+                                </div>
+                                <button onClick={() => setIsSettingsOpen(false)} className="p-2.5 bg-gray-100 dark:bg-white/5 rounded-2xl text-gray-400 hover:text-slate-900 dark:hover:text-white transition-all"><X size={20} /></button>
+                            </div>
+
+                            <div className="space-y-5">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase text-union-green-600 flex items-center gap-2 tracking-widest">
+                                        <User size={14} /> {t('comm_sync.full_name')}
+                                    </label>
+                                    <input
+                                        value={profile.name} onChange={(e) => profile.setProfile({ name: e.target.value })}
+                                        className="w-full bg-gray-100 dark:bg-white/5 border border-transparent rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:border-union-green-500 focus:bg-white dark:focus:bg-slate-800 transition-all text-slate-800 dark:text-white"
+                                        placeholder="Esempio: Marco Rossi"
+                                    />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase text-union-green-600 flex items-center gap-2 tracking-widest">
+                                            <Instagram size={14} /> Instagram
+                                        </label>
+                                        <input
+                                            value={profile.instagram} onChange={(e) => profile.setProfile({ instagram: e.target.value })}
+                                            className="w-full bg-gray-100 dark:bg-white/5 border border-transparent rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:border-union-green-500 focus:bg-white dark:focus:bg-slate-800 transition-all text-slate-800 dark:text-white"
+                                            placeholder="username"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black uppercase text-union-green-600 flex items-center gap-2 tracking-widest">
+                                            <Send size={14} /> Telegram
+                                        </label>
+                                        <input
+                                            value={profile.telegram} onChange={(e) => profile.setProfile({ telegram: e.target.value })}
+                                            className="w-full bg-gray-100 dark:bg-white/5 border border-transparent rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:border-union-green-500 focus:bg-white dark:focus:bg-slate-800 transition-all text-slate-800 dark:text-white"
+                                            placeholder="username"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase text-union-green-600 flex items-center gap-2 tracking-widest">
+                                        <Phone size={14} /> {t('comm_sync.phone')}
+                                    </label>
+                                    <input
+                                        value={profile.phone} onChange={(e) => profile.setProfile({ phone: e.target.value })}
+                                        className="w-full bg-gray-100 dark:bg-white/5 border border-transparent rounded-2xl px-5 py-4 text-sm font-bold outline-none focus:border-union-green-500 focus:bg-white dark:focus:bg-slate-800 transition-all text-slate-800 dark:text-white"
+                                        placeholder="+39 333..."
+                                    />
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={() => setIsSettingsOpen(false)}
+                                className="w-full mt-10 bg-slate-900 dark:bg-white dark:text-slate-900 text-white rounded-2xl py-4 font-black flex items-center justify-center gap-3 hover:bg-union-green-600 dark:hover:bg-union-green-500 dark:hover:text-white transition-all shadow-xl active:scale-95"
+                            >
+                                <Save size={20} /> {t('comm_sync.save_close')}
+                            </button>
+                        </motion.div>
+                    </div>
+                )
+            }
 
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -377,7 +322,7 @@ const Community: React.FC<CommunityProps> = ({ personalUnits }) => {
                     </div>
                 </div>
             </motion.div>
-        </div>
+        </div >
     );
 };
 

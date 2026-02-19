@@ -1,5 +1,5 @@
 import React from 'react';
-import { Compass, Sparkles, Lock } from 'lucide-react';
+import { GraduationCap, Sparkles, Lock } from 'lucide-react';
 import { ClientModeIcon, FamilyModeIcon, CondoModeIcon } from './icons/ModeIcons';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -36,7 +36,7 @@ export const DesktopHeaderNav: React.FC<DesktopHeaderNavProps> = ({
                 className={getButtonClass(false)}
             >
                 <div className={`mb-1 transition-transform group-hover:scale-110 ${viewMode === 'light' ? 'text-union-green-400' : 'text-union-green-500/70'}`}>
-                    <Compass className="w-6 h-6" />
+                    <GraduationCap className="w-6 h-6" />
                 </div>
                 <span className="text-[10px] font-bold leading-none text-union-green-400 flex items-center gap-1">
                     {t('nav.light')} <Sparkles size={8} className="animate-pulse text-union-green-300" />

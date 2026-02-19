@@ -34,7 +34,7 @@ import { Presentation, Fuel, Share2, Compass, Sparkles } from 'lucide-react'; //
 
 // --- IMPORTAZIONI LEGALI E UI ---
 import LegalFooter from './components/LegalFooter';
-const APP_VERSION = "1.2.49";
+const APP_VERSION = "v1.2.50";
 
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 

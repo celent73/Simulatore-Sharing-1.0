@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Users, Building2, Compass, Sparkles, Lock } from 'lucide-react';
+import { User, Users, Building2, GraduationCap, Sparkles, Lock } from 'lucide-react';
 import { ClientModeIcon, FamilyModeIcon, CondoModeIcon } from './icons/ModeIcons';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -74,7 +74,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
                     className={getButtonClass(false)}
                 >
                     <div className="group-hover:scale-110 transition-transform">
-                        <Compass className="w-8 h-8 md:w-10 md:h-10 text-union-green-400" />
+                        <GraduationCap className="w-8 h-8 md:w-10 md:h-10 text-union-green-400" />
                     </div>
                 </button>
 

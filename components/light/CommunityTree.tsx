@@ -98,81 +98,74 @@ const TreeNodeComponent = ({ node, onUpdate, theme, isProjection }: { node: Node
 
     const nodeStyles = {
         glass: isMain
-            ? 'bg-gradient-to-br from-union-green-500 to-union-green-700 text-white border-white/20'
-            : isLevel3 ? 'bg-white/95 text-union-black border-union-green-500/5' : 'bg-white/90 text-union-black border-union-green-500/10',
+            ? 'bg-gradient-to-br from-union-green-500 to-union-green-600 text-white shadow-[0_10px_30px_rgba(34,197,94,0.3)] border-white/20'
+            : isLevel3
+                ? 'bg-white/80 text-slate-800 border-white/60 shadow-sm backdrop-blur-md'
+                : 'bg-white/90 text-slate-900 border-white/60 shadow-[0_8px_20px_rgba(0,0,0,0.04)] backdrop-blur-xl',
         dark: isMain
-            ? 'bg-gradient-to-br from-yellow-600 to-yellow-900 text-white border-yellow-400/30'
-            : isLevel3 ? 'bg-zinc-800 text-zinc-100 border-zinc-700' : 'bg-zinc-900 text-white border-yellow-600/20',
+            ? 'bg-gradient-to-br from-yellow-600 to-amber-700 text-white border-yellow-400/30'
+            : isLevel3
+                ? 'bg-zinc-900/80 text-zinc-100 border-white/5 backdrop-blur-md'
+                : 'bg-zinc-900/90 text-white border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.2)] backdrop-blur-xl',
         minimal: isMain
-            ? 'bg-union-black text-white border-black'
-            : 'bg-white text-union-black border-gray-200 shadow-sm'
+            ? 'bg-black text-white border-black'
+            : 'bg-white text-black border-gray-200 shadow-sm'
     };
 
-    const connectorColor = theme === 'dark' ? 'rgba(234, 179, 8, 0.2)' : 'rgba(46, 204, 113, 0.2)';
+    const connectorColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
 
     return (
         <div className="flex flex-col items-center relative">
             <motion.div
                 layout
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 className={`
-          relative rounded-2xl shadow-xl border backdrop-blur-md z-20 transition-all duration-300
+          relative rounded-[1.5rem] border z-20 transition-all duration-300
           ${nodeStyles[theme as keyof typeof nodeStyles]}
-          ${isMain ? 'animate-glow p-4 min-w-[130px]' : isLevel3 ? 'p-2 min-w-[90px]' : 'p-4 min-w-[130px]'}
-          ${isProjection ? 'opacity-40 border-dashed scale-95' : ''}
-          flex flex-col items-center
+          ${isMain ? 'p-5 min-w-[140px]' : isLevel3 ? 'p-2.5 min-w-[100px]' : 'p-4 min-w-[140px]'}
+          ${isProjection ? 'opacity-50 grayscale scale-95 border-dashed' : ''}
+          flex flex-col items-center group hover:scale-105
         `}
             >
                 <div className={`
-          p-2 rounded-full mb-1
-          ${isMain ? 'bg-white/20' : theme === 'dark' ? 'bg-yellow-600/10 text-yellow-500' : 'bg-union-green-500/10 text-union-green-600'}
-          ${isLevel3 ? 'scale-75' : ''}
+          p-2.5 rounded-full mb-2 shadow-inner
+          ${isMain ? 'bg-white/20 text-white' : theme === 'dark' ? 'bg-yellow-500/10 text-yellow-500' : 'bg-union-green-500/10 text-union-green-600'}
+          ${isLevel3 ? 'scale-75 mb-0' : ''}
         `}>
-                    {isMain ? <User size={isLevel3 ? 16 : 20} /> : <Users size={isLevel3 ? 14 : 18} />}
+                    {isMain ? <User size={isLevel3 ? 16 : 22} /> : <Users size={isLevel3 ? 14 : 20} />}
                 </div>
 
                 {isEditing ? (
-                    <div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-col items-center gap-2 mt-1">
                         <input
                             ref={inputRef}
                             value={editValue}
                             onChange={(e) => setEditValue(e.target.value)}
                             onKeyDown={(e) => { if (e.key === 'Enter') handleSave(); if (e.key === 'Escape') setIsEditing(false); }}
                             onBlur={handleSave}
-                            className="bg-union-green-50/20 border border-union-green-500/30 rounded px-2 py-1 text-xs font-bold text-center w-24 outline-none no-export"
+                            className="bg-transparent border-b-2 border-current rounded-none px-1 py-0.5 text-xs font-bold text-center w-24 outline-none no-export"
                             autoFocus
                         />
-                        <div className="flex gap-1 no-export">
-                            <button
-                                onMouseDown={(e) => { e.preventDefault(); handleSave(); }}
-                                className="p-1 bg-union-green-500 text-white rounded-full scale-75"
-                            >
-                                <Check size={12} />
-                            </button>
-                            <button
-                                onMouseDown={(e) => { e.preventDefault(); setIsEditing(false); setEditValue(node.label); }}
-                                className="p-1 bg-red-400 text-white rounded-full scale-75"
-                            >
-                                <X size={12} />
-                            </button>
-                        </div>
                     </div>
                 ) : (
                     <div
                         onClick={() => !isProjection && setIsEditing(true)}
-                        className="group flex flex-col items-center cursor-edit"
+                        className="group flex flex-col items-center cursor-pointer"
                         title="Clicca per modificare"
                     >
-                        <span className={`font-black ${isLevel3 ? 'text-[10px]' : 'text-xs'} ${theme === 'minimal' ? 'text-black' : ''}`}>{node.label}</span>
-                        <span className={`${isLevel3 ? 'text-[7px]' : 'text-[9px]'} uppercase font-black opacity-40 tracking-widest`}>{node.role}</span>
+                        <span className={`font-black ${isLevel3 ? 'text-[11px]' : 'text-sm'} tracking-tight leading-tight mb-0.5`}>{node.label}</span>
+                        <span className={`${isLevel3 ? 'text-[8px]' : 'text-[10px]'} uppercase font-bold opacity-50 tracking-widest`}>{node.role}</span>
                     </div>
                 )}
 
                 {hasChildren && (
                     <div
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        className={`mt-1 cursor-pointer transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                        onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
+                        className={`absolute -bottom-3 w-6 h-6 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 shadow-sm border border-white/50 backdrop-blur-sm z-30 ${isExpanded ? 'bg-white text-slate-800 rotate-180' : 'bg-slate-800 text-white'}`}
                     >
-                        <ChevronDown size={14} className={isMain ? 'text-white/50' : 'opacity-40'} />
+                        <ChevronDown size={12} strokeWidth={3} />
                     </div>
                 )}
             </motion.div>
@@ -180,10 +173,11 @@ const TreeNodeComponent = ({ node, onUpdate, theme, isProjection }: { node: Node
             <AnimatePresence mode="wait">
                 {hasChildren && isExpanded && (
                     <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className={`flex gap-4 sm:gap-12 relative justify-center px-4 ${isLevel3 ? 'mt-8' : 'mt-16'}`}
+                        initial={{ opacity: 0, height: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, height: 'auto', scale: 1 }}
+                        exit={{ opacity: 0, height: 0, scale: 0.95 }}
+                        transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+                        className={`flex gap-6 sm:gap-16 relative justify-center px-4 ${isLevel3 ? 'mt-8' : 'mt-16'}`}
                     >
                         <svg className={`absolute left-0 w-full pointer-events-none overflow-visible z-10 no-export ${isLevel3 ? 'top-[-32px] h-8' : 'top-[-64px] h-16'}`}>
                             {node.children!.map((_, idx) => {
@@ -196,8 +190,10 @@ const TreeNodeComponent = ({ node, onUpdate, theme, isProjection }: { node: Node
                                         key={idx}
                                         d={`M 50% 0 C 50% ${h / 2}, ${targetX}% ${h / 2}, ${targetX}% ${h}`}
                                         stroke={connectorColor}
-                                        strokeWidth="2"
+                                        strokeWidth="1.5"
                                         fill="none"
+                                        strokeLinecap="round"
+                                        className="opacity-60"
                                     />
                                 );
                             })}
@@ -285,40 +281,40 @@ const CommunityTree = ({ theme = 'glass', isProjectionMode = false }: TreeProps)
     };
 
     return (
-        <div className={`py-12 overflow-hidden no-scrollbar rounded-3xl min-h-[500px] transition-colors duration-500 relative ${theme === 'dark' ? 'bg-zinc-950/40' : 'bg-gradient-to-b from-transparent to-union-green-500/5'}`} id="export-card-tree">
+        <div className={`pt-0 pb-16 overflow-hidden no-scrollbar rounded-[2rem] min-h-[600px] transition-colors duration-500 relative ${theme === 'dark' ? 'bg-zinc-950/20' : 'bg-transparent'}`} id="export-card-tree">
 
-            <div className="absolute top-4 right-4 flex flex-col gap-2 z-50 no-export">
-                <button onClick={handleZoomIn} className="p-2 rounded-xl bg-white shadow-sm hover:translate-y-[-2px] transition-all text-union-green-600">
-                    <ZoomIn size={18} />
-                </button>
-                <button onClick={handleZoomOut} className="p-2 rounded-xl bg-white shadow-sm hover:translate-y-[-2px] transition-all text-union-green-600">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-1 p-1.5 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-white/50 dark:border-white/10 z-50 no-export transition-all hover:scale-105 hover:bg-white dark:hover:bg-zinc-900">
+                <button onClick={handleZoomOut} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 transition-colors">
                     <ZoomOut size={18} />
                 </button>
-                <button onClick={handleResetZoom} className="p-2 rounded-xl bg-white shadow-sm hover:translate-y-[-2px] transition-all text-union-green-600" title="Adatta allo schermo">
-                    <Maximize size={18} />
+                <div className="w-px h-4 bg-gray-300 dark:bg-white/10 mx-1"></div>
+                <button onClick={handleResetZoom} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 transition-colors font-bold text-xs" title="Adatta allo schermo">
+                    {Math.round(scale * 100)}%
                 </button>
-                <div className="h-px bg-gray-200 my-1 mx-2"></div>
+                <div className="w-px h-4 bg-gray-300 dark:bg-white/10 mx-1"></div>
+                <button onClick={handleZoomIn} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 transition-colors">
+                    <ZoomIn size={18} />
+                </button>
+
+                <div className="w-px h-4 bg-gray-300 dark:bg-white/10 mx-2"></div>
+
                 <button
                     onClick={() => {
                         if (confirm('Sei sicuro di voler resettare l\'albero? Rimarrai solo tu!')) {
                             setTreeData({
-                                id: 'me',
-                                label: 'Tu',
-                                role: 'Family Pro',
-                                level: 0,
-                                children: []
+                                id: 'me', label: 'Tu', role: 'Family Pro', level: 0, children: []
                             });
                         }
                     }}
-                    className="p-2 rounded-xl bg-white shadow-sm hover:translate-y-[-2px] hover:bg-red-50 hover:text-red-500 transition-all text-gray-400"
+                    className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-50 hover:text-red-500 text-gray-400 transition-colors"
                     title="Resetta Albero"
                 >
-                    <Trash2 size={18} />
+                    <Trash2 size={16} />
                 </button>
             </div>
 
             <div
-                className="transition-transform duration-500 origin-top flex justify-center"
+                className="transition-transform duration-500 origin-top flex justify-center pt-0 pb-20"
                 style={{ transform: `scale(${scale})` }}
             >
                 <div ref={containerRef} className="px-10 pb-20">

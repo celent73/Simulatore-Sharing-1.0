@@ -53,11 +53,11 @@ export const translations = {
       level_name: "Livello {{n}}",
       level_sub_0: "Commissioni Dirette (Collaboratori)",
       level_sub_n: "Rendita Indiretta {{n}}° Livello",
-      needs_units: "SERVE {{n}} UTENZE",
+      needs_units: "SERVONO {{n}} CONTRATTI",
       unlocked: "SBLOCCATO",
     },
     nav: {
-      light: "Light",
+      light: "Tutorial",
       pro: "Pro",
       network: "Network",
       scanner: "AI Scanner",
@@ -791,7 +791,37 @@ export const translations = {
       finish: "Fatto",
       done: "Ok",
       months: "Mesi"
-    }
+    },
+    academy: {
+      title: "Sharing Academy",
+      subtitle: "Formazione e Strumenti",
+      menu: {
+        tutorial: "Tutorial Piano Compensi",
+        contract: "Contract Simulator",
+        video: "Video Academy"
+      },
+      contract: {
+        title: "Simulatore Inserimento Contratto",
+        step1_title: "Dati Cliente",
+        step2_title: "Fornitura",
+        step3_title: "Caricamento Bolletta",
+        label_name: "Nome",
+        label_surname: "Cognome",
+        label_cf: "Codice Fiscale",
+        label_address: "Indirizzo Fornitura",
+        label_pod: "POD / PDR",
+        pod_hint: "Lo trovi nella prima pagina della bolletta",
+        upload_cta: "Carica Bolletta PDF/Foto",
+        upload_sub: "Trascina qui o clicca per caricare",
+        file_uploaded: "File Caricato Correttamente!",
+        demo_btn: "Popola Dati Demo",
+        next_btn: "Avanti",
+        submit_btn: "Invia Contratto",
+        success_title: "Contratto Simulato con Successo! 🎉",
+        success_desc: "Hai completato la procedura di inserimento. Nella realtà, riceverai una mail di conferma.",
+        new_sim: "Nuova Simulazione"
+      }
+    },
   },
   de: {
     app: {
@@ -849,7 +879,7 @@ export const translations = {
       unlocked: "FREIGESCHALTET",
     },
     nav: {
-      light: "Light",
+      light: "Tutorial",
       pro: "Pro",
       network: "Netzwerk",
       scanner: "AI Scanner",
@@ -1555,7 +1585,37 @@ export const translations = {
         md: "Discounter",
         aff_int: "Internet-Affiliates Beispiel"
       }
-    }
+    },
+    academy: {
+      title: "Sharing Academy",
+      subtitle: "Schulung und Tools",
+      menu: {
+        tutorial: "Vergütungsplan Tutorial",
+        contract: "Vertragssimulator",
+        video: "Video Academy"
+      },
+      contract: {
+        title: "Vertragseingabe Simulator",
+        step1_title: "Kundendaten",
+        step2_title: "Versorgungsdetails",
+        step3_title: "Rechnung hochladen",
+        label_name: "Vorname",
+        label_surname: "Nachname",
+        label_cf: "Steuernummer",
+        label_address: "Lieferadresse",
+        label_pod: "POD / PDR",
+        pod_hint: "Finden Sie auf der ersten Seite der Rechnung",
+        upload_cta: "Rechnung hochladen PDF/Foto",
+        upload_sub: "Hierziehen oder klicken zum Hochladen",
+        file_uploaded: "Datei erfolgreich hochgeladen!",
+        demo_btn: "Demo-Daten füllen",
+        next_btn: "Weiter",
+        submit_btn: "Vertrag senden",
+        success_title: "Vertrag erfolgreich simuliert! 🎉",
+        success_desc: "Sie haben den Eingabevorgang abgeschlossen. In der Realität würden Sie eine Bestätigungs-E-Mail erhalten.",
+        new_sim: "Neue Simulation"
+      }
+    },
   },
   en: {
     app: {
@@ -1911,7 +1971,7 @@ export const translations = {
       disclaimer: "This simulator creates estimates based on mathematical projections. Actual results may vary."
     },
     nav: {
-      light: "Light",
+      light: "Tutorial",
       pro: "Pro",
       network: "Network",
       scanner: "AI Scanner",
@@ -2428,5 +2488,35 @@ export const translations = {
       rtz_missing: "You are missing €{{n}} to completely zero the bill.",
       rtz_note: "\"The calculation considers contracts currently entered in the simulator and your spending habits.\""
     },
+    academy: {
+      title: "Sharing Academy",
+      subtitle: "Training and Tools",
+      menu: {
+        tutorial: "Compensation Plan Tutorial",
+        contract: "Contract Simulator",
+        video: "Video Academy"
+      },
+      contract: {
+        title: "Contract Entry Simulator",
+        step1_title: "Customer Data",
+        step2_title: "Supply Details",
+        step3_title: "Upload Bill",
+        label_name: "First Name",
+        label_surname: "Last Name",
+        label_cf: "Tax Code",
+        label_address: "Supply Address",
+        label_pod: "POD / PDR",
+        pod_hint: "Found on the first page of the bill",
+        upload_cta: "Upload Bill PDF/Photo",
+        upload_sub: "Drag here or click to upload",
+        file_uploaded: "File Uploaded Successfully!",
+        demo_btn: "Fill Demo Data",
+        next_btn: "Next",
+        submit_btn: "Submit Contract",
+        success_title: "Contract Simulated Successfully! 🎉",
+        success_desc: "You have completed the entry procedure. In reality, you would receive a confirmation email.",
+        new_sim: "New Simulation"
+      }
+    }
   },
 };
