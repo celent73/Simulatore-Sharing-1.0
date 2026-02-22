@@ -84,7 +84,7 @@ const BonusCard: React.FC<BonusCardProps> = ({
               )}
               {isCompleted && (
                 <div className="flex flex-col items-center gap-1 ml-auto bg-white/40 dark:bg-black/20 p-2 rounded-2xl border border-slate-200/50 dark:border-white/5 shadow-inner">
-                  <span className="text-[9px] text-gray-500 dark:text-slate-400 font-black uppercase tracking-widest">{t('focus_mode.active')}</span>
+                  <span className="text-[9px] text-gray-500 dark:text-slate-400 font-black uppercase tracking-widest">{t('bonus.bonus_active')}</span>
                   <button
                     onClick={onToggle}
                     className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 shadow-md ${isActive ? 'bg-blue-600 ring-2 ring-blue-500/20' : 'bg-slate-300 dark:bg-slate-700'}`}

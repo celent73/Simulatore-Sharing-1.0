@@ -487,8 +487,11 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 }}
-                                    className="relative z-30 mb-10 w-full flex justify-center"
+                                    className="relative z-30 mb-8 w-full flex flex-col items-center"
                                 >
+                                    <div className="mb-3 text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em]">
+                                        {getLabel('cashback_detailed.insert_spending')}
+                                    </div>
                                     <div className="flex items-center justify-center gap-1 bg-zinc-900/60 border border-white/10 rounded-[2.5rem] py-6 px-10 backdrop-blur-xl shadow-2xl min-w-[200px] max-w-[300px]">
                                         <span className="text-5xl sm:text-6xl font-light text-white/50 mb-1">€</span>
                                         <input
@@ -500,14 +503,21 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                             autoFocus
                                         />
                                     </div>
-                                    <div className="absolute -bottom-8 left-0 right-0 text-center text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em]">
-                                        {getLabel('cashback_detailed.insert_spending')}
-                                    </div>
                                 </motion.div>
 
                                 <div className="relative z-10 w-full min-h-[180px] flex flex-col items-center justify-center">
                                     {parsedAmount > 0 ? (
                                         <div className="flex flex-col items-center">
+                                            {/* RETURN LABEL MOVED HERE */}
+                                            <motion.div
+                                                className="mb-3 px-4 py-1.5 bg-zinc-900/40 border border-white/5 rounded-full text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] backdrop-blur-md"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ delay: 0.3 }}
+                                            >
+                                                {getLabel('cashback_detailed.return') + ` (${selectedBrand.percentage}%)`}
+                                            </motion.div>
+
                                             <motion.div
                                                 className="relative flex items-center justify-center gap-2 sm:gap-4"
                                                 initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
@@ -520,10 +530,10 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                                     animate={{ rotate: 12, scale: 1 }}
                                                     transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
                                                 >
-                                                    <Sparkles size={48} className="text-yellow-400 fill-yellow-400 drop-shadow-[0_0_25px_rgba(250,204,21,0.6)]" />
+                                                    <Sparkles size={40} className="text-yellow-400 fill-yellow-400 drop-shadow-[0_0_25px_rgba(250,204,21,0.6)]" />
                                                 </motion.div>
 
-                                                <div className="text-6xl sm:text-8xl font-black leading-none tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 drop-shadow-[0_0_30px_rgba(255,255,255,0.3)] pb-2 pr-2">
+                                                <div className="text-5xl sm:text-7xl font-black leading-none tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/70 drop-shadow-[0_0_30px_rgba(255,255,255,0.3)] pb-2 pr-2">
                                                     € {cashbackReturn.toLocaleString(language === 'de' ? 'de-DE' : 'it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 </div>
                                             </motion.div>
@@ -559,18 +569,6 @@ export const CashbackFocusMode: React.FC<CashbackFocusModeProps> = ({ isOpen, on
                                     )}
                                 </div>
                             </div>
-
-                            <motion.div
-                                className="mt-8 text-white/40 text-sm font-medium tracking-wide uppercase relative z-20"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.5 }}
-                            >
-                                {parsedAmount > 0 ?
-                                    (getLabel('cashback_detailed.return') + ` (${selectedBrand.percentage}%)`) :
-                                    ""
-                                }
-                            </motion.div>
 
                             {/* ACTION BUTTONS */}
                             <motion.div

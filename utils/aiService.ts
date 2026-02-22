@@ -21,6 +21,8 @@ export interface ExtractedBillData {
         spread?: number;
         totalAmount?: number;
         energyQuota?: number;
+        pod?: string;
+        power?: number;
     };
     gas?: {
         consumption?: number; // Smc
@@ -29,6 +31,7 @@ export interface ExtractedBillData {
         spread?: number;
         totalAmount?: number;
         energyQuota?: number;
+        pdr?: string;
     };
 }
 
@@ -213,7 +216,9 @@ export const analyzeBillImage = async (inputBase64: string, priorityType: 'elect
                 "energyQuota": number|null (€ spesa materia energia), 
                 "fixedCosts": number|null (€ mensili commercializzazione/PCV, es: 11.50), 
                 "pun": number|null (prezzo base PUN), 
-                "spread": number|null (margine spread es: 0.021) 
+                "spread": number|null (margine spread es: 0.021),
+                "pod": string|null (codice IT...),
+                "power": number|null (potenza impegnata es: 3.3)
             },
             "gas": { 
                 "consumption": number|null (Smc totali), 
@@ -221,7 +226,8 @@ export const analyzeBillImage = async (inputBase64: string, priorityType: 'elect
                 "energyQuota": number|null (€ spesa materia gas), 
                 "fixedCosts": number|null (€ mensili commercializzazione/QVD, es: 11.50), 
                 "psv": number|null (prezzo base PSV), 
-                "spread": number|null (margine spread es: 0.12) 
+                "spread": number|null (margine spread es: 0.12),
+                "pdr": string|null (codice 14 cifre)
             }
           }
         `;
