@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, Search, Check, FileText, ChevronDown, AlertCircle, Save, Info } from 'lucide-react';
-import { useLanguage } from '../../contexts/LanguageContext';
 
 const ContractSimulator: React.FC = () => {
-    const { t } = useLanguage();
-
     // Form State (Simplified for basic interaction)
     const [formData, setFormData] = useState({
         sponsor: '',
@@ -53,6 +50,14 @@ const ContractSimulator: React.FC = () => {
         marketing: false,
         profiling: false,
         rethinking: false,
+
+        // Missing Properties
+        propertyRight: '',
+        ivaReduced: false,
+        acciseReduced: false,
+        supplyMunicipality: '',
+        supplyCivic: '',
+        supplyCap: '',
     });
 
     const handleScrollToTop = () => {
