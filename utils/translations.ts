@@ -792,7 +792,14 @@ export const translations = {
       next: "Avanti",
       finish: "Fatto",
       done: "Ok",
-      months: "Mesi"
+      month: "Mese",
+      months: "Mesi",
+      year: "Anno",
+      years: "Anni",
+      contracts: "Contratti",
+      projection: "Proiezione",
+      personalize: "Personalizza",
+      to_goal: "AL GOAL"
     },
     academy: {
       title: "Sharing Academy",
@@ -1485,7 +1492,14 @@ export const translations = {
       next: "Weiter",
       finish: "Fertig",
       done: "Ok",
+      month: "Monat",
       months: "Monate",
+      year: "Jahr",
+      years: "Jahre",
+      contracts: "Verträge",
+      projection: "Projektion",
+      personalize: "Anpassen",
+      to_goal: "ZUM ZIEL",
       back: "Zurück"
     },
     focus_mode: {
@@ -2573,9 +2587,14 @@ export const translations = {
     },
     common: {
       currency: "€",
+      month: "Month",
       months: "Months",
       year: "Year",
       years: "Years",
+      contracts: "Contracts",
+      projection: "Projection",
+      personalize: "Customize",
+      to_goal: "TO GOAL",
       loading: "Loading...",
       error: "An error occurred",
       success: "Success!",

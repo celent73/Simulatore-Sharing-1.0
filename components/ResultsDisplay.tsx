@@ -249,10 +249,10 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           value={formatValueWithSuffix(displayMonthlyRec1).value}
           suffix={
             <>
-              <span className="text-[12px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
+              <span className="text-[12px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ {t('common.month') || 'Mese'}</span>
               <div className="w-full mt-2">
                 <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/60 dark:bg-black/20 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
-                  ANNO: {formatCurrency(displayMonthlyRec1 * 12).replace(",00", "")}{parkSuffix}
+                  {t('common.year')?.toUpperCase() || 'ANNO'}: {formatCurrency(displayMonthlyRec1 * 12).replace(",00", "")}{parkSuffix}
                 </div>
               </div>
             </>
@@ -265,10 +265,10 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           value={formatValueWithSuffix(displayMonthlyRec2).value}
           suffix={
             <>
-              <span className="text-[12px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
+              <span className="text-[12px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ {t('common.month') || 'Mese'}</span>
               <div className="w-full mt-2">
                 <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/60 dark:bg-black/20 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
-                  ANNO: {formatCurrency(displayMonthlyRec2 * 12).replace(",00", "")}{parkSuffix}
+                  {t('common.year')?.toUpperCase() || 'ANNO'}: {formatCurrency(displayMonthlyRec2 * 12).replace(",00", "")}{parkSuffix}
                 </div>
               </div>
             </>
@@ -281,10 +281,10 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           value={formatValueWithSuffix(displayMonthlyRec3).value}
           suffix={
             <>
-              <span className="text-[12px] sm:text-[11px] font-black text-orange-950/60 tracking-tighter uppercase whitespace-nowrap">/ Mese</span>
+              <span className="text-[12px] sm:text-[11px] font-black text-orange-950/60 tracking-tighter uppercase whitespace-nowrap">/ {t('common.month') || 'Mese'}</span>
               <div className="w-full mt-2">
                 <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/80 dark:bg-orange-900/20 px-3 py-1.5 rounded-lg border border-white/50 dark:border-orange-500/20 text-slate-900 dark:text-orange-200 whitespace-nowrap shadow-sm backdrop-blur-sm">
-                  ANNO: {formatCurrency(displayMonthlyRec3 * 12).replace(",00", "")}{parkSuffix}
+                  {t('common.year')?.toUpperCase() || 'ANNO'}: {formatCurrency(displayMonthlyRec3 * 12).replace(",00", "")}{parkSuffix}
                 </div>
               </div>
             </>
@@ -298,7 +298,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
           suffix={
             <div className="flex flex-col items-start gap-1">
               <span className="text-[10px] text-gray-400 font-black uppercase tracking-tighter">
-                / {totalContracts.toLocaleString('it-IT')} Contratti
+                / {totalContracts.toLocaleString('it-IT')} {t('common.contracts') || 'Contratti'}
               </span>
               {(() => {
                 const milestones = [600, 1500, 5000];
@@ -307,7 +307,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                 if (remainingToNext <= 0) return null;
                 return (
                   <div className="text-[10px] font-black bg-red-50 dark:bg-red-900/20 px-2.5 py-1 rounded-lg border border-red-100 dark:border-red-800 text-red-500 whitespace-nowrap shadow-sm uppercase tracking-tighter">
-                    -{remainingToNext} AL GOAL
+                    -{remainingToNext} {t('common.to_goal') || 'AL GOAL'}
                   </div>
                 );
               })()}
@@ -399,15 +399,15 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                     <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-slate-900 dark:text-white text-center">{formatCurrency(row.oneTimeBonus)}</td>
                     <td className="px-6 py-5 whitespace-nowrap">
                       <div className="text-sm font-black text-slate-900 dark:text-white">{formatCurrency(row.recurringYear1)}</div>
-                      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tighter">Anno: {formatCurrency(row.recurringYear1 * 12).replace(",00", "")}</div>
+                      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tighter">{t('common.year') || 'Anno'}: {formatCurrency(row.recurringYear1 * 12).replace(",00", "")}</div>
                     </td>
                     <td className="px-6 py-5 whitespace-nowrap">
                       <div className="text-sm font-black text-slate-900 dark:text-white">{formatCurrency(row.recurringYear2)}</div>
-                      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tighter">Anno: {formatCurrency(row.recurringYear2 * 12).replace(",00", "")}</div>
+                      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tighter">{t('common.year') || 'Anno'}: {formatCurrency(row.recurringYear2 * 12).replace(",00", "")}</div>
                     </td>
                     <td className="px-6 py-5 whitespace-nowrap">
                       <div className="text-sm font-black text-slate-900 dark:text-white">{formatCurrency(row.recurringYear3)}</div>
-                      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tighter">Anno: {formatCurrency(row.recurringYear3 * 12).replace(",00", "")}</div>
+                      <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tighter">{t('common.year') || 'Anno'}: {formatCurrency(row.recurringYear3 * 12).replace(",00", "")}</div>
                     </td>
                   </tr>
                 ))}
@@ -420,15 +420,15 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                     <td className="px-6 py-5 whitespace-nowrap text-xs text-slate-400 text-center">-</td>
                     <td className="px-6 py-5 whitespace-nowrap">
                       <div className="text-sm font-black text-amber-600">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
-                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12).replace(",00", "")}</div>
+                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">{t('common.year') || 'Anno'}: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12).replace(",00", "")}</div>
                     </td>
                     <td className="px-6 py-5 whitespace-nowrap">
                       <div className="text-sm font-black text-amber-600">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
-                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12).replace(",00", "")}</div>
+                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">{t('common.year') || 'Anno'}: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12).replace(",00", "")}</div>
                     </td>
                     <td className="px-6 py-5 whitespace-nowrap">
                       <div className="text-sm font-black text-amber-600">{formatCurrency(planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0))}</div>
-                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Anno: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12).replace(",00", "")}</div>
+                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">{t('common.year') || 'Anno'}: {formatCurrency((planResult.monthlyPanelYield + (isAnnual ? monthlyCashback : 0)) * 12).replace(",00", "")}</div>
                     </td>
                   </tr>
                 )}
@@ -459,7 +459,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                           className="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 px-3 py-2 rounded-xl transition-all flex items-center gap-2"
                         >
                           <Edit3 size={14} />
-                          <span className="text-[9px] font-black uppercase tracking-tighter">Personalizza</span>
+                          <span className="text-[9px] font-black uppercase tracking-tighter">{t('common.personalize') || 'Personalizza'}</span>
                         </button>
                         <button
                           onClick={handleExportPDF}
@@ -471,13 +471,13 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                         </button>
                       </div>
                       <div className="flex items-center gap-2">
-                        <label className="text-[9px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-tighter">Proiezione:</label>
+                        <label className="text-[9px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-tighter">{t('common.projection') || 'Proiezione'}:</label>
                         <select
                           value={projectionYears}
                           onChange={(e) => setProjectionYears(Number(e.target.value))}
                           className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-[10px] font-black rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer text-slate-900 dark:text-white"
                         >
-                          <option value={1}>1 Anno</option>
+                          <option value={1}>1 {t('common.year') || 'Anno'}</option>
                           <option value={2}>2 Anni</option>
                           <option value={3}>3 Anni</option>
                           <option value={5}>5 Anni</option>
@@ -490,19 +490,19 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
                   <td className="px-6 py-8 align-top">
                     <div className="text-2xl text-orange-600 dark:text-orange-400 drop-shadow-sm">{formatCurrency(displayMonthlyRec1)}</div>
                     <div className="text-[10px] font-black text-slate-400 dark:text-slate-500 mt-2 uppercase tracking-tighter">
-                      {projectionYears} {projectionYears > 1 ? 'Anni' : 'Anno'}: <span className="text-slate-900 dark:text-white">{formatCurrency(displayMonthlyRec1 * 12 * projectionYears)}</span>
+                      {projectionYears} {projectionYears > 1 ? (t('common.years') || 'Anni') : (t('common.year') || 'Anno')}: <span className="text-slate-900 dark:text-white">{formatCurrency(displayMonthlyRec1 * 12 * projectionYears)}</span>
                     </div>
                   </td>
                   <td className="px-6 py-8 align-top">
                     <div className="text-2xl text-orange-600 dark:text-orange-400 drop-shadow-sm">{formatCurrency(displayMonthlyRec2)}</div>
                     <div className="text-[10px] font-black text-slate-400 dark:text-slate-500 mt-2 uppercase tracking-tighter">
-                      {projectionYears} {projectionYears > 1 ? 'Anni' : 'Anno'}: <span className="text-slate-900 dark:text-white">{formatCurrency(displayMonthlyRec2 * 12 * projectionYears)}</span>
+                      {projectionYears} {projectionYears > 1 ? (t('common.years') || 'Anni') : (t('common.year') || 'Anno')}: <span className="text-slate-900 dark:text-white">{formatCurrency(displayMonthlyRec2 * 12 * projectionYears)}</span>
                     </div>
                   </td>
                   <td className="px-6 py-8 align-top">
                     <div className="text-2xl text-orange-600 dark:text-orange-400 drop-shadow-sm">{formatCurrency(displayMonthlyRec3)}</div>
                     <div className="text-[10px] font-black text-slate-400 dark:text-slate-500 mt-2 uppercase tracking-tighter">
-                      {projectionYears} {projectionYears > 1 ? 'Anni' : 'Anno'}: <span className="text-slate-900 dark:text-white">{formatCurrency(displayMonthlyRec3 * 12 * projectionYears)}</span>
+                      {projectionYears} {projectionYears > 1 ? (t('common.years') || 'Anni') : (t('common.year') || 'Anno')}: <span className="text-slate-900 dark:text-white">{formatCurrency(displayMonthlyRec3 * 12 * projectionYears)}</span>
                     </div>
                   </td>
                 </tr>
@@ -694,7 +694,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
         <div className="fixed inset-0 z-[10001] flex items-center justify-center p-4 bg-black/40 dark:bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
           <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl border-2 border-slate-50 dark:border-white/10 animate-in zoom-in-95 duration-200">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Personalizza PDF</h3>
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{t('common.personalize') || 'Personalizza'} PDF</h3>
               <button
                 onClick={() => setIsEditModalOpen(false)}
                 className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full text-slate-400 transition-colors"

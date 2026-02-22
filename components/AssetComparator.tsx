@@ -44,7 +44,7 @@ const AssetComparator: React.FC<AssetComparatorProps> = ({ recurringIncome }) =>
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-black text-white mb-3 tracking-tight drop-shadow-lg">{t('assets.title')}</h2>
                 <p className="text-slate-400 max-w-2xl text-lg font-medium leading-relaxed">
-                    {t('assets.desc')} <span className="text-white font-bold decoration-amber-500/50 underline underline-offset-4 decoration-2">{formatCurrency(recurringIncome)}/mese</span>
+                    {t('assets.desc')} <span className="text-white font-bold decoration-amber-500/50 underline underline-offset-4 decoration-2">{formatCurrency(recurringIncome)}/ {t('common.month')?.toLowerCase() || 'mese'}</span>
                 </p>
             </div>
 

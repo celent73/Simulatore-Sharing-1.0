@@ -15,6 +15,7 @@ interface CondoResultsDisplayProps {
 const formatCurrency = (val: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val);
 
 const RecruiterCard = ({ fullResults }: { fullResults: CondoSimulationResult }) => {
+    const { t } = useLanguage();
     const earnings = fullResults.familyUtilityEarnings!;
 
     // Estimate breakdown (simplified for UI)
@@ -65,7 +66,7 @@ const RecruiterCard = ({ fullResults }: { fullResults: CondoSimulationResult }) 
 
                     {/* YEAR 1 */}
                     <div className="bg-black/20 backdrop-blur-md p-5 rounded-3xl border border-white/10 hover:border-white/20 transition-all">
-                        <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-2 opacity-60">1° Anno</p>
+                        <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-2 opacity-60">1° {t('common.year') || 'Anno'}</p>
                         <p className="text-3xl font-black mb-4 tracking-tighter">{formatCurrency(earnings.year1.total)}</p>
                         <div className="space-y-3">
                             <div className="flex flex-col bg-white/5 p-2 rounded-xl border border-white/5">
@@ -81,7 +82,7 @@ const RecruiterCard = ({ fullResults }: { fullResults: CondoSimulationResult }) 
 
                     {/* YEAR 2 */}
                     <div className="bg-black/20 backdrop-blur-md p-5 rounded-3xl border border-white/10 hover:border-white/20 transition-all">
-                        <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-2 opacity-60">2° Anno</p>
+                        <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-2 opacity-60">2° {t('common.year') || 'Anno'}</p>
                         <p className="text-3xl font-black mb-4 tracking-tighter">{formatCurrency(earnings.year2.total)}</p>
                         <div className="space-y-3">
                             <div className="flex flex-col bg-white/5 p-2 rounded-xl border border-white/5">
@@ -99,7 +100,7 @@ const RecruiterCard = ({ fullResults }: { fullResults: CondoSimulationResult }) 
 
                     {/* YEAR 3 */}
                     <div className="bg-white/5 backdrop-blur-md p-5 rounded-3xl border border-white/10 hover:border-white/20 transition-all ring-2 ring-yellow-400/20">
-                        <p className="text-[10px] font-black text-yellow-400 uppercase tracking-widest mb-2">3° Anno MAX</p>
+                        <p className="text-[10px] font-black text-yellow-400 uppercase tracking-widest mb-2">3° {t('common.year') || 'Anno'} MAX</p>
                         <p className="text-3xl font-black mb-4 tracking-tighter text-yellow-300 drop-shadow-md">{formatCurrency(earnings.year3.total)}</p>
                         <div className="space-y-3">
                             <div className="flex flex-col bg-yellow-400/10 p-2 rounded-xl border border-yellow-400/20">
@@ -267,7 +268,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                 className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 text-[11px] font-black uppercase tracking-wider transition-all hover:scale-105 active:scale-95 text-slate-300"
                             >
                                 <Edit3 size={16} />
-                                Personalizza
+                                {t('common.personalize') || 'Personalizza'}
                             </button>
                             <button
                                 onClick={handleExportPDF}
@@ -345,7 +346,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                 <div className="mt-2 pt-3 border-t border-purple-500/20 flex flex-col gap-2 bg-purple-500/5 p-3 rounded-2xl">
                                     <span className="text-[9px] font-black uppercase tracking-[0.2em] text-purple-500">Network Level 1</span>
                                     <div className="flex justify-between text-[10px] text-slate-600 dark:text-purple-200">
-                                        <span>Totale Anno 1:</span>
+                                        <span>Totale {t('common.year') || 'Anno'} 1:</span>
                                         <span className="font-black">{formatCurrency((results.familyUtilityEarnings!.year1.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year1.networkPart?.recurring || 0))}</span>
                                     </div>
                                 </div>
@@ -388,7 +389,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                 <div className="mt-2 pt-3 border-t border-purple-500/20 flex flex-col gap-2 bg-purple-500/5 p-3 rounded-2xl">
                                     <span className="text-[9px] font-black uppercase tracking-[0.2em] text-purple-500">Network Level 1</span>
                                     <div className="flex justify-between text-[10px] text-slate-600 dark:text-purple-200">
-                                        <span>Totale Anno 2:</span>
+                                        <span>Totale {t('common.year') || 'Anno'} 2:</span>
                                         <span className="font-black">{formatCurrency((results.familyUtilityEarnings!.year2.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year2.networkPart?.recurring || 0))}</span>
                                     </div>
                                 </div>
@@ -431,7 +432,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                 <div className="mt-2 pt-3 border-t border-white/10 flex flex-col gap-2 bg-slate-900/50 p-3 rounded-2xl">
                                     <span className="text-[9px] font-black uppercase tracking-[0.2em] text-purple-300">Network Level 1</span>
                                     <div className="flex justify-between text-[10px] text-purple-100/70">
-                                        <span>Totale Anno 3:</span>
+                                        <span>Totale {t('common.year') || 'Anno'} 3:</span>
                                         <span className="font-black text-white">{formatCurrency((results.familyUtilityEarnings!.year3.networkPart?.oneTime || 0) + (results.familyUtilityEarnings!.year3.networkPart?.recurring || 0))}</span>
                                     </div>
                                 </div>
@@ -502,7 +503,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
                                         </td>
                                         <td className="p-6 text-right font-black text-purple-900 dark:text-purple-100 bg-purple-600/10 text-xl">
                                             +{formatCurrency(results.networkStats.totalAnnualYear1 + results.networkStats.totalAnnualYear2 + results.networkStats.totalAnnualYear3)}
-                                            <span className="text-[9px] font-black uppercase tracking-widest opacity-60 block">Totale 3 Anni</span>
+                                            <span className="text-[9px] font-black uppercase tracking-widest opacity-60 block">Totale 3 {t('common.years') || 'Anni'}</span>
                                         </td>
                                     </tr>
                                 )}
@@ -529,7 +530,7 @@ const CondoResultsDisplay: React.FC<CondoResultsDisplayProps> = ({ results }) =>
 
                         <div className="flex justify-between items-center mb-8 relative z-10">
                             <div>
-                                <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">Personalizza Report</h3>
+                                <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">{t('common.personalize') || 'Personalizza'} Report</h3>
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Dati per esportazione PDF</p>
                             </div>
                             <button
