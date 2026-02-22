@@ -170,7 +170,13 @@ const SharingAcademy: React.FC<SharingAcademyProps> = ({ isOpen, onClose }) => {
                     })}
                 </div>
 
-                <div className="w-10"></div> {/* Spacer for symmetry */}
+                <button
+                    onClick={onClose}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300 transition-colors font-bold text-sm"
+                >
+                    <span className="hidden sm:inline">{t('common.close') || 'Chiudi'}</span>
+                    <X size={18} />
+                </button>
             </div>
 
             {/* Mobile Menu (below header) */}
