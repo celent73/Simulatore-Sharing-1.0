@@ -513,9 +513,9 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
         {/* CONTROLS SECTION - REDESIGNED for Focus Mode */}
         {isFullScreen && onInputChange && (
-          <div className="bg-white dark:bg-slate-900 shadow-xl border-t-2 border-slate-100 dark:border-white/10 p-6 sm:p-8 shrink-0">
-            <div className="flex gap-6 items-center">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 flex-1">
+          <div className="bg-white dark:bg-slate-900 shadow-xl border-t-2 border-slate-100 dark:border-white/10 p-4 sm:p-5 shrink-0">
+            <div className="flex gap-4 items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 flex-1">
                 <div className="transform origin-center"><CustomSlider label={t('input.direct_recruits')} value={inputs.directRecruits} onChange={(v: number) => onInputChange('directRecruits', v)} min={0} max={20} icon={User} colorBase="orange" showButtons={true} /></div>
                 <div className="transform origin-center"><CustomSlider label={t('input.contracts_per_user') || "Contratti/Utente"} value={inputs.contractsPerUser} onChange={(v: number) => onInputChange('contractsPerUser', v)} min={0} max={2} icon={FileText} colorBase="cyan" showButtons={true} /></div>
                 <div className="transform origin-center"><CustomSlider label={t('input.indirect_recruits')} value={inputs.indirectRecruits} onChange={(v: number) => onInputChange('indirectRecruits', v)} min={0} max={10} icon={PenSquare} colorBase="blue" showButtons={true} /></div>

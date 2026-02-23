@@ -593,98 +593,100 @@ const AppContent = () => {
         {/* Custom Styles Injection */}
 
 
-        <header className="flex flex-col gap-4 mb-4 sm:mb-8 rounded-[2.5rem] p-6 border border-white/10 shadow-[0_32px_80px_0_rgba(0,0,0,0.8)] backdrop-blur-[64px] transition-all duration-500 relative z-50 bg-header-dynamic" style={{ background: 'var(--header-bg)' }}>
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/[0.05] pointer-events-none rounded-[2.5rem]" />
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none rounded-[2.5rem]" />
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
-            <div className="w-full md:w-auto flex justify-center md:justify-start">
-              <div className="flex items-center gap-3">
-                <h1 onClick={handleTitleClick} className="text-2xl sm:text-4xl font-extrabold text-white drop-shadow-sm select-none cursor-pointer active:scale-95 transition-transform flex items-center gap-3 flex-wrap justify-center md:justify-start">
+        {!isResultsFullScreen && (
+          <header className="flex flex-col gap-4 mb-4 sm:mb-8 rounded-[2.5rem] p-6 border border-white/10 shadow-[0_32px_80px_0_rgba(0,0,0,0.8)] backdrop-blur-[64px] transition-all duration-500 relative z-50 bg-header-dynamic" style={{ background: 'var(--header-bg)' }}>
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/[0.05] pointer-events-none rounded-[2.5rem]" />
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none rounded-[2.5rem]" />
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
+              <div className="w-full md:w-auto flex justify-center md:justify-start">
+                <div className="flex items-center gap-3">
+                  <h1 onClick={handleTitleClick} className="text-2xl sm:text-4xl font-extrabold text-white drop-shadow-sm select-none cursor-pointer active:scale-95 transition-transform flex items-center gap-3 flex-wrap justify-center md:justify-start">
+                    {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
+                    <span className="text-white">Sharing</span>
+                    <span className="text-main-accent -ml-2">Simulator</span>
+                    <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.53</span>
+                    {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-main-accent" /></span>}
+                  </h1>
+                  {isCreatorMode && <span className="hidden sm:inline-flex bg-white/20 backdrop-blur-md text-white border border-white/40 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm uppercase tracking-wider">Creator Mode</span>}
+                  {/* Logo removed as per user request */}
+                </div>
+              </div>
+
+
+              {/* DESKTOP NAVIGATION */}
+              <DesktopHeaderNav
+                viewMode={viewMode}
+                handleModeChange={handleModeChange}
+                onOpenLightSimulator={() => openModal('LIGHT_SIMULATOR')}
+                isPremium={isPremium}
+              />
+
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-2 md:mt-0">
+                {/* BUTTONS ROW - REORGANIZED */}
+
+                <PaletteSelector />
+                {/* 1. THEME TOGGLE */}
+                <button
+                  onClick={toggleTheme}
+                  className="p-3 rounded-2xl bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all border border-white/10 shadow-lg active:scale-90"
+                  title="Cambia Tema"
+                >
+                  <div className="scale-90 opacity-80">{isDarkMode ? <SunIcon /> : <MoonIcon />}</div>
+                </button>
+
+                {/* 2. LANGUAGE TOGGLE */}
+                <button
+                  onClick={toggleLanguage}
+                  className="p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 shadow-lg hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center min-w-[52px]"
+                  title="Cambia Lingua"
+                >
                   {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
-                  <span className="text-white">Sharing</span>
-                  <span className="text-main-accent -ml-2">Simulator</span>
-                  <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.53</span>
-                  {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-main-accent" /></span>}
-                </h1>
-                {isCreatorMode && <span className="hidden sm:inline-flex bg-white/20 backdrop-blur-md text-white border border-white/40 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm uppercase tracking-wider">Creator Mode</span>}
-                {/* Logo removed as per user request */}
+                </button>
+
+                {/* 3. CASHBACK BUTTON (PRIORITY) */}
+                <button
+                  onClick={() => openModal('CASHBACK_DETAILED', { initialDetails: (inputs as any).cashbackDetails, onConfirm: handleCashbackDetailedConfirm })}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all border-0 font-bold text-sm hover:scale-[1.05] animate-pulse-slow"
+                  title="Configura Cashback"
+                >
+                  <div className="p-0.5 bg-white/20 rounded-md">
+                    <Users size={16} className="text-white" />
+                  </div>
+                  <span className="hidden sm:inline">Cashback</span>
+                </button>
+
+                <div className="w-px h-8 bg-white/30 mx-1 hidden sm:block"></div>
+
+                {/* 4. MENU (SECONDARY ITEMS) */}
+                <HeaderMenu
+                  onOpenPresentation={() => openModal('BUSINESS_PRESENTATION', {
+                    cashbackDetails: (inputs as any).cashbackDetails,
+                    onCashbackConfirm: updateCashbackState,
+                    onOpenFocus: handleOpenFocusFromPresentation,
+                    initialPage: returnToPresentationPage || 1
+                  })}
+                  onOpenUnionEcosystem={() => openModal('UNION_ECOSYSTEM')}
+                  onOpenFuelPitch={() => openModal('FUEL_PITCH')}
+                  onOpenFocusMode={() => openModal('FOCUS_MODE')}
+                  toggleShary={toggleShary}
+                  isSharyActive={isActive}
+                  onOpenTarget={handleTargetClick}
+                  onOpenFutureTicket={() => openModal('FUTURE_TICKET', {
+                    monthlyRecurring: planResult?.monthlyData?.length > 0 ? planResult.monthlyData[planResult.monthlyData.length - 1].monthlyRecurring : 0,
+                    estimatedMonths: inputs.realizationTimeMonths,
+                    userName: isPremium ? "Partner Pro" : "Guest"
+                  })}
+                  onOpenGuide={() => openModal('GUIDE')}
+                  onOpenInstall={() => openModal('INSTALL_PROMPT', { installPrompt })}
+                  isPremium={isPremium}
+                  viewMode={viewMode}
+                  showInstall={!isStandalone && (canInstall || /iphone|ipad|ipod|android/i.test(window.navigator.userAgent.toLowerCase()))}
+                />
               </div>
             </div>
-
-
-            {/* DESKTOP NAVIGATION */}
-            <DesktopHeaderNav
-              viewMode={viewMode}
-              handleModeChange={handleModeChange}
-              onOpenLightSimulator={() => openModal('LIGHT_SIMULATOR')}
-              isPremium={isPremium}
-            />
-
-            <div className="flex flex-wrap items-center justify-center gap-2 mt-2 md:mt-0">
-              {/* BUTTONS ROW - REORGANIZED */}
-
-              <PaletteSelector />
-              {/* 1. THEME TOGGLE */}
-              <button
-                onClick={toggleTheme}
-                className="p-3 rounded-2xl bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all border border-white/10 shadow-lg active:scale-90"
-                title="Cambia Tema"
-              >
-                <div className="scale-90 opacity-80">{isDarkMode ? <SunIcon /> : <MoonIcon />}</div>
-              </button>
-
-              {/* 2. LANGUAGE TOGGLE */}
-              <button
-                onClick={toggleLanguage}
-                className="p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 shadow-lg hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center min-w-[52px]"
-                title="Cambia Lingua"
-              >
-                {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
-              </button>
-
-              {/* 3. CASHBACK BUTTON (PRIORITY) */}
-              <button
-                onClick={() => openModal('CASHBACK_DETAILED', { initialDetails: (inputs as any).cashbackDetails, onConfirm: handleCashbackDetailedConfirm })}
-                className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all border-0 font-bold text-sm hover:scale-[1.05] animate-pulse-slow"
-                title="Configura Cashback"
-              >
-                <div className="p-0.5 bg-white/20 rounded-md">
-                  <Users size={16} className="text-white" />
-                </div>
-                <span className="hidden sm:inline">Cashback</span>
-              </button>
-
-              <div className="w-px h-8 bg-white/30 mx-1 hidden sm:block"></div>
-
-              {/* 4. MENU (SECONDARY ITEMS) */}
-              <HeaderMenu
-                onOpenPresentation={() => openModal('BUSINESS_PRESENTATION', {
-                  cashbackDetails: (inputs as any).cashbackDetails,
-                  onCashbackConfirm: updateCashbackState,
-                  onOpenFocus: handleOpenFocusFromPresentation,
-                  initialPage: returnToPresentationPage || 1
-                })}
-                onOpenUnionEcosystem={() => openModal('UNION_ECOSYSTEM')}
-                onOpenFuelPitch={() => openModal('FUEL_PITCH')}
-                onOpenFocusMode={() => openModal('FOCUS_MODE')}
-                toggleShary={toggleShary}
-                isSharyActive={isActive}
-                onOpenTarget={handleTargetClick}
-                onOpenFutureTicket={() => openModal('FUTURE_TICKET', {
-                  monthlyRecurring: planResult?.monthlyData?.length > 0 ? planResult.monthlyData[planResult.monthlyData.length - 1].monthlyRecurring : 0,
-                  estimatedMonths: inputs.realizationTimeMonths,
-                  userName: isPremium ? "Partner Pro" : "Guest"
-                })}
-                onOpenGuide={() => openModal('GUIDE')}
-                onOpenInstall={() => openModal('INSTALL_PROMPT', { installPrompt })}
-                isPremium={isPremium}
-                viewMode={viewMode}
-                showInstall={!isStandalone && (canInstall || /iphone|ipad|ipod|android/i.test(window.navigator.userAgent.toLowerCase()))}
-              />
-            </div>
-          </div>
-          <p className="text-blue-100 font-medium text-[10px] sm:text-sm md:text-base -mt-2 pl-1 relative z-10 opacity-90 text-center md:text-left max-w-xs md:max-w-none mx-auto md:mx-0 leading-tight">{t('app.subtitle')}</p>
-        </header>
+            <p className="text-blue-100 font-medium text-[10px] sm:text-sm md:text-base -mt-2 pl-1 relative z-10 opacity-90 text-center md:text-left max-w-xs md:max-w-none mx-auto md:mx-0 leading-tight">{t('app.subtitle')}</p>
+          </header>
+        )}
 
         {/* MOBILE SWIPE NAVIGATION TABS */}
         <div
