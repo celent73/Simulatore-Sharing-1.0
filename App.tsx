@@ -588,7 +588,7 @@ const AppContent = () => {
 
       <ScrollToTopButton />
 
-      <div className={`${isResultsFullScreen ? 'w-full p-0 max-w-none' : 'container mx-auto p-4 sm:p-6 lg:p-8'} pb-32 relative flex-grow ${isResultsFullScreen ? 'z-[10000]' : 'z-10'} ${isTrialExpired ? 'blur-sm pointer-events-none select-none h-screen overflow-hidden' : ''}`}>
+      <div className={`${isResultsFullScreen ? 'w-full p-0 pb-0 max-w-none' : 'container mx-auto p-4 sm:p-6 lg:p-8 pb-32'} relative flex-grow ${isResultsFullScreen ? 'z-[10000]' : 'z-10'} ${isTrialExpired ? 'blur-sm pointer-events-none select-none h-screen overflow-hidden' : ''}`}>
 
         {/* Custom Styles Injection */}
 
@@ -689,35 +689,37 @@ const AppContent = () => {
         )}
 
         {/* MOBILE SWIPE NAVIGATION TABS */}
-        <div
-          className="md:hidden flex justify-center mb-6 p-1.5 rounded-2xl mx-auto max-w-[92%] border-2 border-white/60 dark:border-white/10 shadow-2xl relative z-30 bg-white/60 dark:bg-slate-900/60 backdrop-blur-3xl"
-        >
-          <button
-            onClick={() => setMobileTab('input')}
-            className={`flex-1 py-3.5 text-base font-black rounded-xl transition-all duration-300 ${mobileTab === 'input'
-              ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-xl shadow-orange-200/50 scale-[1.02] border border-white/30'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+        {!isResultsFullScreen && (
+          <div
+            className="md:hidden flex justify-center mb-6 p-1.5 rounded-2xl mx-auto max-w-[92%] border-2 border-white/60 dark:border-white/10 shadow-2xl relative z-30 bg-white/60 dark:bg-slate-900/60 backdrop-blur-3xl"
           >
-            {t('nav_mobile.input')}
-          </button>
-          <button
-            onClick={() => setMobileTab('results')}
-            className={`flex-1 py-3.5 text-base font-black rounded-xl transition-all duration-300 ${mobileTab === 'results'
-              ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-xl shadow-orange-200/50 scale-[1.02] border border-white/30'
-              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-          >
-            {t('nav_mobile.results')}
-          </button>
-        </div>
+            <button
+              onClick={() => setMobileTab('input')}
+              className={`flex-1 py-3.5 text-base font-black rounded-xl transition-all duration-300 ${mobileTab === 'input'
+                ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-xl shadow-orange-200/50 scale-[1.02] border border-white/30'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+            >
+              {t('nav_mobile.input')}
+            </button>
+            <button
+              onClick={() => setMobileTab('results')}
+              className={`flex-1 py-3.5 text-base font-black rounded-xl transition-all duration-300 ${mobileTab === 'results'
+                ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-xl shadow-orange-200/50 scale-[1.02] border border-white/30'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+            >
+              {t('nav_mobile.results')}
+            </button>
+          </div>
+        )}
 
-        <main key={viewMode} className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ${isResultsFullScreen ? '' : 'animate-in fade-in slide-in-from-bottom-2 duration-300'}`}>
+        <main key={viewMode} className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 ${isResultsFullScreen ? 'gap-0 block' : 'gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300'}`}>
           {/* MOBILE VIEW IS HANDLED VIA SWIPE/TABS */}
           {/* DESKTOP VIEW IS STANDARD GRID */}
 
           {/* INPUT PANEL - Visible on Desktop OR if mobileTab is 'input' */}
-          <div className={`${mobileTab === 'results' ? 'hidden md:block' : 'block'} md:col-span-1 lg:col-span-1 min-w-0`}>
+          <div className={`${isResultsFullScreen ? 'hidden' : (mobileTab === 'results' ? 'hidden md:block' : 'block')} md:col-span-1 lg:col-span-1 min-w-0`}>
             {/* SWIPE HANDLER FOR MOBILE INPUT */}
             <div
               className="md:hidden h-full touch-pan-y"
@@ -794,10 +796,10 @@ const AppContent = () => {
           </div>
 
           {/* RESULTS DISPLAY - Visible on Desktop OR if mobileTab is 'results' */}
-          <div className={`${mobileTab === 'input' ? 'hidden md:block' : 'block'} md:col-span-1 lg:col-span-2 relative min-w-0`}>
+          <div className={`${isResultsFullScreen ? 'w-full block md:col-span-3 lg:col-span-3' : `${mobileTab === 'input' ? 'hidden md:block' : 'block'} md:col-span-1 lg:col-span-2`} relative min-w-0`}>
             {/* SWIPE HANDLER FOR MOBILE RESULTS */}
             <div
-              className="md:hidden h-full touch-pan-y"
+              className={`${isResultsFullScreen ? 'hidden' : 'md:hidden h-full touch-pan-y'}`}
               onTouchStart={(e) => {
                 const touch = e.touches[0];
                 // @ts-ignore
@@ -850,7 +852,7 @@ const AppContent = () => {
             </div>
 
             {/* DESKTOP RENDER */}
-            <div className="hidden md:block h-full relative">
+            <div className={`${isResultsFullScreen ? 'block h-full' : 'hidden md:block h-full relative'}`}>
               {!isPremium && (
                 <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-gray-900 dark:via-gray-900/80 z-20 flex items-center justify-center pointer-events-none">
                   <div className="bg-union-blue-600/90 text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-2 backdrop-blur-md pointer-events-auto cursor-pointer" onClick={() => openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error })}>
