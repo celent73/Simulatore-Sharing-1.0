@@ -1437,6 +1437,11 @@ export const translations = {
       quote: "\"Der beste Zeitpunkt, einen Baum zu pflanzen, war vor 20 Jahren. Der zweitbeste Zeitpunkt ist heute.\"",
       label: "Projektion:"
     },
+    analysis_btn: {
+      premium: "Premium Tool",
+      title: "Utility Analyse",
+      subtitle: "Echte Ersparnis berechnen"
+    },
     ticket: {
       title: "DEIN TICKET FÜR DIE ZUKUNFT",
       economy_option: "Economy-Option",

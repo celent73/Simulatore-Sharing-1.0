@@ -71,8 +71,9 @@ const ContractSimulator: React.FC = () => {
 
                 {/* Header Title */}
                 <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl sm:text-3xl font-bold text-[#003366] dark:text-blue-400 tracking-tight">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-[#003366] dark:text-blue-400 tracking-tight flex items-baseline gap-3">
                         Nuovo Contratto
+                        <span className="text-lg sm:text-xl font-medium text-gray-500 dark:text-gray-400">(Working progress)</span>
                     </h1>
                 </div>
 
