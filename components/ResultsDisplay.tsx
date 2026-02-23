@@ -227,96 +227,100 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
   return (
     <div id="results-summary" className="space-y-10 relative">
-      <ProjectionModal
-        isOpen={isProjectionModalOpen}
-        onClose={() => setIsProjectionModalOpen(false)}
-        years={projectionYears}
-        onYearChange={setProjectionYears}
-        monthlyRecurring={totalRecurringYear3 + (isAnnual ? monthlyCashback : 0)}
-        totalOneTime={oneTimeBonusWithoutCashback + (isAnnual ? 0 : monthlyCashback)}
-      />
+      {!isFullScreen && (
+        <>
+          <ProjectionModal
+            isOpen={isProjectionModalOpen}
+            onClose={() => setIsProjectionModalOpen(false)}
+            years={projectionYears}
+            onYearChange={setProjectionYears}
+            monthlyRecurring={totalRecurringYear3 + (isAnnual ? monthlyCashback : 0)}
+            totalOneTime={oneTimeBonusWithoutCashback + (isAnnual ? 0 : monthlyCashback)}
+          />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
-        <SummaryCard
-          title={cashbackPeriod === 'annual' ? "Bonus Una Tantum" : t('results.one_time')}
-          value={formatValueWithSuffix(totalOneTimeBonus).value}
-          variant="gradient-blue"
-          icon={<WalletIcon className="w-6 h-6" />}
-          showBadge={inputs.bonus3x3Active}
-        />
-        <SummaryCard
-          title={t('results.rec_y1') + recTitleSuffix}
-          value={formatValueWithSuffix(displayMonthlyRec1).value}
-          suffix={
-            <>
-              <span className="text-[12px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ {t('common.month') || 'Mese'}</span>
-              <div className="w-full mt-2">
-                <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/60 dark:bg-black/20 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
-                  {t('common.year')?.toUpperCase() || 'ANNO'}: {formatCurrency(displayMonthlyRec1 * 12).replace(",00", "")}{parkSuffix}
-                </div>
-              </div>
-            </>
-          }
-          variant="glass"
-          icon={<FireIcon className="text-orange-500 w-6 h-6" />}
-        />
-        <SummaryCard
-          title={t('results.rec_y2') + recTitleSuffix}
-          value={formatValueWithSuffix(displayMonthlyRec2).value}
-          suffix={
-            <>
-              <span className="text-[12px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ {t('common.month') || 'Mese'}</span>
-              <div className="w-full mt-2">
-                <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/60 dark:bg-black/20 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
-                  {t('common.year')?.toUpperCase() || 'ANNO'}: {formatCurrency(displayMonthlyRec2 * 12).replace(",00", "")}{parkSuffix}
-                </div>
-              </div>
-            </>
-          }
-          variant="glass"
-          icon={<BoltIcon className="text-orange-500 w-6 h-6" />}
-        />
-        <SummaryCard
-          title={t('results.rec_y3') + recTitleSuffix}
-          value={formatValueWithSuffix(displayMonthlyRec3).value}
-          suffix={
-            <>
-              <span className="text-[12px] sm:text-[11px] font-black text-orange-950/60 tracking-tighter uppercase whitespace-nowrap">/ {t('common.month') || 'Mese'}</span>
-              <div className="w-full mt-2">
-                <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/80 dark:bg-orange-900/20 px-3 py-1.5 rounded-lg border border-white/50 dark:border-orange-500/20 text-slate-900 dark:text-orange-200 whitespace-nowrap shadow-sm backdrop-blur-sm">
-                  {t('common.year')?.toUpperCase() || 'ANNO'}: {formatCurrency(displayMonthlyRec3 * 12).replace(",00", "")}{parkSuffix}
-                </div>
-              </div>
-            </>
-          }
-          variant="gradient-orange"
-          icon={<StarIcon className="text-orange-600 dark:text-orange-400 w-6 h-6" />}
-        />
-        <SummaryCard
-          title={t('results.total_users')}
-          value={totalUsers.toLocaleString('it-IT')}
-          suffix={
-            <div className="flex flex-col items-start gap-1">
-              <span className="text-[10px] text-gray-400 font-black uppercase tracking-tighter">
-                / {totalContracts.toLocaleString('it-IT')} {t('common.contracts') || 'Contratti'}
-              </span>
-              {(() => {
-                const milestones = [600, 1500, 5000];
-                const nextMilestone = milestones.find(m => m > totalContracts);
-                const remainingToNext = nextMilestone ? nextMilestone - totalContracts : 0;
-                if (remainingToNext <= 0) return null;
-                return (
-                  <div className="text-[10px] font-black bg-red-50 dark:bg-red-900/20 px-2.5 py-1 rounded-lg border border-red-100 dark:border-red-800 text-red-500 whitespace-nowrap shadow-sm uppercase tracking-tighter">
-                    -{remainingToNext} {t('common.to_goal') || 'AL GOAL'}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
+            <SummaryCard
+              title={cashbackPeriod === 'annual' ? "Bonus Una Tantum" : t('results.one_time')}
+              value={formatValueWithSuffix(totalOneTimeBonus).value}
+              variant="gradient-blue"
+              icon={<WalletIcon className="w-6 h-6" />}
+              showBadge={inputs.bonus3x3Active}
+            />
+            <SummaryCard
+              title={t('results.rec_y1') + recTitleSuffix}
+              value={formatValueWithSuffix(displayMonthlyRec1).value}
+              suffix={
+                <>
+                  <span className="text-[12px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ {t('common.month') || 'Mese'}</span>
+                  <div className="w-full mt-2">
+                    <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/60 dark:bg-black/20 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
+                      {t('common.year')?.toUpperCase() || 'ANNO'}: {formatCurrency(displayMonthlyRec1 * 12).replace(",00", "")}{parkSuffix}
+                    </div>
                   </div>
-                );
-              })()}
-            </div>
-          }
-          variant="glass"
-          icon={<UsersIcon className="text-slate-500 w-6 h-6" />}
-        />
-      </div>
+                </>
+              }
+              variant="glass"
+              icon={<FireIcon className="text-orange-500 w-6 h-6" />}
+            />
+            <SummaryCard
+              title={t('results.rec_y2') + recTitleSuffix}
+              value={formatValueWithSuffix(displayMonthlyRec2).value}
+              suffix={
+                <>
+                  <span className="text-[12px] sm:text-[11px] font-black text-slate-400 tracking-tighter uppercase whitespace-nowrap">/ {t('common.month') || 'Mese'}</span>
+                  <div className="w-full mt-2">
+                    <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/60 dark:bg-black/20 px-3 py-1.5 rounded-lg border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white whitespace-nowrap shadow-sm">
+                      {t('common.year')?.toUpperCase() || 'ANNO'}: {formatCurrency(displayMonthlyRec2 * 12).replace(",00", "")}{parkSuffix}
+                    </div>
+                  </div>
+                </>
+              }
+              variant="glass"
+              icon={<BoltIcon className="text-orange-500 w-6 h-6" />}
+            />
+            <SummaryCard
+              title={t('results.rec_y3') + recTitleSuffix}
+              value={formatValueWithSuffix(displayMonthlyRec3).value}
+              suffix={
+                <>
+                  <span className="text-[12px] sm:text-[11px] font-black text-orange-950/60 tracking-tighter uppercase whitespace-nowrap">/ {t('common.month') || 'Mese'}</span>
+                  <div className="w-full mt-2">
+                    <div className="inline-block text-[13px] sm:text-[12px] font-black bg-white/80 dark:bg-orange-900/20 px-3 py-1.5 rounded-lg border border-white/50 dark:border-orange-500/20 text-slate-900 dark:text-orange-200 whitespace-nowrap shadow-sm backdrop-blur-sm">
+                      {t('common.year')?.toUpperCase() || 'ANNO'}: {formatCurrency(displayMonthlyRec3 * 12).replace(",00", "")}{parkSuffix}
+                    </div>
+                  </div>
+                </>
+              }
+              variant="gradient-orange"
+              icon={<StarIcon className="text-orange-600 dark:text-orange-400 w-6 h-6" />}
+            />
+            <SummaryCard
+              title={t('results.total_users')}
+              value={totalUsers.toLocaleString('it-IT')}
+              suffix={
+                <div className="flex flex-col items-start gap-1">
+                  <span className="text-[10px] text-gray-400 font-black uppercase tracking-tighter">
+                    / {totalContracts.toLocaleString('it-IT')} {t('common.contracts') || 'Contratti'}
+                  </span>
+                  {(() => {
+                    const milestones = [600, 1500, 5000];
+                    const nextMilestone = milestones.find(m => m > totalContracts);
+                    const remainingToNext = nextMilestone ? nextMilestone - totalContracts : 0;
+                    if (remainingToNext <= 0) return null;
+                    return (
+                      <div className="text-[10px] font-black bg-red-50 dark:bg-red-900/20 px-2.5 py-1 rounded-lg border border-red-100 dark:border-red-800 text-red-500 whitespace-nowrap shadow-sm uppercase tracking-tighter">
+                        -{remainingToNext} {t('common.to_goal') || 'AL GOAL'}
+                      </div>
+                    );
+                  })()}
+                </div>
+              }
+              variant="glass"
+              icon={<UsersIcon className="text-slate-500 w-6 h-6" />}
+            />
+          </div>
+        </>
+      )}
 
       <div className={`
         ${isFullScreen
