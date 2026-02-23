@@ -320,15 +320,15 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
       <div className={`
         ${isFullScreen
-          ? 'fixed inset-0 z-[10000] p-4 flex flex-col gap-4 overflow-hidden bg-[#F2F2F7] dark:bg-black'
+          ? 'fixed inset-0 z-[10000] p-0 flex flex-col overflow-hidden bg-[#F2F2F7] dark:bg-black'
           : 'relative transition-all duration-500 ease-in-out'
         }
       `}>
         <div className={`
-          bg-white dark:bg-slate-900 shadow-xl border-2 border-slate-100 dark:border-white/10
+          bg-white dark:bg-slate-900 shadow-xl border-x-0 border-t-0 border-b-2 border-slate-100 dark:border-white/10
           ${isFullScreen
-            ? 'flex-1 rounded-[3rem] overflow-hidden flex flex-col p-8'
-            : 'p-8 rounded-[3rem]'
+            ? 'flex-1 rounded-none overflow-hidden flex flex-col p-6 sm:p-8'
+            : 'p-8 rounded-[3rem] border-2 border-slate-100 dark:border-white/10'
           }
         `}>
           <div className="flex justify-between items-center mb-8 shrink-0">
@@ -513,7 +513,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ planResult, viewMode = 
 
         {/* CONTROLS SECTION - REDESIGNED for Focus Mode */}
         {isFullScreen && onInputChange && (
-          <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-xl border-2 border-slate-100 dark:border-white/10 p-8 shrink-0">
+          <div className="bg-white dark:bg-slate-900 shadow-xl border-t-2 border-slate-100 dark:border-white/10 p-6 sm:p-8 shrink-0">
             <div className="flex gap-6 items-center">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 flex-1">
                 <div className="transform origin-center"><CustomSlider label={t('input.direct_recruits')} value={inputs.directRecruits} onChange={(v: number) => onInputChange('directRecruits', v)} min={0} max={20} icon={User} colorBase="orange" showButtons={true} /></div>
