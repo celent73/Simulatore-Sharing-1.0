@@ -588,7 +588,7 @@ const AppContent = () => {
 
       <ScrollToTopButton />
 
-      <div className={`container mx-auto p-4 sm:p-6 lg:p-8 pb-32 relative flex-grow ${isResultsFullScreen ? 'z-[10000]' : 'z-10'} ${isTrialExpired ? 'blur-sm pointer-events-none select-none h-screen overflow-hidden' : ''}`}>
+      <div className={`${isResultsFullScreen ? 'w-full p-0 max-w-none' : 'container mx-auto p-4 sm:p-6 lg:p-8'} pb-32 relative flex-grow ${isResultsFullScreen ? 'z-[10000]' : 'z-10'} ${isTrialExpired ? 'blur-sm pointer-events-none select-none h-screen overflow-hidden' : ''}`}>
 
         {/* Custom Styles Injection */}
 
