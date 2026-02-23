@@ -588,7 +588,7 @@ const AppContent = () => {
 
       <ScrollToTopButton />
 
-      <div className={`container mx-auto p-4 sm:p-6 lg:p-8 pb-32 relative z-10 flex-grow ${isTrialExpired ? 'blur-sm pointer-events-none select-none h-screen overflow-hidden' : ''}`}>
+      <div className={`container mx-auto p-4 sm:p-6 lg:p-8 pb-32 relative flex-grow ${isResultsFullScreen ? 'z-[10000]' : 'z-10'} ${isTrialExpired ? 'blur-sm pointer-events-none select-none h-screen overflow-hidden' : ''}`}>
 
         {/* Custom Styles Injection */}
 
@@ -710,7 +710,7 @@ const AppContent = () => {
           </button>
         </div>
 
-        <main key={viewMode} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <main key={viewMode} className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ${isResultsFullScreen ? '' : 'animate-in fade-in slide-in-from-bottom-2 duration-300'}`}>
           {/* MOBILE VIEW IS HANDLED VIA SWIPE/TABS */}
           {/* DESKTOP VIEW IS STANDARD GRID */}
 
