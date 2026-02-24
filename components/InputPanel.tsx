@@ -186,7 +186,7 @@ const uiTexts = {
 import { CustomSlider } from './CustomSlider';
 
 // ... MODALI ...
-const CashbackModal = ({ isOpen, onClose, inputs, onInputChange, onReset, txt, period, OpenDetailed }: any) => {
+const CashbackModal = ({ isOpen, onClose, inputs, onInputChange, onReset, txt, period, setPeriod, t, OpenDetailed }: any) => {
   if (!isOpen) return null;
   const monthlySaving = (inputs.cashbackSpending * inputs.cashbackPercentage) / 100;
   const saving = period === 'annual' ? monthlySaving * 12 : monthlySaving;
@@ -203,9 +203,22 @@ const CashbackModal = ({ isOpen, onClose, inputs, onInputChange, onReset, txt, p
             </div>
             <div>
               <h3 className="text-2xl font-black text-slate-900 dark:text-white leading-none tracking-tighter">{txt.cashbackTitle}</h3>
-              <div className="mt-1 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-purple-500"></span>
-                <p className="text-xs font-black text-purple-600/70 dark:text-purple-400 uppercase tracking-widest">{txt.savings}</p>
+              <div className="mt-2 flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-purple-500"></span>
+                  <p className="text-xs font-black text-purple-600/70 dark:text-purple-400 uppercase tracking-widest">{txt.savings}</p>
+                </div>
+
+                {/* TOGGLE MESE/ANNO PREMIUM */}
+                {setPeriod && t && (
+                  <div
+                    onClick={(e) => { e.stopPropagation(); setPeriod(period === 'monthly' ? 'annual' : 'monthly'); }}
+                    className="flex bg-slate-100 dark:bg-slate-700 rounded-lg p-0.5 cursor-pointer border border-slate-200/50 dark:border-white/5"
+                  >
+                    <span className={`text-[10px] font-black px-2 py-0.5 rounded-md transition-all ${period === 'monthly' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-500 dark:text-slate-400'}`}>{t('input.month').toUpperCase()}</span>
+                    <span className={`text-[10px] font-black px-2 py-0.5 rounded-md transition-all ${period === 'annual' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-500 dark:text-slate-400'}`}>{t('input.year').toUpperCase()}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -711,6 +724,8 @@ const InputPanel: React.FC<InputPanelProps> = ({
         }}
         txt={txt}
         period={cashbackPeriod}
+        setPeriod={setCashbackPeriod}
+        t={t}
         OpenDetailed={onOpenCashbackDetailed}
       />
 
