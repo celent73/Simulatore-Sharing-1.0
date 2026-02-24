@@ -628,7 +628,7 @@ const AppContent = () => {
                 {/* 1. THEME TOGGLE */}
                 <button
                   onClick={toggleTheme}
-                  className="p-3 rounded-2xl bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all border border-white/10 shadow-lg active:scale-90"
+                  className="p-3 rounded-2xl bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all border border-white/10 shadow-lg active:scale-90 [.theme-union-colors_&]:!bg-white [.theme-union-colors_&]:!text-[#0077c8] [.theme-union-colors_&]:!border-white"
                   title="Cambia Tema"
                 >
                   <div className="scale-90 opacity-80">{isDarkMode ? <SunIcon /> : <MoonIcon />}</div>
@@ -637,7 +637,7 @@ const AppContent = () => {
                 {/* 2. LANGUAGE TOGGLE */}
                 <button
                   onClick={toggleLanguage}
-                  className="p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 shadow-lg hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center min-w-[52px]"
+                  className="p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 shadow-lg hover:bg-white/20 transition-all active:scale-90 flex items-center justify-center min-w-[52px] [.theme-union-colors_&]:!bg-white [.theme-union-colors_&]:!border-white"
                   title="Cambia Lingua"
                 >
                   {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}

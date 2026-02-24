@@ -51,7 +51,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
     const getButtonClass = (isActive: boolean) => `
         relative flex flex-col items-center justify-center w-full h-full 
         transition-all duration-300 ease-out active:scale-95 group
-        ${isActive ? 'text-white' : 'text-slate-400 hover:text-slate-200'}
+        ${isActive ? 'text-white [.theme-union-colors_&]:!text-[#0077c8]' : 'text-slate-400 hover:text-slate-200 [.theme-union-colors_&]:!text-white'}
     `;
 
     const getIconContainerClass = (isActive: boolean) => `
@@ -62,8 +62,8 @@ const BottomDock: React.FC<BottomDockProps> = ({
     return (
         <div className={`fixed bottom-4 left-4 right-4 z-[100] flex justify-center md:hidden transition-all duration-500 ease-in-out ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-[200%] opacity-0 pointer-events-none'}`}>
             <div
-                className="flex items-center justify-between w-full max-w-md md:max-w-2xl px-4 py-4 backdrop-blur-[64px] border border-white/10 shadow-[0_45px_100px_0_rgba(0,0,0,0.8)] rounded-[2.5rem] transition-all duration-300 relative overflow-hidden bg-header-dynamic"
-                style={{ background: 'var(--header-bg)' }}
+                className="flex items-center justify-between w-full max-w-md md:max-w-2xl px-4 py-4 backdrop-blur-[64px] border border-white/10 shadow-[0_45px_100px_0_rgba(0,0,0,0.8)] rounded-[2.5rem] transition-all duration-300 relative overflow-hidden"
+                style={{ background: 'var(--footer-bg)' }}
             >
                 <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none" />
@@ -74,7 +74,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
                     className={getButtonClass(false)}
                 >
                     <div className="group-hover:scale-110 transition-transform">
-                        <GraduationCap className="w-8 h-8 md:w-10 md:h-10 text-union-green-400" />
+                        <GraduationCap className="w-8 h-8 md:w-10 md:h-10 text-union-green-400 [.theme-union-colors_&]:!text-white" />
                     </div>
                 </button>
 
@@ -85,7 +85,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
                 >
                     {!isPremium && <div className="absolute top-1 right-2 bg-red-500 text-white p-0.5 rounded-full z-20 shadow-sm"><Lock size={8} /></div>}
                     <div className={getIconContainerClass(viewMode === 'condo')}>
-                        <CondoModeIcon className={`w-8 h-8 md:w-10 md:h-10 transition-all ${viewMode !== 'condo' ? 'grayscale opacity-40' : 'drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'}`} />
+                        <CondoModeIcon className={`w-8 h-8 md:w-10 md:h-10 transition-all ${viewMode !== 'condo' ? 'grayscale opacity-40 [.theme-union-colors_&]:!opacity-100 [.theme-union-colors_&]:brightness-[100]' : 'drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'}`} />
                     </div>
                 </button>
 
@@ -95,7 +95,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
                     className={getButtonClass(viewMode === 'family')}
                 >
                     <div className={getIconContainerClass(viewMode === 'family')}>
-                        <FamilyModeIcon className={`w-8 h-8 md:w-10 md:h-10 transition-all ${viewMode !== 'family' ? 'grayscale opacity-40' : 'drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'}`} />
+                        <FamilyModeIcon className={`w-8 h-8 md:w-10 md:h-10 transition-all ${viewMode !== 'family' ? 'grayscale opacity-40 [.theme-union-colors_&]:!opacity-100 [.theme-union-colors_&]:brightness-[100]' : 'drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'}`} />
                     </div>
                 </button>
 
@@ -105,7 +105,7 @@ const BottomDock: React.FC<BottomDockProps> = ({
                     className={getButtonClass(viewMode === 'client')}
                 >
                     <div className={getIconContainerClass(viewMode === 'client')}>
-                        <ClientModeIcon className={`w-8 h-8 md:w-10 md:h-10 transition-all ${viewMode !== 'client' ? 'grayscale opacity-40' : 'drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'}`} />
+                        <ClientModeIcon className={`w-8 h-8 md:w-10 md:h-10 transition-all ${viewMode !== 'client' ? 'grayscale opacity-40 [.theme-union-colors_&]:!opacity-100 [.theme-union-colors_&]:brightness-[100]' : 'drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'}`} />
                     </div>
                 </button>
 

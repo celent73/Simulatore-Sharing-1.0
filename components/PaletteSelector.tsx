@@ -8,6 +8,7 @@ const PALETTES: { id: AccentColor; color: string; label: string }[] = [
     { id: 'titan', color: '#475569', label: 'Titan Grey' },
     { id: 'night-blue', color: '#1e3a8a', label: 'Blu Notte' },
     { id: 'union-orange', color: '#2b0f07', label: 'Orange Union' },
+    { id: 'union-colors', color: '#0077c8', label: 'Union Colors' },
 ];
 
 const PaletteSelector: React.FC = () => {
@@ -18,10 +19,10 @@ const PaletteSelector: React.FC = () => {
         <div className="relative">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-10 h-10 rounded-full border-2 border-white/20 shadow-lg flex items-center justify-center transition-transform hover:scale-110 active:scale-95"
-                style={{ backgroundColor: PALETTES.find(p => p.id === accentColor)?.color }}
+                className="w-10 h-10 rounded-full border-2 border-white/20 shadow-lg flex items-center justify-center transition-transform hover:scale-110 active:scale-95 [.theme-union-colors_&]:!bg-white [.theme-union-colors_&]:!border-white"
+                style={{ backgroundColor: accentColor === 'union-colors' ? 'transparent' : PALETTES.find(p => p.id === accentColor)?.color }}
             >
-                <div className="w-4 h-4 rounded-full bg-white/30" />
+                <div className="w-4 h-4 rounded-full bg-white/30 [.theme-union-colors_&]:!bg-[#0077c8]" />
             </button>
 
             <AnimatePresence>
