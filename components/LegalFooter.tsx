@@ -13,15 +13,21 @@ const LegalFooter: React.FC<LegalFooterProps> = ({ onOpenLegal }) => {
           <button onClick={() => onOpenLegal('privacy')} className="text-[10px] text-white/40 hover:text-white/70 uppercase tracking-widest font-bold transition-colors">Privacy</button>
           <button onClick={() => onOpenLegal('cookie')} className="text-[10px] text-white/40 hover:text-white/70 uppercase tracking-widest font-bold transition-colors">Cookie</button>
         </div>
-        <p className="text-[10px] text-slate-400 font-medium leading-relaxed max-w-2xl mx-auto uppercase tracking-wider mb-4">
-          Tutti i diritti riservati © {new Date().getFullYear()} - Sharing Simulator v1.2.55
-        </p>
-        <p className="text-[10px] text-slate-500 font-medium max-w-2xl mx-auto italic">
-          I risultati sono proiezioni matematiche e non costituiscono garanzia di guadagno.
-        </p>
-        <p className="mt-2 text-[8px] opacity-50 uppercase tracking-[0.2em] font-black">
-          v1.2.55 - Protetto da crittografia SSL a 256 bit 🔒
-        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* Copyright e Versione */}
+          <div className="text-left">
+            <p className="font-semibold text-gray-800 dark:text-gray-200">
+              Tutti i diritti riservati © {new Date().getFullYear()} - Sharing Simulator v1.2.58
+            </p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Applicazione indipendente non affiliata o sponsorizzata da terze parti.
+            </p>
+          </div>
+
+          <div className="text-xs font-mono text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700">
+            v1.2.58 - Protetto da crittografia SSL a 256 bit 🔒
+          </div>
+        </div>
       </div>
     </footer>
   );

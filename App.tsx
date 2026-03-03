@@ -7,7 +7,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { supabase, supabaseUrl } from './utils/supabaseClient';
+import { supabase, supabaseUrl, supabaseStateless } from './utils/supabaseClient';
 import { PlanInput, CondoInput, ViewMode } from './types';
 import { useCompensationPlan } from './hooks/useSimulation';
 import { useCondoSimulation } from './hooks/useCondoSimulation';
@@ -16,6 +16,7 @@ import CondoInputPanel from './components/CondoInputPanel';
 import ResultsDisplay from './components/ResultsDisplay';
 import CondoResultsDisplay from './components/CondoResultsDisplay';
 import { useSmartState } from './hooks/useSmartState';
+import { useScenarios } from './hooks/useScenarios';
 
 
 
@@ -34,7 +35,7 @@ import { Presentation, Fuel, Share2, Compass, Sparkles } from 'lucide-react'; //
 
 // --- IMPORTAZIONI LEGALI E UI ---
 import LegalFooter from './components/LegalFooter';
-const APP_VERSION = "v1.2.55";
+const APP_VERSION = "v1.2.58";
 
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 
@@ -166,13 +167,13 @@ const AppContent = () => {
     }
   }, []);
 
-  // --- NUOVI STATI PER LA VERIFICA SUPABASE ---
-  const [licenseCode, setLicenseCode] = useState('');
+  // --- STATI LICENZA SINCRONIZZATI ---
+  const { state: licenseCode, set: setLicenseCode, sync: syncLicense } = useSmartState<string>('', 'licenseCode');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { state: viewMode, set: setViewMode } = useSmartState<ViewMode>('family', 'sim_view_mode_v1');
-  const { state: condoInputs, set: setCondoInputs } = useSmartState<CondoInput>(initialCondoInputs, 'condo_sim_state_v1');
+  const { state: viewMode, set: setViewMode, sync: syncViewMode } = useSmartState<ViewMode>('family', 'sim_view_mode_v1');
+  const { state: condoInputs, set: setCondoInputs, sync: syncCondo } = useSmartState<CondoInput>(initialCondoInputs, 'condo_sim_state_v1');
   const [isContractInfoModalOpen, setIsContractInfoModalOpen] = useState(false);
   const [cashbackPeriod, setCashbackPeriod] = useState<'monthly' | 'annual'>('monthly');
   const isInitialMount = useRef(true);
@@ -180,7 +181,55 @@ const AppContent = () => {
   const [installPrompt, setInstallPrompt] = useState<any>(null); // State for the prompt event
 
   const { language, setLanguage, t } = useLanguage();
-  const { state: inputs, set: setInputs, undo, redo, canUndo, canRedo, reset } = useSmartState<PlanInput>(initialInputs, 'sim_state_v1');
+  const { state: inputs, set: setInputs, undo, redo, canUndo, canRedo, reset, sync: syncInputs } = useSmartState<PlanInput>(initialInputs, 'sim_state_v1');
+
+  const { scenarios, saveScenario, deleteScenario, updateScenario, sync: syncScenarios } = useScenarios(); // useScenarios internamente usa useSmartState
+
+  const LoadingOverlay = ({ message }: { message?: string }) => (
+    <div className="fixed inset-0 z-[100000] flex flex-col items-center justify-center bg-black/60 backdrop-blur-md transition-opacity animate-in fade-in duration-300">
+      <div className="relative">
+        <div className="w-16 h-16 border-4 border-white/20 border-t-main-accent rounded-full animate-spin" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <PartyPopper size={24} className="text-main-accent animate-pulse" />
+        </div>
+      </div>
+      <p className="mt-4 text-white font-bold tracking-wider uppercase text-sm animate-pulse">{message || t('common.loading') || 'Caricamento...'}</p>
+    </div>
+  );
+
+  const performGlobalSync = async (silent = false, stayLoading = false) => {
+    if (!silent) console.log("[Sync] Avvio sincronizzazione manuale globale...");
+    setLoading(true);
+    try {
+      const syncPromise = Promise.allSettled([
+        syncInputs(),
+        syncCondo(),
+        syncViewMode(),
+        syncLicense(),
+        syncScenarios()
+      ]);
+
+      // Aggiungiamo un timeout di 5 secondi per evitare che l'interfaccia si blocchi in infinito
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Sync Timeout')), 5000);
+      });
+
+      const results = await Promise.race([syncPromise, timeoutPromise]) as PromiseSettledResult<any>[];
+
+      const failures = results.filter(r => r.status === 'rejected');
+      if (failures.length > 0) {
+        console.error("[Sync] Alcune sincronizzazioni sono fallite:", failures);
+        if (!silent) alert("⚠️ Alcuni dati non sono stati salvati. Controlla la connessione.");
+      } else if (!silent) {
+        alert("✅ Tutti i dati sono stati salvati nel cloud!");
+      }
+    } catch (e) {
+      console.error("Errore sync globale:", e);
+      if (!silent) alert("❌ Errore durante la sincronizzazione. Assicurati di avere una connessione internet attiva.");
+    } finally {
+      if (!stayLoading) setLoading(false);
+    }
+  };
 
   const planResult = useCompensationPlan(inputs, viewMode);
   const condoResult = useCondoSimulation(condoInputs, planResult);
@@ -219,8 +268,8 @@ const AppContent = () => {
     let cleanCode = inputCode.replace(/\s+/g, '').replace(/[\u200B-\u200D\uFEFF]/g, '').toUpperCase();
 
     try {
-      // 1. TENTA RICERCA NORMALE
-      let { data: licenses, error: dbError } = await supabase
+      // 1. TENTA RICERCA NORMALE (STATERLESS)
+      let { data: licenses, error: dbError } = await supabaseStateless
         .from('licenses')
         .select('*')
         .ilike('code', cleanCode);
@@ -228,7 +277,7 @@ const AppContent = () => {
       // 2. SE FALLISCE, PROVA A RIMUOVERE I TRATTINI (es. AAAA-BBBB -> AAAABBBB)
       if ((!licenses || licenses.length === 0) && cleanCode.includes('-')) {
         const noDashes = cleanCode.replace(/-/g, '');
-        const { data: retryData, error: retryError } = await supabase
+        const { data: retryData, error: retryError } = await supabaseStateless
           .from('licenses')
           .select('*')
           .ilike('code', noDashes);
@@ -245,7 +294,7 @@ const AppContent = () => {
       // 3. SE FALLISCE E MANCANO I TRATTINI (LUNGHEZZA 12), PROVA A FORMATTARE (es. AAAABBBBCCCC -> AAAA-BBBB-CCCC)
       if ((!licenses || licenses.length === 0) && !cleanCode.includes('-') && cleanCode.length === 12) {
         const formatted = `${cleanCode.slice(0, 4)}-${cleanCode.slice(4, 8)}-${cleanCode.slice(8, 12)}`;
-        const { data: retryData2, error: retryError2 } = await supabase
+        const { data: retryData2, error: retryError2 } = await supabaseStateless
           .from('licenses')
           .select('*')
           .ilike('code', formatted);
@@ -289,7 +338,7 @@ const AppContent = () => {
       }
 
       if (shouldIncrement) {
-        const { error: updateError } = await supabase
+        const { error: updateError } = await supabaseStateless
           .from('licenses')
           .update({ uses: currentUses + 1 })
           .eq('id', data.id);
@@ -304,27 +353,18 @@ const AppContent = () => {
     }
   };
 
-  const handleVerifyCode = async () => {
-    if (!licenseCode.trim()) return;
+  const handleVerifyCode = async (codeToVerify?: string) => {
+    const code = codeToVerify || licenseCode;
+    if (!code.trim()) return;
     setLoading(true);
     setError('');
 
-    const result = await verifyLicenseStatus(licenseCode, true);
+    const result = await verifyLicenseStatus(code, true);
 
     if (result.valid) {
       setIsPremium(true);
       localStorage.setItem('is_premium', 'true');
-      localStorage.setItem('licenseCode', result.finalCode || licenseCode.trim().toUpperCase());
-      openModal('PREMIUM_UNLOCK', {
-        isOpen: true,
-        onClose: closeModal,
-        onUnlock: handleVerifyCode,
-        licenseCode: licenseCode,
-        setLicenseCode: setLicenseCode,
-        loading: loading,
-        error: error,
-        forceLock: false
-      });
+      setLicenseCode(result.finalCode || code.trim().toUpperCase());
       alert("Codice valido! App sbloccata su questo dispositivo.");
     } else {
       setError(result.error || 'Errore durante la verifica.');
@@ -332,34 +372,41 @@ const AppContent = () => {
     setLoading(false);
   };
 
+  // EFFECT REATTIVO PER LA LICENZA (Sincronizzazione Stato <-> Premium)
   useEffect(() => {
-    const initLicense = async () => {
-      const savedCode = localStorage.getItem('licenseCode');
-      const savedPremiumStatus = localStorage.getItem('is_premium');
-
-      // Imposta immediatamente lo stato se salvato localmente per evitare flash della UI
-      if (savedPremiumStatus === 'true') {
-        setIsPremium(true);
-      }
-
-      if (savedCode) {
-        setLicenseCode(savedCode);
-
-        // Verifica silenziosa per confermare che la licenza sia ancora valida nel DB
-        const result = await verifyLicenseStatus(savedCode, false);
-        if (result.valid) {
-          setIsPremium(true);
-          localStorage.setItem('is_premium', 'true');
-        } else if (savedPremiumStatus === 'true' && !result.isNetworkError) {
-          // Se la verifica fallisce ESPLICITAMENTE (es. codice revocato), rimuoviamo i privilegi.
-          // In caso di errore di rete, manteniamo lo stato premium locale per permettere l'uso offline.
+    let isMounted = true;
+    const checkLicense = async () => {
+      if (!licenseCode) {
+        if (isMounted) {
           setIsPremium(false);
           localStorage.removeItem('is_premium');
         }
+        return;
+      }
+
+      // Se abbiamo già lo stato premium in locale, evitiamo flash
+      const savedPremiumStatus = localStorage.getItem('is_premium');
+      if (savedPremiumStatus === 'true' && isMounted) {
+        setIsPremium(true);
+      }
+
+      const result = await verifyLicenseStatus(licenseCode, false);
+
+      if (!isMounted) return;
+
+      if (result.valid) {
+        setIsPremium(true);
+        localStorage.setItem('is_premium', 'true');
+      } else if (!result.isNetworkError) {
+        // Fallimento esplicito: il codice non è più valido
+        setIsPremium(false);
+        localStorage.removeItem('is_premium');
       }
     };
-    initLicense();
-  }, []);
+
+    checkLicense();
+    return () => { isMounted = false; };
+  }, [licenseCode]);
 
   const handleAcceptLegal = () => {
     localStorage.setItem('legal_accepted', 'true');
@@ -369,6 +416,8 @@ const AppContent = () => {
   const handleOpenLegalDoc = (type: 'privacy' | 'terms' | 'cookie') => {
     openModal('LEGAL', { type, mode: 'view' });
   };
+
+
 
   // Theme effect is now handled inside ThemeProvider
 
@@ -573,10 +622,12 @@ const AppContent = () => {
       {/* SHARY UI */}
       <SharyAssistant />
 
+      {loading && <LoadingOverlay message={"Caricamento in corso..."} />}
+
 
 
       <div className="fixed top-2 right-2 z-[9999] pointer-events-none opacity-50 text-[10px] font-mono bg-black/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-        v1.2.55
+        v1.2.58
       </div>
 
 
@@ -604,7 +655,7 @@ const AppContent = () => {
                     {language === 'it' ? <ItalyFlag /> : (language === 'de' ? <GermanyFlag /> : <UKFlag />)}
                     <span className="text-white">Sharing</span>
                     <span className="text-main-accent -ml-2">Simulator</span>
-                    <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.55</span>
+                    <span className="text-[10px] font-bold opacity-30 tracking-[0.2em] ml-2">v1.2.58</span>
                     {isPremium && <span className="ml-2 animate-bounce inline-block"><CrownIconSVG className="w-8 h-8 text-main-accent" /></span>}
                   </h1>
                   {isCreatorMode && <span className="hidden sm:inline-flex bg-white/20 backdrop-blur-md text-white border border-white/40 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm uppercase tracking-wider">Creator Mode</span>}
@@ -680,7 +731,6 @@ const AppContent = () => {
                   onOpenInstall={() => openModal('INSTALL_PROMPT', { installPrompt })}
                   isPremium={isPremium}
                   viewMode={viewMode}
-                  showInstall={!isStandalone && (canInstall || /iphone|ipad|ipod|android/i.test(window.navigator.userAgent.toLowerCase()))}
                 />
               </div>
             </div>
