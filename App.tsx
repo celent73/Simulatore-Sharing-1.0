@@ -318,7 +318,9 @@ const AppContent = () => {
           ? "Impossibile contattare il server. Controlla la tua connessione internet."
           : `Errore Database: ${dbError.message}`;
 
-        return { valid: false, error: friendlyError, isNetworkError: isConnectionError };
+        // IMPORTANT FIX: Treat ANY database error as a potential network/temporary error when validating an existing valid key
+        // We do not want to lock out users just because Supabase is slow or returns an unexpected error code.
+        return { valid: false, error: friendlyError, isNetworkError: true };
       }
 
       if (!licenses || licenses.length === 0) {
@@ -398,7 +400,7 @@ const AppContent = () => {
         setIsPremium(true);
         localStorage.setItem('is_premium', 'true');
       } else if (!result.isNetworkError) {
-        // Fallimento esplicito: il codice non è più valido
+        // Fallimento esplicito: il codice non è più valido (es. superato il limite)
         setIsPremium(false);
         localStorage.removeItem('is_premium');
       }
@@ -497,7 +499,7 @@ const AppContent = () => {
       openModal('PREMIUM_UNLOCK', {
         isOpen: true,
         onClose: closeModal,
-        onUnlock: handleVerifyCode,
+        onUnlock: () => setIsPremium(true),
         licenseCode: licenseCode,
         setLicenseCode: setLicenseCode,
         loading: loading,
@@ -518,11 +520,12 @@ const AppContent = () => {
       return;
     }
     if (!isPremium) {
-      if (field === 'directRecruits' && value > 2) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
-      if (field === 'indirectRecruits' && value > 2) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
-      if (field === 'networkDepth' && value > 2) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
-      if (field === 'contractsPerUser' && value > 1) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
-      if (field === 'cashbackSpending' && value > 500) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
+      const unlockPayload = { isOpen: true, onClose: closeModal, onUnlock: () => setIsPremium(true), licenseCode, setLicenseCode, loading, error };
+      if (field === 'directRecruits' && value > 2) { openModal('PREMIUM_UNLOCK', unlockPayload); return; }
+      if (field === 'indirectRecruits' && value > 2) { openModal('PREMIUM_UNLOCK', unlockPayload); return; }
+      if (field === 'networkDepth' && value > 2) { openModal('PREMIUM_UNLOCK', unlockPayload); return; }
+      if (field === 'contractsPerUser' && value > 1) { openModal('PREMIUM_UNLOCK', unlockPayload); return; }
+      if (field === 'cashbackSpending' && value > 500) { openModal('PREMIUM_UNLOCK', unlockPayload); return; }
     }
     setInputs(prev => ({ ...prev, [field]: value }));
   };
@@ -530,7 +533,7 @@ const AppContent = () => {
   const handleCondoInputChange = (field: keyof CondoInput, value: number) => setCondoInputs(prev => ({ ...prev, [field]: value }));
 
   const handleResetToZero = () => {
-    if (!isPremium) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
+    if (!isPremium) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: () => setIsPremium(true), licenseCode, setLicenseCode, loading, error }); return; }
     setInputs(initialInputs);
   };
 
@@ -545,7 +548,7 @@ const AppContent = () => {
   };
 
   const handleModeChange = (mode: ViewMode) => {
-    if (mode === 'condo' && !isPremium) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
+    if (mode === 'condo' && !isPremium) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: () => setIsPremium(true), licenseCode, setLicenseCode, loading, error }); return; }
     setViewMode(mode);
   };
 
@@ -569,7 +572,7 @@ const AppContent = () => {
   };
 
   const handleTargetClick = () => {
-    if (!isPremium) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: handleVerifyCode, licenseCode, setLicenseCode, loading, error }); return; }
+    if (!isPremium) { openModal('PREMIUM_UNLOCK', { isOpen: true, onClose: closeModal, onUnlock: () => setIsPremium(true), licenseCode, setLicenseCode, loading, error }); return; }
     openModal('TARGET_CALCULATOR', { currentInputs: inputs, onApply: handleApplyTarget });
   };
 

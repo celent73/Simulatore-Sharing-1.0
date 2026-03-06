@@ -7,7 +7,7 @@ import FreedomCalculator from './FreedomCalculator';
 
 import AssetComparator from './AssetComparator';
 import TimeMultiplier from './TimeMultiplier';
-
+import { motion, AnimatePresence } from 'framer-motion';
 
 import GoldenNoCard from './GoldenNoCard';
 
@@ -105,7 +105,20 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ title, value, suffix, variant
         <div className="flex flex-col gap-2">
           {/* Row 1: Value + Suffix inline */}
           <div className="flex items-baseline gap-2 flex-wrap">
-            <div className={`text-3xl sm:text-3xl lg:text-4xl font-black tracking-tighter ${styles.value} leading-none transition-all`}>{value}</div>
+            <div className={`text-3xl sm:text-3xl lg:text-4xl font-black tracking-tighter ${styles.value} leading-none transition-all relative inline-block min-w-[120px]`}>
+              <AnimatePresence mode="popLayout">
+                <motion.div
+                  key={value}
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 5 }}
+                  transition={{ duration: 0.2 }}
+                  className="inline-block"
+                >
+                  {value}
+                </motion.div>
+              </AnimatePresence>
+            </div>
             {suffix && <div className="transition-all">{suffix}</div>}
           </div>
         </div>

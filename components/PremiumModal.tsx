@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Check, Star, Zap, Mail } from 'lucide-react';
-import { supabase, supabaseUrl } from '../utils/supabaseClient';
+import { createClient } from '@supabase/supabase-js';
+import { supabase, supabaseUrl, supabaseStateless } from '../utils/supabaseClient';
 
 interface PremiumModalProps {
   isOpen: boolean;
@@ -16,12 +17,17 @@ interface PremiumModalProps {
 export const PremiumModal: React.FC<PremiumModalProps> = ({
   isOpen,
   onClose,
+  onUnlock,
+  licenseCode: propsLicenseCode,
+  setLicenseCode,
+  loading: propsLoading,
+  error: propsError,
   forceLock = false
 }) => {
-  // STATO INTERNO - Non dipende più da props esterne
-  const [licenseCode, setLicenseCode] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  // STATO INTERNO - Sincronizzato con props se presenti, altrimenti locale per indipendenza
+  const [localLicenseCode, setLocalLicenseCode] = useState(propsLicenseCode || '');
+  const [localLoading, setLocalLoading] = useState(false);
+  const [localError, setLocalError] = useState(propsError || '');
 
   if (!isOpen) return null;
 
@@ -31,31 +37,49 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
 
   // FUNZIONE DI VERIFICA INTEGRATA
   const handleVerifyCode = async () => {
-    if (!licenseCode.trim()) {
-      setError('Inserisci un codice licenza');
+    if (!localLicenseCode.trim()) {
+      setLocalError('Inserisci un codice licenza');
       return;
     }
 
-    setLoading(true);
-    setError('');
+    setLocalLoading(true);
+    setLocalError('');
 
     try {
+      console.log("[PremiumModal] Inizio verifica per:", localLicenseCode);
       // Pulisci il codice
-      let cleanCode = licenseCode.replace(/\s+/g, '').replace(/[\u200B-\u200D\uFEFF]/g, '').toUpperCase();
+      let cleanCode = localLicenseCode.replace(/\s+/g, '').replace(/[\u200B-\u200D\uFEFF]/g, '').toUpperCase();
 
-      // Verifica su Supabase
-      let { data: licenses, error: dbError } = await supabase
-        .from('licenses')
-        .select('*')
-        .ilike('code', cleanCode);
+      // Crea un client stateless temporaneo per evitare i Navigator Logs cross-tab della libreria JS
+      // che, in alcuni casi post-logout profondo con pulizia DOM manuale, congelano i check per 10 minuti.
+      const statelessSupabase = supabaseStateless; // Usa quello centralizzato
+
+      // Funzione helper per l'upsert protetto da timeout 
+      const fetchWithTimeout = async (promiseFn: () => Promise<any>, ms: number = 8000) => {
+        let timeout: NodeJS.Timeout;
+        const timeoutPromise = new Promise((_, reject) => {
+          timeout = setTimeout(() => reject(new Error('Timeout Connessione Supabase. La query ha impiegato più di 8 secondi e si è bloccata.')), ms);
+        });
+        try {
+          return await Promise.race([promiseFn(), timeoutPromise]);
+        } finally {
+          //@ts-ignore
+          clearTimeout(timeout);
+        }
+      };
+
+      console.log("[PremiumModal] Chiamata DB 1...");
+      let { data: licenses, error: dbError } = await fetchWithTimeout(
+        async () => await statelessSupabase.from('licenses').select('*').ilike('code', cleanCode)
+      );
 
       // Prova senza trattini
       if ((!licenses || licenses.length === 0) && cleanCode.includes('-')) {
+        console.log("[PremiumModal] Chiamata DB 2 (no dashes)...");
         const noDashes = cleanCode.replace(/-/g, '');
-        const { data: retryData } = await supabase
-          .from('licenses')
-          .select('*')
-          .ilike('code', noDashes);
+        const { data: retryData } = await fetchWithTimeout(
+          async () => await statelessSupabase.from('licenses').select('*').ilike('code', noDashes)
+        );
         if (retryData && retryData.length > 0) {
           licenses = retryData;
           cleanCode = noDashes;
@@ -64,20 +88,22 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
 
       // Prova con trattini formattati
       if ((!licenses || licenses.length === 0) && !cleanCode.includes('-') && cleanCode.length === 12) {
+        console.log("[PremiumModal] Chiamata DB 3 (formatted)...");
         const formatted = `${cleanCode.slice(0, 4)}-${cleanCode.slice(4, 8)}-${cleanCode.slice(8, 12)}`;
-        const { data: retryData2 } = await supabase
-          .from('licenses')
-          .select('*')
-          .ilike('code', formatted);
+        const { data: retryData2 } = await fetchWithTimeout(
+          async () => await statelessSupabase.from('licenses').select('*').ilike('code', formatted)
+        );
         if (retryData2 && retryData2.length > 0) {
           licenses = retryData2;
           cleanCode = formatted;
         }
       }
 
+      console.log("[PremiumModal] Risultati DB:", { licenses, dbError });
+
       if (dbError || !licenses || licenses.length === 0) {
-        setError('Codice non valido o non trovato');
-        setLoading(false);
+        setLocalError('Codice non valido o errato');
+        setLocalLoading(false);
         return;
       }
 
@@ -86,31 +112,42 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
       const maxUses = data.max_uses || 3;
 
       if (currentUses >= maxUses) {
-        setError(`Limite dispositivi raggiunto (${maxUses}/${maxUses})`);
-        setLoading(false);
+        setLocalError(`Limite dispositivi raggiunto (${maxUses}/${maxUses})`);
+        setLocalLoading(false);
         return;
       }
 
+      console.log("[PremiumModal] Aggiornamento counter...", data.id);
       // Incrementa contatore
-      await supabase
-        .from('licenses')
-        .update({ uses: currentUses + 1 })
-        .eq('id', data.id);
+      await fetchWithTimeout(
+        async () => await statelessSupabase.from('licenses').update({ uses: currentUses + 1 }).eq('id', data.id)
+      );
 
-      // Salva in localStorage
+      console.log("[PremiumModal] Salvataggio e aggiornamento stato...");
+      // 1. Salvataggio locale "legacy" per velocità
       localStorage.setItem('is_premium', 'true');
-      localStorage.setItem('licenseCode', cleanCode);
 
-      // Successo!
-      alert('✅ Codice valido! App sbloccata.\n\nRicarica la pagina per vedere le modifiche.');
-      window.location.reload();
+      // 2. Aggiornamento stato parent (useSmartState) - Questo innesca anche il salvataggio cloud
+      if (setLicenseCode) {
+        setLicenseCode(cleanCode);
+      } else {
+        localStorage.setItem('licenseCode', JSON.stringify(cleanCode));
+      }
 
-    } catch (err) {
+      // 3. Callback di sblocco
+      if (onUnlock) {
+        onUnlock();
+      }
+
+      alert('✅ Codice valido! App sbloccata.');
+      onClose();
+
+    } catch (err: any) {
       console.error('Errore verifica:', err);
-      setError('Errore di connessione. Riprova.');
+      setLocalError(err.message || 'Errore di sistema. Riprova.');
     }
 
-    setLoading(false);
+    setLocalLoading(false);
   };
 
   return (
@@ -222,8 +259,8 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
               <input
                 type="text"
                 placeholder="INCOLLA IL TUO CODICE LICENZA QUI..."
-                value={licenseCode}
-                onChange={(e) => setLicenseCode(e.target.value.toUpperCase())}
+                value={localLicenseCode}
+                onChange={(e) => setLocalLicenseCode(e.target.value.toUpperCase())}
                 className="w-full p-4 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-xl text-center font-mono text-lg tracking-widest focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all uppercase placeholder:text-sm md:placeholder:text-base text-gray-900 dark:text-white"
                 autoComplete="off"
                 autoCorrect="off"
@@ -231,22 +268,22 @@ export const PremiumModal: React.FC<PremiumModalProps> = ({
                 spellCheck="false"
               />
 
-              {error && (
+              {localError && (
                 <div className="text-red-500 text-sm text-center font-medium animate-pulse">
-                  {error}
+                  {localError}
                 </div>
               )}
 
               <button
                 onClick={handleVerifyCode}
-                disabled={!licenseCode || loading}
+                disabled={!localLicenseCode || localLoading}
                 className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transition-all flex items-center justify-center gap-2
-                  ${!licenseCode || loading
+                  ${!localLicenseCode || localLoading
                     ? 'bg-gray-200 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
                     : 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:scale-[1.02] active:scale-95'
                   }`}
               >
-                {loading ? (
+                {localLoading ? (
                   <span className="animate-spin">⏳</span>
                 ) : (
                   <>Attiva Licenza <Check size={20} /></>

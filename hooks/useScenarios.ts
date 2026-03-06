@@ -1,35 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
 import { PlanInput, CondoInput, ViewMode, SavedScenario } from '../types';
+import { useSmartState } from './useSmartState';
 
 const STORAGE_KEY = 'sharing_simulator_scenarios_v1';
 
 export const useScenarios = () => {
-    const [scenarios, setScenarios] = useState<SavedScenario[]>([]);
+    const { state: scenarios, set: setScenarios, sync } = useSmartState<SavedScenario[]>([], STORAGE_KEY);
 
-    // Carica scenari all'avvio
-    useEffect(() => {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-            try {
-                setScenarios(JSON.parse(saved));
-            } catch (e) {
-                console.error("Errore nel parsing degli scenari salvati", e);
-                // Se c'è un errore, magari resettiamo o lasciamo vuoto, ma meglio non cancellare tutto subito per sicurezza
-            }
-        }
-    }, []);
-
-    const saveToStorage = (newScenarios: SavedScenario[]) => {
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(newScenarios));
-            setScenarios(newScenarios);
-        } catch (e) {
-            console.error("Errore nel salvataggio su LocalStorage", e);
-            alert("Impossibile salvare lo scenario. Memoria piena o errore del browser.");
-        }
-    };
-
-    const saveScenario = (name: string, data: PlanInput, viewMode: ViewMode, condoData?: CondoInput) => {
+    const saveScenario = useCallback((name: string, data: PlanInput, viewMode: ViewMode, condoData?: CondoInput) => {
         const newScenario: SavedScenario = {
             id: crypto.randomUUID(),
             name: name.trim() || `Scenario ${new Date().toLocaleDateString()}`,
@@ -39,27 +17,25 @@ export const useScenarios = () => {
             viewMode
         };
 
-        const updatedScenarios = [newScenario, ...scenarios];
-        saveToStorage(updatedScenarios);
+        setScenarios(prev => [newScenario, ...prev]);
         return newScenario;
-    };
+    }, [setScenarios]);
 
-    const deleteScenario = (id: string) => {
-        const updatedScenarios = scenarios.filter(s => s.id !== id);
-        saveToStorage(updatedScenarios);
-    };
+    const deleteScenario = useCallback((id: string) => {
+        setScenarios(prev => prev.filter(s => s.id !== id));
+    }, [setScenarios]);
 
-    const updateScenario = (id: string, newName: string) => {
-        const updatedScenarios = scenarios.map(s =>
+    const updateScenario = useCallback((id: string, newName: string) => {
+        setScenarios(prev => prev.map(s =>
             s.id === id ? { ...s, name: newName } : s
-        );
-        saveToStorage(updatedScenarios);
-    }
+        ));
+    }, [setScenarios]);
 
     return {
         scenarios,
         saveScenario,
         deleteScenario,
-        updateScenario
+        updateScenario,
+        sync
     };
 };

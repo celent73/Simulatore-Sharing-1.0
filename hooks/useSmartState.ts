@@ -12,7 +12,14 @@ export const useSmartState = <T>(initialState: T, key?: string) => {
         if (!key) return initialState;
         try {
             const stored = localStorage.getItem(key);
-            return stored ? JSON.parse(stored) : initialState;
+            if (!stored) return initialState;
+
+            try {
+                return JSON.parse(stored);
+            } catch (e) {
+                console.warn(`[useSmartState] JSON.parse fallito per ${key}, restituisco il valore raw:`, stored);
+                return stored as unknown as T;
+            }
         } catch (e) {
             console.error("Failed to load state from localStorage", e);
             return initialState;
@@ -25,18 +32,22 @@ export const useSmartState = <T>(initialState: T, key?: string) => {
         future: [],
     });
 
-    const canUndo = state.past.length > 0;
-    const canRedo = state.future.length > 0;
+    const sync = useCallback(async () => {
+        // Dummy function per non rompere i componenti che la chiamano (es. useScenarios)
+        return Promise.resolve();
+    }, []);
+
+    // --- FUNZIONI DI STATO (Undo/Redo/Set/Reset) ---
 
     const undo = useCallback(() => {
         setState((currentState) => {
-            if (currentState.past.length === 0) {
-                return currentState;
-            }
+            if (currentState.past.length === 0) return currentState;
             const previous = currentState.past[currentState.past.length - 1];
             const newPast = currentState.past.slice(0, currentState.past.length - 1);
 
-            if (key) localStorage.setItem(key, JSON.stringify(previous)); // Sync
+            if (key) {
+                localStorage.setItem(key, JSON.stringify(previous));
+            }
 
             return {
                 past: newPast,
@@ -48,13 +59,13 @@ export const useSmartState = <T>(initialState: T, key?: string) => {
 
     const redo = useCallback(() => {
         setState((currentState) => {
-            if (currentState.future.length === 0) {
-                return currentState;
-            }
+            if (currentState.future.length === 0) return currentState;
             const next = currentState.future[0];
             const newFuture = currentState.future.slice(1);
 
-            if (key) localStorage.setItem(key, JSON.stringify(next)); // Sync
+            if (key) {
+                localStorage.setItem(key, JSON.stringify(next));
+            }
 
             return {
                 past: [...currentState.past, currentState.present],
@@ -70,12 +81,13 @@ export const useSmartState = <T>(initialState: T, key?: string) => {
                 ? (newStateOrFn as (prev: T) => T)(currentState.present)
                 : newStateOrFn;
 
-            // Don't update if the state is the same
             if (JSON.stringify(newState) === JSON.stringify(currentState.present)) {
                 return currentState;
             }
 
-            if (key) localStorage.setItem(key, JSON.stringify(newState)); // Sync
+            if (key) {
+                localStorage.setItem(key, JSON.stringify(newState));
+            }
 
             return {
                 past: [...currentState.past, currentState.present],
@@ -86,7 +98,9 @@ export const useSmartState = <T>(initialState: T, key?: string) => {
     }, [key]);
 
     const reset = useCallback(() => {
-        if (key) localStorage.removeItem(key);
+        if (key) {
+            localStorage.removeItem(key);
+        }
         setState({
             past: [],
             present: initialState,
@@ -100,7 +114,8 @@ export const useSmartState = <T>(initialState: T, key?: string) => {
         undo,
         redo,
         reset,
-        canUndo,
-        canRedo,
+        sync, // Mantenuto per compatibilità
+        canUndo: state.past.length > 0,
+        canRedo: state.future.length > 0,
     };
 };

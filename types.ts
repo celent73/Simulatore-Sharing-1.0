@@ -153,3 +153,12 @@ export interface CondoSimulationResult {
     total3Years: number;
   };
 }
+
+export interface SavedScenario {
+  id: string;
+  name: string;
+  createdAt: number;
+  data: PlanInput;
+  condoData?: CondoInput;
+  viewMode: ViewMode;
+}

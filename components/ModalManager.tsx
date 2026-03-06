@@ -8,6 +8,7 @@ import { BroadcastModal } from './BroadcastModal';
 import { InstallModal } from './InstallModal'; // Is this PromptModal? Yes
 import PaymentSuccessModal from './PaymentSuccessModal';
 
+
 // Eager load frequently used modals for better performance
 import { NetworkVisualizerModal } from './NetworkVisualizerModal';
 import GuideHubModal from './GuideHubModal';
@@ -50,6 +51,7 @@ const ModalManager: React.FC = () => {
             {activeModal === 'BROADCAST' && <BroadcastModal isOpen={true} onClose={closeModal} {...modalProps} />}
             {activeModal === 'INSTALL_PROMPT' && <InstallModal isOpen={true} onClose={closeModal} {...modalProps} />}
             {activeModal === 'PAYMENT_SUCCESS' && <PaymentSuccessModal isOpen={true} onClose={closeModal} {...modalProps} />}
+
 
             {activeModal === 'NETWORK_VISUALIZER' && <NetworkVisualizerModal isOpen={true} onClose={closeModal} {...modalProps} />}
             {activeModal === 'GUIDE' && <GuideHubModal isOpen={true} onClose={closeModal} {...modalProps} />}
